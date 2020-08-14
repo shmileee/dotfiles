@@ -27,6 +27,9 @@ sudo apt-get update && sudo apt-get install -y \
   golang-go \
   dos2unix
 
+# Install assh - wrapper that adds support for multiple things to SSH
+go get -u moul.io/assh/v2
+
 # Install oh-my-bash framework
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
 
