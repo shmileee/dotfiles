@@ -12,6 +12,9 @@ call plug#begin('~/.vim/plugged')
 " Atom One Dark / Light theme.
 Plug 'rakr/vim-one'
 
+" surround.vim
+Plug 'tpope/vim-surround'
+
 " Integrate fzf with Vim.
 Plug '~/.fzf'
 Plug 'junegunn/fzf.vim'
@@ -91,9 +94,6 @@ Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 " Automatically show Vim's complete menu while typing.
 Plug 'vim-scripts/AutoComplPop'
 
-" Run test suites for various languages.
-Plug 'janko/vim-test'
-
 " Languages and file types.
 Plug 'cakebaker/scss-syntax.vim'
 Plug 'chr4/nginx.vim'
@@ -170,7 +170,7 @@ set autoindent
 set autoread
 set backspace=indent,eol,start
 set backupdir=/tmp//,.
-" set clipboard=unnamedplus
+set clipboard=unnamed
 set colorcolumn=80
 set complete+=kspell
 set completeopt=menuone,longest
@@ -452,6 +452,7 @@ command! -bang -nargs=* Rg
 let g:NERDTreeShowHidden=1
 let g:NERDTreeAutoDeleteBuffer=1
 let g:NERDTreeQuitOnOpen=0
+let g:NERDTreeIgnore = ['\.pyc$', '^__pycache__$']
 
 " Open nerd tree at the current file or close nerd tree if pressed again.
 nnoremap <silent> <expr> <Leader>n g:NERDTree.IsOpen() ? "\:NERDTreeClose<CR>" : bufexists(expand('%')) ? "\:NERDTreeFind<CR>" : "\:NERDTree<CR>"
@@ -519,3 +520,9 @@ let g:limelight_conceal_ctermfg=244
 
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
+nnoremap <leader>1 1gt
+nnoremap <leader>2 2gt
+nnoremap <leader>3 3gt
+nnoremap <leader>4 4gt
+nnoremap <leader>5 5gt
