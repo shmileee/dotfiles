@@ -76,7 +76,7 @@ vim .
 :PlugInstall
 ```
 
-#### Using WSL 1 or WSL 2?
+## Windows specific
 
 In addition to the Linux side of things, there's a few config files that I have
 in various directories of this dotfiles repo. These have long Windows paths.
@@ -85,3 +85,9 @@ It would be expected that you copy those over to your system while replacing "ol
 with your Windows user name if you want to use those things, such as my
 Microsoft Terminal `settings.json` file and others. Some of the paths may
 also contain unique IDs too, so adjust them as needed on your end.
+
+## VSCode
+
+I also use VSCode for various tasks. `Settings Sync` plugin is in charge of
+keeping my VSCode specific settings in sync across all computers. Gist file 
+is [here](https://gist.github.com/shmileee/f6415a0e35ea0350a2ecce4cb3c004a5).
