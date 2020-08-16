@@ -62,6 +62,66 @@ curl "https://releases.hashicorp.com/terraform/0.12.26/terraform_0.12.26_linux_a
   && mv terraform ~/.local/bin && rm terraform.zip
 ```
 
+When working on MacOS:
+
+```
+brew install 
+  7z \
+  adb \
+  android-platform-tools \
+  caskroom/fonts/font-firacode-nerd-font \
+  coreutils \
+  duckdns \
+  fish \
+  ffmpeg \
+  fzf \
+  gawk \
+  github/gh/gh \
+  gnu-getopt \
+  graphviz \
+  hadolint \
+  heroku/brew/heroku \
+  hg \
+  jq \
+  kubernetes-helm \
+  netstat \
+  ngrep \
+  pre-commit \
+  pylint \
+  python \
+  python3 \
+  reattach-to-user-namespace \
+  ripgrep \
+  shellcheck \
+  terraform \
+  tmux \
+  unrar \
+  watch \
+  wireguard-tools
+
+# Install oh-my-fish addon
+mkdir -p ~/.config/fish/omf \
+  && curl -L https://get.oh-my.fish | fish
+
+# Install kubectl completions
+mkdir -p ~/.config/fish/completions \
+  && cd ~/.config/fish \
+  && git clone https://github.com/evanlucas/fish-kubectl-completions \
+  && ln -s ../fish-kubectl-completions/completions/kubectl.fish completions/
+
+# Clone down this dotfiles repo to your home directory. Feel free to place
+# this anywhere you want, but remember where you've cloned things to.
+git clone https://github.com/shmileee/dotfiles ~/dotfiles
+
+ln -s ~/dotfiles/.gitconfig ~/.gitconfig \
+  && ln -s ~/dotfiles/.tmux.conf ~/.tmux.conf \
+  && ln -s ~/dotfiles/.vimrc ~/.vimrc \
+  && ln -s ~/dotfiles/.gitconfig.user ~/.gitconfig.user \
+  && ln -s ~/dotfiles/.gitconfig.user ~/.gitconfig.user \
+  && ln -s ~/dotfiles/fish/config.fish ~/.config/fish/config.fish \
+  && ln -sfn ~/dotfiles/fish/theme ~/.config/omf/theme
+```
+
 Optionally confirm that a few things work after closing and re-opening your
 terminal:
 

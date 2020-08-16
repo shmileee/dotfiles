@@ -9,6 +9,9 @@
 " Specify a directory for plugins.
 call plug#begin('~/.vim/plugged')
 
+" Open vim with the last saved position.
+Plug 'farmergreg/vim-lastplace'
+
 " Atom One Dark / Light theme.
 Plug 'rakr/vim-one'
 
@@ -116,6 +119,7 @@ Plug 'tpope/vim-rails'
 Plug 'vim-python/python-syntax'
 Plug 'vim-ruby/vim-ruby'
 Plug 'wgwoods/vim-systemd-syntax'
+Plug 'blankname/vim-fish'
 
 call plug#end()
 
