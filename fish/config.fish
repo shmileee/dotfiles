@@ -4,7 +4,7 @@ alias s subl
 alias g git
 alias r 'source ~/.config/fish/config.fish'
 alias p 'cd ~/Projects'
-alias tree 'tree -a -I ".git|*.pyc|*pycache*'
+alias tree 'tree -a -I ".git|*.pyc|*pycache*"'
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/esolidarity/google-cloud-sdk/path.fish.inc' ]; . \
