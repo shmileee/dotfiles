@@ -51,3 +51,5 @@ dnsfix () {
 alias rg="rg -j1 --hidden -i"
 
 alias ssh="assh wrapper ssh --"
+
+alias p="cd ~/projects"
