@@ -124,6 +124,9 @@ Plug 'vim-ruby/vim-ruby'
 Plug 'wgwoods/vim-systemd-syntax'
 Plug 'blankname/vim-fish'
 
+" Highlight Jenkinsfile syntax as grovy
+au BufNewFile,BufRead Jenkinsfile setf groovy
+
 call plug#end()
 
 " -----------------------------------------------------------------------------

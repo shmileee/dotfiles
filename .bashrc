@@ -49,7 +49,6 @@ OSH_THEME="powerline"
 # Add wisely, as too many completions slow down shell startup.
 completions=(
   git
-  ssh
 )
 
 # Which aliases would you like to load? (aliases can be found in ~/.oh-my-bash/aliases/*)
