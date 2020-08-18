@@ -70,7 +70,6 @@ plugins=(
   ansible
   git
   docker
-  bashmarks
 )
 
 source $OSH/oh-my-bash.sh
