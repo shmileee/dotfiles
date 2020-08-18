@@ -105,6 +105,9 @@ if grep -qE "(Microsoft|WSL)" /proc/version &>/dev/null; then
     # Fix DNS when connecting through VPN
     dnsfix
 
+    # Set proxy
+    [ -f ~/.proxy ] && source ~/.proxy
+
     # Requires: https://sourceforge.net/projects/vcxsrv/ (or alternative)
     export DISPLAY=:0
 fi

@@ -21,3 +21,4 @@ tags
 # Ignore work gitconfigs
 .gitconfig.work
 .gitconfig.proxy
+.proxy

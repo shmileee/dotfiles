@@ -45,6 +45,7 @@ mkdir -p ~/.local/bin && mkdir -p ~/.vim/spell \
   && ln -s ~/dotfiles/.tmux.conf ~/.tmux.conf \
   && ln -s ~/dotfiles/.vimrc ~/.vimrc
   && ln -s ~/dotfiles/.gitconfig.user ~/.gitconfig.user
+  && ln -s ~/dotfiles/.gitconfig.private ~/.gitconfig.private
 
 # Install Plug (Vim plugin manager).
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
@@ -102,6 +103,9 @@ brew install
 # Install oh-my-fish addon
 mkdir -p ~/.config/fish/omf \
   && curl -L https://get.oh-my.fish | fish
+
+# Install theme for fish
+omf install bobthefish
 
 # Install kubectl completions
 mkdir -p ~/.config/fish/completions \
