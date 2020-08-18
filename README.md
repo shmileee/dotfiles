@@ -69,6 +69,7 @@ When working on MacOS:
 brew install 
   7z \
   adb \
+  assh \
   android-platform-tools \
   caskroom/fonts/font-firacode-nerd-font \
   coreutils \
