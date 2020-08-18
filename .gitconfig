@@ -1,8 +1,16 @@
 [core]
 	editor = vim
-
 [color "diff"]
 	whitespace = red reverse
-
 [include]
 	path = ~/.gitconfig.user
+[include]
+	path = ~/.gitconfig.proxy
+[includeIf "gitdir:~/dotfiles/**"]
+	path = ~/.gitconfig.private
+[includeIf "gitdir:~/projects/**"]
+	path = ~/.gitconfig.private
+[includeIf "gitdir:~/work/**"]
+	path = ~/.gitconfig.work
+[credential]
+	helper = store

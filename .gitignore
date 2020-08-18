@@ -17,3 +17,7 @@ tags
 
 # Persistent undo
 [._]*.un~/
+
+# Ignore work gitconfigs
+.gitconfig.work
+.gitconfig.proxy

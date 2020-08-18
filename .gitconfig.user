@@ -1,10 +1,5 @@
-[user]
-	email = oleksandr.ponomarov@s3connectedhealth.com
-	name = Oleksandr Ponomarov
-
 [core]
 	editor = vim
-
 [alias]
 	co = checkout
 	br = branch
