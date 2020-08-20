@@ -41,9 +41,11 @@ alias tree 'tree -a -I ".git|*.pyc|*pycache*"'
 #######################################################################
 
 if grep -qE "(Microsoft|WSL)" /proc/version &>/dev/null
-   if [ "(umask)" = "0000" ]
+   if [ (umask) = "0000" ]
       umask 0022
    end
+
+   set -gx DOCKER_HOST "tcp://localhost:2375"
 
    function proxy
       if [ -f ~/.proxy ]
@@ -57,9 +59,9 @@ if grep -qE "(Microsoft|WSL)" /proc/version &>/dev/null
 
    function dnsfix
       set -lx search (grep -F "search" /etc/resolv.conf)
-      set -lx ipv4dnsraw (/mnt/c/Windows/system32/netsh.exe \
+      set -lx ipv4dnsraw (/c/Windows/system32/netsh.exe \
          interface ip show dns | tr -d '\r');
-      set -lx ipv6dnsraw (/mnt/c/Windows/system32/netsh.exe \
+      set -lx ipv6dnsraw (/c/Windows/system32/netsh.exe \
          interface ipv6 show dns | tr -d '\r');
       set -lx nameservers (printf '%s\n%s\n' \
          $ipv4dnsraw $ipv6dnsraw | grep -iF "DNS Servers" | grep -v "None" \
@@ -94,6 +96,7 @@ if grep -qE "(Microsoft|WSL)" /proc/version &>/dev/null
       set -gx GOBIN "$GOPATH/bin"
       set -gx PATH "$GOBIN" $PATH
 
+      set -gx PATH ~/.local/bin $PATH
       #######################################################################
       #                               Functions                             #
       #######################################################################
