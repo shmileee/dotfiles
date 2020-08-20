@@ -46,6 +46,10 @@ if grep -qE "(Microsoft|WSL)" /proc/version &>/dev/null
    end
 
    set -gx DOCKER_HOST "tcp://localhost:2375"
+   # fixing volumes not working in WSL1
+   set -gx ROOTFS_DIR (echo "/c/Users/oleksandrp/AppData/Local\
+      /Packages/CanonicalGroupLimited.Ubuntu20.04onWindows_79rhkp1fndgsc\
+      /LocalState/rootfs" | sed '/^$/d;s/[[:blank:]]//g')
 
    function proxy
       if [ -f ~/.proxy ]
