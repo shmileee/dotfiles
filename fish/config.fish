@@ -7,19 +7,6 @@
 # source fzf binds
 fzf_key_bindings
 
-# enable vi mode
-set -U fish_key_bindings fish_vi_key_bindings
-# and now restore ctrl+f for autocomplete and fzf binds
-# https://github.com/fish-shell/fish-shell/issues/3541
-function fish_user_key_bindings
-   for mode in insert default visual
-      bind -M $mode \cf forward-char
-      bind -M $mode \ct fzf-file-widget
-      bind -M $mode \cr fzf-history-widget
-      bind -M $mode \ec fzf-cd-widget
-   end
-end
-
 #######################################################################
 #                               Aliases                               #
 #######################################################################

@@ -108,7 +108,7 @@ Plug 'ekalinin/dockerfile.vim'
 Plug 'elixir-editors/vim-elixir'
 Plug 'Glench/Vim-Jinja2-Syntax'
 Plug 'godlygeek/tabular' | Plug 'tpope/vim-markdown'
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install' }
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarnpkg install' }
 Plug 'jvirtanen/vim-hcl'
 Plug 'lifepillar/pgsql.vim'
 Plug 'othree/html5.vim'
@@ -175,6 +175,13 @@ let &statusline = s:statusline_expr()
 
 let mapleader=" "
 let maplocalleader=" "
+
+
+" fold-related
+set foldmethod=syntax
+let g:is_bash = 1
+let g:sh_fold_enabled = 3
+set nofoldenable
 
 set autoindent
 set autoread
