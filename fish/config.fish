@@ -21,6 +21,7 @@ alias ssh 'assh wrapper ssh --'
 alias p 'cd ~/projects'
 alias w 'cd ~/work'
 alias d 'cd ~/dotfiles'
+alias gdc 'git diff --cached | vim -'
 alias tree 'tree -a -I ".git|*.pyc|*pycache*"'
 
 #######################################################################
