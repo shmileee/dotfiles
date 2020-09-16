@@ -249,6 +249,10 @@ hi SpellCap cterm=underline
 " Basic mappings
 " -----------------------------------------------------------------------------
 
+" https://vim.fandom.com/wiki/Insert_newline_without_entering_insert_mode
+nnoremap o o<Esc>
+nnoremap O O<Esc>
+
 " Seamlessly treat visual lines as actual lines when moving around.
 noremap j gj
 noremap k gk
