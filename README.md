@@ -25,10 +25,14 @@ sudo apt-get update && sudo apt-get install -y \
   jq \
   golang \
   golang-go \
-  dos2unix
+  dos2unix \
+  ruby-full
 
 # Install assh - wrapper that adds support for multiple things to SSH
 go get -u moul.io/assh/v2
+
+# Install tmuxinator
+sudo gem install tmuxinator
 
 # Install oh-my-bash framework
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
@@ -44,6 +48,7 @@ mkdir -p ~/.local/bin && mkdir -p ~/.vim/spell \
   && ln -s ~/dotfiles/.gitconfig ~/.gitconfig \
   && ln -s ~/dotfiles/.tmux.conf ~/.tmux.conf \
   && ln -s ~/dotfiles/.vimrc ~/.vimrc
+  && ln -s ~/dotfiles/.gemrc ~/.gemrc
   && ln -s ~/dotfiles/.gitconfig.user ~/.gitconfig.user
   && ln -s ~/dotfiles/.gitconfig.private ~/.gitconfig.private
 

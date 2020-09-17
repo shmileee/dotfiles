@@ -16,6 +16,7 @@ if which subl &>/dev/null
 end
 
 alias g git
+alias tx tmuxinator
 alias r 'source ~/.config/fish/config.fish'
 alias ssh 'assh wrapper ssh --'
 alias p 'cd ~/projects'
@@ -80,6 +81,8 @@ if [ -f '/Users/esolidarity/google-cloud-sdk/path.fish.inc' ]; . \
 #######################################################################
 #                               Exports                               #
 #######################################################################
+
+set -gx EDITOR "vim"
 
 set -gx FZF_DEFAULT_COMMAND "rg --files --hidden --follow --glob '!.git'"
 set -gx FZF_DEFAULT_OPTS "--color=dark"

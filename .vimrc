@@ -218,7 +218,7 @@ set scrolloff=3
 set shiftwidth=2
 set showcmd
 set showmatch
-set shortmess-=S
+set shortmess=I
 set showmode
 set smartcase
 set softtabstop=2
