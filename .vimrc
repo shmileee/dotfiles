@@ -12,8 +12,14 @@ call plug#begin('~/.vim/plugged')
 " Open vim with the last saved position.
 Plug 'farmergreg/vim-lastplace'
 
+" Open vim with the last saved position.
+Plug 'gcmt/taboo.vim'
+
 " Atom One Dark / Light theme.
 Plug 'rakr/vim-one'
+
+" Handle multi-file find and replace.
+Plug 'mhinz/vim-grepper'
 
 " surround.vim
 Plug 'tpope/vim-surround'
@@ -35,19 +41,10 @@ Plug 'dhruvasagar/vim-zoom'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 
 " Navigate and manipulate files in a tree view.
-Plug 'scrooloose/nerdtree'
-
-" Helpers for moving and manipulating files / directories.
-Plug 'tpope/vim-eunuch'
-
-" Launch Ranger from Vim.
-Plug 'francoiscabrol/ranger.vim'
+Plug 'lambdalisue/fern.vim'
 
 " Run a diff on 2 directories.
 Plug 'will133/vim-dirdiff'
-
-" Run a diff on 2 blocks of text.
-Plug 'AndrewRadev/linediff.vim'
 
 " Add spelling errors to the quickfix list (vim-ingo-library is a dependency).
 Plug 'inkarkat/vim-ingo-library' | Plug 'inkarkat/vim-SpellCheck'
@@ -74,7 +71,7 @@ Plug 'ntpeters/vim-better-whitespace'
 Plug 'tpope/vim-commentary'
 
 " Automatically set 'shiftwidth' + 'expandtab' (indention) based on file type.
-Plug 'tpope/vim-sleuth'
+" Plug 'tpope/vim-sleuth'
 
 " A number of useful motions for the quickfix list, pasting and more.
 Plug 'tpope/vim-unimpaired'
@@ -87,12 +84,6 @@ Plug 'mhinz/vim-signify'
 
 " A git wrapper.
 Plug 'tpope/vim-fugitive'
-
-" Dim paragraphs above and below the active paragraph.
-Plug 'junegunn/limelight.vim'
-
-" Distraction free writing by removing UI elements and centering everything.
-Plug 'junegunn/goyo.vim'
 
 " A bunch of useful language related snippets (ultisnips is the engine).
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
@@ -454,6 +445,10 @@ let g:fzf_action = {
 " Launch fzf with CTRL+P.
 nnoremap <silent> <C-p> :FZF -m<CR>
 
+" Close current tab
+nnoremap <silent> <Leader>w :tabclose<CR>
+nnoremap <silent> <C-p> :FZF -m<CR>
+
 " Map a few common things to do with FZF.
 nnoremap <silent> <Leader><Enter> :Buffers<CR>
 nnoremap <silent> <Leader>l :Lines<CR>
@@ -467,24 +462,62 @@ command! -bang -nargs=* Rg
 
 
 " .............................................................................
-" scrooloose/nerdtree
+" lambdalisue/fern.vim
 " .............................................................................
+" Disable netrw.
+let g:loaded_netrw  = 1
+let g:loaded_netrwPlugin = 1
+let g:loaded_netrwSettings = 1
+let g:loaded_netrwFileHandlers = 1
 
-let g:NERDTreeShowHidden=1
-let g:NERDTreeAutoDeleteBuffer=1
-let g:NERDTreeQuitOnOpen=0
-" Files to ignore
-let NERDTreeIgnore = [
-    \ '\~$',
-    \ '\.pyc$',
-    \ '^\.DS_Store$',
-    \ '^node_modules$',
-    \ '^.ropeproject$',
-    \ '^__pycache__$'
-\]
+augroup my-fern-hijack
+  autocmd!
+  autocmd BufEnter * ++nested call s:hijack_directory()
+augroup END
 
-" Open nerd tree at the current file or close nerd tree if pressed again.
-nnoremap <silent> <expr> <Leader>n g:NERDTree.IsOpen() ? "\:NERDTreeClose<CR>" : bufexists(expand('%')) ? "\:NERDTreeFind<CR>" : "\:NERDTree<CR>"
+function! s:hijack_directory() abort
+  let path = expand('%:p')
+  if !isdirectory(path)
+    return
+  endif
+  bwipeout %
+  execute printf('Fern %s', fnameescape(path))
+endfunction
+
+" Custom settings and mappings.
+let g:fern#disable_default_mappings = 1
+
+noremap <silent> <Leader>f :Fern . -drawer -reveal=% -toggle -width=35<CR><C-w>=
+
+function! FernInit() abort
+  nmap <buffer><expr>
+        \ <Plug>(fern-my-open-expand-collapse)
+        \ fern#smart#leaf(
+        \   "\<Plug>(fern-action-open:select)",
+        \   "\<Plug>(fern-action-expand)",
+        \   "\<Plug>(fern-action-collapse)",
+        \ )
+  nmap <buffer> <CR> <Plug>(fern-my-open-expand-collapse)
+  nmap <buffer> <2-LeftMouse> <Plug>(fern-my-open-expand-collapse)
+  nmap <buffer> t <Plug>(fern-action-open:tabedit)
+  nmap <buffer> T <Plug>(fern-action-open:tabedit)gT
+  nmap <buffer> n <Plug>(fern-action-new-path)
+  nmap <buffer> d <Plug>(fern-action-remove)
+  nmap <buffer> m <Plug>(fern-action-move)
+  nmap <buffer> M <Plug>(fern-action-rename)
+  nmap <buffer> h <Plug>(fern-action-hidden-toggle)
+  nmap <buffer> r <Plug>(fern-action-reload)
+  nmap <buffer> s <Plug>(fern-action-open:split)
+  nmap <buffer> v <Plug>(fern-action-open:vsplit)
+  nmap <buffer><nowait> < <Plug>(fern-action-leave)
+  nmap <buffer><nowait> > <Plug>(fern-action-enter)
+endfunction
+
+augroup FernGroup
+  autocmd!
+  autocmd FileType fern call FernInit()
+augroup END
+
 
 " .............................................................................
 " unblevable/quick-scope
@@ -498,7 +531,7 @@ highlight QuickScopePrimary gui=underline cterm=underline
 highlight QuickScopeSecondary gui=underline cterm=underline
 
 " .............................................................................
-" mhinz/vim-grepper
+" mhinz/vim-greppek
 " .............................................................................
 
 let g:grepper={}
@@ -536,12 +569,6 @@ let g:strip_whitespace_on_save=1
 
 let g:fastfold_savehook=0
 let g:fastfold_fold_command_suffixes=[]
-
-" .............................................................................
-" junegunn/limelight.vim
-" .............................................................................
-
-let g:limelight_conceal_ctermfg=244
 
 " .............................................................................
 " SirVer/ultisnips
