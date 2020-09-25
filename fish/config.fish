@@ -94,6 +94,8 @@ set -gx PATH "$GOBIN" $PATH
 set -gx PATH ~/.local/bin $PATH
 set -gx PATH "/c/Program\ Files/Oracle/VirtualBox" $PATH
 
+set -gx  DISPLAY :0
+
 #######################################################################
 #                               Functions                             #
 #######################################################################

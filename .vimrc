@@ -174,11 +174,11 @@ let g:is_bash = 1
 let g:sh_fold_enabled = 3
 set nofoldenable
 
-set autoindent
+" set autoindent
 set autoread
 set backspace=indent,eol,start
 set backupdir=/tmp//,.
-set clipboard=unnamed
+set clipboard=unnamedplus
 set colorcolumn=80
 set complete+=kspell
 set completeopt=menuone,longest
@@ -219,6 +219,8 @@ set splitright
 set tabstop=2
 set textwidth=0
 set ttimeout
+set timeoutlen=1000
+set ttimeoutlen=0
 set ttyfast
 set ttymouse=sgr
 set undodir=/tmp
@@ -582,31 +584,3 @@ nnoremap <leader>2 2gt
 nnoremap <leader>3 3gt
 nnoremap <leader>4 4gt
 nnoremap <leader>5 5gt
-
-function! WrapForTmux(s)
-  if !exists('$TMUX')
-    return a:s
-  endif
-
-  let tmux_start = "\<Esc>Ptmux;"
-  let tmux_end = "\<Esc>\\"
-
-  return tmux_start . substitute(a:s, "\<Esc>", "\<Esc>\<Esc>", 'g') . tmux_end
-endfunction
-
-let &t_SI .= WrapForTmux("\<Esc>[?2004h")
-let &t_EI .= WrapForTmux("\<Esc>[?2004l")
-
-function! XTermPasteBegin()
-  set pastetoggle=<Esc>[201~
-  set paste
-  return ""
-endfunction
-
-inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
-
-if exists('+termguicolors')
-  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-  set termguicolors
-endif
