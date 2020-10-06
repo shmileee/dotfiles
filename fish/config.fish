@@ -25,6 +25,7 @@ alias d 'cd ~/dotfiles'
 alias gdc 'git diff --cached | vim -'
 alias tree 'tree -a -I ".git|*.pyc|*pycache*"'
 
+
 #######################################################################
 #                          Windows-specific                           #
 #######################################################################
@@ -48,6 +49,10 @@ if grep -qE "(Microsoft|WSL)" /proc/version &>/dev/null
          ln -s ~/dotfiles/.proxy ~/.proxy
          ln -s ~/dotfiles/.gitconfig.proxy ~/.gitconfig.proxy
       end
+   end
+
+   function open
+     '/c/Program Files (x86)/Google/Chrome/Application/chrome.exe' $argv
    end
 
    function dnsfix
