@@ -122,3 +122,7 @@ export PATH="$PATH:$HOME/go/bin"
 
 stty werase undef
 bind '"\C-w":backward-kill-word'
+
+export PATH=$PATH:$HOME/bin
+
+source "$HOME/lib/azure-cli/az.completion"

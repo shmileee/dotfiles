@@ -41,6 +41,9 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/mast
 # this anywhere you want, but remember where you've cloned things to.
 git clone https://github.com/shmileee/dotfiles ~/dotfiles
 
+# Install Azure CLI
+curl -L https://aka.ms/InstallAzureCli | bash
+
 mkdir -p ~/.local/bin && mkdir -p ~/.vim/spell \
   && ln -s ~/dotfiles/.aliases ~/.oh-my-bash/aliases/custom.aliases.sh \
   && ln -s ~/dotfiles/.docker.aliases ~/.oh-my-bash/aliases/docker.aliases.sh \
