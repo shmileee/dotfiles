@@ -31,5 +31,13 @@
 	# List contributors with number of commits
 	contributors = shortlog --summary --numbered
 
+	permission-reset = !git diff -p -R --no-ext-diff --no-color | grep -E \"^(diff|(old|new) mode)\" --color=never | git apply
+
 [push]
 	default = current
+
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
