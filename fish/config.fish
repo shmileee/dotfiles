@@ -25,7 +25,12 @@ alias d 'cd ~/dotfiles'
 alias gdc 'git diff --cached | vim -'
 alias tree 'tree -a -I ".git|*.pyc|*pycache*"'
 alias cdp 'cd (git rev-parse --show-toplevel)'
-
+alias dps 'docker ps' # Get container process
+alias dpa 'docker ps -a' # Get process included stop container
+alias dip 'docker inspect --format "{{ .NetworkSettings.IPAddress }}"' # Get container IP
+alias dkd 'docker run -d -P' # Run deamonized container, e.g., $dkd base /bin/echo hello
+alias dki 'docker run -i -t -P' # Run interactive container, e.g., $dki base /bin/bash
+alias dex 'docker exec -i -t' # Execute interactive container, e.g., $dex base /bin/bash
 
 #######################################################################
 #                          Windows-specific                           #
@@ -117,7 +122,6 @@ function fif --description="Using ripgrep combined with preview"
    end
 end
 
-
 function vdiff --description="Compare two files or dirs with vim"
    if test (count $argv) -ne 2; or test $argv[1] = "--help"
       printf "vdiff requires two arguments"
@@ -140,5 +144,29 @@ function sudo
         eval command sudo $history[1]
     else
         command sudo $argv
+    end
+end
+
+function dstop --description="Stop all containers"
+    docker stop (docker ps -a -q)
+end
+
+function drm --description="Remove all containers"
+    docker rm (docker ps -a -q)
+end
+
+function drmf --description="Stop and Remove all containers"
+    docker stop (docker ps -a -q) && docker rm (docker ps -a -q)
+end
+
+function drmi --description="Remove all images"
+    docker rmi (docker images -q)
+end
+
+function dbash --description="Bash into running container"
+    if test (count $argv) -lt 1; or test $argv[1] = "--help"
+      printf "Need a container name to bash into."
+    else if test (count $argv) -eq 1
+      docker exec -it (docker ps -aqf "name=$argv[1]") bash
     end
 end
