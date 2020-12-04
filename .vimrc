@@ -15,7 +15,7 @@ Plug 'wsdjeg/vim-fetch'
 " Open vim with the last saved position.
 Plug 'farmergreg/vim-lastplace'
 
-" Open vim with the last saved position.
+" Quickly rename tabs
 Plug 'gcmt/taboo.vim'
 
 " Atom One Dark / Light theme.
@@ -335,10 +335,6 @@ function! QuickFix_toggle()
 endfunction
 nnoremap <silent> <Leader>c :call QuickFix_toggle()<CR>
 
-" Convert the selected text's title case using the external tcc script.
-"   Requires: https://github.com/nickjj/title-case-converter
-vnoremap <Leader>tc c<C-r>=system('tcc', getreg('"'))[:-2]<CR>
-
 " Navigate the complete menu items like CTRL+n / CTRL+p would.
 inoremap <expr> <Down> pumvisible() ? "<C-n>" :"<Down>"
 inoremap <expr> <Up> pumvisible() ? "<C-p>" : "<Up>"
@@ -353,6 +349,11 @@ inoremap <expr> <Left> pumvisible() ? "<C-e>" : "<Left>"
 " -----------------------------------------------------------------------------
 " Basic autocommands
 " -----------------------------------------------------------------------------
+
+" Wrap text under cursor with double curly braces (e.g., for Jinja variables).
+" Binds to ysiwj (106 = char2nr('j'))
+" https://stackoverflow.com/questions/52330006/vim-binding-to-wrap-word-under-cursor-in-double-curly-braces
+autocmd FileType ansible,yaml let b:surround_106 = "{{ \r }}"
 
 " Auto-resize splits when Vim gets resized.
 autocmd VimResized * wincmd =
@@ -452,10 +453,8 @@ nnoremap <silent> <C-p> :FZF -m<CR>
 
 " Close current tab
 nnoremap <silent> <Leader>w :tabclose<CR>
-nnoremap <silent> <C-p> :FZF -m<CR>
 
 " Map a few common things to do with FZF.
-nnoremap <silent> <Leader><Enter> :Buffers<CR>
 nnoremap <silent> <Leader>l :Lines<CR>
 
 " Allow passing optional flags into the Rg command.
