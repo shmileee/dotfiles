@@ -24,6 +24,7 @@ alias w 'cd ~/work'
 alias d 'cd ~/dotfiles'
 alias gdc 'git diff --cached | vim -'
 alias tree 'tree -a -I ".git|*.pyc|*pycache*"'
+alias cdp 'cd (git rev-parse --show-toplevel)'
 
 
 #######################################################################
@@ -97,6 +98,8 @@ set -gx GOBIN "$GOPATH/bin"
 set -gx PATH "$GOBIN" $PATH
 
 set -gx PATH ~/.local/bin $PATH
+set -gx PATH ~/bin $PATH
+
 set -gx PATH "/c/Program\ Files/Oracle/VirtualBox" $PATH
 
 set -gx  DISPLAY :0
