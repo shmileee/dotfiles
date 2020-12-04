@@ -9,6 +9,9 @@
 " Specify a directory for plugins.
 call plug#begin('~/.vim/plugged')
 
+" Quickly jumping to the point indicated by common stack trace output
+Plug 'wsdjeg/vim-fetch'
+
 " Open vim with the last saved position.
 Plug 'farmergreg/vim-lastplace'
 
