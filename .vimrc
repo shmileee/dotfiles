@@ -257,6 +257,10 @@ noremap <Up> gk
 inoremap <Down> <C-o>gj
 inoremap <Up> <C-o>gk
 
+" Hit jk to exit insert mode
+inoremap jk <esc>
+inoremap kj <esc>
+
 " Navigate around splits with a single key combo.
 nnoremap <C-l> <C-w><C-l>
 nnoremap <C-h> <C-w><C-h>
