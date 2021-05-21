@@ -30,3 +30,6 @@ Leader + r | replace all occurrences in current file
 Leader + c | toggle quick fix list
 Leader + l | toggle search over lines of current file
 Leader + sp | fix last misspelled word
+ctrl + wo | close all windows except current
+ctrl + o | jump previous
+ctrl + i | jump next
