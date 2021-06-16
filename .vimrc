@@ -141,6 +141,8 @@ syntax on
 
 " Set the color scheme.
 colorscheme one
+let g:solarized_visibility = "high"
+let g:solarized_contrast = "high"
 set background=dark
 
 " -----------------------------------------------------------------------------
@@ -179,9 +181,9 @@ set nofoldenable
 
 " set autoindent
 set autoread
-set backspace=indent,eol,start
+set clipboard=unnamed
 set backupdir=/tmp//,.
-set clipboard=unnamedplus
+set clipboard=unnamed
 set colorcolumn=80
 set complete+=kspell
 set completeopt=menuone,longest
@@ -236,10 +238,11 @@ set wrap
 
 runtime! macros/matchit.vim
 
-hi SpellBad cterm=underline ctermfg=9
-hi SpellLocal cterm=underline ctermfg=9
-hi SpellRare cterm=underline ctermfg=9
-hi SpellCap cterm=underline
+" Spelling mistakes will be colored up red.
+hi SpellBad cterm=underline ctermfg=203 guifg=#ff5f5f
+hi SpellLocal cterm=underline ctermfg=203 guifg=#ff5f5f
+hi SpellRare cterm=underline ctermfg=203 guifg=#ff5f5f
+hi SpellCap cterm=underline ctermfg=203 guifg=#ff5f5f
 
 " -----------------------------------------------------------------------------
 " Basic mappings
@@ -590,3 +593,6 @@ nnoremap <leader>2 2gt
 nnoremap <leader>3 3gt
 nnoremap <leader>4 4gt
 nnoremap <leader>5 5gt
+
+set backspace=indent,eol,start
+au BufRead,BufNewFile *.md setlocal textwidth=80
