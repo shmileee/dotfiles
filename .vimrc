@@ -374,6 +374,9 @@ autocmd InsertLeave * silent! set nopaste
 " Make sure all types of requirements.txt files get syntax highlighting.
 autocmd BufNewFile,BufRead requirements*.txt set syntax=python
 
+" Make sure .aliases, .bash_aliases and similar files get syntax highlighting.
+autocmd BufNewFile,BufRead .*aliases set syntax=sh
+
 " Ensure tabs don't get converted to spaces in Makefiles.
 autocmd FileType make setlocal noexpandtab
 
@@ -387,6 +390,9 @@ augroup END
 " ----------------------------------------------------------------------------
 " Basic commands
 " ----------------------------------------------------------------------------
+
+" Allow files to be saved as root when forgetting to start Vim using sudo.
+command W :execute ':silent w !sudo tee % > /dev/null' | :edit!
 
 " Add all TODO items to the quickfix list relative to where you opened Vim.
 function! s:todo() abort

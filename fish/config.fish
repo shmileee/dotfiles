@@ -27,6 +27,8 @@ alias d 'cd ~/dotfiles'
 alias gdc 'git diff --cached | vim -'
 alias tree 'tree -a -I ".git|*.pyc|*pycache*"'
 alias cdp 'cd (git rev-parse --show-toplevel)'
+alias vdt="rm /tmp/%*" # Remove Vim's temp file
+alias vss="sort -u ~/.vim/spell/en.utf-8.add -o ~/.vim/spell/en.utf-8.add"
 alias dps 'docker ps' # Get container process
 alias dpa 'docker ps -a' # Get process included stop container
 alias dip 'docker inspect --format "{{ .NetworkSettings.IPAddress }}"' # Get container IP
