@@ -9,9 +9,9 @@
 	last = log -1 HEAD
 	visual = !gitk
 	tags = tag -l
-	branches = branch -a
+	branches = for-each-ref --sort='-authordate:iso8601' --format='%(color:green)%(authordate:iso8601)  %(color:yellow)%(authorname)%09%(color:white)%(refname:short)' refs/heads
 	remotes = remote -v
-	l = log --pretty=oneline -n 20 --graph --abbrev-commit
+	l = log --graph --full-history --pretty=format:'%C(red)%h%Creset - %C(yellow)%s %C(green)(%an, %cr)%C(white)%d%C(reset)' --abbrev-commit --date=relative
 	s = status -s
 	d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
 
