@@ -123,7 +123,9 @@ function fif --description="Using ripgrep combined with preview"
       printf "Need a string to search for."
    else if test (count $argv) -eq 1
       rg --files-with-matches --no-messages "$argv[1]" | fzf --preview \
-         "rg  --ignore-case --pretty --context 10 '$argv[1]'"
+         "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' \
+         --ignore-case --pretty --context 10 '$argv[1]' || rg --ignore-case \
+         --pretty --context 10 '$argv[1]' {}"
    end
 end
 
