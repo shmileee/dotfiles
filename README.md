@@ -74,40 +74,11 @@ curl "https://releases.hashicorp.com/terraform/0.12.26/terraform_0.12.26_linux_a
 When working on MacOS:
 
 ```
-brew install 
-  7z \
-  adb \
-  assh \
-  android-platform-tools \
-  caskroom/fonts/font-firacode-nerd-font \
-  coreutils \
-  duckdns \
-  fish \
-  ffmpeg \
-  fzf \
-  gawk \
-  github/gh/gh \
-  gnu-getopt \
-  graphviz \
-  hadolint \
-  heroku/brew/heroku \
-  hg \
-  jq \
-  kubernetes-helm \
-  netstat \
-  ngrep \
-  pre-commit \
-  pylint \
-  python \
-  python3 \
-  reattach-to-user-namespace \
-  ripgrep \
-  shellcheck \
-  terraform \
-  tmux \
-  unrar \
-  watch \
-  wireguard-tools
+# Install brew
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Install packages from Brewfile
+brew bundle
 
 # Install oh-my-fish addon
 mkdir -p ~/.config/fish/omf \
@@ -126,12 +97,12 @@ mkdir -p ~/.config/fish/completions \
 # this anywhere you want, but remember where you've cloned things to.
 git clone https://github.com/shmileee/dotfiles ~/dotfiles
 
-ln -s ~/dotfiles/.gitconfig ~/.gitconfig \
-  && ln -s ~/dotfiles/.tmux.conf ~/.tmux.conf \
-  && ln -s ~/dotfiles/.vimrc ~/.vimrc \
-  && ln -s ~/dotfiles/.gitconfig.user ~/.gitconfig.user \
-  && ln -s ~/dotfiles/.gitconfig.user ~/.gitconfig.user \
-  && ln -s ~/dotfiles/fish/config.fish ~/.config/fish/config.fish \
+ln -sfn ~/dotfiles/.gitconfig ~/.gitconfig \
+  && ln -sfn ~/dotfiles/.tmux.conf ~/.tmux.conf \
+  && ln -sfn ~/dotfiles/.vimrc ~/.vimrc \
+  && ln -sfn ~/dotfiles/.gitconfig.user ~/.gitconfig.user \
+  && ln -sfn ~/dotfiles/.gitconfig.private ~/.gitconfig.private \
+  && ln -sfn ~/dotfiles/fish/config.fish ~/.config/fish/config.fish \
   && ln -sfn ~/dotfiles/fish/theme ~/.config/omf/theme
 ```
 
