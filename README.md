@@ -101,6 +101,7 @@ ln -sfn ~/dotfiles/.gitconfig ~/.gitconfig \
   && ln -sfn ~/dotfiles/.tmux.conf ~/.tmux.conf \
   && ln -sfn ~/dotfiles/.vimrc ~/.vimrc \
   && ln -sfn ~/dotfiles/.gitconfig.user ~/.gitconfig.user \
+  && ln -sfn ~/dotfiles/.gitignore_global ~/.gitignore_global \
   && ln -sfn ~/dotfiles/.gitconfig.private ~/.gitconfig.private \
   && ln -sfn ~/dotfiles/fish/config.fish ~/.config/fish/config.fish \
   && ln -sfn ~/dotfiles/fish/theme ~/.config/omf/theme

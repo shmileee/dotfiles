@@ -1,5 +1,6 @@
 [core]
 	editor = vim
+	excludesfile = ~/.gitignore_global
 [color "diff"]
 	whitespace = red reverse
 [include]
