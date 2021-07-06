@@ -15,3 +15,5 @@
 	path = ~/.gitconfig.work
 [credential]
 	helper = store
+[pull]
+	rebase = false
