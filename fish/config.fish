@@ -27,6 +27,7 @@ alias w 'cd ~/work'
 alias d 'cd ~/dotfiles'
 alias gdc 'git diff --cached | vim -'
 alias tree 'tree -a -I ".git|*.pyc|*pycache*"'
+alias tfcost 'terraform state pull | curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/'
 alias cdp 'cd (git rev-parse --show-toplevel)'
 alias vdt="rm /tmp/%*" # Remove Vim's temp file
 alias vss="sort -u ~/.vim/spell/en.utf-8.add -o ~/.vim/spell/en.utf-8.add"
