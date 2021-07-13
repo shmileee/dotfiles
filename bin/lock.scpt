@@ -1,0 +1,3 @@
+#!/usr/bin/osascript
+
+tell application "System Events" to key code 12 using {control down, command down}

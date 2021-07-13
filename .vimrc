@@ -9,6 +9,8 @@
 " Specify a directory for plugins.
 call plug#begin('~/.vim/plugged')
 
+Plug 'hashivim/vim-terraform'
+
 " Quickly jumping to the point indicated by common stack trace output
 Plug 'wsdjeg/vim-fetch'
 

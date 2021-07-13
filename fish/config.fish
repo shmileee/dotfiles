@@ -18,7 +18,8 @@ end
 alias g git
 alias ls exa
 alias tx tmuxinator
-alias du duf
+alias du dust
+alias df duf
 alias groot 'git rev-parse --show-toplevel'
 alias r 'source ~/.config/fish/config.fish'
 alias ssh 'assh wrapper ssh --'
