@@ -21,7 +21,7 @@ alias tx tmuxinator
 alias du dust
 alias df duf
 alias groot 'git rev-parse --show-toplevel'
-alias r 'source ~/.config/fish/config.fish'
+alias r 'ranger'
 alias ssh 'assh wrapper ssh --'
 alias p 'cd ~/projects'
 alias w 'cd ~/work'
