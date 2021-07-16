@@ -20,6 +20,9 @@ Plug 'farmergreg/vim-lastplace'
 " Quickly rename tabs
 Plug 'gcmt/taboo.vim'
 
+" Integration with Dash
+Plug 'rizzatti/dash.vim'
+
 " Atom One Dark / Light theme.
 Plug 'rakr/vim-one'
 
@@ -320,6 +323,8 @@ map <F5> :setlocal spell!<CR>
 
 " Toggle relative line numbers and regular line numbers.
 nmap <F6> :set invrelativenumber<CR>
+
+nmap <silent> <leader>d <Plug>DashSearch
 
 " Automatically fix the last misspelled word and jump back to where you were.
 "   Taken from this talk: https://www.youtube.com/watch?v=lwD8G1P52Sk
