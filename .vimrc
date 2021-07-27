@@ -26,6 +26,9 @@ Plug 'rizzatti/dash.vim'
 " Atom One Dark / Light theme.
 Plug 'rakr/vim-one'
 
+" Jsonnet filetype plugin for Vim.
+Plug 'google/vim-jsonnet'
+
 " Handle multi-file find and replace.
 Plug 'mhinz/vim-grepper'
 
@@ -324,7 +327,9 @@ map <F5> :setlocal spell!<CR>
 " Toggle relative line numbers and regular line numbers.
 nmap <F6> :set invrelativenumber<CR>
 
+let g:dash_activate=0
 nmap <silent> <leader>d <Plug>DashSearch
+
 
 " Automatically fix the last misspelled word and jump back to where you were.
 "   Taken from this talk: https://www.youtube.com/watch?v=lwD8G1P52Sk
@@ -446,6 +451,7 @@ command! -bang Profile call s:profile(<bang>0)
 " .............................................................................
 
 let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all'
+
 
 " Customize fzf colors to match your color scheme.
 let g:fzf_colors =
