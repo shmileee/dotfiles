@@ -1,58 +1,60 @@
 [core]
-	editor = vim
+  editor = vim
 [alias]
-	co = checkout
-	br = branch
-	ci = commit
-	st = status
-	unstage = reset HEAD --
-	last = log -1 HEAD
-	visual = !gitk
-	tags = tag -l
-	branches = for-each-ref --sort='-authordate:iso8601' --format='%(color:green)%(authordate:iso8601)  %(color:yellow)%(authorname)%09%(color:white)%(refname:short)' refs/heads
-	remotes = remote -v
-	l = log --graph --full-history --pretty=format:'%C(red)%h%Creset - %C(yellow)%s %C(green)(%an, %cr)%C(white)%d%C(reset)' --abbrev-commit --date=relative
-	s = status -s
-	d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
+  co = checkout
+  br = branch
+  ci = commit
+  st = status
+  unstage = reset HEAD --
+  last = log -1 HEAD
+  visual = !gitk
+  tags = tag -l
+  branches = for-each-ref --sort='-authordate:iso8601' --format='%(color:green)%(authordate:iso8601)  %(color:yellow)%(authorname)%09%(color:white)%(refname:short)' refs/heads
+  remotes = remote -v
+  l = log --graph --full-history --pretty=format:'%C(red)%h%Creset - %C(yellow)%s %C(green)(%an, %cr)%C(white)%d%C(reset)' --abbrev-commit --date=relative
+  s = status -s
+  d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
 
-	# Find branches containing commit
-	fb = "!f() { git branch -a --contains $1; }; f"
+  # Find branches containing commit
+  fb = "!f() { git branch -a --contains $1; }; f"
 
-	# Find commits by source code
-	fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
+  # Find commits by source code
+  fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
 
-	# Find commits by commit message
-	fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
+  # Find commits by commit message
+  fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
 
-	# Remove branches that have already been merged with master
-	# a.k.a. ‘delete merged’
-	dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
+  # Remove branches that have already been merged with master
+  # a.k.a. ‘delete merged’
+  dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
 
-	# List contributors with number of commits
-	contributors = shortlog --summary --numbered
+  # List contributors with number of commits
+  contributors = shortlog --summary --numbered
 
-	permission-reset = !git diff -p -R --no-ext-diff --no-color | grep -E \"^(diff|(old|new) mode)\" --color=never | git apply
+  permission-reset = !git diff -p -R --no-ext-diff --no-color | grep -E \"^(diff|(old|new) mode)\" --color=never | git apply
+
+  set-upstream = !git branch --set-upstream-to=origin/$(git symbolic-ref --short HEAD)
 
 [push]
-	default = current
+  default = current
 
 [filter "lfs"]
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
-	clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true
+  clean = git-lfs clean -- %f
 
 [pager]
-    diff = delta
-    log = delta
-    reflog = delta
-    show = delta
+  diff = delta
+  log = delta
+  reflog = delta
+  show = delta
 
 [delta]
-    plus-style = "syntax #012800"
-    minus-style = "syntax #340001"
-    syntax-theme = Monokai Extended
-    navigate = true
+  plus-style = "syntax #012800"
+  minus-style = "syntax #340001"
+  syntax-theme = Monokai Extended
+  navigate = true
 
 [interactive]
-    diffFilter = delta --color-only
+  diffFilter = delta --color-only
