@@ -263,6 +263,9 @@ hi SpellCap cterm=underline ctermfg=203 guifg=#ff5f5f
 nnoremap o o<Esc>
 nnoremap O O<Esc>
 
+vnoremap K :m '<-2<CR>gv=gv
+vnoremap J :m '>+1<CR>gv=gv
+
 " Fix the undo breakpoints
 inoremap , ,<c-g>u
 inoremap . .<c-g>u
