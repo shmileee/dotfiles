@@ -259,6 +259,14 @@ hi SpellCap cterm=underline ctermfg=203 guifg=#ff5f5f
 " Basic mappings
 " -----------------------------------------------------------------------------
 
+nnoremap <silent> Q <nop>
+
+" https://superuser.com/questions/321547/how-do-i-replace-paste-yanked-text-in-vim-without-yanking-the-deleted-lines
+vnoremap p "0p
+vnoremap P "0P
+vnoremap y "0y
+vnoremap d "0d
+
 " https://vim.fandom.com/wiki/Insert_newline_without_entering_insert_mode
 nnoremap o o<Esc>
 nnoremap O O<Esc>
@@ -339,7 +347,7 @@ map <F5> :setlocal spell!<CR>
 " Toggle relative line numbers and regular line numbers.
 nmap <F6> :set invrelativenumber<CR>
 
-let g:dash_activate=0
+let g:dash_activate=1
 nmap <silent> <leader>d <Plug>DashSearch
 
 nnoremap J mzJ`z
