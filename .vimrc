@@ -275,10 +275,7 @@ let &t_SI = "\e[6 q"
 let &t_EI = "\e[2 q"
 
 " https://superuser.com/questions/321547/how-do-i-replace-paste-yanked-text-in-vim-without-yanking-the-deleted-lines
-vnoremap p "0p
-vnoremap P "0P
-vnoremap y "0y
-vnoremap d "0d
+vnoremap <Leader>p "_dP
 
 " https://vim.fandom.com/wiki/Insert_newline_without_entering_insert_mode
 nnoremap o o<Esc>
