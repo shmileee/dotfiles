@@ -35,6 +35,9 @@ Plug 'mhinz/vim-grepper'
 " surround.vim
 Plug 'tpope/vim-surround'
 
+" repeat.vim
+Plug 'tpope/vim-repeat'
+
 " Respect .editorconfig
 Plug 'editorconfig/editorconfig-vim'
 
@@ -259,6 +262,12 @@ hi SpellCap cterm=underline ctermfg=203 guifg=#ff5f5f
 " https://vim.fandom.com/wiki/Insert_newline_without_entering_insert_mode
 nnoremap o o<Esc>
 nnoremap O O<Esc>
+
+" Fix the undo breakpoints
+inoremap , ,<c-g>u
+inoremap . .<c-g>u
+inoremap ! !<c-g>u
+inoremap ? ?<c-g>u
 
 " Seamlessly treat visual lines as actual lines when moving around.
 noremap j gj
