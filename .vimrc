@@ -342,6 +342,7 @@ nmap <F6> :set invrelativenumber<CR>
 let g:dash_activate=0
 nmap <silent> <leader>d <Plug>DashSearch
 
+nnoremap J mzJ`z
 
 " Automatically fix the last misspelled word and jump back to where you were.
 "   Taken from this talk: https://www.youtube.com/watch?v=lwD8G1P52Sk
