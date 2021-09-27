@@ -73,12 +73,32 @@ curl "https://releases.hashicorp.com/terraform/0.12.26/terraform_0.12.26_linux_a
 
 When working on MacOS:
 
-```
+```sh
+# Install iTerm2 
+https://iterm2.com/downloads.html
+
 # Install brew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
+# Clone down this dotfiles repo to your home directory. Feel free to place
+# this anywhere you want, but remember where you've cloned things to.
+git clone https://github.com/shmileee/dotfiles ~/dotfiles
+
 # Install packages from Brewfile
 brew bundle
+
+# Install VimPlug
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+ln -sfn ~/dotfiles/.gitconfig ~/.gitconfig \
+  && ln -sfn ~/dotfiles/.tmux.conf ~/.tmux.conf \
+  && ln -sfn ~/dotfiles/.vimrc ~/.vimrc \
+  && ln -sfn ~/dotfiles/.gitconfig.user ~/.gitconfig.user \
+  && ln -sfn ~/dotfiles/.gitignore_global ~/.gitignore_global \
+  && ln -sfn ~/dotfiles/.gitconfig.private ~/.gitconfig.private \
+  && ln -sfn ~/dotfiles/fish/config.fish ~/.config/fish/config.fish \
+  && ln -sfn ~/dotfiles/fish/theme ~/.config/omf/theme
 
 # Install oh-my-fish addon
 mkdir -p ~/.config/fish/omf \
@@ -93,18 +113,8 @@ mkdir -p ~/.config/fish/completions \
   && git clone https://github.com/evanlucas/fish-kubectl-completions \
   && ln -s ../fish-kubectl-completions/completions/kubectl.fish completions/
 
-# Clone down this dotfiles repo to your home directory. Feel free to place
-# this anywhere you want, but remember where you've cloned things to.
-git clone https://github.com/shmileee/dotfiles ~/dotfiles
-
-ln -sfn ~/dotfiles/.gitconfig ~/.gitconfig \
-  && ln -sfn ~/dotfiles/.tmux.conf ~/.tmux.conf \
-  && ln -sfn ~/dotfiles/.vimrc ~/.vimrc \
-  && ln -sfn ~/dotfiles/.gitconfig.user ~/.gitconfig.user \
-  && ln -sfn ~/dotfiles/.gitignore_global ~/.gitignore_global \
-  && ln -sfn ~/dotfiles/.gitconfig.private ~/.gitconfig.private \
-  && ln -sfn ~/dotfiles/fish/config.fish ~/.config/fish/config.fish \
-  && ln -sfn ~/dotfiles/fish/theme ~/.config/omf/theme
+# Install mathiasbynens's .macos tweaks
+sudo bash .macos
 ```
 
 Optionally confirm that a few things work after closing and re-opening your
