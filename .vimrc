@@ -687,3 +687,7 @@ endfunction
 
 " Make a keybinding (mnemonic: "mark down paste")
 nmap <Leader>mdp :call PasteMDLink()<cr>
+
+" better use of arrow keys, number increment/decrement
+nnoremap <up> <C-a>
+nnoremap <down> <C-x>
