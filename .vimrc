@@ -90,7 +90,7 @@ Plug 'ntpeters/vim-better-whitespace'
 Plug 'tpope/vim-commentary'
 
 " Automatically set 'shiftwidth' + 'expandtab' (indention) based on file type.
-" Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-sleuth'
 
 " A number of useful motions for the quickfix list, pasting and more.
 Plug 'tpope/vim-unimpaired'
@@ -133,6 +133,7 @@ Plug 'vim-python/python-syntax'
 Plug 'vim-ruby/vim-ruby'
 Plug 'wgwoods/vim-systemd-syntax'
 Plug 'blankname/vim-fish'
+Plug 'towolf/vim-helm'
 
 " Highlight Jenkinsfile syntax as grovy
 au BufNewFile,BufRead Jenkinsfile setf groovy
@@ -160,6 +161,13 @@ colorscheme gruvbox
 let g:solarized_visibility = "high"
 let g:solarized_contrast = "high"
 set background=dark
+
+" Specific colorscheme settings (must come after setting your colorscheme).
+if (g:colors_name == 'gruvbox')
+  if (&background == 'dark')
+    hi Visual cterm=NONE ctermfg=NONE ctermbg=237 guibg=#3a3a3a
+  endif
+endif
 
 " -----------------------------------------------------------------------------
 " Status line
@@ -195,7 +203,7 @@ let g:is_bash = 1
 let g:sh_fold_enabled = 3
 set nofoldenable
 
-" set autoindent
+set autoindent
 set autoread
 set clipboard=unnamed
 set backupdir=/tmp//,.
@@ -226,11 +234,11 @@ set nostartofline
 set number relativenumber
 set regexpengine=1
 set ruler
-set scrolloff=3
+set scrolloff=0
 set shiftwidth=2
 set showcmd
 set showmatch
-set shortmess=I
+set shortmess+=c
 set showmode
 set smartcase
 set softtabstop=2
@@ -439,12 +447,15 @@ augroup CursorLine
     au WinLeave * setlocal nocursorline
 augroup END
 
+" Make sure Kubernetes yaml files end up being set as helm files.
+au BufNewFile,BufRead *.{yaml,yml} if getline(1) =~ '^apiVersion:' || getline(2) =~ '^apiVersion:' | setlocal filetype=helm | endif
+
 " ----------------------------------------------------------------------------
 " Basic commands
 " ----------------------------------------------------------------------------
 
 " Allow files to be saved as root when forgetting to start Vim using sudo.
-command W :execute ':silent w !sudo tee % > /dev/null' | :edit!
+command Sw :execute ':silent w !sudo tee % > /dev/null' | :edit!
 
 " Add all TODO items to the quickfix list relative to where you opened Vim.
 function! s:todo() abort
@@ -521,6 +532,7 @@ nnoremap <silent> <C-p> :FZF -m<CR>
 nnoremap <silent> <Leader>w :tabclose<CR>
 
 " Map a few common things to do with FZF.
+nnoremap <silent> <Leader><Enter> :Buffers<CR>
 nnoremap <silent> <Leader>l :Lines<CR>
 
 " Allow passing optional flags into the Rg command.
@@ -601,7 +613,7 @@ highlight QuickScopePrimary gui=underline cterm=underline
 highlight QuickScopeSecondary gui=underline cterm=underline
 
 " .............................................................................
-" mhinz/vim-greppek
+" mhinz/vim-grepper
 " .............................................................................
 
 let g:grepper={}
