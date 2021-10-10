@@ -9,6 +9,8 @@
 " Specify a directory for plugins.
 call plug#begin('~/.vim/plugged')
 
+Plug 'mbbill/undotree'
+
 Plug 'hashivim/vim-terraform'
 
 " Quickly jumping to the point indicated by common stack trace output
@@ -276,6 +278,9 @@ let &t_EI = "\e[2 q"
 
 " https://superuser.com/questions/321547/how-do-i-replace-paste-yanked-text-in-vim-without-yanking-the-deleted-lines
 vnoremap <Leader>p "_dP
+
+" UndoTree
+nnoremap <Leader>u :UndotreeShow<CR>
 
 " https://vim.fandom.com/wiki/Insert_newline_without_entering_insert_mode
 nnoremap o o<Esc>
