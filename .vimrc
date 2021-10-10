@@ -22,11 +22,14 @@ Plug 'farmergreg/vim-lastplace'
 " Quickly rename tabs
 Plug 'gcmt/taboo.vim'
 
+Plug 'sheerun/vim-polyglot'
+
 " Integration with Dash
 Plug 'rizzatti/dash.vim'
 
 " Atom One Dark / Light theme.
 Plug 'rakr/vim-one'
+Plug 'morhetz/gruvbox'
 
 " Jsonnet filetype plugin for Vim.
 Plug 'google/vim-jsonnet'
@@ -153,7 +156,7 @@ endif
 syntax on
 
 " Set the color scheme.
-colorscheme one
+colorscheme gruvbox
 let g:solarized_visibility = "high"
 let g:solarized_contrast = "high"
 set background=dark
@@ -356,6 +359,7 @@ map <Leader>ev :tabnew $MYVIMRC<CR>
 " Source Vim config file.
 map <Leader>sv :source $MYVIMRC<CR>
 
+
 " Toggle spell check.
 map <F5> :setlocal spell!<CR>
 
@@ -408,7 +412,7 @@ inoremap <expr> <Left> pumvisible() ? "<C-e>" : "<Left>"
 " Wrap text under cursor with double curly braces (e.g., for Jinja variables).
 " Binds to ysiwj (106 = char2nr('j'))
 " https://stackoverflow.com/questions/52330006/vim-binding-to-wrap-word-under-cursor-in-double-curly-braces
-autocmd FileType ansible,yaml let b:surround_106 = "{{ \r }}"
+autocmd FileType ansible,yaml,j2 let b:surround_106 = "{{ \r }}"
 
 " Auto-resize splits when Vim gets resized.
 autocmd VimResized * wincmd =
@@ -649,7 +653,9 @@ nnoremap <leader>3 3gt
 nnoremap <leader>4 4gt
 nnoremap <leader>5 5gt
 
+" required for mac delete to work
 set backspace=indent,eol,start
+
 au BufRead,BufNewFile *.md setlocal textwidth=80
 
 " https://benjamincongdon.me/blog/2020/06/27/Vim-Tip-Paste-Markdown-Link-with-Automatic-Title-Fetching/

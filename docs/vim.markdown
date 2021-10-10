@@ -1,26 +1,28 @@
 ## surround.vim
 
-motion  | description 
-------------- | ------------- 
+motion  | description
+------------- | -------------
 cs{' | { test } > 'test'
 ds" | "test" > test
 yss" | test > "test" (whole line)
-ysiwj | ansible_string > {{ ansible_string }} 
+ysiwj | ansible_string > {{ ansible_string }}
 
 
 ## fzf.vim
 
-hotkey  | description 
-------------- | ------------- 
+hotkey  | description
+------------- | -------------
 ctrl + P | search file in current directory
 ctrl + T | open file in new tab
 ctrl + V | open file in new vertical split
+shift + tab | select file
+alt +A | select all files
 
 
 ## general hotkeys
 
-hotkey  | description 
-------------- | ------------- 
+hotkey  | description
+------------- | -------------
 F5 | toggle spell check
 F6 | toggle absolute numbers
 F7 | toggle white space characters
@@ -33,3 +35,7 @@ Leader + sp | fix last misspelled word
 ctrl + wo | close all windows except current
 ctrl + o | jump previous
 ctrl + i | jump next
+ctrl + ^ | switch between 2 most recent files
+Leader + d | search for current word in Dash
+!norm @q | replay macro `q` on visually selected lines
+shift + J/K | move visually selected lines DOWN/UP

@@ -1,6 +1,6 @@
 # dotfiles
 
-Here's a bunch of settings for the various tools I use. 
+Here's a bunch of settings for the various tools I use.
 
 ## Quickly Get Set Up with These Dotfiles
 
@@ -74,7 +74,7 @@ curl "https://releases.hashicorp.com/terraform/0.12.26/terraform_0.12.26_linux_a
 When working on MacOS:
 
 ```sh
-# Install iTerm2 
+# Install iTerm2
 https://iterm2.com/downloads.html
 
 # Install brew
@@ -147,5 +147,5 @@ also contain unique IDs too, so adjust them as needed on your end.
 ## VSCode
 
 I also use VSCode for various tasks. `Settings Sync` plugin is in charge of
-keeping my VSCode specific settings in sync across all computers. Gist file 
+keeping my VSCode specific settings in sync across all computers. Gist file
 is [here](https://gist.github.com/shmileee/f6415a0e35ea0350a2ecce4cb3c004a5).
