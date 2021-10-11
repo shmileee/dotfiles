@@ -5,7 +5,7 @@
 #######################################################################
 
 # source fzf binds
-fzf_key_bindings
+# fzf_key_bindings
 
 #######################################################################
 #                               Aliases                               #
@@ -111,6 +111,7 @@ set -gx GOPATH ~/go
 set -gx GOBIN "$GOPATH/bin"
 set -gx PATH "$GOBIN" $PATH
 set -gx PATH "/opt/homebrew/bin" $PATH
+set -gx PATH "/usr/local/opt/coreutils/libexec/gnubin" $PATH
 set -gx PATH "/opt/homebrew/opt/coreutils/libexec/gnubin" $PATH
 set -gx PATH "/opt/homebrew/Cellar/perl/5.34.0/bin" $PATH
 set -gx PATH "/usr/local/gfortran/bin" $PATH

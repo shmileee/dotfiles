@@ -17,5 +17,8 @@
 	helper = store
 [pull]
 	rebase = false
+	default = current
 [init]
 	defaultBranch = main
+[push]
+	default = current

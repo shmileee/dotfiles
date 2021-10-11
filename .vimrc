@@ -11,6 +11,8 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'mbbill/undotree'
 
+Plug 'tyru/open-browser.vim'
+
 Plug 'hashivim/vim-terraform'
 
 " Quickly jumping to the point indicated by common stack trace output
@@ -497,6 +499,11 @@ command! -bang Profile call s:profile(<bang>0)
 " Plugin settings, mappings and autocommands
 " -----------------------------------------------------------------------------
 
+" Open URLs under cursor
+let g:netrw_nogx = 1 " disable netrw's gx mapping.
+nmap gn <Plug>(openbrowser-smart-search)
+vmap gn <Plug>(openbrowser-smart-search)
+
 " .............................................................................
 " junegunn/fzf.vim
 " .............................................................................
@@ -590,6 +597,7 @@ function! FernInit() abort
   nmap <buffer> h <Plug>(fern-action-hidden-toggle)
   nmap <buffer> r <Plug>(fern-action-reload)
   nmap <buffer> s <Plug>(fern-action-open:split)
+  nmap <buffer> c <Plug>(fern-action-copy)
   nmap <buffer> v <Plug>(fern-action-open:vsplit)
   nmap <buffer><nowait> < <Plug>(fern-action-leave)
   nmap <buffer><nowait> > <Plug>(fern-action-enter)
