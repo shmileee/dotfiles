@@ -9,10 +9,13 @@
 " Specify a directory for plugins.
 call plug#begin('~/.vim/plugged')
 
+" Git for your undos in Vim
 Plug 'mbbill/undotree'
 
+" Open link under cursor in browser
 Plug 'tyru/open-browser.vim'
 
+" Terraform syntax and tools
 Plug 'hashivim/vim-terraform'
 
 " Quickly jumping to the point indicated by common stack trace output
@@ -24,6 +27,7 @@ Plug 'farmergreg/vim-lastplace'
 " Quickly rename tabs
 Plug 'gcmt/taboo.vim'
 
+" Multiple language packs for Vim
 Plug 'sheerun/vim-polyglot'
 
 " Integration with Dash
@@ -31,6 +35,8 @@ Plug 'rizzatti/dash.vim'
 
 " Atom One Dark / Light theme.
 Plug 'rakr/vim-one'
+
+" Gruvbox theme
 Plug 'morhetz/gruvbox'
 
 " Jsonnet filetype plugin for Vim.
@@ -113,11 +119,9 @@ Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'vim-scripts/AutoComplPop'
 
 " Languages and file types.
-Plug 'cakebaker/scss-syntax.vim'
 Plug 'chr4/nginx.vim'
 Plug 'chrisbra/csv.vim'
 Plug 'ekalinin/dockerfile.vim'
-Plug 'elixir-editors/vim-elixir'
 Plug 'Glench/Vim-Jinja2-Syntax'
 Plug 'godlygeek/tabular' | Plug 'tpope/vim-markdown'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarnpkg install' }
@@ -125,20 +129,14 @@ Plug 'jvirtanen/vim-hcl'
 Plug 'lifepillar/pgsql.vim'
 Plug 'othree/html5.vim'
 Plug 'pangloss/vim-javascript'
-Plug 'PotatoesMaster/i3-vim-syntax'
 Plug 'stephpy/vim-yaml'
 Plug 'tmux-plugins/vim-tmux'
 Plug 'tpope/vim-git'
-Plug 'tpope/vim-liquid'
-Plug 'tpope/vim-rails'
 Plug 'vim-python/python-syntax'
 Plug 'vim-ruby/vim-ruby'
 Plug 'wgwoods/vim-systemd-syntax'
 Plug 'blankname/vim-fish'
 Plug 'towolf/vim-helm'
-
-" Highlight Jenkinsfile syntax as grovy
-au BufNewFile,BufRead Jenkinsfile setf groovy
 
 call plug#end()
 
@@ -197,7 +195,6 @@ let &statusline = s:statusline_expr()
 
 let mapleader=" "
 let maplocalleader=" "
-
 
 " fold-related
 set foldmethod=syntax
@@ -274,6 +271,9 @@ hi SpellCap cterm=underline ctermfg=203 guifg=#ff5f5f
 " Basic mappings
 " -----------------------------------------------------------------------------
 
+" better use of arrow keys, number increment/decrement
+nnoremap <up> <C-a>
+nnoremap <down> <C-x>
 nnoremap <silent> Q <nop>
 
 " Use a line cursor within insert mode and a block cursor everywhere else.
@@ -368,7 +368,6 @@ map <Leader>ev :tabnew $MYVIMRC<CR>
 
 " Source Vim config file.
 map <Leader>sv :source $MYVIMRC<CR>
-
 
 " Toggle spell check.
 map <F5> :setlocal spell!<CR>
@@ -499,6 +498,9 @@ command! -bang Profile call s:profile(<bang>0)
 " Plugin settings, mappings and autocommands
 " -----------------------------------------------------------------------------
 
+" Highlight Jenkinsfile syntax as grovy
+au BufNewFile,BufRead Jenkinsfile setf groovy
+
 " Open URLs under cursor
 let g:netrw_nogx = 1 " disable netrw's gx mapping.
 nmap gn <Plug>(openbrowser-smart-search)
@@ -509,7 +511,6 @@ vmap gn <Plug>(openbrowser-smart-search)
 " .............................................................................
 
 let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all'
-
 
 " Customize fzf colors to match your color scheme.
 let g:fzf_colors =
@@ -607,7 +608,6 @@ augroup FernGroup
   autocmd!
   autocmd FileType fern call FernInit()
 augroup END
-
 
 " .............................................................................
 " unblevable/quick-scope
@@ -707,7 +707,3 @@ endfunction
 
 " Make a keybinding (mnemonic: "mark down paste")
 nmap <Leader>mdp :call PasteMDLink()<cr>
-
-" better use of arrow keys, number increment/decrement
-nnoremap <up> <C-a>
-nnoremap <down> <C-x>
