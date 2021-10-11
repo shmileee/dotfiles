@@ -39,3 +39,4 @@ ctrl + ^ | switch between 2 most recent files
 Leader + d | search for current word in Dash
 !norm @q | replay macro `q` on visually selected lines
 shift + J/K | move visually selected lines DOWN/UP
+gn | open link under current cursor
