@@ -9,6 +9,8 @@
 " Specify a directory for plugins.
 call plug#begin('~/.vim/plugged')
 
+Plug 'christoomey/vim-titlecase'
+
 " Git for your undos in Vim
 Plug 'mbbill/undotree'
 
