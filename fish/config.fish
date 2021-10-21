@@ -126,6 +126,14 @@ set -gx  DISPLAY :0
 #                               Functions                             #
 #######################################################################
 
+function ssm-session --description="List currently running EC2 instances and log into selected one."
+  aws ec2 describe-instances --filter "Name=instance-state-name,Values=running" \
+      | jq -r '.Reservations[].Instances[] | {InstanceName: (.Tags[] | select(.Key=="Name").Value), InstanceId} | [.InstanceName, .InstanceId] | @tsv' \
+      | fzf \
+      | cut -f 2 \
+      | xargs -o aws ssm start-session --target
+end
+
 function fif --description="Using ripgrep combined with preview"
    if test (count $argv) -lt 1; or test $argv[1] = "--help"
       printf "Need a string to search for."
