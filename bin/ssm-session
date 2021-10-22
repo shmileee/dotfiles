@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+#
+# Based on https://github.com/corrupt952/ssm-session
+#
+# Requirements:
+#   - fzf (brew install fzf)
+#
+# Usage:
+#   Designed to be used to with `aws-vault`:
+#
+#   List avialable instances:
+#     aws-vault exec <profile> -- ssm-session list
+#
+#  Connect to instance (uses fzf to provide interactive list)
+#    aws-vault exec <profile> -- ssm-session start
+
+set -o pipefail
+
+ssm_instance_ids () {
+  aws ssm describe-instance-information\
+    --query "InstanceInformationList[].InstanceId" \
+    --output=text
+  }
+
+list_instances () {
+  instance_ids=$(ssm_instance_ids)
+
+  aws ec2 describe-instances \
+    --instance-ids ${instance_ids} \
+    --filter "Name=instance-state-name,Values=running" \
+    --query "Reservations[*].Instances[*].[InstanceId,Tags[?Key=='Name']|[0].Value]" \
+    --output text
+  }
+
+print_usage () {
+    cat <<-EOF
+usage: ssm-session <command>
+command:
+    list:  List target sessions
+    start: Start session manager
+EOF
+}
+
+
+case "$1" in
+  list )
+    list_instances
+
+    ;;
+  start )
+    # Ignore SIGINT(Ctrl-C) to prevent accidental exit from session
+    trap '' 2
+
+    list_instances \
+      | fzf \
+      | cut -f 1 \
+      | xargs -o aws ssm start-session --target
+
+    ;;
+  * )
+    print_usage
+;;
+esac
