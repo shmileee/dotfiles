@@ -9,6 +9,8 @@
 " Specify a directory for plugins.
 call plug#begin('~/.vim/plugged')
 
+Plug 'vim-airline/vim-airline'
+
 Plug 'christoomey/vim-titlecase'
 
 " Git for your undos in Vim
