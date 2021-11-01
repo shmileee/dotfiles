@@ -5,7 +5,6 @@ set backspace=indent,eol,start
 set clipboard=unnamed
 set cmdheight=1
 set complete+=kspell
-set completeopt=menuone,longest
 set confirm
 set cursorline
 set foldmethod=syntax
@@ -34,7 +33,7 @@ set spelllang=en_us
 set splitbelow
 set splitright
 set t_Co=256
-set updatetime=100
+set updatetime=50
 set wildmenu
 set wrap
 
@@ -59,3 +58,12 @@ set tabstop=2
 
 set colorcolumn=80
 set rtp+=/usr/local/opt/fzf
+set completeopt=menu,menuone,longest
+
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
+set backupdir=/tmp//,.
+set directory=/tmp//,.
+set undodir=/tmp
+set undofile

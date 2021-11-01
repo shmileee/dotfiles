@@ -2,11 +2,13 @@ call plug#begin()
 source $HOME/.config/nvim/nvim-config/plugins.vim
 call plug#end()
 
+let mapleader=" "
+source $HOME/.config/nvim/nvim-config/leader.vim
 source $HOME/.config/nvim/nvim-config/general.vim
 source $HOME/.config/nvim/nvim-config/theme.vim
 source $HOME/.config/nvim/nvim-config/init.lua
 " slows things down
-" source $HOME/.config/nvim/nvim-config/coc.vim
+source $HOME/.config/nvim/nvim-config/coc.vim
 source $HOME/.config/nvim/nvim-config/mappings.vim
 source $HOME/.config/nvim/nvim-config/autocommands.vim
 source $HOME/.config/nvim/nvim-config/functions.vim
@@ -14,9 +16,6 @@ source $HOME/.config/nvim/nvim-config/quick-scope.vim
 source $HOME/.config/nvim/nvim-config/goyo.vim
 source $HOME/.config/nvim/nvim-config/fzf.vim
 source $HOME/.config/nvim/nvim-config/start-screen.vim
-
-let mapleader=" "
-source $HOME/.config/nvim/nvim-config/leader.vim
 
 " Miscellaneous
 command! LF FloatermNew lf

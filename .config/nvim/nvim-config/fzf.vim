@@ -27,6 +27,3 @@ let g:fzf_action = {
 
 " Launch fzf with CTRL+P.
 nnoremap <silent> <C-p> :FZF -m<CR>
-
-" Map a few common things to do with FZF.
-nnoremap <silent> <Leader>l :Lines<CR>

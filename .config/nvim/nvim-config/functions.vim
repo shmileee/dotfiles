@@ -26,17 +26,3 @@ function! s:todo() abort
 endfunction
 
 command! Todo call s:todo()
-
-" Profile Vim by running this command once to start it and again to stop it.
-function! s:profile(bang)
-  if a:bang
-    profile pause
-    noautocmd qall
-  else
-    profile start /tmp/profile.log
-    profile func *
-    profile file *
-  endif
-endfunction
-
-command! -bang Profile call s:profile(<bang>0)

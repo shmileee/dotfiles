@@ -17,27 +17,31 @@ Plug 'chrisbra/vim-autosave'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'phaazon/hop.nvim'
-" Plug 'roxma/vim-tmux-clipboard'
 Plug 'voldikss/fzf-floaterm'
 Plug 'voldikss/vim-floaterm'
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 
 " Focus
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
 
 " NeoVim
-" Plug 'iamcco/coc-spell-checker', {'do': 'yarn install --frozen-lockfile'}
-" Plug 'neoclide/coc-eslint', {'do': 'yarn install --frozen-lockfile'}
-" Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
-" Plug 'neoclide/coc-prettier', {'do': 'yarn install --frozen-lockfile'}
-" Plug 'neoclide/coc-sources', {'do': 'yarn install --frozen-lockfile'}
-" Plug 'neoclide/coc-tabnine', {'do': 'yarn install --frozen-lockfile'}
-" Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
-" Plug 'neoclide/coc-yaml', {'do': 'yarn install --frozen-lockfile'}
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Plug 'oncomouse/coc-fish', {'do': 'yarn install --frozen-lockfile'}
-" Plug 'norcalli/nvim-colorizer.lua'
-" Plug 'nvim-lua/plenary.nvim'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/nvim-cmp'
+Plug 'neovim/nvim-lspconfig'
+Plug 'iamcco/coc-spell-checker', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-eslint', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-prettier', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-sources', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-tabnine', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-yaml', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'oncomouse/coc-fish', {'do': 'yarn install --frozen-lockfile'}
+Plug 'norcalli/nvim-colorizer.lua'
+Plug 'nvim-lua/plenary.nvim'
 
 " Vim
 Plug 'Glench/Vim-Jinja2-Syntax'
@@ -64,7 +68,6 @@ Plug 'othree/html5.vim'
 Plug 'pangloss/vim-javascript'
 Plug 'rizzatti/dash.vim'
 Plug 'stephpy/vim-yaml'
-Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'towolf/vim-helm'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
