@@ -41,3 +41,6 @@ au BufNewFile,BufRead Jenkinsfile setf groovy
 autocmd FileType gitcommit setlocal spell
 
 au BufRead,BufNewFile *.md setlocal textwidth=80
+
+" Add at least single space between bash test operators on save
+autocmd BufWritePost *.sh silent! %s/\(\[\[\zs\ze\S\|\S\zs\ze\]\]\)/ /g
