@@ -61,6 +61,9 @@ map <F1> :setlocal spell!<CR>
 " Toggle relative line numbers and regular line numbers.
 nmap <F2> :set invrelativenumber<CR>
 
+" Run Autoformat on whole file
+nmap <F4> :Autoformat<CR>
+
 " Better line concatenation.
 nnoremap J mzJ`z
 

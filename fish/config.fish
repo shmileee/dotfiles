@@ -93,7 +93,7 @@ if grep -qE "(Microsoft|WSL)" /proc/version &>/dev/null
     if [ -f ~/.proxy ]
         . \
             ~/.proxy
-        end
+    end
 
     # Fix DNS when connecting through VPN
     dnsfix
@@ -103,7 +103,7 @@ end
 if [ -f '/Users/esolidarity/google-cloud-sdk/path.fish.inc' ]
     . \
         '/Users/esolidarity/google-cloud-sdk/path.fish.inc'
-    end
+end
 
 #######################################################################
 #                               Exports                               #
