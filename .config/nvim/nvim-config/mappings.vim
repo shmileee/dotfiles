@@ -13,12 +13,6 @@ nnoremap N Nzzzv
 
 " Undo break points
 inoremap , ,<c-g>u
-inoremap { {<c-g>u
-inoremap } }<c-g>u
-inoremap [ [<c-g>u
-inoremap ] ]<c-g>u
-inoremap ( (<c-g>u
-inoremap ) )<c-g>u
 
 " Jumplist mutation
 nnoremap <expr> k (v:count > 5 ? "m'" . v:count : "") . 'k'

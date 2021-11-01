@@ -83,6 +83,7 @@ Plug 'will133/vim-dirdiff'
 Plug 'wsdjeg/vim-fetch'
 Plug 'unblevable/quick-scope'
 Plug 'Chiel92/vim-autoformat'
+Plug 'Raimondi/delimitMate'
 
 " Themes
 Plug 'arcticicestudio/nord-vim'

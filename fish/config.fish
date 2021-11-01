@@ -113,6 +113,7 @@ set -gx EDITOR nvim
 
 set -gx FZF_DEFAULT_COMMAND "rg --files --hidden --follow --glob '!.git'"
 set -gx FZF_DEFAULT_OPTS "--color=dark"
+set -gx FZF_CTRL_T_COMMAND "rg --files --hidden --follow --glob '!.git'"
 
 set -gx GOPATH ~/go
 set -gx GOBIN "$GOPATH/bin"
