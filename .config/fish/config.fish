@@ -24,6 +24,7 @@ alias du dust
 alias df duf
 alias vim nvim
 alias groot 'git rev-parse --show-toplevel'
+alias rg 'rg --hidden --follow --glob "!.git"'
 alias r ranger
 alias ssh 'assh wrapper ssh --'
 alias p 'cd ~/projects'

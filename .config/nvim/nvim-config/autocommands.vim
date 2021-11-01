@@ -5,25 +5,25 @@
 " Wrap text under cursor with double curly braces (e.g., for Jinja variables).
 " Binds to ysiwj (106 = char2nr('j'))
 " https://stackoverflow.com/questions/52330006/vim-binding-to-wrap-word-under-cursor-in-double-curly-braces
-autocmd FileType ansible,yaml,j2 let b:surround_106 = "{{ \r }}"
+au FileType ansible,yaml,j2 let b:surround_106 = "{{ \r }}"
 
 " Auto-resize splits when Vim gets resized.
-autocmd VimResized * wincmd =
+au VimResized * wincmd =
 
 " Update a buffer's contents on focus if it changed outside of Vim.
 " au FocusGained,BufEnter * :checktime
 
 " Unset paste on InsertLeave.
-autocmd InsertLeave * silent! set nopaste
+au InsertLeave * silent! set nopaste
 
 " Make sure all types of requirements.txt files get syntax highlighting.
-autocmd BufNewFile,BufRead requirements*.txt set syntax=python
+au BufNewFile,BufRead requirements*.txt set syntax=python
 
 " Make sure .aliases, .bash_aliases and similar files get syntax highlighting.
-autocmd BufNewFile,BufRead .*aliases set syntax=sh
+au BufNewFile,BufRead .*aliases set syntax=sh
 
 " Ensure tabs don't get converted to spaces in Makefiles.
-autocmd FileType make setlocal noexpandtab
+au FileType make setlocal noexpandtab
 
 " Only show the cursor line in the active buffer.
 augroup CursorLine
@@ -38,9 +38,10 @@ au BufNewFile,BufRead *.{yaml,yml} if getline(1) =~ '^apiVersion:' || getline(2)
 " Highlight Jenkinsfile syntax as grovy
 au BufNewFile,BufRead Jenkinsfile setf groovy
 
-autocmd FileType gitcommit setlocal spell
+au FileType gitcommit setlocal spell
 
 au BufRead,BufNewFile *.md setlocal textwidth=80
 
 " Add at least single space between bash test operators on save
-autocmd BufWritePost *.sh silent! %s/\(\[\[\zs\ze\S\|\S\zs\ze\]\]\)/ /g
+au BufWritePost *.sh silent! %s/\(\[\[\zs\ze\S\|\S\zs\ze\]\]\)/ /g
+au BufRead *.tf set nofoldenable
