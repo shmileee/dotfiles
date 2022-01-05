@@ -42,6 +42,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'oncomouse/coc-fish', {'do': 'yarn install --frozen-lockfile'}
 Plug 'norcalli/nvim-colorizer.lua'
 Plug 'nvim-lua/plenary.nvim'
+Plug 'ThePrimeagen/harpoon'
 
 " Vim
 Plug 'Glench/Vim-Jinja2-Syntax'

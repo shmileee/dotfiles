@@ -7,6 +7,7 @@ nmap <Leader>f :LfNewTab<cr>
 nmap <Leader>h :HopWord<cr>
 nmap <Leader>l :HopLine<cr>
 nmap <Leader>m :MaximizerToggle!<cr>
+nmap <Leader>w :bd<cr>
 
 " UndoTree
 nnoremap <Leader>u :UndotreeShow<CR>
@@ -38,3 +39,10 @@ nmap <silent> <Leader>d <Plug>DashSearch
 " Automatically fix the last misspelled word and jump back to where you were.
 "   Taken from this talk: https://www.youtube.com/watch?v=lwD8G1P52Sk
 nnoremap <Leader>sp :normal! mz[s1z=`z<CR>
+
+nnoremap <silent><Leader>a :lua require("harpoon.mark").add_file()<CR>
+nnoremap <silent><C-e> :lua require("harpoon.ui").toggle_quick_menu()<CR>
+nnoremap <silent><Leader>1 :lua require("harpoon.ui").nav_file(1)<CR>
+nnoremap <silent><Leader>2 :lua require("harpoon.ui").nav_file(2)<CR>
+nnoremap <silent><Leader>3 :lua require("harpoon.ui").nav_file(3)<CR>
+nnoremap <silent><Leader>4 :lua require("harpoon.ui").nav_file(4)<CR>

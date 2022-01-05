@@ -5,6 +5,7 @@ set --erase fish_greeting
 
 switch (uname)
     case Darwin
+        set -gx PATH "/opt/homebrew/bin" $PATH
         eval (brew shellenv)
 end
 
@@ -16,18 +17,16 @@ end
 #                               Plugins                               #
 #######################################################################
 
-zoxide init fish | source
-
 fundle plugin edc/bass
 fundle plugin FabioAntunes/fish-nvm
 fundle plugin franciscolourenco/done
 fundle init
+fundle install 2>&1 >/dev/null
 
 #######################################################################
 #                            Abbreviations                            #
 #######################################################################
 
-alias g git
 alias ls exa
 alias tx tmuxinator
 alias du dust
@@ -54,6 +53,7 @@ alias vss="sort -u ~/.vim/spell/en.utf-8.add \
 alias cdp 'cd (git rev-parse --show-toplevel)'
 alias vdt="rm /tmp/%*"                                                # Remove Vim's temp file
 
+abbr g git
 abbr dps 'docker ps'                                                  # Get container process
 abbr dpa 'docker ps -a'                                               # Get process included stop container
 abbr dip 'docker inspect --format "{{ .NetworkSettings.IPAddress }}"' # Get container IP
