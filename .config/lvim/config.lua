@@ -107,38 +107,41 @@ linters.setup {
 
 -- Additional Plugins
 lvim.plugins = {
-    {
-      "tpope/vim-surround"
-    },
-    {
-      "folke/trouble.nvim",
-      cmd = "TroubleToggle",
-    },
-    {
-      "ntpeters/vim-better-whitespace",
-      config = function ()
-        vim.g.strip_whitespace_confirm = "0"
-        vim.g.strip_whitelines_at_eof = "1"
-        vim.g.strip_whitespace_on_save = "1"
-      end
-    },
+  {
+    "tpope/vim-surround"
+  },
+  {
+    "folke/trouble.nvim",
+    cmd = "TroubleToggle",
+  },
+  {
+    "tpope/vim-repeat"
+  },
+  {
+    "ntpeters/vim-better-whitespace",
+    config = function ()
+      vim.g.strip_whitespace_confirm = "0"
+      vim.g.strip_whitelines_at_eof = "1"
+      vim.g.strip_whitespace_on_save = "1"
+    end
+  },
 }
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
 lvim.autocommands.custom_groups = {
-  { "BufWinEnter", "*.lua", "setlocal ts=8 sw=8" },
+  { "BufWinEnter", "*.lua", "setlocal ts=4 sw=4" },
   { "FileType", "dashboard", "DisableWhitespace" },
 }
 
 local init_custom_options = function()
-    local custom_options = {
-      relativenumber = true, -- Set relative numbered lines
-      colorcolumn = "80", -- Indent line at what column? Set something like '99999' to not display it
-      shell = "/bin/sh"
-    }
+  local custom_options = {
+    relativenumber = true, -- Set relative numbered lines
+    colorcolumn = "80", -- Indent line at what column? Set something like '99999' to not display it
+    shell = "/bin/sh"
+  }
 
-    for k, v in pairs(custom_options) do
-      vim.opt[k] = v
-    end
+  for k, v in pairs(custom_options) do
+    vim.opt[k] = v
+  end
 end
 init_custom_options()
