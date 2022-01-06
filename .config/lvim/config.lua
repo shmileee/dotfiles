@@ -110,11 +110,20 @@ lvim.plugins = {
       "folke/trouble.nvim",
       cmd = "TroubleToggle",
     },
+    {
+      "ntpeters/vim-better-whitespace",
+      config = function ()
+        vim.g.strip_whitespace_confirm = "0"
+        vim.g.strip_whitelines_at_eof = "1"
+        vim.g.strip_whitespace_on_save = "1"
+      end
+    },
 }
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
 lvim.autocommands.custom_groups = {
   { "BufWinEnter", "*.lua", "setlocal ts=8 sw=8" },
+  { "FileType", "dashboard", "DisableWhitespace" },
 }
 
 local init_custom_options = function()
