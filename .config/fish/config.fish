@@ -31,7 +31,7 @@ alias ls exa
 alias tx tmuxinator
 alias du dust
 alias df duf
-alias vim nvim
+alias vim lvim
 alias r ranger
 
 alias p 'cd ~/projects'
@@ -69,7 +69,7 @@ abbr groot 'git rev-parse --show-toplevel'
 set -gx LANG en_US.UTF-8
 set -gx LC_ALL en_US.UTF-8
 
-set -gx EDITOR nvim
+set -gx EDITOR lvim
 set -gx FZF_DEFAULT_COMMAND "rg --files --hidden --follow --glob '!.git'"
 set -gx FZF_DEFAULT_OPTS "--color=dark"
 set -gx FZF_CTRL_T_COMMAND "rg --files --hidden --follow --glob '!.git'"
