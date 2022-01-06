@@ -29,6 +29,7 @@ lvim.builtin.telescope.defaults.mappings = {
 
 -- Use which-key to add extra bindings with the leader-key prefix
 lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
+lvim.builtin.which_key.mappings["n"] = { "<cmd>normal! mz[s1z=`z<CR>", "Fix spelling" }
 lvim.builtin.which_key.mappings["<leader>"] = { "<cmd>nohlsearch<CR>", "No highlight" }
 lvim.builtin.which_key.mappings["f"] = { "<cmd>NvimTreeToggle<CR>", "Explorer" }
 lvim.builtin.which_key.mappings["e"] = {}
@@ -106,6 +107,9 @@ linters.setup {
 
 -- Additional Plugins
 lvim.plugins = {
+    {
+      "tpope/vim-surround"
+    },
     {
       "folke/trouble.nvim",
       cmd = "TroubleToggle",
