@@ -118,6 +118,7 @@ local init_custom_options = function()
     local custom_options = {
       relativenumber = true, -- Set relative numbered lines
       colorcolumn = "80", -- Indent line at what column? Set something like '99999' to not display it
+      shell = "/bin/sh"
     }
 
     for k, v in pairs(custom_options) do
