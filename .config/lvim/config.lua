@@ -6,9 +6,10 @@ lvim.colorscheme = "onedarker"
 -- keymappings [view all the defaults by pressing <leader>Lk]
 lvim.leader = "space"
 -- add your own keymapping
-lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
-lvim.keys.normal_mode["<C-p>"] = "<cmd>Telescope find_files<cr>"
+lvim.keys.normal_mode["<C-p>"] = "<cmd>lua require('telescope.builtin').find_files({cwd = require('telescope.utils').buffer_dir()})<CR>"
 lvim.keys.normal_mode["<Space><Space>"] = "<cmd>nohlsearch<CR>"
+lvim.keys.normal_mode["o"] = "o<Esc>"
+lvim.keys.normal_mode["O"] = "O<Esc>"
 
 -- Change Telescope navigation to use j and k for navigation and n and p for history in both input and normal mode.
 -- we use protected-mode (pcall) just in case the plugin wasn't loaded yet.
@@ -43,6 +44,9 @@ lvim.builtin.which_key.mappings["t"] = {
   q = { "<cmd>Trouble quickfix<cr>", "QuickFix" },
   l = { "<cmd>Trouble loclist<cr>", "LocationList" },
   w = { "<cmd>Trouble lsp_workspace_diagnostics<cr>", "Diagnostics" },
+}
+lvim.builtin.which_key.mappings["s"] = {
+  t = { "<cmd>lua require('telescope.builtin').live_grep({cwd = require('telescope.utils').buffer_dir()})<CR>", "Search text in current directory" }
 }
 
 lvim.builtin.dashboard.active = true
@@ -109,6 +113,9 @@ linters.setup {
 lvim.plugins = {
   {
     "tpope/vim-surround"
+  },
+  {
+    "farmergreg/vim-lastplace"
   },
   {
     "folke/trouble.nvim",
