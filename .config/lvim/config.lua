@@ -45,8 +45,8 @@ lvim.builtin.which_key.mappings["t"] = {
   l = { "<cmd>Trouble loclist<cr>", "LocationList" },
   w = { "<cmd>Trouble lsp_workspace_diagnostics<cr>", "Diagnostics" },
 }
-lvim.builtin.which_key.mappings["s"] = {
-  t = { "<cmd>lua require('telescope.builtin').live_grep({cwd = require('telescope.utils').buffer_dir()})<CR>", "Search text in current directory" }
+lvim.builtin.which_key.mappings["st"] = {
+  "<cmd>lua require('telescope.builtin').live_grep({cwd = require('telescope.utils').buffer_dir()})<CR>", "Search text in current directory"
 }
 
 lvim.builtin.dashboard.active = true
