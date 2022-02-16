@@ -5,6 +5,19 @@ lvim.colorscheme = "onedarker"
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
 lvim.leader = "space"
+
+-- better putting
+lvim.keys.visual_mode["p"] = "pgvy"
+
+lvim.keys.normal_mode["k"] = "gk"
+lvim.keys.normal_mode["j"] = "gj"
+lvim.keys.normal_mode["$"] = "g$"
+lvim.keys.normal_mode["0"] = "g0"
+
+-- better yanking
+lvim.keys.normal_mode["Y"] = "y$"
+lvim.keys.visual_mode["y"] = "ygv<esc>"
+
 -- add your own keymapping
 lvim.keys.normal_mode["<C-p>"] = "<cmd>lua require('telescope.builtin').find_files({cwd = require('telescope.utils').buffer_dir()})<CR>"
 lvim.keys.normal_mode["<Space><Space>"] = "<cmd>nohlsearch<CR>"
@@ -112,17 +125,19 @@ linters.setup {
 -- Additional Plugins
 lvim.plugins = {
   {
-    "tpope/vim-surround"
-  },
-  {
-    "farmergreg/vim-lastplace"
-  },
-  {
     "folke/trouble.nvim",
     cmd = "TroubleToggle",
   },
   {
-    "tpope/vim-repeat"
+    "tpope/vim-surround",
+    "tpope/vim-repeat",
+    "farmergreg/vim-lastplace",
+  },
+  {
+    'iamcco/markdown-preview.nvim',
+    opt = true,
+    ft = "markdown",
+    run = 'cd app && yarn install'
   },
   {
     "ntpeters/vim-better-whitespace",
