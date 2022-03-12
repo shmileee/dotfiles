@@ -162,7 +162,6 @@ lvim.plugins = {
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
 lvim.autocommands.custom_groups = {
-  { "BufWinEnter", "*.lua", "setlocal ts=4 sw=4" },
   { "FileType", "dashboard", "DisableWhitespace" },
 }
 
