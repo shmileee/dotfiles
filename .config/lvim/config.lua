@@ -90,6 +90,8 @@ lvim.builtin.treesitter.ignore_install = { "haskell" }
 lvim.builtin.treesitter.highlight.enabled = true
 
 -- generic LSP settings
+lvim.lsp.automatic_servers_installation = false
+
 require("lvim.lsp.manager").setup("dockerls", {
     settings = {
         docker = {
