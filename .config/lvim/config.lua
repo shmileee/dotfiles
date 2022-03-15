@@ -167,6 +167,7 @@ lvim.plugins = {
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
 lvim.autocommands.custom_groups = {
   { "FileType", "dashboard", "DisableWhitespace" },
+  { "BufRead,BufNewFile", "*.md", "setlocal textwidth=80" },
 }
 
 local init_custom_options = function()
