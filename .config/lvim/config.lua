@@ -46,6 +46,7 @@ lvim.builtin.telescope.defaults.mappings = {
 lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
 lvim.builtin.which_key.mappings["n"] = { "<cmd>normal! mz[s1z=`z<CR>", "Fix spelling" }
 lvim.builtin.which_key.mappings["f"] = { "<cmd>NvimTreeToggle<CR>", "Explorer" }
+lvim.builtin.which_key.mappings["r"] = { ":%s///g<Left><Left>", "Replace" }
 lvim.builtin.which_key.mappings["e"] = {}
 lvim.builtin.which_key.mappings["q"] = {}
 lvim.builtin.which_key.mappings["h"] = {}
