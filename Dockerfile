@@ -20,7 +20,7 @@ RUN useradd -ms /bin/bash $USER && \
     usermod -a -G sudo $USER && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-COPY ./scripts/common /tmp/scripts/common
+COPY ./scripts/common/install_brew.sh /tmp/scripts/common/install_brew.sh
 RUN /tmp/scripts/common/install_brew.sh
 
 # Assume the user.
@@ -33,7 +33,7 @@ ENV DOTFILES_DIR $USER_HOME/dotfiles
 
 COPY --chown=shmileee . $DOTFILES_DIR
 
-# RUN $DOTFILES_DIR/setup.sh --ansible
+RUN $DOTFILES_DIR/scripts/setup.sh --ansible
 
 # Start fish shell.
 # CMD fish
