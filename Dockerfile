@@ -20,13 +20,13 @@ RUN useradd -ms /bin/bash $USER && \
     usermod -a -G sudo $USER && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-COPY ./scripts/common/install_brew.sh /tmp/scripts/common/install_brew.sh
-RUN /tmp/scripts/common/install_brew.sh
-
 # Assume the user.
 USER $USER
 ENV USER_HOME /home/$USER
 WORKDIR $USER_HOME
+
+COPY ./scripts/common/install_brew.sh /tmp/scripts/common/install_brew.sh
+RUN /tmp/scripts/common/install_brew.sh
 
 COPY --chown=shmileee ./scripts/common/ansible.sh /tmp/scripts/common/ansible.sh
 RUN /tmp/scripts/common/ansible.sh --install
@@ -35,8 +35,6 @@ RUN /tmp/scripts/common/ansible.sh --install
 ENV DOTFILES_DIR $USER_HOME/dotfiles
 
 COPY --chown=shmileee ./scripts/common/ansible.sh /tmp/scripts/common/ansible.sh
-RUN /tmp/scripts/common/ansible.sh --install
-
 COPY --chown=shmileee . $DOTFILES_DIR
 
 CMD exec $DOTFILES_DIR/scripts/common/ansible.sh --run
