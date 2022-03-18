@@ -28,12 +28,18 @@ USER $USER
 ENV USER_HOME /home/$USER
 WORKDIR $USER_HOME
 
+COPY --chown=shmileee ./scripts/common/ansible.sh /tmp/scripts/common/ansible.sh
+RUN /tmp/scripts/common/ansible.sh --install
+
 # Setup the dotfiles directory.
 ENV DOTFILES_DIR $USER_HOME/dotfiles
 
+COPY --chown=shmileee ./scripts/common/ansible.sh /tmp/scripts/common/ansible.sh
+RUN /tmp/scripts/common/ansible.sh --install
+
 COPY --chown=shmileee . $DOTFILES_DIR
 
-RUN $DOTFILES_DIR/scripts/setup.sh --ansible
+CMD exec $DOTFILES_DIR/scripts/common/ansible.sh --run
 
 # Start fish shell.
 # CMD fish
