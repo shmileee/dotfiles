@@ -4,19 +4,24 @@ FROM ubuntu:jammy
 ENV DOCKERIZED true
 ENV USER shmileee
 ENV TIMEZONE "Europe/Warsaw"
-ARG DEBIAN_FRONTEND=noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Setup time zones and install linux dependencies needed for build.
+# Setup time zones .
 RUN ln -snf "/usr/share/zoneinfo/$TIMEZONE" /etc/localtime && \
-    echo $TIMEZONE > /etc/timezones && \
-    apt update -y && \
-    apt install -y sudo curl && \
-    apt clean
+    echo $TIMEZONE > /etc/timezones
+
+COPY ./scripts/linux /tmp/scripts/linux
+
+# Install essential Linux dependencies.
+RUN /tmp/scripts/linux/install_dependencies.sh
 
 # Adds a new user to the sudo group
 RUN useradd -ms /bin/bash $USER && \
     usermod -a -G sudo $USER && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+COPY ./scripts/common /tmp/scripts/common
+RUN /tmp/scripts/common/install_brew.sh
 
 # Assume the user.
 USER $USER
@@ -28,7 +33,7 @@ ENV DOTFILES_DIR $USER_HOME/dotfiles
 
 COPY --chown=shmileee . $DOTFILES_DIR
 
-# RUN $DOTFILES_DIR/setup.sh
+# RUN $DOTFILES_DIR/setup.sh --ansible
 
 # Start fish shell.
 # CMD fish
