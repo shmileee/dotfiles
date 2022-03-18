@@ -13,7 +13,7 @@ install_brew() {
   bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
   if test "$(uname -s)" == "Linux"; then
-    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /etc/profile
+    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.profile
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   fi
 
