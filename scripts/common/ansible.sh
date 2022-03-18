@@ -3,7 +3,6 @@
 # shellcheck disable=SC2086
 cwd="$(cd "$(dirname ${BASH_SOURCE[0]})" && pwd)"
 
-
 install_collections() {
   echo "⚪ [ansible] installing collections..."
   ansible-galaxy collection install community.general

@@ -1,24 +1,25 @@
 #!/usr/bin/env bash
 
 install_brew() {
-  echo "⚪ installing brew..."
+  echo "⚪ [homebrew] installing..."
 
   if command -v brew &> /dev/null; then
-    echo "⚪ brew is installed."
+    echo "⚪ [homebrew] already installed."
 
     return 0
   fi
 
-  export CI=1
+  export NONINTERACTIVE=1
   bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
+  # shellcheck disable=SC2016
   if test "$(uname -s)" == "Linux"; then
-    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.profile
+    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.bashrc
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   fi
 
   brew analytics off
-  echo "✅ homebrew installed!"
+  echo "✅ [homebrew] installed!"
 }
 
 install_brew
