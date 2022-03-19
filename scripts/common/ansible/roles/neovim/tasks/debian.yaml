@@ -20,7 +20,7 @@
   register: clone
 
 - name: "build"
-  make:
+  make: # noqa no-handler
     chdir: "{{ neovim_destination_directory }}"
     params:
       CMAKE_BUILD_TYPE: RelWithDebInfo
@@ -28,7 +28,7 @@
 
 - name: "install"
   become: true
-  make:
+  make: # noqa no-handler
     chdir: "{{ neovim_destination_directory }}"
     target: install
   when: clone.changed
