@@ -19,3 +19,7 @@
 - name: "install"
   ansible.builtin.command: /tmp/install-lunarvim.sh --no-install-dependencies --yes
   changed_when: false
+
+- name: "update lunarvim dotfiles"
+  ansible.builtin.command: chezmoi update --force --apply
+  changed_when: false
