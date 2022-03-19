@@ -3,7 +3,7 @@
 - block:
     - name: "packages | list homebrew tools"
       ansible.builtin.debug:
-        msg: "{{ homebrew_packages }}"
+        msg: "{{ brew.packages }}"
 
     - name: "packages | update homebrew"
       changed_when: false
@@ -12,21 +12,21 @@
 
     - name: "packages | install homebrew taps"
       community.general.homebrew_tap:
-        name: "{{ homebrew_taps }}"
+        name: "{{ brew.taps }}"
         state: present
 
     - name: "packages | install homebrew casks"
       community.general.homebrew_cask:
-        name: "{{ homebrew_casks }}"
+        name: "{{ brew.casks }}"
         state: present
 
     - name: "packages | install homebrew tools"
       community.general.homebrew:
-        name: "{{ homebrew_packages }}"
+        name: "{{ brew.packages }}"
 
     - name: "packages | install homebrew tools from source"
       community.general.homebrew:
-        name: "{{ homebrew_packages_from_source }}"
+        name: "{{ brew.packages_from_source }}"
         install_options: build-from-source
 
   tags: homebrew
