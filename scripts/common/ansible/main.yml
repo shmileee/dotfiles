@@ -34,3 +34,6 @@
 
   - name: python
     tags: python
+
+  - name: kubernetes
+    tags: kubernetes
