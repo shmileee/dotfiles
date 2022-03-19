@@ -20,7 +20,7 @@ set -x EDITOR vim
 set -x GPG_TTY (tty)
 
 # locale
-set -x LC_CTYPE en_US.UTF-8
+# set -x LC_CTYPE en_US.UTF-8 -- issues with pyenv
 
 
 # env vars
@@ -31,6 +31,13 @@ set -x XDG_CACHE_HOME $HOME/.cache
 # direnv
 if command -v direnv > /dev/null
     eval (direnv hook fish)
+end
+
+
+# anyenv
+if test -d $HOME/.anyenv
+    set -x PATH $HOME/.anyenv/bin $PATH
+    source (anyenv init - fish | psub)
 end
 
 
