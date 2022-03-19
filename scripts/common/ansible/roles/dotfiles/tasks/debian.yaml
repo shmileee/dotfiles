@@ -14,3 +14,4 @@
 
 - name: "chezmoi update"
   ansible.builtin.command: chezmoi update --force
+  changed_when: false
