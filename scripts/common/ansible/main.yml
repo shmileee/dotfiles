@@ -4,3 +4,15 @@
   roles:
   - name: common
     tags: common
+
+  - name: dotfiles
+    tags: dotfiles
+
+  - name: fish
+    tags: fish
+
+  - name: neovim
+    tags: neovim
+
+  - name: lunarvim
+    tags: lunarvim
