@@ -23,7 +23,7 @@ brew:
     - font-fira-code-nerd-font
   packages:
     - asdf
-    # - bat -- does not work on ubuntu jammy, has to be compiled and it takes too long
+    - bat
     - direnv
     - exa
     - fd

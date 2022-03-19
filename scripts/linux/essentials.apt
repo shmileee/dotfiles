@@ -11,9 +11,8 @@ sudo
 vim
 
 # Download Manager
-wget
 curl
+wget
 
 # Ansible
 ansible
-
