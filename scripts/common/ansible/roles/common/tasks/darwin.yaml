@@ -28,3 +28,5 @@
       community.general.homebrew:
         name: "{{ homebrew_packages_from_source }}"
         install_options: build-from-source
+
+  tags: homebrew

@@ -3,6 +3,7 @@
 - name: "install tmux"
   community.general.homebrew:
     name: tmux
+  tags: homebrew
 
 - name: "install tmux powerline pip dependencies"
   ansible.builtin.pip:

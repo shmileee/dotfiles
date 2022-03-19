@@ -3,6 +3,7 @@
 - name: "install anyenv"
   community.general.homebrew:
     name: anyenv
+  tags: homebrew
 
 - name: "init anyenv"
   ansible.builtin.command: anyenv install --init

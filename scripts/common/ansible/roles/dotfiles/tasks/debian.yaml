@@ -4,9 +4,13 @@
   community.general.homebrew:
     name:
       - chezmoi
+  tags: homebrew
 
 - name: "chezmoi init"
-  changed_when: false
   ansible.builtin.command: chezmoi init --apply .
   args:
     chdir: "{{ ansible_user_dir }}/dotfiles"
+    creates: "{{ ansible_user_dir }}/.local/share/chezmoi"
+
+- name: "chezmoi update"
+  ansible.builtin.command: chezmoi update --force

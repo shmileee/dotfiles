@@ -4,6 +4,7 @@
   community.general.homebrew:
     name:
       - 'fish'
+  tags: homebrew
 
 - block:
     - name: "obtain path to fish"
@@ -55,7 +56,7 @@
       delay: 5
 
     - name: "install plugins with fisher"
-      ansible.builtin.shell: . "{{ ansible_user_dir }}/.config/fish/config.fish && fisher update"
+      ansible.builtin.shell: ". {{ ansible_user_dir }}/.config/fish/config.fish && fisher update"
       changed_when: false
 
   tags: fish_config

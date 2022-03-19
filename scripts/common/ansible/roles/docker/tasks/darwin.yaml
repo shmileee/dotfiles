@@ -4,3 +4,4 @@
   community.general.homebrew_cask:
     name: "docker"
     state: present
+  tags: homebrew
