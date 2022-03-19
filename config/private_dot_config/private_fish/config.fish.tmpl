@@ -1,0 +1,78 @@
+{{ if (eq .chezmoi.os "darwin") }}
+if command -v gsed > /dev/null
+    alias sed 'gsed'
+end
+
+{{ else if (eq .chezmoi.os "linux" ) }}
+# PATH
+set -x PATH $HOME/.ngrok $PATH
+set -x PATH /home/linuxbrew/.linuxbrew/bin $PATH
+set -x PATH ~/.local/bin $PATH
+
+# alias
+alias ls 'ls -a --color=auto'
+
+{{ end }}
+
+set -x EDITOR vim
+
+# GPG
+set -x GPG_TTY (tty)
+
+# locale
+set -x LC_CTYPE en_US.UTF-8
+
+
+# env vars
+set -x XDG_CONFIG_HOME $HOME/.config
+set -x XDG_CACHE_HOME $HOME/.cache
+
+
+# direnv
+if command -v direnv > /dev/null
+    eval (direnv hook fish)
+end
+
+
+# go
+set -x GOPATH ~/go
+set -x PATH $HOME/go/bin $PATH
+
+
+# rust
+set -x PATH $HOME/.cargo/bin $PATH
+
+
+# kubernetes
+set -x KUBE_EDITOR vim
+
+
+# alias
+## common
+alias .. 'cd ..'
+
+### exa
+if command -v exa > /dev/null
+    alias l="exa --icons"
+    alias ls="exa --git --icons"
+    alias la="exa --git -a --icons"
+    alias ll="exa -lab --git --icons"
+    alias tree="exa --tree --icons"
+else
+    alias l="ls"
+    alias la="ls -a"
+    alias ll="ls -al"
+end
+
+## bat
+if command -v bat > /dev/null
+    alias cat="bat --plain"
+end
+
+## git
+alias g 'git'
+alias ghb 'gh repo view -w'
+
+# fish bobthefish-theme config
+set -g theme_date_format "+20%y/%m/%d %H:%M"
+set -g theme_display_k8s_context no
