@@ -33,7 +33,7 @@
   environment:
     GOPATH: '{{ golang.path }}'
   ansible.builtin.command: |
-    bash -lc 'go get -u {{ item | quote }}'
+    fish -lc 'go get -u {{ item | quote }}'
   with_items: '{{ golang.packages }}'
   when: golang.packages
   changed_when: false
