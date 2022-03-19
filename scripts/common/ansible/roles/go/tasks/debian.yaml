@@ -1,0 +1,15 @@
+---
+
+- name: "add golang apt repository"
+  become: true
+  ansible.builtin.apt_repository:
+    repo: "ppa:longsleep/golang-backports"
+    state: present
+    update_cache: true
+
+- name: "install packages"
+  become: true
+  ansible.builtin.apt:
+    name: golang-go
+    autoclean: true
+    autoremove: true
