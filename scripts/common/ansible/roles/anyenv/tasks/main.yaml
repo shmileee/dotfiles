@@ -1,0 +1,17 @@
+---
+
+- name: "install anyenv"
+  community.general.homebrew:
+    name: anyenv
+
+- name: "init anyenv"
+  ansible.builtin.command: anyenv install --init
+  args:
+    stdin: "y"
+  changed_when: false
+
+- name: "install anyenv-update"
+  ansible.builtin.git:
+    repo: https://github.com/znz/anyenv-update.git
+    dest: ~/.anyenv/plugins/anyenv-update
+    version: master
