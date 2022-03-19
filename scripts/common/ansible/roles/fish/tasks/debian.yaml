@@ -55,7 +55,7 @@
       delay: 5
 
     - name: "install plugins with fisher"
-      ansible.builtin.command: fisher update
+      ansible.builtin.shell: . ~/.config/fish/config.fish && fisher update
       changed_when: false
 
   tags: fish_config
