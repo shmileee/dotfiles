@@ -1,0 +1,24 @@
+---
+
+apt_packages:
+  - build-essential
+  - libssl-dev
+  - llvm
+  - python3-pip
+  - python-is-python3
+  - vim
+
+homebrew_casks: []
+
+homebrew_packages:
+  - asdf
+  - bat
+  - direnv
+  - exa
+  - fd
+  - gh
+  - ghq
+  - ripgrep
+
+homebrew_packages_from_source:
+  - duf

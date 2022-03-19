@@ -1,44 +1,54 @@
 ---
-- block:
-  - name: "Install packages"
-    become: true
-    ansible.builtin.apt:
-      name:
-        - build-essential
-        - libssl-dev
-        - llvm
-        - python3-pip
-        - python-is-python3
-      autoclean: true
-      autoremove: true
-      update_cache: true
 
-  - name: "Upgrade all packages to the latest version"
-    become: true
-    ansible.builtin.apt:
-      upgrade: safe
-    changed_when: false
+- name: "packages | read in apt packages from file"
+  ansible.builtin.set_fact:
+    apt_packages_from_file: "{{ lookup('file', playbook_dir +
+      '/../../linux/essentials.apt').splitlines() | reject('search', '#.*') |
+      unique }}"
 
 - block:
-    - name: "Update homebrew"
+    - name: "packages | list apt tools"
+      ansible.builtin.debug:
+        msg: "{{ apt_packages | difference(apt_packages_from_file) }}"
+
+    - name: "packages | install"
+      become: true
+      ansible.builtin.apt:
+        # Ensure packages that have been installed with shell scripts are
+        # excluded.
+        name: "{{ apt_packages | difference(apt_packages_from_file) }}"
+        autoclean: true
+        autoremove: true
+        update_cache: true
+
+    - name: "packages | upgrade to the latest version"
+      become: true
+      ansible.builtin.apt:
+        upgrade: safe
+      changed_when: false
+
+- block:
+    - name: "packages | list homebrew tools"
+      ansible.builtin.debug:
+        msg: "{{ homebrew_packages | difference(apt_packages_from_file) }}"
+
+    - name: "packages | update homebrew"
       changed_when: false
       community.general.homebrew:
         update_homebrew: true
 
-    - name: "Install tools by brew"
-      community.general.homebrew:
-        name:
-          - asdf
-          - bat
-          - direnv
-          - exa
-          - fd
-          - gh
-          - ghq
-          - ripgrep
+    - name: "packages | install homebrew casks"
+      community.general.homebrew_cask:
+        name: "{{ homebrew_casks }}"
+        state: present
 
-    - name: "Install tools by brew --build-from-source"
+    - name: "packages | install homebrew tools"
       community.general.homebrew:
-        name:
-          - duf
+        # Ensure packages that have been installed with shell scripts are
+        # excluded.
+        name: "{{ homebrew_packages | difference(apt_packages_from_file) }}"
+
+    - name: "packages | install homebrew tools from source"
+      community.general.homebrew:
+        name: "{{ homebrew_packages_from_source }}"
         install_options: build-from-source
