@@ -1,0 +1,21 @@
+---
+
+- name: "download"
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh
+    dest: /tmp/install-lunarvim.sh
+    mode: '0755'
+  register: download_result
+  until: download_result is succeeded
+  retries: 3
+  delay: 5
+
+- name: "create config dir"
+  ansible.builtin.file:
+    path: ~/.config/lvim
+    state: directory
+    mode: '0755'
+
+- name: "install"
+  ansible.builtin.command: /tmp/install-lunarvim.sh --no-install-dependencies --yes
+  changed_when: false
