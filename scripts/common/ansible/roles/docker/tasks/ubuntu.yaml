@@ -1,0 +1,50 @@
+---
+
+- name: "install dependencies"
+  become: true
+  ansible.builtin.apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+    update_cache: true
+
+- name: "obtain ubuntu codename"
+  ansible.builtin.command: lsb_release -cs
+  register: ubuntu_codename
+  check_mode: false
+  failed_when: false
+  changed_when: false
+
+- name: "add gpg key"
+  become: true
+  ansible.builtin.apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: "add docker apt repository"
+  become: true
+  ansible.builtin.apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ubuntu_codename.stdout }} stable"
+    state: present
+    update_cache: true
+
+- name: "install docker"
+  become: true
+  ansible.builtin.apt:
+    name:
+      - docker-ce
+      - docker-compose
+    state: present
+    update_cache: true
+    autoclean: true
+    autoremove: true
+
+- name: "add user to docker group"
+  become: true
+  ansible.builtin.user:
+    name: '{{ ansible_user }}'
+    append: true
+    groups:
+      - docker

@@ -22,3 +22,6 @@
 
   - name: anyenv
     tags: anyenv
+
+  - name: docker
+    tags: docker
