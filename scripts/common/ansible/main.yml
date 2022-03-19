@@ -1,39 +1,47 @@
 ---
-- hosts: localhost
+- hosts: 127.0.0.1
   strategy: linear
+  connection: local
+
+  vars_files:
+    - config.yml
+
   roles:
-  - name: common
-    tags: common
+    - name: common
+      tags: common
 
-  - name: fonts
-    tags: fonts
+    - name: fonts
+      tags: fonts
 
-  - name: dotfiles
-    tags: dotfiles
+    - name: dotfiles
+      tags: dotfiles
 
-  - name: fish
-    tags: fish
+    - name: fish
+      tags: fish
 
-  - name: neovim
-    tags: neovim
+    - name: neovim
+      tags: neovim
 
-  - name: lunarvim
-    tags: lunarvim
+    - name: lunarvim
+      tags: lunarvim
 
-  - name: anyenv
-    tags: anyenv
+    - name: anyenv
+      tags: anyenv
 
-  - name: docker
-    tags: docker
+    - name: docker
+      tags: docker
 
-  # - name: go
-  #   tags: go
+    - name: go
+      tags: go
 
-  - name: tmux
-    tags: tmux
+    - name: tmux
+      tags: tmux
 
-  - name: python
-    tags: python
+    - name: python
+      tags: python
 
-  # - name: kubernetes
-  #   tags: kubernetes
+    # - name: kubernetes
+    #   tags: kubernetes
+
+    - name: node
+      tags: node
