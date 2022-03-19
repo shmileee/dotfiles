@@ -1,6 +1,6 @@
 ---
 
-- name: "install ricty font"
+- name: "install firacode font"
   become: true
   ansible.builtin.apt:
     name: fonts-firacode
