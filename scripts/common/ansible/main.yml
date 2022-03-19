@@ -31,3 +31,6 @@
 
   - name: tmux
     tags: tmux
+
+  - name: python
+    tags: python
