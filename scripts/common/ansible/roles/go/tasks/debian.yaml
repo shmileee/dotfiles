@@ -1,23 +1,39 @@
 ---
 
-# TODO:
-# fatal: [localhost]: FAILED! => {"changed": false, "msg": "Failed to update
-# apt cache: E:The repository
-# 'http://ppa.launchpad.net/longsleep/golang-backports/ubuntu jammy Release'
-# does not have a Release file."}
+- name: "install goenv"
+  ansible.builtin.command: anyenv install goenv
+  args:
+    creates: "{{ ansible_user_dir }}/.anyenv/envs/goenv/bin/goenv"
 
-# Switch to: goenv
+- name: "get installed versions"
+  ansible.builtin.command: |
+    fish -lc 'goenv versions'
+  changed_when: false
+  register: installed_versions
 
-- name: "add golang apt repository"
-  become: true
-  ansible.builtin.apt_repository:
-    repo: "ppa:longsleep/golang-backports"
-    state: present
-    update_cache: true
+- name: "install golang"
+  ansible.builtin.command: |
+    fish -lc 'goenv install {{ item | quote }}'
+  when: |
+    golang.versions and installed_versions.stdout.find(item) == -1
+  with_items: '{{ golang.versions }}'
+
+- name: "get global version"
+  ansible.builtin.command: |
+    fish -lc 'goenv global'
+  register: global_golang
+  changed_when: false
+
+- name: "set global golang"
+  ansible.builtin.command: |
+    fish -lc 'goenv global {{ golang.versions[0] | quote }}'
+  when: global_golang.stdout != golang.versions[0]
 
 - name: "install packages"
-  become: true
-  ansible.builtin.apt:
-    name: golang-go
-    autoclean: true
-    autoremove: true
+  environment:
+    GOPATH: '{{ golang.path }}'
+  ansible.builtin.command: |
+    bash -lc 'go get -u {{ item | quote }}'
+  with_items: '{{ golang.packages }}'
+  when: golang.packages
+  changed_when: false
