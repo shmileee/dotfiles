@@ -1,0 +1,12 @@
+---
+
+- name: "install chezmoi"
+  community.general.homebrew:
+    name:
+      - chezmoi
+
+- name: "chezmoi init"
+  changed_when: false
+  ansible.builtin.command: chezmoi init --apply .
+  args:
+    chdir: "{{ ansible_env.HOME }}/dotfiles"
