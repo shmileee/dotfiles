@@ -18,3 +18,7 @@
     repo: https://github.com/tmux-plugins/tpm
     dest: "{{ ansible_user_dir }}/.tmux/plugins/tpm"
     version: master
+
+- name: "install tmux plugins"
+  ansible.builtin.command: |
+    "{{ ansible_user_dir }}/.tmux/plugins/tpm/bin/install_plugins"
