@@ -1,0 +1,17 @@
+anyenv:
+  envs_dir: '{{ ansible_user_dir }}/.anyenv/envs'
+
+nodejs:
+  versions:
+    - 16.14.2
+  packages:
+    - yarn
+
+golang:
+  path: '{{ ansible_user_dir }}/.go'
+  versions:
+    - 1.17.8
+  packages:
+    - golang.org/x/tools/cmd/goimports
+    - golang.org/x/tools/gopls
+
