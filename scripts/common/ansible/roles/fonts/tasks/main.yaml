@@ -1,0 +1,6 @@
+---
+- include_tasks: darwin.yaml
+  when: ansible_os_family == "Darwin"
+
+- include_tasks: debian.yaml
+  when: ansible_os_family == "Debian"

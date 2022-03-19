@@ -5,6 +5,9 @@
   - name: common
     tags: common
 
+  - name: fonts
+    tags: fonts
+
   - name: dotfiles
     tags: dotfiles
 
