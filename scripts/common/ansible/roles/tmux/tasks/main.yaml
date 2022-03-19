@@ -1,0 +1,19 @@
+---
+
+- name: "install tmux"
+  community.general.homebrew:
+    name: tmux
+
+- name: "install tmux powerline pip dependencies"
+  ansible.builtin.pip:
+    name:
+      - powerline-status
+      - powerline-mem-segment
+      - psutil
+    executable: pip3
+
+- name: "install tpm"
+  ansible.builtin.git:
+    repo: https://github.com/tmux-plugins/tpm
+    dest: "{{ ansible_user_dir }}/.tmux/plugins/tpm"
+    version: master
