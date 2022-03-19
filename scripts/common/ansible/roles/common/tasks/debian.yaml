@@ -9,14 +9,14 @@
 - block:
     - name: "packages | list apt tools"
       ansible.builtin.debug:
-        msg: "{{ apt_packages | difference(apt_packages_from_file) }}"
+        msg: "{{ apt.packages | difference(apt_packages_from_file) }}"
 
     - name: "packages | install"
       become: true
       ansible.builtin.apt:
         # Ensure packages that have been installed with shell scripts are
         # excluded.
-        name: "{{ apt_packages | difference(apt_packages_from_file) }}"
+        name: "{{ apt.packages | difference(apt_packages_from_file) }}"
         autoclean: true
         autoremove: true
         update_cache: true
@@ -30,7 +30,7 @@
 - block:
     - name: "packages | list homebrew tools"
       ansible.builtin.debug:
-        msg: "{{ homebrew_packages | difference(apt_packages_from_file) }}"
+        msg: "{{ brew.packages | difference(apt_packages_from_file) }}"
 
     - name: "packages | update homebrew"
       changed_when: false
@@ -41,11 +41,11 @@
       community.general.homebrew:
         # Ensure packages that have been installed with shell scripts are
         # excluded.
-        name: "{{ homebrew_packages | difference(apt_packages_from_file) }}"
+        name: "{{ brewpackages | difference(apt_packages_from_file) }}"
 
     - name: "packages | install homebrew tools from source"
       community.general.homebrew:
-        name: "{{ homebrew_packages_from_source }}"
+        name: "{{ brew.packages_from_source }}"
         install_options: build-from-source
 
   tags: homebrew

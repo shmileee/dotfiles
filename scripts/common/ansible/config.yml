@@ -1,3 +1,38 @@
+apt:
+  packages:
+    - build-essential
+    - libssl-dev
+    - llvm
+    - python3-pip
+    - python-is-python3
+    - vim
+    - less
+
+brew:
+  taps:
+    # - aws/tap
+    # - carlocab/personal
+    # - go-task/tap
+    # - hashicorp/tap
+    - homebrew/bundle
+    - homebrew/cask
+    - homebrew/cask-fonts
+    - homebrew/core
+    # - trussworks/tap
+  casks:
+    - font-fira-code-nerd-font
+  packages:
+    - asdf
+    # - bat -- does not work on ubuntu jammy, has to be compiled and it takes too long
+    - direnv
+    - exa
+    - fd
+    - gh
+    - ghq
+    - ripgrep
+  packages_from_source:
+    - duf
+
 anyenv:
   envs_dir: '{{ ansible_user_dir }}/.anyenv/envs'
 
@@ -15,3 +50,18 @@ golang:
     - golang.org/x/tools/cmd/goimports
     - golang.org/x/tools/gopls
 
+neovim:
+  directory: "{{ ansible_user_dir }}/Development/repository/github.com/neovim/neovim"
+  build_dependencies:
+    - autoconf
+    - automake
+    - cmake
+    - curl
+    - doxygen
+    - g++
+    - gettext
+    - libtool
+    - libtool-bin
+    - ninja-build
+    - pkg-config
+    - unzip

@@ -39,4 +39,3 @@
     PATH: >-
       {{- anyenv.envs_dir -}}/nodenv/shims:
       {{- lookup("env", "PATH") -}}
-
