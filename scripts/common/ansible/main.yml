@@ -25,3 +25,6 @@
 
   - name: docker
     tags: docker
+
+  - name: go
+    tags: go
