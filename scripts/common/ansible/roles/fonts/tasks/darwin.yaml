@@ -10,4 +10,6 @@
         - font-powerline-symbols
         - font-fira-code-nerd-font
 
-  tags: font_install
+  tags:
+    - font_install
+    - homebrew
