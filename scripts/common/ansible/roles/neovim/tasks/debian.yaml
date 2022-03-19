@@ -12,6 +12,7 @@
   ansible.builtin.git:
     clone: true
     depth: 1
+    single_branch: true
     dest: "{{ neovim.directory }}"
     force: true
     repo: https://github.com/neovim/neovim.git
