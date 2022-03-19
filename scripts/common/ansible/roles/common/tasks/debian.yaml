@@ -37,11 +37,6 @@
       community.general.homebrew:
         update_homebrew: true
 
-    - name: "packages | install homebrew casks"
-      community.general.homebrew_cask:
-        name: "{{ homebrew_casks }}"
-        state: present
-
     - name: "packages | install homebrew tools"
       community.general.homebrew:
         # Ensure packages that have been installed with shell scripts are
