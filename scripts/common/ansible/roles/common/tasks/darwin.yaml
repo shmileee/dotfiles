@@ -14,19 +14,23 @@
       community.general.homebrew_tap:
         name: "{{ brew.taps }}"
         state: present
+      when: brew.taps
 
     - name: "packages | install homebrew casks"
       community.general.homebrew_cask:
         name: "{{ brew.casks }}"
         state: present
+      when: brew.casks
 
     - name: "packages | install homebrew tools"
       community.general.homebrew:
         name: "{{ brew.packages }}"
+      when: brew.packages
 
     - name: "packages | install homebrew tools from source"
       community.general.homebrew:
         name: "{{ brew.packages_from_source }}"
         install_options: build-from-source
+      when: brew.packages_from_source
 
   tags: homebrew
