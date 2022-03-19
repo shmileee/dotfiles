@@ -1,0 +1,13 @@
+---
+
+- block:
+  - name: "brew tap homebrew/cask-fonts"
+    community.general.homebrew_tap: tap=homebrew/cask-fonts state=present
+
+  - name: "install fonts"
+    community.general.homebrew_cask:
+      name:
+        - font-powerline-symbols
+        - font-fira-code-nerd-font
+
+  tags: font_install
