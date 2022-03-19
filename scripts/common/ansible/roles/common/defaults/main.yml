@@ -8,7 +8,20 @@ apt_packages:
   - python-is-python3
   - vim
 
-homebrew_casks: []
+homebrew_taps:
+  # - aws/tap
+  # - carlocab/personal
+  # - go-task/tap
+  # - hashicorp/tap
+  - homebrew/bundle
+  - homebrew/cask
+  - homebrew/cask-fonts
+  - homebrew/core
+  # - trussworks/tap
+
+
+homebrew_casks:
+  - font-fira-code-nerd-font
 
 homebrew_packages:
   - asdf
