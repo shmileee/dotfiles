@@ -12,7 +12,7 @@
 
 - name: "create config dir"
   ansible.builtin.file:
-    path: ~/.config/lvim
+    path: "{{ ansible_user_dir }}/.config/lvim"
     state: directory
     mode: '0755'
 

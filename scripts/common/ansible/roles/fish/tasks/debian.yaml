@@ -23,7 +23,7 @@
 - block:
     - name: "create fish config dir"
       ansible.builtin.file:
-        path: ~/.config/fish
+        path: "{{ ansible_user_dir }}/.config/fish"
         state: directory
         mode: '0755'
 
@@ -40,14 +40,14 @@
 
     - name: "create functions dir"
       ansible.builtin.file:
-        path: ~/.config/fish/functions
+        path: "{{ ansible_user_dir }}/.config/fish/functions"
         state: directory
         mode: '0755'
 
     - name: "install fisher"
       ansible.builtin.get_url:
         url: https://git.io/fisher
-        dest: ~/.config/fish/functions/fisher.fish
+        dest: "{{ ansible_user_dir }}/.config/fish/functions/fisher.fish"
         mode: '0755'
       register: download_result
       until: download_result is succeeded
@@ -55,7 +55,7 @@
       delay: 5
 
     - name: "install plugins with fisher"
-      ansible.builtin.shell: . ~/.config/fish/config.fish && fisher update
+      ansible.builtin.shell: . "{{ ansible_user_dir }}/.config/fish/config.fish && fisher update"
       changed_when: false
 
   tags: fish_config
