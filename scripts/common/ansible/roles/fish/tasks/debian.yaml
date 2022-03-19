@@ -1,0 +1,61 @@
+---
+
+- name: "install"
+  community.general.homebrew:
+    name:
+      - 'fish'
+
+- block:
+    - name: "obtain path to fish"
+      ansible.builtin.command: which fish
+      register: fish_path
+      changed_when: false
+
+    - name: "change default shell to fish"
+      become: true
+      ansible.builtin.user:
+        name: '{{ ansible_user }}'
+        shell: '{{ fish_path.stdout }}'
+        system: true
+
+  tags: fish_chsh
+
+- block:
+    - name: "create fish config dir"
+      ansible.builtin.file:
+        path: ~/.config/fish
+        state: directory
+        mode: '0755'
+
+    - name: "obtain path to fish"
+      ansible.builtin.command: which fish
+      register: fish_path
+      changed_when: false
+      check_mode: false
+
+    - name: "set ansible_shell_executable to fish"
+      ansible.builtin.set_fact:
+        ansible_shell_executable: '{{ fish_path.stdout }}'
+        ansible_shell_type: fish
+
+    - name: "create functions dir"
+      ansible.builtin.file:
+        path: ~/.config/fish/functions
+        state: directory
+        mode: '0755'
+
+    - name: "install fisher"
+      ansible.builtin.get_url:
+        url: https://git.io/fisher
+        dest: ~/.config/fish/functions/fisher.fish
+        mode: '0755'
+      register: download_result
+      until: download_result is succeeded
+      retries: 3
+      delay: 5
+
+    - name: "install plugins with fisher"
+      ansible.builtin.command: fisher update
+      changed_when: false
+
+  tags: fish_config
