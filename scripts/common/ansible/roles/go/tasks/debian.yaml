@@ -1,5 +1,13 @@
 ---
 
+# TODO:
+# fatal: [localhost]: FAILED! => {"changed": false, "msg": "Failed to update
+# apt cache: E:The repository
+# 'http://ppa.launchpad.net/longsleep/golang-backports/ubuntu jammy Release'
+# does not have a Release file."}
+
+# Switch to: goenv
+
 - name: "add golang apt repository"
   become: true
   ansible.builtin.apt_repository:

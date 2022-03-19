@@ -26,8 +26,8 @@
   - name: docker
     tags: docker
 
-  - name: go
-    tags: go
+  # - name: go
+  #   tags: go
 
   - name: tmux
     tags: tmux
@@ -35,5 +35,5 @@
   - name: python
     tags: python
 
-  - name: kubernetes
-    tags: kubernetes
+  # - name: kubernetes
+  #   tags: kubernetes

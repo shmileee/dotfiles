@@ -7,6 +7,7 @@ apt_packages:
   - python3-pip
   - python-is-python3
   - vim
+  - less
 
 homebrew_taps:
   # - aws/tap
@@ -25,7 +26,7 @@ homebrew_casks:
 
 homebrew_packages:
   - asdf
-  - bat
+  # - bat -- does not work on ubuntu jammy, has to be compiled and it takes too long
   - direnv
   - exa
   - fd
