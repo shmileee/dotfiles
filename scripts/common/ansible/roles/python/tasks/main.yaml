@@ -3,5 +3,5 @@
 - name: "install pyenv"
   ansible.builtin.command: anyenv install pyenv
   args:
-    creates: ~/.anyenv/envs/pyenv/bin/pyenv
+    creates: "{{ ansible_user_dir }}/.anyenv/envs/pyenv/bin/pyenv"
   changed_when: false

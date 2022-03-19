@@ -8,10 +8,10 @@
   ansible.builtin.command: anyenv install --init
   args:
     stdin: "y"
-  changed_when: false
+    creates: "{{ ansible_user_dir }}/.config/anyenv/anyenv-install"
 
 - name: "install anyenv-update"
   ansible.builtin.git:
     repo: https://github.com/znz/anyenv-update.git
-    dest: ~/.anyenv/plugins/anyenv-update
+    dest: "{{ ansible_user_dir }}/.anyenv/plugins/anyenv-update"
     version: master
