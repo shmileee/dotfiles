@@ -1,0 +1,44 @@
+---
+- block:
+  - name: "Install packages"
+    become: true
+    ansible.builtin.apt:
+      name:
+        - build-essential
+        - libssl-dev
+        - llvm
+        - python3-pip
+        - python-is-python3
+      autoclean: true
+      autoremove: true
+      update_cache: true
+
+  - name: "Upgrade all packages to the latest version"
+    become: true
+    ansible.builtin.apt:
+      upgrade: safe
+    changed_when: false
+
+- block:
+    - name: "Update homebrew"
+      changed_when: false
+      community.general.homebrew:
+        update_homebrew: true
+
+    - name: "Install tools by brew"
+      community.general.homebrew:
+        name:
+          - asdf
+          - bat
+          - direnv
+          - exa
+          - fd
+          - gh
+          - ghq
+          - ripgrep
+
+    - name: "Install tools by brew --build-from-source"
+      community.general.homebrew:
+        name:
+          - duf
+        install_options: build-from-source

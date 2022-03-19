@@ -1,0 +1,6 @@
+---
+- hosts: localhost
+  strategy: linear
+  roles:
+  - name: common
+    tags: common
