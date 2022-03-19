@@ -19,3 +19,6 @@
 
   - name: lunarvim
     tags: lunarvim
+
+  - name: anyenv
+    tags: anyenv
