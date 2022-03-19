@@ -20,6 +20,7 @@
         autoclean: true
         autoremove: true
         update_cache: true
+      when: apt.packages
 
     - name: "packages | upgrade to the latest version"
       become: true
@@ -41,11 +42,13 @@
       community.general.homebrew:
         # Ensure packages that have been installed with shell scripts are
         # excluded.
-        name: "{{ brewpackages | difference(apt_packages_from_file) }}"
+        name: "{{ brew.packages | difference(apt_packages_from_file) }}"
+      when: brew.packages
 
     - name: "packages | install homebrew tools from source"
       community.general.homebrew:
         name: "{{ brew.packages_from_source }}"
         install_options: build-from-source
+      when: brew.packages_from_source
 
   tags: homebrew
