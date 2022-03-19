@@ -12,13 +12,11 @@ brew:
   taps:
     # - aws/tap
     # - carlocab/personal
-    # - go-task/tap
     # - hashicorp/tap
     - homebrew/bundle
     - homebrew/cask
     - homebrew/cask-fonts
     - homebrew/core
-    # - trussworks/tap
   casks:
     - font-fira-code-nerd-font
   packages:
@@ -45,7 +43,7 @@ nodejs:
 golang:
   path: '{{ ansible_user_dir }}/.go'
   versions:
-    - 1.17.8
+    - 1.18
   packages:
     - golang.org/x/tools/cmd/goimports
     - golang.org/x/tools/gopls
