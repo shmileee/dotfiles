@@ -41,12 +41,12 @@ nodejs:
     - yarn
 
 golang:
-  path: '{{ ansible_user_dir }}/.go'
+  path: '{{ ansible_user_dir }}/go'
   versions:
-    - 1.18
+    - 1.18.0
   packages:
-    - golang.org/x/tools/cmd/goimports
-    - golang.org/x/tools/gopls
+    - golang.org/x/tools/cmd/goimports@latest
+    - golang.org/x/tools/gopls@latest
 
 neovim:
   build_from_source: false

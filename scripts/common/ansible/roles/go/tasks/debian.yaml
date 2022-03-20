@@ -14,8 +14,9 @@
 - name: "install golang"
   ansible.builtin.command: |
     fish -lc 'goenv install {{ item | quote }}'
-  when: |
-    golang.versions and installed_versions.stdout.find(item) == -1
+  when:
+    - golang.versions is defined
+    - 'item|string not in installed_versions.stdout'
   with_items: '{{ golang.versions }}'
 
 - name: "get global version"
@@ -30,12 +31,10 @@
   when: global_golang.stdout != golang.versions[0]
 
 - name: "install packages"
-  environment:
-    GOPATH: '{{ golang.path }}'
   ansible.builtin.command: |
-    fish -lc 'go get -u {{ item | quote }}'
+    fish -lc 'go install {{ item | quote }}'
   with_items: '{{ golang.packages }}'
   when: golang.packages
-  register: go_get_result
+  register: go_install_result
   changed_when:
-    - '"downloading" in go_get_result.stderr'
+    - '"Downloading" in go_install_result.stderr'
