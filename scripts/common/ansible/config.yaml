@@ -31,6 +31,10 @@ brew:
   packages_from_source:
     - duf
 
+dotfiles:
+  repo: 'https://github.com/shmileee/dotfiles'
+  branch: 'feature/automation'
+
 anyenv:
   envs_dir: '{{ ansible_user_dir }}/.anyenv/envs'
 

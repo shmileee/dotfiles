@@ -7,9 +7,9 @@
   tags: homebrew
 
 - name: "chezmoi init"
-  ansible.builtin.command: chezmoi init --apply .
+  ansible.builtin.command: |
+    "chezmoi init --apply {{ dotfiles.repo }} --branch {{ dotfiles.branch }}"
   args:
-    chdir: "{{ ansible_user_dir }}/dotfiles"
     creates: "{{ ansible_user_dir }}/.local/share/chezmoi"
 
 - name: "chezmoi update"

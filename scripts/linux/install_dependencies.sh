@@ -3,7 +3,7 @@
 # shellcheck disable=SC2086
 cwd="$(cd "$(dirname ${BASH_SOURCE[0]})" && pwd)"
 
-apt="apt -qq -y"
+apt="sudo apt -qq -y"
 $apt update
 
 add-apt-repository --yes --update ppa:ansible/ansible
