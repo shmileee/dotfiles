@@ -4,7 +4,7 @@
   connection: local
 
   vars_files:
-    - config.yml
+    - config.yaml
 
   roles:
     - name: common
