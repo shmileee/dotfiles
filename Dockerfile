@@ -36,7 +36,7 @@ ENV DOTFILES_DIR $USER_HOME/dotfiles
 COPY --chown=linuxbrew ./scripts/common/ansible.sh /tmp/scripts/common/ansible.sh
 COPY --chown=linuxbrew . $DOTFILES_DIR
 
-CMD exec $DOTFILES_DIR/scripts/common/ansible.sh --run
+RUN $DOTFILES_DIR/scripts/common/ansible.sh --run
 
 # Start fish shell.
 # CMD fish
