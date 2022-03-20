@@ -1,5 +1,6 @@
 ---
 
+  # TODO: make build from source platforms independent
 - import_tasks: build.yaml
   when: neovim.build_from_source
 
