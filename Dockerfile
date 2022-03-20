@@ -20,7 +20,8 @@ ENV DOCKERIZED true
 WORKDIR $USER_HOME
 
 # Configure dotfiles.
-RUN curl -fsSL https://raw.githubusercontent.com/shmileee/dotfiles/feature/automation/scripts/setup.sh | bash -s -- --all
+COPY ./scripts/setup.sh /tmp/setup.sh
+RUN /tmp/setup.sh
 
 # Start fish shell.
 CMD ["fish", "-l"]

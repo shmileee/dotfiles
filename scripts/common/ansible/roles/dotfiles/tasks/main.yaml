@@ -8,7 +8,7 @@
 
 - name: "chezmoi init"
   ansible.builtin.command: |
-    "chezmoi init --apply {{ dotfiles.repo }} --branch {{ dotfiles.branch }}"
+    chezmoi init --apply {{ dotfiles.repo }} --branch {{ dotfiles.branch }}
   args:
     creates: "{{ ansible_user_dir }}/.local/share/chezmoi"
 
