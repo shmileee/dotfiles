@@ -36,5 +36,9 @@
   with_items: '{{ golang.packages }}'
   when: golang.packages
   register: go_install_result
+  environment:
+    PATH: >-
+      {{- anyenv.envs_dir -}}/goenv/shims:
+      {{- lookup("env", "PATH") -}}
   changed_when:
     - '"Downloading" in go_install_result.stderr'
