@@ -27,9 +27,6 @@
   ansible.builtin.command: 'goenv global {{ golang.versions[0] | quote }}'
   when: global_golang.stdout != golang.versions[0]
 
-- name: "grepme: echo $PATH with shell with fish login shell"
-  ansible.builtin.command: 'echo $PATH'
-
 - name: "install packages"
   ansible.builtin.command: 'go install {{ item | quote }}'
   with_items: '{{ golang.packages }}'
