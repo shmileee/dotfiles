@@ -49,6 +49,7 @@ golang:
     - golang.org/x/tools/gopls
 
 neovim:
+  build_from_source: false
   directory: "{{ ansible_user_dir }}/Development/repository/github.com/neovim/neovim"
   build_dependencies:
     - autoconf

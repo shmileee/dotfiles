@@ -1,40 +1,30 @@
 ---
 
-- name: "dependencies"
-  become: true
-  ansible.builtin.apt:
-    name: "{{ neovim.build_dependencies }}"
-    autoclean: true
-    autoremove: true
-    update_cache: true
+- import_tasks: build.yaml
+  when: neovim.build_from_source
 
-- name: "clone"
-  ansible.builtin.git:
-    clone: true
-    depth: 1
-    single_branch: true
-    dest: "{{ neovim.directory }}"
-    force: true
-    repo: https://github.com/neovim/neovim.git
-    update: true
-    version: "{{ neovim_version | default('master') }}"
-  register: clone
+- block:
+    - name: "download nightly binary"
+      ansible.builtin.get_url:
+        url: https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.deb
+        dest: /tmp/nvim.deb
+        mode: '0755'
+      register: download_result
+      until: download_result is succeeded
+      retries: 3
+      delay: 5
 
-- name: "build"
-  make: # noqa no-handler
-    chdir: "{{ neovim.directory }}"
-    params:
-      CMAKE_BUILD_TYPE: RelWithDebInfo
-  when: clone.changed
+    - name: "install"
+      become: true
+      ansible.builtin.apt:
+        deb: "/tmp/nvim.deb"
+        autoclean: true
+        autoremove: true
+        update_cache: true
 
-- name: "install"
-  become: true
-  make: # noqa no-handler
-    chdir: "{{ neovim.directory }}"
-    target: install
-  when: clone.changed
+    - name: "remove leftovers"
+      ansible.builtin.file:
+        path: "/tmp/nvim.deb"
+        state: absent
 
-- name: "remove build folder"
-  ansible.builtin.file:
-    path: "{{ neovim.directory }}/build"
-    state: absent
+  when: not neovim.build_from_source
