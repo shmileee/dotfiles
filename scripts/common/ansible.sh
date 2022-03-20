@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euoE pipefail
+
 # shellcheck disable=SC2086
 cwd="$(cd "$(dirname ${BASH_SOURCE[0]})" && pwd)"
 
@@ -11,6 +13,7 @@ install_collections() {
 run_playbook() {
   echo "⚪ [ansible] running playbook..."
   ansible-playbook -e "ansible_user=$(whoami)" "${cwd}/ansible/main.yml" -vvv
+  echo "✅ [ansible] configured!"
 }
 
 # process arguments

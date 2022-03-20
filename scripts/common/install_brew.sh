@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euoE pipefail
+
 install_brew() {
   echo "⚪ [homebrew] installing..."
 

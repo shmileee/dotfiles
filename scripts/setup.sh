@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euoE pipefail
+
 # shellcheck disable=SC2086
 cwd="$(cd "$(dirname ${BASH_SOURCE[0]})" && pwd)"
 
