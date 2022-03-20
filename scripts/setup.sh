@@ -6,7 +6,8 @@ set -euoE pipefail
 cwd="$(cd "$(dirname ${BASH_SOURCE[0]})" && pwd)"
 
 source="https://github.com/shmileee/dotfiles"
-tarball="$source/tarball/master"
+branch="${branch:-feature/automation}"
+tarball="$source/tarball/$branch"
 target="/tmp/.dotfiles"
 tar_cmd="tar -xzv -C $target --strip-components=1 --exclude='{.gitignore}'"
 
@@ -34,7 +35,7 @@ is_executable() { type "$1" > /dev/null 2>&1; }
 
 download_repository() {
   if is_executable "git"; then
-    cmd="git clone $source $target"
+    cmd="git clone -b $branch $source $target"
   elif is_executable "curl"; then
     cmd="curl -#L $tarball | $tar_cmd"
   elif is_executable "wget"; then
