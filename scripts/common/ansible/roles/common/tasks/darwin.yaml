@@ -6,7 +6,6 @@
         msg: "{{ brew.packages }}"
 
     - name: "packages | update homebrew"
-      changed_when: false
       community.general.homebrew:
         update_homebrew: true
 
