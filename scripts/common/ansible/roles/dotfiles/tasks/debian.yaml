@@ -14,4 +14,5 @@
 
 - name: "chezmoi update"
   ansible.builtin.command: chezmoi update --force
-  changed_when: false
+  register: chezmoi_update
+  changed_when: '"Updating" in chezmoi_update.stderr'

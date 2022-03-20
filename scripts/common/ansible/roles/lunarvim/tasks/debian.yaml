@@ -23,4 +23,5 @@
 
 - name: "update lunarvim dotfiles"
   ansible.builtin.command: chezmoi update --force --apply
-  changed_when: false
+  register: chezmoi_update
+  changed_when: '"Updating" in chezmoi_update.stderr'
