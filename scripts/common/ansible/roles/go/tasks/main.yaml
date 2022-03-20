@@ -15,7 +15,16 @@
     cmd: echo $PATH
   changed_when: false
 
-- name: "source config.fish"
+- name: "grepme: echo $SHELL"
+  ansible.builtin.command: echo $SHELL
+  changed_when: false
+
+- name: "grepme: cat anyenv init-|psub"
+  ansible.builtin.shell: |
+    cat (anyenv init -|psub)
+  changed_when: false
+
+- name: "grepme: source config.fish"
   ansible.builtin.shell: ". {{ ansible_user_dir }}/.config/fish/config.fish"
   changed_when: false
 
