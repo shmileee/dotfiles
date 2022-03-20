@@ -36,4 +36,6 @@
     fish -lc 'go get -u {{ item | quote }}'
   with_items: '{{ golang.packages }}'
   when: golang.packages
-  changed_when: false
+  register: go_get_result
+  changed_when:
+    - '"downloading" in go_get_result.stderr'
