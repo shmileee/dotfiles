@@ -9,6 +9,7 @@
   ansible.builtin.command: |
     fish -lc 'goenv versions'
   changed_when: false
+  ignore_errors: true
   register: installed_versions
 
 - name: "install golang"
@@ -29,6 +30,18 @@
   ansible.builtin.command: |
     fish -lc 'goenv global {{ golang.versions[0] | quote }}'
   when: global_golang.stdout != golang.versions[0]
+
+- name: "set global golang"
+  ansible.builtin.command: |
+    fish -lc 'env | grep -i go'
+
+- name: "set global golang"
+  ansible.builtin.command: |
+    fish -lc 'which go'
+
+- name: "set global golang"
+  ansible.builtin.command: |
+    fish -lc 'echo $PATH'
 
 - name: "install packages"
   ansible.builtin.command: |
