@@ -1,5 +1,5 @@
 ---
-name: ci
+name: docker
 
 on:
   push:
