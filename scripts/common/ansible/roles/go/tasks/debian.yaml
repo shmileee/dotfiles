@@ -34,4 +34,3 @@
   register: go_install_result
   changed_when:
     - '"Downloading" in go_install_result.stderr'
-
