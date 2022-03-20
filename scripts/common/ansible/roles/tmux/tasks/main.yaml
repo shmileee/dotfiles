@@ -20,7 +20,7 @@
     version: master
 
 - name: "install tmux plugins"
-  ansible.builtin.command: |
-    "{{ ansible_user_dir }}/.tmux/plugins/tpm/bin/install_plugins"
+  ansible.builtin.command:
+    cmd: "{{ ansible_user_dir }}/.tmux/plugins/tpm/bin/install_plugins"
   register: task
   changed_when: '"download success" in task.stdout'

@@ -21,7 +21,7 @@ WORKDIR $USER_HOME
 
 # Configure dotfiles.
 COPY ./scripts/setup.sh /tmp/setup.sh
-RUN /tmp/setup.sh
+RUN /tmp/setup.sh --all
 
 # Start fish shell.
 CMD ["fish", "-l"]

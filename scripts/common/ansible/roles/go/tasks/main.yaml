@@ -5,30 +5,48 @@
   args:
     creates: "{{ ansible_user_dir }}/.anyenv/envs/goenv/bin/goenv"
 
+- name: "cat config.fish"
+  ansible.builtin.command:
+    cmd: cat {{ ansible_user_dir }}/.config/fish/config.fish
+  changed_when: false
+
+- name: "print path"
+  ansible.builtin.command:
+    cmd: echo $PATH
+  changed_when: false
+
+- name: "source config.fish"
+  ansible.builtin.command:
+    cmd: . {{ ansible_user_dir }}/.config/fish/config.fish
+  changed_when: false
+
 - name: "get installed versions"
-  ansible.builtin.command: 'goenv versions'
+  ansible.builtin.command: goenv versions
   changed_when: false
   ignore_errors: true
   register: installed_versions
 
 - name: "install golang"
-  ansible.builtin.command: 'goenv install {{ item | quote }}'
+  ansible.builtin.command:
+    cmd: goenv install {{ item | quote }}
   when:
     - golang.versions is defined
     - 'item|string not in installed_versions.stdout'
   with_items: '{{ golang.versions }}'
 
 - name: "get global version"
-  ansible.builtin.command: 'goenv global'
+  ansible.builtin.command: goenv global
   register: global_golang
   changed_when: false
 
 - name: "set global golang"
-  ansible.builtin.command: 'goenv global {{ golang.versions[0] | quote }}'
+  ansible.builtin.command:
+    cmd: goenv global {{ golang.versions[0] | quote }}
   when: global_golang.stdout != golang.versions[0]
 
 - name: "install packages"
-  ansible.builtin.command: 'go install {{ item | quote }}'
+  ansible.builtin.command:
+    cmd: go install {{ item | quote }}
   with_items: '{{ golang.packages }}'
   when: golang.packages
   register: go_install_result

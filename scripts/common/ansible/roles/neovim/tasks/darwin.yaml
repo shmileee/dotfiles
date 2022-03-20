@@ -4,5 +4,5 @@
   community.general.homebrew:
     state: head
     name:
-    - 'luajit'
-    - 'neovim'
+      - 'luajit'
+      - 'neovim'
