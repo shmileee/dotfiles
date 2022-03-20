@@ -16,8 +16,7 @@
   changed_when: false
 
 - name: "source config.fish"
-  ansible.builtin.command:
-    cmd: . {{ ansible_user_dir }}/.config/fish/config.fish
+  ansible.builtin.shell: ". {{ ansible_user_dir }}/.config/fish/config.fish"
   changed_when: false
 
 - name: "get installed versions"
