@@ -5,6 +5,12 @@ set -euoE pipefail
 # shellcheck disable=SC2086
 cwd="$(cd "$(dirname ${BASH_SOURCE[0]})" && pwd)"
 
+source="https://github.com/shmileee/dotfiles"
+tarball="$source/tarball/master"
+target="/tmp/.dotfiles"
+tar_cmd="tar -xzv -C $target --strip-components=1 --exclude='{.gitignore}'"
+
+
 display_help() {
   echo "Usage: ./setup.sh [arguments]..."
   echo
@@ -24,6 +30,36 @@ exit_help() {
 
 macos() { test "$(uname -s)" == "Darwin"  && return 0; }
 linux() { test "$(uname -s)" == "Linux"  && return 0; }
+is_executable() { type "$1" > /dev/null 2>&1; }
+
+download_repository() {
+  if is_executable "git"; then
+    cmd="git clone $source $target"
+  elif is_executable "curl"; then
+    cmd="curl -#L $tarball | $tar_cmd"
+  elif is_executable "wget"; then
+    cmd="wget --no-check-certificate -O - $tarball | $tar_cmd"
+  fi
+
+  if test -z "$cmd" ; then
+    exit_help "No git, curl or wget available. Aborting."
+  else
+    mkdir -p "$target"
+    eval "$cmd"
+  fi
+}
+
+setup_all() {
+  download_repository
+  if linux; then
+    "${target}/scripts/linux/install_dependencies.sh"
+  fi
+  "${target}/scripts/common/install_brew.sh"
+  if macos; then
+    brew install ansible
+  fi
+  "${target}/scripts/common/ansible.sh" --all
+}
 
 # process arguments
 while [[ $# -gt 0 ]]; do
@@ -43,14 +79,7 @@ while [[ $# -gt 0 ]]; do
       "${cwd}/common/ansible.sh"
       ;;
     --all)
-      if linux; then
-        "${cwd}/linux/install_dependencies.sh"
-      fi
-      "${cwd}/common/install_brew.sh"
-      if macos; then
-        brew install ansible
-      fi
-      "${cwd}/common/ansible.sh" --all
+      setup_all
       ;;
     *)
       exit_help "Unknown argument: $arg"
