@@ -1,8 +1,0 @@
----
-
-- name: "install golang"
-  community.general.homebrew:
-    name:
-      - 'go'
-
-  tags: homebrew
