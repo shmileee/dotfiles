@@ -34,5 +34,5 @@ jobs:
       - name: Install using setup.sh
         run: |
           if [ "$RUNNER_OS" == "macOS" ]; then
-            bash -x ./scripts/setup.sh --all
+            ./scripts/setup.sh --all
           fi
