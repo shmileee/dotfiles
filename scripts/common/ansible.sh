@@ -11,7 +11,6 @@ install_collections() {
 run_playbook() {
   echo "⚪ [ansible] running playbook..."
   ansible-playbook -e "ansible_user=$(whoami)" "${cwd}/ansible/main.yml" -vvv
-  echo "✅ [ansible] configured!"
 }
 
 # process arguments
