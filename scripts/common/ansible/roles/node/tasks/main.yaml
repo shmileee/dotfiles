@@ -9,13 +9,15 @@
   ansible.builtin.command: |
     fish -lc 'nodenv versions'
   changed_when: false
+  ignore_errors: true
   register: installed_versions
 
 - name: "install nodejs"
   ansible.builtin.command: |
     fish -lc 'nodenv install {{ item | quote }}'
-  when: |
-    nodejs.versions and installed_versions.stdout.find(item) == -1
+  when:
+    - nodejs.versions is defined
+    - 'item|string not in installed_versions.stdout'
   with_items: '{{ nodejs.versions }}'
 
 - name: "get global version"
