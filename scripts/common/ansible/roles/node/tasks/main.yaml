@@ -6,38 +6,31 @@
     creates: "{{ ansible_user_dir }}/.anyenv/envs/nodenv/bin/nodenv"
 
 - name: "get installed versions"
-  ansible.builtin.command: |
-    fish -lc 'nodenv versions'
+  ansible.builtin.command: 'nodenv versions'
   changed_when: false
   ignore_errors: true
   register: installed_versions
 
 - name: "install nodejs"
-  ansible.builtin.command: |
-    fish -lc 'nodenv install {{ item | quote }}'
+  ansible.builtin.command: 'nodenv install {{ item | quote }}'
   when:
     - nodejs.versions is defined
     - 'item|string not in installed_versions.stdout'
   with_items: '{{ nodejs.versions }}'
 
 - name: "get global version"
-  ansible.builtin.command: |
-    fish -lc 'nodenv global'
+  ansible.builtin.command: 'nodenv global'
   register: global_node
   changed_when: false
 
 - name: "set global nodejs"
-  ansible.builtin.command: |
-    fish -lc 'nodenv global {{ nodejs.versions[0] | quote }}'
+  ansible.builtin.command: 'nodenv global {{ nodejs.versions[0] | quote }}'
   when: global_node.stdout != nodejs.versions[0]
 
 - name: "install packages"
   community.general.npm:
     name: '{{ item }}'
     global: true
+    executable: '{{ anyenv.envs_dir }}/nodenv/shims/npm'
   with_items: '{{ nodejs.packages }}'
   when: nodejs.packages
-  environment:
-    PATH: >-
-      {{- anyenv.envs_dir -}}/nodenv/shims:
-      {{- lookup("env", "PATH") -}}

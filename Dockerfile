@@ -39,4 +39,4 @@ COPY --chown=linuxbrew . $DOTFILES_DIR
 RUN $DOTFILES_DIR/scripts/common/ansible.sh --run
 
 # Start fish shell.
-# CMD fish
+CMD ["fish", "-l"]
