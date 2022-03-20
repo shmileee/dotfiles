@@ -12,7 +12,7 @@ install_collections() {
 
 run_playbook() {
   echo "⚪ [ansible] running playbook..."
-  ansible-playbook -e "ansible_user=$(whoami)" "${cwd}/ansible/main.yml" -vvv
+  ansible-playbook -e "ansible_user=$(whoami)" "${cwd}/ansible/main.yaml" -vvv
   echo "✅ [ansible] configured!"
 }
 
@@ -26,7 +26,7 @@ while [[ $# -gt 0 ]]; do
     --run)
       run_playbook
       ;;
-    *)
+    --all)
       install_collections
       run_playbook
       ;;

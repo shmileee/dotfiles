@@ -47,7 +47,10 @@ while [[ $# -gt 0 ]]; do
         "${cwd}/linux/install_dependencies.sh"
       fi
       "${cwd}/common/install_brew.sh"
-      "${cwd}/common/ansible.sh"
+      if macos; then
+        brew install ansible
+      fi
+      "${cwd}/common/ansible.sh" --all
       ;;
     *)
       exit_help "Unknown argument: $arg"
