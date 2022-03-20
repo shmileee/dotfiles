@@ -5,9 +5,12 @@ end
 
 {{ else if (eq .chezmoi.os "linux" ) }}
 # PATH
-set -x PATH $HOME/.ngrok $PATH
-set -x PATH /home/linuxbrew/.linuxbrew/bin $PATH
-set -x PATH ~/.local/bin $PATH
+
+{{- if not (env "DOCKERIZED") }}
+fish_add_path /home/linuxbrew/.linuxbrew/bin
+{{- end }}
+
+fish_add_path $HOME/.local/bin
 
 # alias
 alias ls 'ls -a --color=auto'
@@ -36,18 +39,17 @@ end
 
 # anyenv
 if test -d $HOME/.anyenv
-    set -x PATH $HOME/.anyenv/bin $PATH
-    source (anyenv init - fish | psub)
+    source (anyenv init - | psub)
 end
 
 
 # go
 set -x GOPATH $HOME/go
-set -x PATH $GOPATH/bin $PATH
+fish_add_path $GOPATH/bin
 
 
 # rust
-set -x PATH $HOME/.cargo/bin $PATH
+fish_add_path $HOME/.cargo/bin
 
 
 # kubernetes
