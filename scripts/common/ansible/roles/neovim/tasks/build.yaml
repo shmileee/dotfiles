@@ -1,0 +1,40 @@
+---
+
+- name: "dependencies"
+  become: true
+  ansible.builtin.apt:
+    name: "{{ neovim.build_dependencies }}"
+    autoclean: true
+    autoremove: true
+    update_cache: true
+
+- name: "clone"
+  ansible.builtin.git:
+    clone: true
+    depth: 1
+    single_branch: true
+    dest: "{{ neovim.directory }}"
+    force: true
+    repo: https://github.com/neovim/neovim.git
+    update: true
+    version: "{{ neovim_version | default('master') }}"
+  register: clone
+
+- name: "build"
+  make: # noqa no-handler
+    chdir: "{{ neovim.directory }}"
+    params:
+      CMAKE_BUILD_TYPE: RelWithDebInfo
+  when: clone.changed
+
+- name: "install"
+  become: true
+  make: # noqa no-handler
+    chdir: "{{ neovim.directory }}"
+    target: install
+  when: clone.changed
+
+- name: "remove build folder"
+  ansible.builtin.file:
+    path: "{{ neovim.directory }}/build"
+    state: absent
