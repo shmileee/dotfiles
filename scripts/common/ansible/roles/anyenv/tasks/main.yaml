@@ -16,21 +16,10 @@
     dest: "{{ ansible_user_dir }}/.anyenv/plugins/anyenv-update"
     version: master
 
-- name: "echo PATH"
-  command: echo "$PATH"
-  register: default_path
-
-- name: "echo anyenv PATH"
-  command: echo "$HOME/.anyenv"
-  register: anyenv_home
-
 - name: "install envs"
-  environment:
-    PATH: "{{ anyenv_home.stdout }}/bin:{{ default_path.stdout }}"
-  shell: |
-    anyenv install {{ item.env }}
+  ansible.builtin.command:
+    cmd: anyenv install {{ item.env }}
   args:
-    executable: /bin/bash
     creates: "{{ ansible_user_dir }}/.anyenv/envs/{{ item.env }}"
   with_items:
     - env: nodenv
@@ -38,11 +27,9 @@
     - env: pyenv
 
 - name: "install language"
-  environment:
-    PATH: "{{ anyenv_home.stdout }}/bin:{{ default_path.stdout }}"
-  shell: |
+  ansible.builtin.shell: |
     eval "$(anyenv init - bash)"
-    {{ item.env }} install {{ item.version  }}
+    {{ item.env }} install {{ item.version }}
     {{ item.env }} rehash
     {{ item.env }} global {{ item.version }}
   args:
