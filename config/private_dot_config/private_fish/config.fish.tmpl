@@ -53,10 +53,13 @@ set -x KUBE_EDITOR vim
 
 
 # alias
-## common
-alias .. 'cd ..'
 
-### exa
+## common
+if command -v tree > /dev/null
+  alias tree 'tree -a -I ".git|*.pyc|*pycache*"'
+end
+
+## exa
 if command -v exa > /dev/null
     alias l="exa --icons"
     alias ls="exa --git --icons"
@@ -77,6 +80,29 @@ end
 ## git
 alias g 'git'
 alias ghb 'gh repo view -w'
+alias gdc 'git diff --cached | vim -'
+alias cdp 'cd (git rev-parse --show-toplevel)'
+
+## rg
+alias rg 'rg --hidden --follow --glob "!.git"'
+
+
+# abbreviatios
+abbr g git
+abbr dps 'docker ps'
+abbr dpa 'docker ps -a'
+abbr dkd 'docker run -d -P'
+abbr dex 'docker exec -i -t'
+abbr dki 'docker run -i -t -P'
+abbr dip 'docker inspect --format "{{ .NetworkSettings.IPAddress }}"'
+abbr groot 'git rev-parse --show-toplevel'
+
+
+# fzf
+set -gx FZF_DEFAULT_COMMAND "rg --files --hidden --follow --glob '!.git'"
+set -gx FZF_DEFAULT_OPTS "--color=dark"
+set -gx FZF_CTRL_T_COMMAND "rg --files --hidden --follow --glob '!.git'"
+
 
 # fish bobthefish-theme config
 set -g theme_date_format "+20%y/%m/%d %H:%M"
