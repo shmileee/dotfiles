@@ -8,20 +8,18 @@
 - name: "brew | update"
   community.general.homebrew:
     update_homebrew: true
-  run_once: true
 
 - name: "brew | install taps"
   community.general.homebrew_tap:
     name: "{{ brew.taps }}"
     state: present
-  run_once: true
   when: brew.taps is defined
 
 - name: "brew | install casks"
   community.general.homebrew_cask:
     name: "{{ brew.casks }}"
     state: present
-  run_once: true
+    install_options: no-quarantine
   when:
     - brew.casks is defined
     - ansible_system == "Darwin"
