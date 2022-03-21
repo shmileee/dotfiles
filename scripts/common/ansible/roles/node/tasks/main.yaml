@@ -6,4 +6,5 @@
     global: true
     executable: '{{ anyenv.envs_dir }}/nodenv/shims/npm'
   with_items: '{{ nodejs.packages }}'
+  ignore_errors: "{{ ansible_check }}"
   when: nodejs.packages
