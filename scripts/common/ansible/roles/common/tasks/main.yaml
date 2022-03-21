@@ -1,7 +1,14 @@
 ---
 
-- import_tasks: debian.yaml
-  when: ansible_os_family == "Debian"
+- import_tasks: packages.yaml
+  when: ansible_system == "Linux"
 
-- import_tasks: darwin.yaml
-  when: ansible_os_family == "Darwin"
+- name: "merge common and platform specific packages"
+  ansible.builtin.set_fact:
+    brew_pkgs_merged: "{{ brew.packages.common | union(brew.packages[ansible_system|lower] | d([])) }}"
+
+- import_tasks: brew.yaml
+  vars:
+    pkgs: '{{ brew_pkgs_merged }}'
+  when:
+    - ansible_system in ["Linux", "Darwin"]

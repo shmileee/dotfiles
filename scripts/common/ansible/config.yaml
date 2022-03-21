@@ -1,12 +1,11 @@
-apt:
-  packages:
-    - build-essential
-    - libssl-dev
-    - llvm
-    - python3-pip
-    - python-is-python3
-    - vim
-    - less
+packages:
+  - build-essential
+  - libssl-dev
+  - llvm
+  - python3-pip
+  - python-is-python3
+  - vim
+  - less
 
 brew:
   taps:
@@ -19,15 +18,19 @@ brew:
     - homebrew/core
   casks:
     - font-fira-code-nerd-font
+    - iterm2
   packages:
-    - asdf
-    - bat
-    - direnv
-    - exa
-    - fd
-    - gh
-    - ghq
-    - ripgrep
+    common:
+      - asdf
+      - bat
+      - direnv
+      - exa
+      - fd
+      - gh
+      - ghq
+      - ripgrep
+    darwin: []
+    linux: []
   packages_from_source:
     - duf
 

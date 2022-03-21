@@ -1,0 +1,33 @@
+---
+
+- name: "packages | list"
+  ansible.builtin.debug:
+    msg: "{{ packages }}"
+  when: packages is defined
+
+- name: "apt | update"
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
+  when: ansible_os_family == "Debian"
+
+- name: "packages | install"
+  become: true
+  ansible.builtin.package:
+    name: "{{ packages }}"
+    state: present
+  when: packages is defined
+
+- name: "apt | upgrade to the latest version"
+  become: true
+  ansible.builtin.apt:
+    upgrade: safe
+  changed_when: false
+  when: ansible_os_family == "Debian"
+
+- name: "apt | clean"
+  become: true
+  ansible.builtin.apt:
+    autoclean: true
+    autoremove: true
+  when: ansible_os_family == "Debian"
