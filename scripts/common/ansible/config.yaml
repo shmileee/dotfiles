@@ -29,7 +29,8 @@ brew:
       - gh
       - ghq
       - ripgrep
-    darwin: []
+    darwin:
+      - rectrangle
     linux: []
   packages_from_source:
     - duf
