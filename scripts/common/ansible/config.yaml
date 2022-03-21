@@ -22,6 +22,7 @@ brew:
     - aws-vault
     - font-fira-code-nerd-font
     - hiddenbar
+    - rectrangle
     - tunnelblick
   packages:
     common:
@@ -70,7 +71,6 @@ brew:
       - gawk
       - gnu-getopt
       - gnu-sed
-      - rectrangle
       - watch
       - wget
       - xz
