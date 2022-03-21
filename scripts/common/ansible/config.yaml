@@ -22,7 +22,7 @@ brew:
     - aws-vault
     - font-fira-code-nerd-font
     - hiddenbar
-    - rectrangle
+    - rectangle
     - tunnelblick
   packages:
     common:
