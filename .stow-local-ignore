@@ -18,10 +18,5 @@ _darcs
 ^/README.*
 ^/LICENSE.*
 ^/COPYING
-^/docs
-^/Brewfile.*
-^/etc
-^/fonts
-^/mnt
 ^/stow.sh
 ^/Dockerfile
