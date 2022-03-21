@@ -1,40 +1,9 @@
 ---
 
-- name: "install nodenv"
-  ansible.builtin.command: anyenv install nodenv
-  args:
-    creates: "{{ ansible_user_dir }}/.anyenv/envs/nodenv/bin/nodenv"
-
-- name: "get installed versions"
-  ansible.builtin.command: 'nodenv versions'
-  changed_when: false
-  ignore_errors: true
-  register: installed_versions
-
-- name: "install nodejs"
-  ansible.builtin.command:
-    cmd: nodenv install {{ item | quote }}
-  when:
-    - nodejs.versions is defined
-    - 'item|string not in installed_versions.stdout'
-  with_items: '{{ nodejs.versions }}'
-
-- name: "get global version"
-  ansible.builtin.command:
-    cmd: nodenv global
-  register: global_node
-  changed_when: false
-
-- name: "set global nodejs"
-  ansible.builtin.command:
-    cmd: nodenv global {{ nodejs.versions[0] | quote }}
-  when: global_node.stdout != nodejs.versions[0]
-
 - name: "install packages"
   community.general.npm:
     name: '{{ item }}'
     global: true
     executable: '{{ anyenv.envs_dir }}/nodenv/shims/npm'
   with_items: '{{ nodejs.packages }}'
-  ignore_errors: "{{ ansible_check_mode }}"
   when: nodejs.packages
