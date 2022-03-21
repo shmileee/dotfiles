@@ -37,12 +37,6 @@
     - name: tmux
       tags: tmux
 
-    # - name: python
-    #   tags: python
-
-    # - name: kubernetes
-    #   tags: kubernetes
-
     - name: node
       tags: node
 

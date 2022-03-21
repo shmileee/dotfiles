@@ -1,6 +1,0 @@
----
-
-- name: "install kubectlenv"
-  ansible.builtin.command: anyenv install kubectlenv
-  args:
-    creates: "{{ ansible_user_dir }}/.anyenv/envs/kubectl/bin/kubectlenv"
