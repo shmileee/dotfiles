@@ -23,7 +23,6 @@ brew:
     - font-fira-code-nerd-font
     - hiddenbar
     - tunnelblick
-    - lynx
   packages:
     common:
       - asciinema
