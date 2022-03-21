@@ -1,49 +1,7 @@
 ---
 
-- name: "rectangle | set spectacle-compatible shortcuts"
-  community.general.osx_defaults:
-    domain: com.knollsoft.Rectangle
-    key: alternateDefaultShortcuts
-    type: int
-    value: 0
-    state: present
+- import_tasks: darwin_system.yaml
+  when: ansible_system == "Darwin"
 
-- name: "rectangle | launch on login"
-  community.general.osx_defaults:
-    domain: com.knollsoft.Rectangle
-    key: launchOnLogin
-    type: int
-    value: 1
-    state: present
-
-- name: "alt-tab | set thumbnails"
-  community.general.osx_defaults:
-    domain: com.lwouis.alt-tab-macos
-    key: alignThumbnails
-    type: int
-    value: 1
-    state: present
-
-- name: "alt-tab | set spaces"
-  community.general.osx_defaults:
-    domain: com.lwouis.alt-tab-macos
-    key: spacesToShow2
-    type: int
-    value: 1
-    state: present
-
-- name: "alt-tab | set shortcuts #1"
-  community.general.osx_defaults:
-    domain: com.lwouis.alt-tab-macos
-    key: holdShortcut2
-    type: string
-    value: '\\U2318'
-    state: present
-
-- name: "alt-tab | set shortcuts #2"
-  community.general.osx_defaults:
-    domain: com.lwouis.alt-tab-macos
-    key: nextWindowShortcut2
-    type: string
-    value: '\\U21e5'
-    state: present
+- import_tasks: darwin_applications.yaml
+  when: ansible_system == "Darwin"
