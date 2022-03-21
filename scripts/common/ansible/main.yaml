@@ -43,5 +43,5 @@
     # - name: kubernetes
     #   tags: kubernetes
 
-    # - name: node
-    #   tags: node
+    - name: node
+      tags: node
