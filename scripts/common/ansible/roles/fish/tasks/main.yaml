@@ -34,11 +34,6 @@
       changed_when: false
       check_mode: false
 
-    - name: "set ansible_shell_executable to fish"
-      ansible.builtin.set_fact:
-        ansible_shell_executable: '{{ fish_path.stdout }}'
-        ansible_shell_type: fish
-
     - name: "create functions dir"
       ansible.builtin.file:
         path: "{{ ansible_user_dir }}/.config/fish/functions"
@@ -57,6 +52,8 @@
 
     - name: "install plugins with fisher"
       ansible.builtin.shell: ". {{ ansible_user_dir }}/.config/fish/config.fish && fisher update"
+      args:
+        executable: '{{ fish_path.stdout }}'
       changed_when: false
 
   tags: fish_config
