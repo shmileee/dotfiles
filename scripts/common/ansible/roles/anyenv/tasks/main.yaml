@@ -41,7 +41,7 @@
   environment:
     PATH: "{{ anyenv_home.stdout }}/bin:{{ default_path.stdout }}"
   shell: |
-    eval "$(anyenv init -)"
+    eval "$(anyenv init - bash)"
     {{ item.env }} install {{ item.version  }}
     {{ item.env }} rehash
     {{ item.env }} global {{ item.version }}
