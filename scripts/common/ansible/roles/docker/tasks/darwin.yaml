@@ -4,4 +4,5 @@
   community.general.homebrew_cask:
     name: "docker"
     state: present
+    install_options: no-quarantine
   tags: homebrew

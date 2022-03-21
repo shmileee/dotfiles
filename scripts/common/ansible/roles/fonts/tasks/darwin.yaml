@@ -9,6 +9,7 @@
       name:
         - font-powerline-symbols
         - font-fira-code-nerd-font
+      install_options: no-quarantine
 
   tags:
     - font_install
