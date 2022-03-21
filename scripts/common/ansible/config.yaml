@@ -18,7 +18,7 @@ brew:
     - homebrew/core
   casks:
     - font-fira-code-nerd-font
-    - iterm2
+    - alacritty
   packages:
     common:
       - asdf
