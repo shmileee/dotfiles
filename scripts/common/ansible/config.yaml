@@ -9,28 +9,72 @@ packages:
 
 brew:
   taps:
-    # - aws/tap
-    # - carlocab/personal
     # - hashicorp/tap
+    - aws/tap
+    - carlocab/personal
     - homebrew/bundle
     - homebrew/cask
     - homebrew/cask-fonts
     - homebrew/core
   casks:
-    - font-fira-code-nerd-font
     - alacritty
+    - alt-tab
+    - aws-vault
+    - font-fira-code-nerd-font
+    - hiddenbar
+    - tunnelblick
+    - lynx
   packages:
     common:
+      - asciinema
       - asdf
+      - autoconf
+      - automake
+      - azure-cli
       - bat
+      - coreutils
       - direnv
+      - dos2unix
+      - dust
       - exa
       - fd
+      - fzf
       - gh
       - ghq
+      - git-delta
+      - hadolint
+      - highlight
+      - jq
+      - jsonnet
+      - kustomize
+      - lazygit
+      - lua-language-server
+      - p7zip
+      - packer
+      - pkg-config
+      - pre-commit
+      - python-yq
       - ripgrep
+      - sponge
+      - terraform-docs
+      - tflint
+      - tfsec
+      - tldr
+      - tre-command
+      - tree
+      - tree-sitter
+      - yamllint
+      - zoxide
     darwin:
+      - carlocab/personal/unrar
+      - ffmpeg
+      - gawk
+      - gnu-getopt
+      - gnu-sed
       - rectrangle
+      - watch
+      - wget
+      - xz
     linux: []
   packages_from_source:
     - duf
