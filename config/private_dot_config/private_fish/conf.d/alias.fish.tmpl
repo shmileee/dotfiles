@@ -6,7 +6,7 @@ if command -v gsed > /dev/null
 end
 {{- end }}
 
-{{- if eq .chezmoi.os "linux" -}}
+{{- if eq .chezmoi.os "linux" }}
 # emulate pbcopy/pbpaste
 alias pbcopy 'xclip -selection clipboard'
 alias pbpaste 'xclip -selection clipboard -o'
