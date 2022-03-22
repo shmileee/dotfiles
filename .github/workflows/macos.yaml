@@ -7,6 +7,8 @@ on:
       - 'master'
     paths:
       - '!**.md'
+      - '!.github/mkdocs.yaml'
+      - '!docs/**'
 
 jobs:
   macos:
