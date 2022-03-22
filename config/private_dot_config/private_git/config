@@ -1,0 +1,24 @@
+[core]
+  editor = vim
+  excludesfile = ~/.config/git/ignore
+[color "diff"]
+  whitespace = red reverse
+[include]
+  path = ~/.config/git/user
+[include]
+  path = ~/.config/git/proxy
+[includeIf "gitdir:~/dotfiles/**"]
+  path = ~/.config/git/personal
+[includeIf "gitdir:~/projects/**"]
+  path = ~/.config/git/work
+[includeIf "gitdir:~/work/**"]
+  path = ~/.config/git/work
+[credential]
+  helper = store
+[pull]
+  rebase = false
+  default = current
+[init]
+  defaultBranch = main
+[push]
+  default = current

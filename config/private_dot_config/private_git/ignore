@@ -1,0 +1,12 @@
+# Mac OS X hidden files
+.DS_Store
+
+# Windows files
+Thumbs.db
+
+# direnv
+.direnv
+.envrc.local
+
+# sops
+.decrypted~*
