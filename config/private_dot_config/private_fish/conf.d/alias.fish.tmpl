@@ -1,0 +1,45 @@
+# set up aliases
+
+{{- if (eq .chezmoi.os "darwin") }}
+if command -v gsed > /dev/null
+    alias sed 'gsed'
+end
+{{- end }}
+
+{{- if eq .chezmoi.os "linux" -}}
+# emulate pbcopy/pbpaste
+alias pbcopy 'xclip -selection clipboard'
+alias pbpaste 'xclip -selection clipboard -o'
+{{- end -}}
+
+# common
+if command -v tree > /dev/null
+  alias tree 'tree -a -I ".git|*.pyc|*pycache*"'
+end
+
+# exa
+if command -v exa > /dev/null
+    alias l="exa --icons"
+    alias ls="exa --git --icons"
+    alias la="exa --git -a --icons"
+    alias ll="exa -lab --git --icons"
+    alias tree="exa --tree --icons"
+else
+    alias l="ls"
+    alias la="ls -a"
+    alias ll="ls -al"
+end
+
+# bat
+if command -v bat > /dev/null
+    alias cat="bat --plain"
+end
+
+# git
+alias g 'git'
+alias ghb 'gh repo view -w'
+alias gdc 'git diff --cached | vim -'
+alias cdp 'cd (git rev-parse --show-toplevel)'
+
+# rg
+alias rg 'rg --hidden --follow --glob "!.git"'
