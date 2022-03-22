@@ -51,7 +51,7 @@
       delay: 5
 
     - name: "install plugins with fisher"
-      ansible.builtin.shell: "fish {{ ansible_user_dir }}/.config/fish/functions/fisher.fish update"
+      ansible.builtin.shell: "source {{ ansible_user_dir }}/.config/fish/functions/fisher.fish; fisher update"
       args:
         executable: '{{ fish_path.stdout }}'
       changed_when: false
