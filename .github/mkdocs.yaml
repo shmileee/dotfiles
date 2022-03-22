@@ -1,0 +1,46 @@
+docs_dir: ../docs
+site_name: Hitchhiker's Guide to the Dotfiles
+repo_url: https://github.com/shmileee/dotfiles
+repo_name: shmileee/dotfiles
+copyright: Copyright &copy; 2021 - 2022 Oleksandr Ponomarov
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: red
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - scheme: slate
+      primary: red
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  language: en
+  font:
+    text: Roboto
+    code: JetBrains Mono
+  icon:
+    repo: fontawesome/brands/github
+  features:
+    - navigation.instant
+    - navigation.expand
+    - navigation.tabs
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.keys
+  - toc:
+      permalink: true
+
+plugins:
+  - search:
+      lang: en
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https:/github.com/shmileee
