@@ -5,4 +5,5 @@
     name: "docker"
     state: present
     install_options: no-quarantine
+    accept_external_apps: true
   tags: homebrew

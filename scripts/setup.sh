@@ -42,7 +42,7 @@ download_repository() {
     cmd="wget --no-check-certificate -O - $tarball | $tar_cmd"
   fi
 
-  if test -z "$cmd" ; then
+  if test -z "$cmd"; then
     exit_help "No git, curl or wget available. Aborting."
   else
     mkdir -p "$target"
@@ -51,7 +51,7 @@ download_repository() {
 }
 
 setup_all() {
-  download_repository
+  test -d "$target" || download_repository
   if linux; then
     "${target}/scripts/linux/install_dependencies.sh"
   fi
