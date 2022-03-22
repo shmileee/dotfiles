@@ -80,7 +80,7 @@ brew:
 
 dotfiles:
   repo: 'https://github.com/shmileee/dotfiles'
-  branch: 'feature/automation'
+  branch: 'master'
 
 anyenv:
   envs_dir: '{{ ansible_user_dir }}/.anyenv/envs'
