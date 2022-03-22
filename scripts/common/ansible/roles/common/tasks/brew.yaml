@@ -20,6 +20,7 @@
     name: "{{ brew.casks }}"
     state: present
     install_options: no-quarantine
+    accept_external_apps: true
   when:
     - brew.casks is defined
     - ansible_system == "Darwin"
