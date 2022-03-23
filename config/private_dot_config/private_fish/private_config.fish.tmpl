@@ -12,7 +12,6 @@ fish_add_path $HOME/.local/bin
 fish_add_path $HOME/.cargo/bin
 
 set -gx HOMEBREW_NO_ANALYTICS 1
-set -U fish_greeting
 
 # fzf
 set -gx FZF_CTRL_T_COMMAND "rg --files --hidden --follow --glob '!.git'"
@@ -21,3 +20,4 @@ set -gx FZF_DEFAULT_OPTS "--color=dark"
 
 # fish bobthefish-theme config
 set -g theme_date_format "+20%y/%m/%d %H:%M"
+set -g theme_display_ruby no

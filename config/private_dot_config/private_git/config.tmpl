@@ -9,7 +9,7 @@
   path = ~/.config/git/proxy
 [includeIf "gitdir:~/dotfiles/**"]
   path = ~/.config/git/personal
-[includeIf "gitdir:{{ .chezmoi.workingTree }}"]
+[includeIf "gitdir:~/.local/share/**"]
   path = ~/.config/git/personal
 [includeIf "gitdir:~/projects/**"]
   path = ~/.config/git/work
