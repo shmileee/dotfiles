@@ -2,10 +2,7 @@
 
 - name: "install packages"
   ansible.builtin.shell: |
-    eval "$(anyenv init - bash)"
     go install {{ item | quote }}
-  args:
-    executable: /bin/bash
   with_items: '{{ golang.packages }}'
   when: golang.packages
   register: go_install_result

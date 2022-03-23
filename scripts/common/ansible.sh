@@ -22,6 +22,7 @@ run_playbook() {
 
   export ANSIBLE_CONFIG="${cwd}/ansible/ansible.cfg"
 
+  echo "ansible-playbook -e ansible_user=$(whoami) ${cwd}/ansible/main.yaml -v ${playbook_opts[*]}"
   ansible-playbook -e "ansible_user=$(whoami)" "${cwd}/ansible/main.yaml" -v "${playbook_opts[*]}"
   echo "✅ [ansible] configured!"
 }

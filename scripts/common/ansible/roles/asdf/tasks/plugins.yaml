@@ -1,0 +1,54 @@
+---
+
+- name: "asdf plugin-add"
+  ansible.builtin.command: 'asdf plugin add {{ item.name }} {{ item.repository | default() }}'
+  environment:
+    PATH: "{{ ansible_env.PATH }}:{{ ansible_user_dir }}/.asdf/bin"
+  args:
+    creates: '.asdf/plugins/{{ item.name }}'
+    chdir: '{{ ansible_user_dir }}'
+  with_items: '{{ asdf_plugins }}'
+  when: asdf_plugins|length > 0
+  ignore_errors: false
+
+- name: "install desired software versions"
+  ansible.builtin.command: 'asdf install {{ item.0.name }} {{ item.1 }}'
+  environment:
+    PATH: "{{ ansible_env.PATH }}:{{ ansible_user_dir }}/.asdf/bin"
+  args:
+    creates: ".asdf/installs/{{ item.0.name }}/{{ item.1 }}"
+    chdir: "{{ ansible_user_dir }}"
+  with_subelements:
+    - "{{ asdf_plugins }}"
+    - versions
+    - flags:
+      skip_missing: true
+  when: asdf_plugins|length > 0
+
+
+- name: "uninstall desired software versions"
+  ansible.builtin.command: 'asdf uninstall {{ item.0.name }} {{ item.1 }}'
+  environment:
+    PATH: "{{ ansible_env.PATH }}:{{ ansible_user_dir }}/.asdf/bin"
+  args:
+    removes: ".asdf/installs/{{ item.0.name }}/{{ item.1 }}"
+    chdir: "{{ ansible_user_dir }}"
+  with_subelements:
+    - "{{ asdf_plugins }}"
+    - delete_versions
+    - flags:
+      skip_missing: true
+  when: asdf_plugins|length > 0
+
+
+- name: "set global software versions"
+  ansible.builtin.command: >
+    asdf global {{ item.name }}
+    {{ item.global | default(item.versions | difference(item.delete_versions|default([])) | sort | first) }}
+  environment:
+    PATH: "{{ ansible_env.PATH }}:{{ ansible_user_dir }}/.asdf/bin"
+  args:
+    chdir: "{{ ansible_user_dir }}"
+  when: item.global is defined
+  with_items: "{{ asdf_plugins }}"
+  changed_when: false

@@ -25,20 +25,14 @@
     - name: lunarvim
       tags: lunarvim
 
-    - name: anyenv
-      tags: anyenv
+    - name: asdf
+      tags: asdf
 
     - name: docker
       tags: docker
 
-    - name: go
-      tags: go
-
     - name: tmux
       tags: tmux
-
-    - name: node
-      tags: node
 
     - name: system_defaults
       tags: system_defaults

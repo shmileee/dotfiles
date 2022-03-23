@@ -1,0 +1,7 @@
+---
+
+- name: "install asdf from github"
+  ansible.builtin.git:
+    repo: "https://github.com/asdf-vm/asdf.git"
+    dest: "{{ ansible_user_dir }}/.asdf"
+    version: "{{ asdf_version }}"
