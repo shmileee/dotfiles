@@ -13,7 +13,7 @@ curl -fsSL oponomarov.com/d | sh -s -- --all
 
 To learn how to use my setup, what features are available, and how to tweak the
 configurations to suit your tastes, please read the [Usage
-Guide](features/UsageGuide) section.
+Guide](features/00-UsageGuide) section.
 
 ### Highlights
 
