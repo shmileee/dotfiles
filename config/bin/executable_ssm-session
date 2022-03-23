@@ -25,7 +25,7 @@ list_instances () {
   instance_ids=$(ssm_instance_ids)
 
   aws ec2 describe-instances \
-    --instance-ids "${instance_ids}" \
+    --instance-ids ${instance_ids} \
     --filter "Name=instance-state-name,Values=running" \
     --query "Reservations[*].Instances[*].[InstanceId,Tags[?Key=='Name']|[0].Value]" \
     --output text
