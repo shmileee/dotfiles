@@ -6,13 +6,12 @@
 #   - fzf (brew install fzf)
 #
 # Usage:
-#   Designed to be used to with `aws-vault`:
 #
 #   List avialable instances:
-#     aws-vault exec <profile> -- ssm-session list
+#    ssm-session list
 #
 #  Connect to instance (uses fzf to provide interactive list)
-#    aws-vault exec <profile> -- ssm-session start
+#    ssm-session start
 
 set -o pipefail
 
@@ -26,7 +25,7 @@ list_instances () {
   instance_ids=$(ssm_instance_ids)
 
   aws ec2 describe-instances \
-    --instance-ids ${instance_ids} \
+    --instance-ids "${instance_ids}" \
     --filter "Name=instance-state-name,Values=running" \
     --query "Reservations[*].Instances[*].[InstanceId,Tags[?Key=='Name']|[0].Value]" \
     --output text
