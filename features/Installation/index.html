@@ -13,7 +13,7 @@
     
     
       
-        <title>Rationale - Hitchhiker's Guide to the Dotfiles</title>
+        <title>Installation - Hitchhiker's Guide to the Dotfiles</title>
       
     
     
@@ -62,7 +62,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#rationale" class="md-skip">
+        <a href="#installation" class="md-skip">
           Skip to content
         </a>
       
@@ -95,7 +95,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Rationale
+              Installation
             
           </span>
         </div>
@@ -323,20 +323,6 @@
               
   
   
-  
-    <li class="md-nav__item">
-      <a href="../Installation/" class="md-nav__link">
-        Installation
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
     
   
   
@@ -349,12 +335,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Rationale
+          Installation
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Rationale
+        Installation
       </a>
       
         
@@ -373,36 +359,35 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#goal" class="md-nav__link">
-    Goal
+  <a href="#requirements" class="md-nav__link">
+    Requirements
+  </a>
+  
+    <nav class="md-nav" aria-label="Requirements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#macos" class="md-nav__link">
+    macOS
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-setupsh" class="md-nav__link">
+    Running setup.sh
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#why-ansible" class="md-nav__link">
-    Why Ansible?
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#why-chezmoi" class="md-nav__link">
-    Why Chezmoi?
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#why-lunarvim" class="md-nav__link">
-    Why LunarVim?
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#why-fish" class="md-nav__link">
-    Why Fish?
+  <a href="#ansible" class="md-nav__link">
+    Ansible
   </a>
   
 </li>
@@ -411,6 +396,20 @@
   
 </nav>
       
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Rationale/" class="md-nav__link">
+        Rationale
+      </a>
     </li>
   
 
@@ -463,36 +462,35 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#goal" class="md-nav__link">
-    Goal
+  <a href="#requirements" class="md-nav__link">
+    Requirements
+  </a>
+  
+    <nav class="md-nav" aria-label="Requirements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#macos" class="md-nav__link">
+    macOS
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-setupsh" class="md-nav__link">
+    Running setup.sh
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#why-ansible" class="md-nav__link">
-    Why Ansible?
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#why-chezmoi" class="md-nav__link">
-    Why Chezmoi?
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#why-lunarvim" class="md-nav__link">
-    Why LunarVim?
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#why-fish" class="md-nav__link">
-    Why Fish?
+  <a href="#ansible" class="md-nav__link">
+    Ansible
   </a>
   
 </li>
@@ -509,81 +507,118 @@
             <article class="md-content__inner md-typeset">
               
                 
-<a href="https://github.com/shmileee/dotfiles/edit/master/docs/features/Rationale.md" title="Edit this page" class="md-content__button md-icon">
+<a href="https://github.com/shmileee/dotfiles/edit/master/docs/features/Installation.md" title="Edit this page" class="md-content__button md-icon">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
 </a>
 
 
 
-<h1 id="rationale">Rationale<a class="headerlink" href="#rationale" title="Permanent link">&para;</a></h1>
-<hr />
-<h2 id="goal">Goal<a class="headerlink" href="#goal" title="Permanent link">&para;</a></h2>
-<p>Provide fully automated development environment that is easy to setup and
-maintain.</p>
-<h2 id="why-ansible">Why Ansible?<a class="headerlink" href="#why-ansible" title="Permanent link">&para;</a></h2>
-<p>In my experience Ansible has the easiest learning curve. It has its own caveats
-and gotchas, but overall it's pretty straightforward to read YAML configuration
-for a person that knows very little about how Ansible works. It's almost like
-reading plain English with very rare exceptions. Additionally, Ansible is a
-Swiss army knife orchestration tool. You can use it and abuse it in many
-different ways which might or might not be supported via other popular
-solution like <a href="https://nixos.wiki/wiki/Home_Manager">NixOS Home Manager</a>
-otherwise. One of the biggest advantages of Ansible is that (if properly
-described) tasks follow
-<a href="https://docs.ansible.com/ansible/latest/reference_appendices/glossary.html#term-Idempotency">idempotency</a>
-principle, which means playbook can be run over and over again without having to
-worry about your precious files accidentally being removed. </p>
-<p>All in all - there are many automation solutions out there - I happen to enjoy
-using Ansible.</p>
-<h2 id="why-chezmoi">Why Chezmoi?<a class="headerlink" href="#why-chezmoi" title="Permanent link">&para;</a></h2>
-<p>Chezmoi is another tool for managing dotfiles. It seems to be <a href="https://dotfiles.github.io/utilities">the most
-popular</a> choice these days with over 6k+
-stars. Prior to switch, I've used GNU Stow which had it's job done but
-unfortunately lacked a couple of features chezmoi tends to resolve. The most
-important features of chezmoi:</p>
-<ul>
-<li><strong>Flexible</strong>: dotfiles can be templates (using text/template syntax). While this
-  can be achieved using Ansible builtin Jinja templates, - chezmoi provides a
-  set of variables that can be used inside the template for simple assertions
-  like the platform you're currently running on, architecture, hostname,
-  environmental variables lookup and many more. Additionally, testing Jinja
-  templates in Ansible is very cumbersome. With chezmoi this is as simple as
-  running <code>chezmoi execute-template &lt; file.tmpl</code>.</li>
-<li><strong>Portable</strong>: chezmoi's configuration uses only visible, regular files and
-  directories and so is portable across version control systems and operating
-  systems.</li>
-<li><strong>Transparent</strong>: chezmoi includes verbose and dry run modes so you can review
-  exactly what changes it will make to your home directory before making them.</li>
-<li><strong>Practical</strong>: chezmoi manages hidden files (dot files), directories, private, and
-  executable files.</li>
-<li><strong>Fast, easy to use, and familiar</strong>: chezmoi runs in fractions of a second and
-  includes commands to make most operations trivial. </li>
-</ul>
-<p>The biggest driver for choosing chezmoi was my intention to follow single
-responsibility principle: dotfiles should be managed separately.</p>
-<h2 id="why-lunarvim">Why LunarVim?<a class="headerlink" href="#why-lunarvim" title="Permanent link">&para;</a></h2>
-<p>I used regular Vim for a couple of years until it has become really painful to
-manage a 500+ lines file. I've made an attempt to switch to Neovim after
-watching Vimconf hosted by <a href="https://github.com/ThePrimeagen">ThePrimagen</a> and
-<a href="https://github.com/tjdevries">TJ DeVries</a>. This switch made me realize I don't
-understand half of the Lua configuration. </p>
-<p>Luckily, it turned out that most of the keymaps, plugins and sane defaults I was
-trying to configure are not necessarily specific and lots of people tend to
-configure Neovim this way. In fact,
-<a href="https://github.com/LunarVim/LunarVim">LunarVim</a> does this pretty well by
-providing a community driven framework for Neovim that acts like a wrapper with
-a bunch of common plugins. I happen to enjoy most of the stuff they ship out of
-the box. As an experienced Vim user, I found I only needed to install a couple
-more plugins to feel comfortable, rebind a couple of keys and configure less
-than 10 options.</p>
-<h2 id="why-fish">Why Fish?<a class="headerlink" href="#why-fish" title="Permanent link">&para;</a></h2>
-<p>Fish ecosystem is great for interactive shells. I still write day-to-day scripts
-in pure bash, but the amount of features that comes preconfigured with fish is just
-too good to resist. </p>
+<h1 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h1>
+<h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h2>
+<p><strong>Operating System</strong></p>
+<p>This Ansible playbook only supports macOS and Debian-based Linux distributions.
+This is by design to provide a consistent development experience across
+machines.</p>
+<h3 id="macos">macOS<a class="headerlink" href="#macos" title="Permanent link">&para;</a></h3>
+<p>On a sparkling fresh installation of macOS:</p>
+<div class="highlight"><pre><span></span><code>sudo softwareupdate -i -a
+xcode-select --install
+</code></pre></div>
+<p>The Xcode Command Line Tools includes <code>git</code> and <code>make</code> (not available on stock
+macOS).</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Fish is not POSIX compatible shell.</p>
+<p>If your machine has already homebrew preinstalled, - make sure you have the full
+ownership over directories managed by <code>brew</code>. See
+<a href="https://github.com/homebrew/brew/issues/3665">this</a> issue for more information.</p>
 </div>
+<h2 id="running-setupsh">Running <code>setup.sh</code><a class="headerlink" href="#running-setupsh" title="Permanent link">&para;</a></h2>
+<p>Bootstrap the installation procedure by running
+<a href="https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh"><code>setup.sh</code></a>.
+The script solves chicken or the egg problem by installing essential
+dependencies to run Ansible playbook.</p>
+<p>The script can be run directly with single <code>curl</code> command if you like living on
+the edge:</p>
+<div class="highlight"><pre><span></span><code>curl -fsSL oponomarov.com/d <span class="p">|</span> sh -s -- --all
+</code></pre></div>
+<p>Otherwise, just download the file somewhere, review its content and execute with
+<code>--all</code> flag:</p>
+<div class="highlight"><pre><span></span><code>curl -fsSL https://raw.githubusercontent.com/shmileee/dotfiles/master/scripts/setup.sh &gt; setup.sh
+chmod +x setup.sh
+./setup.sh --all
+</code></pre></div>
+<p>The script will:</p>
+<ul>
+<li>Download <code>github.com/shmileee/dotfiles</code> into <code>/tmp/.dotfiles</code> using any of
+  the tools available (<code>git</code>, <code>curl</code>, <code>wget</code>)</li>
+<li>Install
+  <a href="https://github.com/shmileee/dotfiles/blob/master/scripts/linux/essentials.apt"><code>essential</code></a>
+  system dependencies if running on Linux</li>
+<li>Install Ansible (if running on Linux, this is part of the previous step,
+  otherwise it is installed via <code>brew</code> in the step)</li>
+<li>Attempt to install homebrew (if it does not exist yet)</li>
+<li>
+<p>Execute
+  <a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible.sh"><code>ansible.sh</code></a>,
+  which in turn will:</p>
+<ul>
+<li>Install <code>community.general</code> Ansible collection</li>
+<li>Check if passwordless <code>sudo</code> is available (if no, - the script will prompt you for
+  password)</li>
+<li>Execute
+  <a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/main.yaml"><code>main.yaml</code></a>
+  playbook</li>
+</ul>
+</li>
+</ul>
+<h2 id="ansible">Ansible<a class="headerlink" href="#ansible" title="Permanent link">&para;</a></h2>
+<p>The
+<a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/main.yaml">following</a>
+playbook is the main entrypoint for configuring the actual system and dotfiles.</p>
+<p>The
+<a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml"><code>config.yaml</code></a>
+file allows you to personalize the setup to your needs. At most it contains a
+list of packages and their versions (in case of tools managed by <code>asdf</code>) to
+install.</p>
+<p>The
+<a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml#L86-L88"><code>dotfiles:</code></a>
+dictionary defines from which repository and branch chezmoi shall install the
+dotfiles to the system. If you tend to reuse this playbook, make sure to adjust
+the variable accordingly.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Certain Ansible tasks expect specific dotfiles to be in place, e.g.
+<a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/roles/tmux/tasks/main.yaml#L22-L26"><code>install tmux
+plugins</code></a>
+will fail if
+<a href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf#L188"><code>tmux.conf</code></a>
+is missing or does not include <code>run '~/.tmux/plugins/tpm/tpm'</code> line.</p>
+</div>
+<p>Supported Ansible roles:</p>
+<ul>
+<li><code>common</code> - Install basic system dependencies for Debian-based distribution
+  using <code>apt</code> package manager if cannot be installed otherwise. Install common
+  packages using homebrew. Install homebrew casks for macOS.</li>
+<li><code>fonts</code> - Install fonts with homebrew. This might change in the future between
+  platforms.</li>
+<li><code>dotfiles</code> - Install chezmoi using homebrew. Initiate dotfiles repository and
+  update files.</li>
+<li><code>fish</code> - Install fish using homebrew. Set default user's shell to fish. Configure fisher and install plugins.</li>
+<li><code>neovim</code> - Install neovim. If <code>neovim.build_from_source</code> is set to <code>true</code>, -
+  neovim will be compiled. Otherwise, download nightly deb package from
+  GitHub. On macOS neovim is installed using HEAD revision via brew.</li>
+<li><code>lunarvim</code> - Install LunarVim and reapply chezmoi to populate <code>config.lua</code></li>
+<li><code>asdf</code> - Install asdf version manager for typical packages that need more
+  granular control over. All tools and their respective versions are defined in
+  <code>config.yaml</code>.</li>
+<li><code>docker</code> - Install docker using brew.</li>
+<li><code>tmux</code> - Install tmux, tpm and plugins defined in <code>tmux.conf</code></li>
+<li><code>system_defaults</code> - Install sane macOS system settings. It will also configure
+  custom tweaks for applications like rectangle or alt-tab. Use this with
+  caution as the settings are very opinionated and might break your existing
+  setup. This role is also the subject for future changes - more things like
+  custom keybinding will be introduced shortly.</li>
+</ul>
 
               
             </article>
@@ -597,7 +632,7 @@ too good to resist. </p>
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../Installation/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Installation" rel="prev">
+        <a href="../1-UsageGuide/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Usage Guide" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -606,20 +641,20 @@ too good to resist. </p>
               <span class="md-footer__direction">
                 Previous
               </span>
-              Installation
+              Usage Guide
             </div>
           </div>
         </a>
       
       
         
-        <a href="../Tools/" class="md-footer__link md-footer__link--next" aria-label="Next: Tools" rel="next">
+        <a href="../Rationale/" class="md-footer__link md-footer__link--next" aria-label="Next: Rationale" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Tools
+              Rationale
             </div>
           </div>
           <div class="md-footer__button md-icon">
