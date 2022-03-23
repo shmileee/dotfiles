@@ -129,6 +129,34 @@ asdf_plugins:
     delete_versions: []
     global: system
 
+  - name: "terraform"
+    repository: "https://github.com/asdf-community/asdf-hashicorp"
+    versions:
+      - 1.1.7
+    delete_versions: []
+    global: 1.1.7
+
+  - name: "terraform-ls"
+    repository: "https://github.com/shihanng/asdf-terraform-ls"
+    versions:
+      - 0.26.0
+    delete_versions: []
+    global: 0.26.0
+
+  - name: "kubectl"
+    repository: "https://github.com/asdf-community/asdf-kubectl"
+    versions:
+      - 1.23.0
+    delete_versions: []
+    global: 1.23.0
+
+  - name: "helm"
+    repository: "https://github.com/Antiarchitect/asdf-helm"
+    versions:
+      - 3.8.1
+    delete_versions: []
+    global: 3.8.1
+
 golang:
   path: '{{ ansible_user_dir }}/.go'
   packages:
