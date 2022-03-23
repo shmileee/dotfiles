@@ -12,6 +12,9 @@ alias pbcopy 'xclip -selection clipboard'
 alias pbpaste 'xclip -selection clipboard -o'
 {{- end }}
 
+# lunarvim
+alias vim lvim
+
 # common
 if command -v tree > /dev/null
   alias tree 'tree -a -I ".git|*.pyc|*pycache*"'
@@ -36,7 +39,6 @@ if command -v bat > /dev/null
 end
 
 # git
-alias g 'git'
 alias ghb 'gh repo view -w'
 alias gdc 'git diff --cached | vim -'
 alias cdp 'cd (git rev-parse --show-toplevel)'
