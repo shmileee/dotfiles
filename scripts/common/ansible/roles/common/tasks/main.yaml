@@ -10,5 +10,6 @@
 - import_tasks: brew.yaml
   vars:
     pkgs: '{{ brew_pkgs_merged }}'
+  tags: homebrew
   when:
     - ansible_system in ["Linux", "Darwin"]
