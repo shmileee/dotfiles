@@ -6,8 +6,8 @@ on:
     branches:
       - 'master'
     paths:
-      - 'config'
-      - 'scripts'
+      - 'config/**'
+      - 'scripts/**'
       - 'Dockerfile'
       - '.github/workflows/docker.yaml'
       - '!**.md'
