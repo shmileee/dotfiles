@@ -6,6 +6,10 @@ on:
     branches:
       - 'master'
     paths:
+      - 'config'
+      - 'scripts'
+      - 'Dockerfile'
+      - '.github/workflows/docker.yaml'
       - '!**.md'
       - '!.github/mkdocs.yaml'
       - '!docs/**'

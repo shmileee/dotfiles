@@ -6,6 +6,9 @@ on:
     branches:
       - 'master'
     paths:
+      - 'config'
+      - 'scripts'
+      - '.github/workflows/macos.yaml'
       - '!**.md'
       - '!.github/mkdocs.yaml'
       - '!docs/**'
