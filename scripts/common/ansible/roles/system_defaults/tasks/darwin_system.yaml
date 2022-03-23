@@ -653,3 +653,10 @@
     key: SendDoNotTrackHTTPHeader
     type: bool
     value: true
+
+- name: "don't use natural scrolling"
+  community.general.osx_defaults:
+    domain: NSGlobalDomain
+    key: com.apple.swipescrolldirection
+    type: bool
+    value: false
