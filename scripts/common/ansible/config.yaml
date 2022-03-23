@@ -103,15 +103,13 @@ asdf_version: "v0.9.0"
 asdf_plugins:
   - name: "python"
     repository: "https://github.com/danhper/asdf-python"
-    versions:
-      - 3.10.1
     delete_versions: []
     global: system
 
   - name: "golang"
     repository: "https://github.com/kennyp/asdf-golang"
     versions:
-      - 1.18.0
+      - 1.18
     delete_versions: []
     global: system
 
@@ -134,3 +132,7 @@ golang:
   packages:
     - golang.org/x/tools/cmd/goimports@latest
     - golang.org/x/tools/gopls@latest
+
+nodejs:
+  packages:
+    - yarn
