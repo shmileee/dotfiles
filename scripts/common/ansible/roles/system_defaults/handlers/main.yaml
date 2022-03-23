@@ -1,0 +1,13 @@
+---
+
+- name: "clear cache"
+  become: true
+  ansible.builtin.shell: "{{ item }}" # noqa command-instead-of-shell
+  with_items:
+    - 'find /private/var/folders/ -name com.apple.iconservices -exec rm -rf {} \; | true'
+    - 'find /private/var/folders/ -name com.apple.dock.iconcache -exec rm -rf {} \; | true'
+    - 'rm -rf /Library/Caches/com.apple.iconservices.store | true'
+
+- name: "restart dock"
+  ansible.builtin.command: /usr/bin/killall Dock
+  failed_when: false

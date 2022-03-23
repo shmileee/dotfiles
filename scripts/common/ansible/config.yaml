@@ -9,7 +9,6 @@ packages:
 
 brew:
   taps:
-    # - hashicorp/tap
     - aws/tap
     - carlocab/personal
     - homebrew/bundle
@@ -17,12 +16,16 @@ brew:
     - homebrew/cask-fonts
     - homebrew/core
   casks:
+    - 1password
     - alacritty
     - alt-tab
     - aws-vault
+    - brave-browser
     - font-fira-code-nerd-font
     - hiddenbar
     - rectangle
+    - slack
+    - telegram
     - tunnelblick
   packages:
     common:
@@ -30,6 +33,7 @@ brew:
       - asdf
       - autoconf
       - automake
+      - awscli
       - azure-cli
       - bat
       - coreutils
@@ -67,6 +71,7 @@ brew:
       - zoxide
     darwin:
       - carlocab/personal/unrar
+      - dockutil
       - ffmpeg
       - gawk
       - gnu-getopt
@@ -166,3 +171,36 @@ golang:
 nodejs:
   packages:
     - yarn
+
+dockitems_disabled:
+  - App Store
+  - Contacts
+  - FaceTime
+  - Launchpad
+  - Mail
+  - Maps
+  - Messages
+  - Notes
+  - Photos
+  - Reminders
+  - Safari
+  - Terminal
+  - iBooks
+  - iTunes
+
+dockitems_enabled:
+  - name: Brave Browser
+    path: "/Applications/Brave Browser.app"
+    pos: 1
+  - name: Alacritty
+    path: "/Applications/Alacritty.app"
+    pos: 2
+  - name: Slack
+    path: "/Applications/Slack.app"
+    pos: 3
+  - name: Telegram
+    path: "/Applications/Telegram.app"
+    pos: 4
+  - name: Spotify
+    path: "/Applications/Spotify.app"
+    pos: 5

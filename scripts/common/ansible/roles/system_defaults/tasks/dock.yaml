@@ -1,0 +1,63 @@
+---
+
+- name: "dockutil | get information on items to remove"
+  ansible.builtin.command:
+    cmd: dockutil --find '{{ item }}'
+  register: current_apps
+  with_items: "{{ dockitems_disabled }}"
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: "dockutil | remove all unwanted dock items"
+  ansible.builtin.command:
+    cmd: dockutil --remove '{{ item.item }}' --no-restart
+  with_items: "{{ current_apps.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  when:
+    - (item.item ~ " was found in persistent-apps") in item.stdout
+  notify:
+    - clear cache
+    - restart dock
+
+- name: "dockutil | get information on configured setup"
+  ansible.builtin.command:
+    cmd: dockutil --find '{{ item.name }}'
+  register: apps_to_add
+  with_items: "{{ dockitems_enabled }}"
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: "dockutil | adding items"
+  ansible.builtin.command:
+    cmd: dockutil --add '{{ item.item.path }}' --position {{ item.item.pos }} --no-restart
+  with_items: "{{ apps_to_add.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  when: (item.item.name ~ " was not found in") in item.stdout
+  notify:
+    - clear cache
+    - restart dock
+
+- name: "dockutil | get information on current setup"
+  ansible.builtin.command: "dockutil --find '{{ item.name }}'"
+  register: apps_after_addition
+  with_items: "{{ dockitems_enabled }}"
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: "dockutil | moving items"
+  ansible.builtin.command:
+    cmd: dockutil --move '{{ item.item.name }}' --position {{ item.item.pos }} --no-restart
+  with_items: "{{ apps_after_addition.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  when:
+    - (item.item.name ~ " was found in persistent-apps at slot " ~ item.item.pos ~ " in") not in item.stdout
+    - (item.item.name ~ " was not found") not in item.stdout
+  notify:
+    - clear cache
+    - restart dock
