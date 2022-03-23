@@ -660,3 +660,10 @@
     key: com.apple.swipescrolldirection
     type: bool
     value: false
+
+- name: "set light/dark mode automatically"
+  community.general.osx_defaults:
+    domain: NSGlobalDomain
+    key: AppleInterfaceStyle
+    type: string
+    value: Dark
