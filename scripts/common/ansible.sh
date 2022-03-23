@@ -20,7 +20,7 @@ run_playbook() {
     playbook_opts+=("--ask-become-pass")
   fi
 
-  ansible-playbook -e "ansible_user=$(whoami)" "${cwd}/ansible/main.yaml" -vvv "${playbook_opts[*]}"
+  ansible-playbook -e "ansible_user=$(whoami)" "${cwd}/ansible/main.yaml" -v "${playbook_opts[*]}"
   echo "✅ [ansible] configured!"
 }
 
