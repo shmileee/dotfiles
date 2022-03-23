@@ -2,7 +2,7 @@
 
 {{- if (eq .chezmoi.os "darwin") }}
 if command -v gsed > /dev/null
-    alias sed 'gsed'
+  alias sed 'gsed'
 end
 {{- end }}
 
@@ -22,20 +22,20 @@ end
 
 # exa
 if command -v exa > /dev/null
-    alias l="exa --icons"
-    alias ls="exa --git --icons"
-    alias la="exa --git -a --icons"
-    alias ll="exa -lab --git --icons"
-    alias tree="exa --tree --icons"
+  alias l="exa --icons"
+  alias ls="exa --git --icons"
+  alias la="exa --git -a --icons"
+  alias ll="exa -lab --git --icons"
+  alias tree="exa --tree --icons"
 else
-    alias l="ls"
-    alias la="ls -a"
-    alias ll="ls -al"
+  alias l="ls"
+  alias la="ls -a"
+  alias ll="ls -al"
 end
 
 # bat
 if command -v bat > /dev/null
-    alias cat="bat --plain"
+  alias cat="bat --plain"
 end
 
 # git
@@ -45,3 +45,8 @@ alias cdp 'cd (git rev-parse --show-toplevel)'
 
 # rg
 alias rg 'rg --hidden --follow --glob "!.git"'
+
+# chezmoi
+if command -v chezmoi > /dev/null
+  alias d="chezmoi cd"
+end
