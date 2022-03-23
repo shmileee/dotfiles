@@ -13,7 +13,7 @@
     
     
       
-        <title>Usage Guide - Hitchhiker's Guide to the Dotfiles</title>
+        <title>Rationale - Hitchhiker's Guide to the Dotfiles</title>
       
     
     
@@ -62,7 +62,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#usage-guide" class="md-skip">
+        <a href="#rationale" class="md-skip">
           Skip to content
         </a>
       
@@ -95,7 +95,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Usage Guide
+              Rationale
             
           </span>
         </div>
@@ -209,7 +209,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="./" class="md-tabs__link md-tabs__link--active">
+      <a href="../1-UsageGuide/" class="md-tabs__link md-tabs__link--active">
         Features
       </a>
     </li>
@@ -309,6 +309,20 @@
               
   
   
+  
+    <li class="md-nav__item">
+      <a href="../1-UsageGuide/" class="md-nav__link">
+        Usage Guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
     
   
   
@@ -321,12 +335,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Usage Guide
+          Rationale
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Usage Guide
+        Rationale
       </a>
       
         
@@ -345,8 +359,36 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#table-of-contents" class="md-nav__link">
-    Table of Contents
+  <a href="#goal" class="md-nav__link">
+    Goal
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-ansible" class="md-nav__link">
+    Why Ansible?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-chezmoi" class="md-nav__link">
+    Why Chezmoi?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-lunarvim" class="md-nav__link">
+    Why LunarVim?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-fish" class="md-nav__link">
+    Why Fish?
   </a>
   
 </li>
@@ -407,8 +449,36 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#table-of-contents" class="md-nav__link">
-    Table of Contents
+  <a href="#goal" class="md-nav__link">
+    Goal
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-ansible" class="md-nav__link">
+    Why Ansible?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-chezmoi" class="md-nav__link">
+    Why Chezmoi?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-lunarvim" class="md-nav__link">
+    Why LunarVim?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-fish" class="md-nav__link">
+    Why Fish?
   </a>
   
 </li>
@@ -425,25 +495,81 @@
             <article class="md-content__inner md-typeset">
               
                 
-<a href="https://github.com/shmileee/dotfiles/edit/master/docs/features/00-UsageGuide.md" title="Edit this page" class="md-content__button md-icon">
+<a href="https://github.com/shmileee/dotfiles/edit/master/docs/features/Rationale.md" title="Edit this page" class="md-content__button md-icon">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
 </a>
 
 
 
-<h1 id="usage-guide">Usage Guide<a class="headerlink" href="#usage-guide" title="Permanent link">&para;</a></h1>
+<h1 id="rationale">Rationale<a class="headerlink" href="#rationale" title="Permanent link">&para;</a></h1>
 <hr />
-<p>In this section you will find write-ups on most used tools, programs, and custom
-scripts. Refer to each individual page for more details. As a general rule, a
-brief explanation is also embedded as a commented header inside each
-configuration file, in case you need a short recap on hand.</p>
-<h2 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<h2 id="goal">Goal<a class="headerlink" href="#goal" title="Permanent link">&para;</a></h2>
+<p>Provide fully automated development environment that is easy to setup and
+maintain.</p>
+<h2 id="why-ansible">Why Ansible?<a class="headerlink" href="#why-ansible" title="Permanent link">&para;</a></h2>
+<p>In my experience Ansible has the easiest learning curve. It has its own caveats
+and gotchas, but overall it's pretty straightforward to read YAML configuration
+for a person that knows very little about how Ansible works. It's almost like
+reading plain English with very rare exceptions. Additionally, Ansible is a
+Swiss army knife orchestration tool. You can use it and abuse it in many
+different ways which might or might not be supported via other popular
+solution like <a href="https://nixos.wiki/wiki/Home_Manager">NixOS Home Manager</a>
+otherwise. One of the biggest advantages of Ansible is that (if properly
+described) tasks follow
+<a href="https://docs.ansible.com/ansible/latest/reference_appendices/glossary.html#term-Idempotency">idempotency</a>
+principle, which means playbook can be run over and over again without having to
+worry about your precious files accidentally being removed. </p>
+<p>All in all - there are many automation solutions out there - I happen to enjoy
+using Ansible.</p>
+<h2 id="why-chezmoi">Why Chezmoi?<a class="headerlink" href="#why-chezmoi" title="Permanent link">&para;</a></h2>
+<p>Chezmoi is another tool for managing dotfiles. It seems to be <a href="https://dotfiles.github.io/utilities">the most
+popular</a> choice these days with over 6k+
+stars. Prior to switch, I've used GNU Stow which had it's job done but
+unfortunately lacked a couple of features chezmoi tends to resolve. The most
+important features of chezmoi:</p>
 <ul>
-<li><a href="../Tools">Tools</a></li>
-<li><a href="../Installation">Installation</a></li>
-<li><a href="../Hotkeys">Hotkeys</a></li>
-<li><a href="../WindowManagement">Window Management</a></li>
+<li><strong>Flexible</strong>: dotfiles can be templates (using text/template syntax). While this
+  can be achieved using Ansible builtin Jinja templates, - chezmoi provides a
+  set of variables that can be used inside the template for simple assertions
+  like the platform you're currently running on, architecture, hostname,
+  environmental variables lookup and many more. Additionally, testing Jinja
+  templates in Ansible is very cumbersome. With chezmoi this is as simple as
+  running <code>chezmoi execute-template &lt; file.tmpl</code>.</li>
+<li><strong>Portable</strong>: chezmoi's configuration uses only visible, regular files and
+  directories and so is portable across version control systems and operating
+  systems.</li>
+<li><strong>Transparent</strong>: chezmoi includes verbose and dry run modes so you can review
+  exactly what changes it will make to your home directory before making them.</li>
+<li><strong>Practical</strong>: chezmoi manages hidden files (dot files), directories, private, and
+  executable files.</li>
+<li><strong>Fast, easy to use, and familiar</strong>: chezmoi runs in fractions of a second and
+  includes commands to make most operations trivial. </li>
 </ul>
+<p>The biggest driver for choosing chezmoi was my intention to follow single
+responsibility principle: dotfiles should be managed separately.</p>
+<h2 id="why-lunarvim">Why LunarVim?<a class="headerlink" href="#why-lunarvim" title="Permanent link">&para;</a></h2>
+<p>I used regular Vim for a couple of years until it has become really painful to
+manage a 500+ lines file. I've made an attempt to switch to Neovim after
+watching Vimconf hosted by <a href="https://github.com/ThePrimeagen">ThePrimagen</a> and
+<a href="https://github.com/tjdevries">TJ DeVries</a>. This switch made me realize I don't
+understand half of the Lua configuration. </p>
+<p>Luckily, it turned out that most of the keymaps, plugins and sane defaults I was
+trying to configure are not necessarily specific and lots of people tend to
+configure Neovim this way. In fact,
+<a href="https://github.com/LunarVim/LunarVim">LunarVim</a> does this pretty well by
+providing a community driven framework for Neovim that acts like a wrapper with
+a bunch of common plugins. I happen to enjoy most of the stuff they ship out of
+the box. As an experienced Vim user, I found I only needed to install a couple
+more plugins to feel comfortable, rebind a couple of keys and configure less
+than 10 options.</p>
+<h2 id="why-fish">Why Fish?<a class="headerlink" href="#why-fish" title="Permanent link">&para;</a></h2>
+<p>Fish ecosystem is great for interactive shells. I still write day-to-day scripts
+in pure bash, but the amount of features that comes preconfigured with fish is just
+too good to resist. </p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Fish is not POSIX compatible shell.</p>
+</div>
 
               
             </article>
@@ -457,7 +583,7 @@ configuration file, in case you need a short recap on hand.</p>
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../.." class="md-footer__link md-footer__link--prev" aria-label="Previous: Dotfiles" rel="prev">
+        <a href="../1-UsageGuide/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Usage Guide" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -466,7 +592,7 @@ configuration file, in case you need a short recap on hand.</p>
               <span class="md-footer__direction">
                 Previous
               </span>
-              Dotfiles
+              Usage Guide
             </div>
           </div>
         </a>
