@@ -1,0 +1,6 @@
+---
+
+- name: "get base defaults config"
+  command: defaults -currentHost read -g
+  register: current_host_defaults
+  changed_when: false

@@ -1,7 +1,7 @@
 ---
 
 - import_tasks: darwin_system.yaml
-  when: ansible_system == "Darwin"
-
 - import_tasks: darwin_applications.yaml
-  when: ansible_system == "Darwin"
+- import_tasks: dock.yaml
+- import_tasks: keybindings.yaml
+  tags: keybindings
