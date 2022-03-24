@@ -1,6 +1,7 @@
 # set up abbreviations
 
 abbr g git
+abbr c clear
 abbr lg lazygit
 abbr dps 'docker ps'
 abbr dpa 'docker ps -a'
