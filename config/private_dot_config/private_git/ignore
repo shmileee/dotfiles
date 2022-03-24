@@ -4,6 +4,8 @@
 # Windows files
 Thumbs.db
 
+temp_files
+
 # direnv
 .direnv
 .envrc.local
