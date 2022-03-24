@@ -661,9 +661,23 @@
     type: bool
     value: false
 
-- name: "set light/dark mode automatically"
+- name: "set dark mode"
   community.general.osx_defaults:
     domain: NSGlobalDomain
     key: AppleInterfaceStyle
     type: string
     value: Dark
+
+- name: "quit printer app once jobs are complete"
+  community.general.osx_defaults:
+    domain: com.apple.print.PrintingPrefs
+    key: 'Quit When Finished'
+    type: boolean
+    value: true
+
+- name: "don't open imagecapture when camera plugged in"
+  community.general.osx_defaults:
+    domain: com.apple.ImageCapture
+    key: disableHotPlug
+    type: boolean
+    value: true
