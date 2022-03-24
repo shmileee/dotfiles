@@ -26,7 +26,7 @@
       ansible.builtin.file:
         path: "{{ ansible_user_dir }}/.config/fish"
         state: directory
-        mode: '0755'
+        mode: '0700'
 
     - name: "obtain path to fish"
       ansible.builtin.command: which fish
