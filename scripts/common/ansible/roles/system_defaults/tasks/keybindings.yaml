@@ -4,4 +4,3 @@
   osx_keybindings:
     source_key: "caps_lock"
     destination_key: "escape"
-
