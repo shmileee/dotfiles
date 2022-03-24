@@ -208,7 +208,7 @@ def main():
         destination_key=dict(type="str", required=False),
     )
 
-    module = AnsibleModule(argument_spec=module_args, supports_check_mode=True)
+    module = AnsibleModule(argument_spec=module_args, supports_check_mode=False)
     result = dict()
     source_key = module.params["source_key"]
     destination_key = module.params["destination_key"]
