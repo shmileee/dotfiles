@@ -13,7 +13,7 @@
     
     
       
-        <title>Usage Guide - Hitchhiker's Guide to the Dotfiles</title>
+        <title>Hotkeys - Hitchhiker's Guide to the Dotfiles</title>
       
     
     
@@ -62,7 +62,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#usage-guide" class="md-skip">
+        <a href="#hotkeys" class="md-skip">
           Skip to content
         </a>
       
@@ -95,7 +95,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Usage Guide
+              Hotkeys
             
           </span>
         </div>
@@ -209,7 +209,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="./" class="md-tabs__link md-tabs__link--active">
+      <a href="../1-UsageGuide/" class="md-tabs__link md-tabs__link--active">
         Features
       </a>
     </li>
@@ -309,6 +309,20 @@
               
   
   
+  
+    <li class="md-nav__item">
+      <a href="../1-UsageGuide/" class="md-nav__link">
+        Usage Guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
     
   
   
@@ -321,12 +335,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Usage Guide
+          Hotkeys
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Usage Guide
+        Hotkeys
       </a>
       
         
@@ -345,8 +359,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#table-of-contents" class="md-nav__link">
-    Table of Contents
+  <a href="#key-bindings" class="md-nav__link">
+    Key Bindings
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#read-more" class="md-nav__link">
+    Read More
   </a>
   
 </li>
@@ -355,20 +376,6 @@
   
 </nav>
       
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../Hotkeys/" class="md-nav__link">
-        Hotkeys
-      </a>
     </li>
   
 
@@ -449,8 +456,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#table-of-contents" class="md-nav__link">
-    Table of Contents
+  <a href="#key-bindings" class="md-nav__link">
+    Key Bindings
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#read-more" class="md-nav__link">
+    Read More
   </a>
   
 </li>
@@ -467,22 +481,57 @@
             <article class="md-content__inner md-typeset">
               
                 
-<a href="https://github.com/shmileee/dotfiles/edit/master/docs/features/1-UsageGuide.md" title="Edit this page" class="md-content__button md-icon">
+<a href="https://github.com/shmileee/dotfiles/edit/master/docs/features/Hotkeys.md" title="Edit this page" class="md-content__button md-icon">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
 </a>
 
 
 
-<h1 id="usage-guide">Usage Guide<a class="headerlink" href="#usage-guide" title="Permanent link">&para;</a></h1>
-<hr />
-<p>In this section you will find write-ups on most used tools, programs, and custom
-scripts. Refer to each individual page for more details. </p>
-<h2 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<h1 id="hotkeys">Hotkeys<a class="headerlink" href="#hotkeys" title="Permanent link">&para;</a></h1>
+<p>All <em>"system-wide"</em> keyboard shortcuts for macOS are bound using builtin
+functionality. The shortcuts are set in
+<a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml"><code>config.yaml</code></a>
+as a <code>darwin_hotkeys</code> map that has the following structure:</p>
 <ul>
-<li><a href="../Rationale">Rationale</a></li>
-<li><a href="../Tools">Tools</a></li>
-<li><a href="../Installation">Installation</a></li>
-<li><a href="../Troubleshooting">Troubleshooting</a></li>
+<li><code>&lt;system keycode&gt;</code>:<ul>
+<li>parameters: <code>&lt;keyboad keys in ascii&gt;</code></li>
+<li>enabled: <code>&lt;boolean that indicates whether shortcut is enabled&gt;</code></li>
+</ul>
+</li>
+</ul>
+<p>Where <code>&lt;system keycode&gt;</code> is the <code>int</code> UID for the feature in <em>System Preferences
+- Keyboard - Shortcuts</em>, e.g.: <em>"Show Spotlight search"</em> corresponds to <code>64</code>.</p>
+<h3 id="key-bindings">Key Bindings<a class="headerlink" href="#key-bindings" title="Permanent link">&para;</a></h3>
+<p>The following keybindings are available: </p>
+<table>
+<thead>
+<tr>
+<th align="center">Key Combination</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><span class="keys"><kbd class="key-command">Cmd</kbd><span>+</span><kbd class="key-g">G</kbd></span></td>
+<td>Show Spotlight search.</td>
+</tr>
+<tr>
+<td align="center"><span class="keys"><kbd class="key-command">Cmd</kbd><span>+</span><kbd class="key-space">Space</kbd></span></td>
+<td>Select the next source in input menu.</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code>community.general.osx_defaults</code> Ansible collection <a href="https://github.com/ansible-collections/community.general/pull/3420">does not
+support</a>
+modifying system shortcuts yet. This is why I use <code>ansible.builtin.command</code>
+to accomplish the desired result, which is not idempotent.</p>
+</div>
+<h2 id="read-more">Read More<a class="headerlink" href="#read-more" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="https://microeducate.tech/what-do-the-parameter-values-in-applesymbolichotkeys-plist-dict-represent/">What do the parameter values in <code>AppleSymbolicHotKeys</code> plist dict
+  represent?</a></li>
 </ul>
 
               
@@ -497,7 +546,7 @@ scripts. Refer to each individual page for more details. </p>
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../.." class="md-footer__link md-footer__link--prev" aria-label="Previous: Dotfiles" rel="prev">
+        <a href="../1-UsageGuide/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Usage Guide" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -506,20 +555,20 @@ scripts. Refer to each individual page for more details. </p>
               <span class="md-footer__direction">
                 Previous
               </span>
-              Dotfiles
+              Usage Guide
             </div>
           </div>
         </a>
       
       
         
-        <a href="../Hotkeys/" class="md-footer__link md-footer__link--next" aria-label="Next: Hotkeys" rel="next">
+        <a href="../Installation/" class="md-footer__link md-footer__link--next" aria-label="Next: Installation" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Hotkeys
+              Installation
             </div>
           </div>
           <div class="md-footer__button md-icon">
