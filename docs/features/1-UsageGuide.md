@@ -9,4 +9,5 @@ scripts. Refer to each individual page for more details.
 * [Rationale](../Rationale)
 * [Tools](../Tools)
 * [Installation](../Installation)
+* [Hotkeys](../Hotkeys)
 * [Troubleshooting](../Troubleshooting)
