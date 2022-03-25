@@ -214,7 +214,7 @@ darwin_hotkeys:
   60:
     parameters: "32, 49, 262144"
     enabled: 0
-  # remap "select next source in input menu" to `⌘ + space`
+  # remap "select the next source in input menu" to `⌘ + space`
   61:
     parameters: "32, 49, 1048576"
     enabled: 1
