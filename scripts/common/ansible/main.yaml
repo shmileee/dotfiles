@@ -28,6 +28,9 @@
     - name: asdf
       tags: asdf
 
+    - name: go
+      tags: go
+
     - name: docker
       tags: docker
 

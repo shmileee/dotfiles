@@ -165,7 +165,6 @@ asdf_plugins:
 golang:
   path: '{{ ansible_user_dir }}/.go'
   packages:
-    - golang.org/x/tools/cmd/goimports@latest
     - golang.org/x/tools/gopls@latest
 
 nodejs:
