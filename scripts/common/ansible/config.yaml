@@ -204,3 +204,17 @@ dockitems_enabled:
   - name: Spotify
     path: "/Applications/Spotify.app"
     pos: 5
+
+darwin_hotkeys:
+  # remap "show spotlight search` to `⌘ + g`
+  64:
+    parameters: "103, 5, 1048576"
+    enabled: 1
+  # disable "select the previous source in input menu"
+  60:
+    parameters: "32, 49, 262144"
+    enabled: 0
+  # remap "select next source in input menu" to `⌘ + space`
+  61:
+    parameters: "32, 49, 1048576"
+    enabled: 1

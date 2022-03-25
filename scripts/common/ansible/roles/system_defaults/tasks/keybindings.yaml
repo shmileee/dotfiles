@@ -4,3 +4,18 @@
   osx_keybindings:
     source_key: "caps_lock"
     destination_key: "escape"
+
+  # `osx_defaults` does not support `dict` yet, see this PR:
+  # https://github.com/ansible-collections/community.general/pull/3420
+- name: "remap system shortcuts"
+  ansible.builtin.command: >
+    defaults write com.apple.symbolichotkeys
+    AppleSymbolicHotKeys -dict-add {{ item.key }}
+    "{
+      enabled = {{ item.value.enabled }};
+      value = {
+        parameters = ({{ item.value.parameters }});
+        type = 'standard';
+      };
+    }"
+  loop: "{{ darwin_hotkeys | dict2items }}"
