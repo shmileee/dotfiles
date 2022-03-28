@@ -72,6 +72,7 @@ brew:
     darwin:
       - carlocab/personal/unrar
       - dockutil
+      - switchaudio-osx
       - ffmpeg
       - gawk
       - gnu-getopt

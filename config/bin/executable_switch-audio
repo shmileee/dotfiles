@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+#
+# Requirements:
+#   - switchaudio-osx (brew install switchaudio-osx)
+#
+# Usage:
+#
+#   Switch between speakers / headphones:
+#   - audio headphones
+#   - audio speakers
+#
+
+if ! command -v "SwitchAudioSource" &> /dev/null; then
+    echo "SwitchAudioSource could not be found."
+    echo "Run:"
+    echo "  - brew install switchaudio-osx"
+    exit
+fi
+
+set_speakers() {
+  SwitchAudioSource -t input -s "MacBook Pro Microphone"
+  SwitchAudioSource -t output -s "MacBook Pro Speakers"
+}
+
+set_headphones() {
+  SwitchAudioSource -t input -s "Sennheiser SC60 for Lync"
+  SwitchAudioSource -t output -s "Sennheiser SC60 for Lync"
+}
+
+toggle() {
+  if test "$(SwitchAudioSource -c)" == "MacBook Pro Speakers"; then
+    set_headphones
+  elif test "$(SwitchAudioSource -c)" == "Sennheiser SC60 for Lync"; then
+    set_speakers
+  fi
+}
+
+case "$1" in
+  headphones)
+    set_headphones
+    ;;
+  speakers)
+    set_speakers
+    ;;
+  *)
+    toggle
+;;
+esac
