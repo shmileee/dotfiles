@@ -3,5 +3,6 @@
 - import_tasks: darwin_system.yaml
 - import_tasks: darwin_applications.yaml
 - import_tasks: dock.yaml
+  tags: dock
 - import_tasks: keybindings.yaml
   tags: keybindings
