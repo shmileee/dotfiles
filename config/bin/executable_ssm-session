@@ -15,13 +15,13 @@
 
 set -o pipefail
 
-ssm_instance_ids () {
+ssm_instance_ids() {
   aws ssm describe-instance-information\
     --query "InstanceInformationList[].InstanceId" \
     --output=text
-  }
+}
 
-list_instances () {
+list_instances() {
   instance_ids=$(ssm_instance_ids)
 
   aws ec2 describe-instances \
@@ -29,9 +29,9 @@ list_instances () {
     --filter "Name=instance-state-name,Values=running" \
     --query "Reservations[*].Instances[*].[InstanceId,Tags[?Key=='Name']|[0].Value]" \
     --output text
-  }
+}
 
-print_usage () {
+print_usage() {
     cat <<-EOF
 usage: ssm-session <command>
 command:
