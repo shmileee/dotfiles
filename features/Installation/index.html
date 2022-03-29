@@ -9,7 +9,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.1">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.5">
     
     
       
@@ -17,7 +17,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.e8d9bf0c.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.2d9f7617.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.e6a45f82.min.css">
@@ -28,8 +28,9 @@
     
       
         
+        
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CJetBrains+Mono&display=fallback">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
         <style>:root{--md-text-font:"Roboto";--md-code-font:"JetBrains Mono"}</style>
       
     
@@ -406,6 +407,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#installation-flow" class="md-nav__link">
+    Installation Flow
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -505,6 +513,13 @@
         <li class="md-nav__item">
   <a href="#ansible" class="md-nav__link">
     Ansible
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation-flow" class="md-nav__link">
+    Installation Flow
   </a>
   
 </li>
@@ -633,6 +648,118 @@ is missing or does not include <code>run '~/.tmux/plugins/tpm/tpm'</code> line.<
   setup. This role is also the subject for future changes - more things like
   custom keybinding will be introduced shortly.</li>
 </ul>
+<h2 id="installation-flow">Installation Flow<a class="headerlink" href="#installation-flow" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>   ┌────────────────────────────────────────────┐
+┌──┤curl -fsSL oponomarov.com/d <span class="p">|</span> sh -s -- --all│
+│  └────────────────────────────────────────────┘
+│
+│
+│     ┌─────────────────────────────────────┐
+├───► │git clone shmileee/dotfiles.git /tmp │
+│     └─────────────────────────────────────┘
+│
+│     ┌─────────────────────────┐     ┌──────────────────────────┐
+├───► │./install_dependencies.sh├────►│ apt install &lt;essentials&gt; │
+│     └─────────────────────────┘     └──────────────────────────┘
+│
+│     ┌──────────────────┐
+├───► │./install_brew.sh │
+│     └──────────────────┘
+│
+│     ┌────────────┐
+└───► │./ansible.sh│
+      └─────┬──────┘
+            │
+   ┌────────┘
+   │
+   │  ┌────────────────────────┐
+   ├─►│install comunity.general│
+   │  └────────────────────────┘
+   │
+   │  ┌──────────────────────────┐
+   │  │ prompt <span class="k">for</span> password <span class="k">if</span>   │
+   ├─►│ sudo is not passwordless │
+   │  └──────────────────────────┘
+   │
+   │
+   │  ┌───────────────────────────────┐
+   └─►│ansible-playbook ... main.yaml │
+      └───────────────┬───────────────┘
+                      │
+     ┌────────────────┘
+     │                 ┌────────────────────────┐
+     │  ┌──────┐       │ brew install &lt;packages&gt;│
+     ├─►│common├──────►│ brew install &lt;casks&gt;   │
+     │  └──────┘       └────────────────────────┘
+     │
+     │  ┌───────┐
+     ├─►│ fonts │
+     │  └───────┘
+     │                 ┌───────────────┐
+     │  ┌──────────┐   │ chezmoi init  │
+     ├─►│ dotfiles ├──►│ chezmoi update│
+     │  └──────────┘   └───────────────┘
+     │
+     │
+     │
+     │  ┌────┐         ┌────────────────────┐
+     ├─►│fish├───────┐ │change default shell│
+     │  └────┘       └►│install fisher      │
+     │                 │install fish plugins│
+     │                 └────────────────────┘
+     │
+     │
+     │                 ┌──────────────────────┐
+     │  ┌──────┐       │ either:              │
+     ├─►│neovim├──────►│  - build from <span class="nb">source</span> │
+     │  └──────┘       │  - install binary    │
+     │                 └──────────────────────┘
+     │
+     │
+     │                 ┌───────────────────────────┐
+     │  ┌────────┐     │ download                  │
+     ├─►│lunarvim├────►│ install                   │
+     │  └────────┘     │ update config with chezmoi│
+     │                 └───────────────────────────┘
+     │
+     │
+     │                 ┌────────────────────┐
+     │  ┌────┐         │ install plugins    │
+     ├─►│asdf├────────►│ install tools      │
+     │  └────┘         │ <span class="nb">set</span> global versions│
+     │                 └────────────────────┘
+     │
+     │  ┌────┐         ┌────────────────────┐
+     ├─►│ go ├────────►│ install go packages│
+     │  └────┘         └────────────────────┘
+     │
+     │  ┌────────┐
+     ├─►│ docker │
+     │  └────────┘     ┌──────────────────────┐
+     │                 │install plugin manager│
+     │  ┌──────┐    ┌─►│install plugins       │
+     ├─►│ tmux ├────┘  └──────────────────────┘
+     │  └──────┘
+     │
+     │  ┌─────────────────┐
+     └─►│ system_defaults │
+        └───────┬─────────┘
+                │          ┌───────────────────────────────┐
+                ├─────────►│ defaults write &lt;apps settings&gt;│
+                │          └───────────────────────────────┘
+                │
+                │          ┌────────────────────┐
+                ├─────────►│reorder apps <span class="k">in</span> dock│
+                │          └────────────────────┘
+                │
+                │          ┌──────────────────────┐
+                ├─────────►│set custom keybindings│
+                │          └──────────────────────┘
+                │
+                │          ┌───────────────────────┐
+                └─────────►│defaults write &lt;system&gt;│
+                           └───────────────────────┘
+</code></pre></div>
 
               
             </article>
@@ -715,7 +842,7 @@ is missing or does not include <code>run '~/.tmux/plugins/tpm/tpm'</code> line.<
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.expand", "navigation.tabs"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.bd0b6b67.min.js"}</script>
     
     
-      <script src="../../assets/javascripts/bundle.8aa65030.min.js"></script>
+      <script src="../../assets/javascripts/bundle.467223ff.min.js"></script>
       
     
   </body>
