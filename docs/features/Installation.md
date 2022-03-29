@@ -121,3 +121,118 @@ Supported Ansible roles:
   caution as the settings are very opinionated and might break your existing
   setup. This role is also the subject for future changes - more things like
   custom keybinding will be introduced shortly.
+
+## Installation Flow
+
+```
+   ┌────────────────────────────────────────────┐
+┌──┤curl -fsSL oponomarov.com/d | sh -s -- --all│
+│  └────────────────────────────────────────────┘
+│
+│
+│     ┌─────────────────────────────────────┐
+├───► │git clone shmileee/dotfiles.git /tmp │
+│     └─────────────────────────────────────┘
+│
+│     ┌─────────────────────────┐     ┌──────────────────────────┐
+├───► │./install_dependencies.sh├────►│ apt install <essentials> │
+│     └─────────────────────────┘     └──────────────────────────┘
+│
+│     ┌──────────────────┐
+├───► │./install_brew.sh │
+│     └──────────────────┘
+│
+│     ┌────────────┐
+└───► │./ansible.sh│
+      └─────┬──────┘
+            │
+   ┌────────┘
+   │
+   │  ┌────────────────────────┐
+   ├─►│install comunity.general│
+   │  └────────────────────────┘
+   │
+   │  ┌──────────────────────────┐
+   │  │ prompt for password if   │
+   ├─►│ sudo is not passwordless │
+   │  └──────────────────────────┘
+   │
+   │
+   │  ┌───────────────────────────────┐
+   └─►│ansible-playbook ... main.yaml │
+      └───────────────┬───────────────┘
+                      │
+     ┌────────────────┘
+     │                 ┌────────────────────────┐
+     │  ┌──────┐       │ brew install <packages>│
+     ├─►│common├──────►│ brew install <casks>   │
+     │  └──────┘       └────────────────────────┘
+     │
+     │  ┌───────┐
+     ├─►│ fonts │
+     │  └───────┘
+     │                 ┌───────────────┐
+     │  ┌──────────┐   │ chezmoi init  │
+     ├─►│ dotfiles ├──►│ chezmoi update│
+     │  └──────────┘   └───────────────┘
+     │
+     │
+     │
+     │  ┌────┐         ┌────────────────────┐
+     ├─►│fish├───────┐ │change default shell│
+     │  └────┘       └►│install fisher      │
+     │                 │install fish plugins│
+     │                 └────────────────────┘
+     │
+     │
+     │                 ┌──────────────────────┐
+     │  ┌──────┐       │ either:              │
+     ├─►│neovim├──────►│  - build from source │
+     │  └──────┘       │  - install binary    │
+     │                 └──────────────────────┘
+     │
+     │
+     │                 ┌───────────────────────────┐
+     │  ┌────────┐     │ download                  │
+     ├─►│lunarvim├────►│ install                   │
+     │  └────────┘     │ update config with chezmoi│
+     │                 └───────────────────────────┘
+     │
+     │
+     │                 ┌────────────────────┐
+     │  ┌────┐         │ install plugins    │
+     ├─►│asdf├────────►│ install tools      │
+     │  └────┘         │ set global versions│
+     │                 └────────────────────┘
+     │
+     │  ┌────┐         ┌────────────────────┐
+     ├─►│ go ├────────►│ install go packages│
+     │  └────┘         └────────────────────┘
+     │
+     │  ┌────────┐
+     ├─►│ docker │
+     │  └────────┘     ┌──────────────────────┐
+     │                 │install plugin manager│
+     │  ┌──────┐    ┌─►│install plugins       │
+     ├─►│ tmux ├────┘  └──────────────────────┘
+     │  └──────┘
+     │
+     │  ┌─────────────────┐
+     └─►│ system_defaults │
+        └───────┬─────────┘
+                │          ┌───────────────────────────────┐
+                ├─────────►│ defaults write <apps settings>│
+                │          └───────────────────────────────┘
+                │
+                │          ┌────────────────────┐
+                ├─────────►│reorder apps in dock│
+                │          └────────────────────┘
+                │
+                │          ┌──────────────────────┐
+                ├─────────►│set custom keybindings│
+                │          └──────────────────────┘
+                │
+                │          ┌───────────────────────┐
+                └─────────►│defaults write <system>│
+                           └───────────────────────┘
+```
