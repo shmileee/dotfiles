@@ -1,0 +1,11 @@
+---
+
+- name: "{{ item.name }}"
+  community.general.osx_defaults:
+    domain: "{{ item.domain | default(omit) }}"
+    host: "{{ item.host | default(omit) }}"
+    key: "{{ item.key }}"
+    type: "{{ item.type }}"
+    value: "{{ item.value }}"
+    array_add: "{{ item.array | default(omit) }}"
+    state: present

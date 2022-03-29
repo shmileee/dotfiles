@@ -1,8 +1,28 @@
 ---
 
-- import_tasks: darwin_system.yaml
-- import_tasks: darwin_applications.yaml
+- block:
+    - include_tasks: set_osx_defaults.yaml
+      loop: "{{ osx_global_defaults }}"
+  tags:
+    - defaults
+    - global
+
+- block:
+    - include_tasks: set_osx_defaults.yaml
+      loop: "{{ osx_rectangle_defaults }}"
+  tags:
+    - defaults
+    - rectangle
+
+- block:
+    - include_tasks: set_osx_defaults.yaml
+      loop: "{{ osx_alt_tab_defaults }}"
+  tags:
+    - defaults
+    - alt-tab
+
 - import_tasks: dock.yaml
   tags: dock
+
 - import_tasks: keybindings.yaml
   tags: keybindings
