@@ -22,8 +22,9 @@ lvim.keys.normal_mode["<Space><Space>"] = "<cmd>nohlsearch<CR>"
 lvim.keys.normal_mode["o"] = "o<Esc>"
 lvim.keys.normal_mode["O"] = "O<Esc>"
 
--- Change Telescope navigation to use j and k for navigation and n and p for history in both input and normal mode.
--- we use protected-mode (pcall) just in case the plugin wasn't loaded yet.
+-- Change Telescope navigation to use j and k for navigation and n and p for
+-- history in both input and normal mode. we use protected-mode (pcall) just in
+-- case the plugin wasn't loaded yet.
 local _, actions = pcall(require, "telescope.actions")
 lvim.builtin.telescope.defaults.mappings = {
   -- for input mode
@@ -67,7 +68,6 @@ lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
 lvim.builtin.nvimtree.show_icons.git = 0
 
--- if you don't want all the parsers change this to a table of the ones you want
 lvim.builtin.treesitter.ensure_installed = {
   "bash",
   "hcl",
@@ -103,7 +103,6 @@ require("lvim.lsp.manager").setup("dockerls", {
     },
 })
 
--- -- set a formatter, this will override the language server formatting capabilities (if it exists)
 local formatters = require "lvim.lsp.null-ls.formatters"
 formatters.setup {
   { exe = "black", filetypes = { "python" } },
@@ -111,10 +110,7 @@ formatters.setup {
   { exe = "terraform_fmt", filetypes = { "terraform" } },
   {
     exe = "prettier",
-    ---@usage arguments to pass to the formatter
-    -- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
     args = { "--print-with", "100" },
-    ---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
     filetypes = { "typescript", "typescriptreact" },
   },
 }
@@ -122,15 +118,16 @@ formatters.setup {
 -- -- set additional linters
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {
-  { exe = "flake8", filetypes = { "python" } },
+  {
+    exe = "flake8",
+    filetypes = { "python" }
+  },
   {
     exe = "shellcheck",
-    ---@usage arguments to pass to the formatter
     filetypes = { "sh" },
   },
   {
     exe = "codespell",
-    ---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
     filetypes = { "javascript", "python" },
   },
 }
@@ -147,10 +144,10 @@ lvim.plugins = {
     "farmergreg/vim-lastplace",
   },
   {
-    'iamcco/markdown-preview.nvim',
+    "iamcco/markdown-preview.nvim",
     opt = true,
     ft = "markdown",
-    run = 'cd app && yarn install'
+    run = "cd app && yarn install"
   },
   {
     "ntpeters/vim-better-whitespace",
@@ -171,7 +168,7 @@ lvim.autocommands.custom_groups = {
 local init_custom_options = function()
   local custom_options = {
     relativenumber = true, -- Set relative numbered lines
-    colorcolumn = "80", -- Indent line at what column? Set something like '99999' to not display it
+    colorcolumn = "80",
     shell = "/bin/sh"
   }
 
@@ -179,4 +176,5 @@ local init_custom_options = function()
     vim.opt[k] = v
   end
 end
+
 init_custom_options()
