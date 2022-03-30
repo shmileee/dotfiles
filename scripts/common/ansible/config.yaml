@@ -23,6 +23,7 @@ brew:
     - brave-browser
     - font-fira-code-nerd-font
     - hiddenbar
+    - kdiff3
     - rectangle
     - slack
     - telegram
