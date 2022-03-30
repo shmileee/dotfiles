@@ -5,7 +5,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Setup time zones.
 RUN sudo ln -snf "/usr/share/zoneinfo/$TIMEZONE" /etc/localtime && \
-    echo $TIMEZONE > /etc/timezone
+    echo $TIMEZONE | sudo tee /etc/timezone
 
 ENV DOCKERIZED true
 
