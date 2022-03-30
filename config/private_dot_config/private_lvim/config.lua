@@ -158,9 +158,17 @@ lvim.plugins = {
   },
 }
 
+vim.g.better_whitespace_filetypes_blacklist = {
+  "diff",
+  "gitcommit",
+  "help",
+  "dashboard",
+  "LspTrouble",
+  "TelescopePrompt",
+}
+
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
 lvim.autocommands.custom_groups = {
-  { "FileType", "dashboard", "DisableWhitespace" },
   { "BufRead,BufNewFile", "*.md", "setlocal textwidth=80" },
 }
 
