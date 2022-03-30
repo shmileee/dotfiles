@@ -128,7 +128,6 @@ linters.setup {
   },
   {
     exe = "codespell",
-    filetypes = { "javascript", "python" },
   },
 }
 
