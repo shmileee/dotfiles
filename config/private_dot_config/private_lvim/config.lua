@@ -11,8 +11,6 @@ lvim.keys.visual_mode["p"] = "pgvy"
 
 lvim.keys.normal_mode["k"] = "gk"
 lvim.keys.normal_mode["j"] = "gj"
-lvim.keys.normal_mode["$"] = "g$"
-lvim.keys.normal_mode["0"] = "g0"
 
 -- better yanking
 lvim.keys.normal_mode["Y"] = "y$"
