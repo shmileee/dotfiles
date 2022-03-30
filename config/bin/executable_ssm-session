@@ -7,7 +7,7 @@
 #
 # Usage:
 #
-#   List avialable instances:
+#   List available instances:
 #    ssm-session list
 #
 #  Connect to instance (uses fzf to provide interactive list)

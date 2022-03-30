@@ -6,7 +6,7 @@ functionality. The shortcuts are set in
 as a `darwin_hotkeys` map that has the following structure:
 
 - `<system keycode>`:
-    - parameters: `<keyboad keys in ascii>`
+    - parameters: `<keyboard keys in ascii>`
     - enabled: `<boolean that indicates whether shortcut is enabled>`
 
 Where `<system keycode>` is the `int` UID for the feature in _System Preferences

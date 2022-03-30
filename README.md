@@ -52,9 +52,9 @@ docker buildx build --platform linux/amd64 -t dotfiles --progress plain .
             │
    ┌────────┘
    │
-   │  ┌────────────────────────┐
-   ├─►│install comunity.general│
-   │  └────────────────────────┘
+   │  ┌─────────────────────────┐
+   ├─►│install community.general│
+   │  └─────────────────────────┘
    │
    │  ┌──────────────────────────┐
    │  │ prompt for password if   │

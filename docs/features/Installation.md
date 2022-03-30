@@ -148,9 +148,9 @@ Supported Ansible roles:
             │
    ┌────────┘
    │
-   │  ┌────────────────────────┐
-   ├─►│install comunity.general│
-   │  └────────────────────────┘
+   │  ┌─────────────────────────┐
+   ├─►│install community.general│
+   │  └─────────────────────────┘
    │
    │  ┌──────────────────────────┐
    │  │ prompt for password if   │
