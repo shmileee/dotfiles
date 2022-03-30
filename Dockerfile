@@ -1,23 +1,13 @@
 FROM homebrew/ubuntu20.04:3.4.2
 
-# Assume root user to install system dependencies.
-USER root
-
 ENV TIMEZONE "Europe/Warsaw"
 ENV DEBIAN_FRONTEND=noninteractive
 
-# +Setup time zones.
-RUN ln -snf "/usr/share/zoneinfo/$TIMEZONE" /etc/localtime && \
-    echo $TIMEZONE > /etc/timezones
+# Setup time zones.
+RUN sudo ln -snf "/usr/share/zoneinfo/$TIMEZONE" /etc/localtime && \
+    echo $TIMEZONE > /etc/timezone
 
-# Set build environment variables.
-ENV USER linuxbrew
-
-# Assume the user back.
-USER $USER
-ENV USER_HOME /home/$USER
 ENV DOCKERIZED true
-WORKDIR $USER_HOME
 
 # Configure dotfiles.
 COPY ./scripts/setup.sh /tmp/setup.sh
