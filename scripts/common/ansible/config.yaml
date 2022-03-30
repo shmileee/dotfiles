@@ -36,6 +36,7 @@ brew:
       - awscli
       - azure-cli
       - bat
+      - codespell
       - coreutils
       - direnv
       - dos2unix
