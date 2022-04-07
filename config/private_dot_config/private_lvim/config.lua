@@ -141,6 +141,7 @@ lvim.plugins = {
     "tpope/vim-surround",
     "tpope/vim-repeat",
     "farmergreg/vim-lastplace",
+    "will133/vim-dirdiff"
   },
   {
     "iamcco/markdown-preview.nvim",
