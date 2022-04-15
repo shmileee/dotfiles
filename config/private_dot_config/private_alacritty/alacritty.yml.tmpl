@@ -68,6 +68,5 @@ key_bindings:
   - { mods: Command, key: Key8, command: { program: *TMUX, args: [ select-window, -t 8 ] } }
   - { mods: Command, key: T, command: { program: *TMUX, args: [ new-window, -c, '#{pane_current_path}' ] } }
   - { mods: Command|Shift, key: R, command: { program: *TMUX, args: [ command-prompt, "rename-session -- '%%'" ] } }
-  - { mods: Control, key: Tab, command: { program: *TMUX, args: [ switch-client, -n ] } }
   - { mods: Command, key: W, command: { program: *TMUX, args: [ kill-window ] } }
   - { mods: Command, key: X, command: { program: *TMUX, args: [ kill-pane ] } }
