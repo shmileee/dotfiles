@@ -15,15 +15,18 @@ brew:
     - homebrew/cask
     - homebrew/cask-fonts
     - homebrew/core
+    - cloudflare/cloudflare
   casks:
     - 1password
     - alacritty
     - alt-tab
     - aws-vault
     - brave-browser
+    - cloudflare/cloudflare/cf-terraforming
     - font-fira-code-nerd-font
     - hiddenbar
     - kdiff3
+    - multipass
     - rectangle
     - slack
     - telegram
