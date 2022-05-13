@@ -55,6 +55,7 @@ brew:
       - highlight
       - jq
       - jsonnet
+      - k9s
       - kustomize
       - lazygit
       - lua-language-server
