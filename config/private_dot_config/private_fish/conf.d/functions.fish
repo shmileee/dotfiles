@@ -33,3 +33,10 @@ function sudo
         command sudo $argv
     end
 end
+
+# export vault token
+function vault_auth
+    set --local env "$argv[1]"
+    set -gx VAULT_ADDR https://$env.vault.tuadm.net:8200
+    set -gx TF_VAR_vault_token (vault login -method=oidc -path=okta role=admin -format=json 2>/dev/null | jq '.auth.client_token' -r)
+end
