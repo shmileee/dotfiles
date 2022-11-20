@@ -3,7 +3,6 @@
 Fully automated development environment. Read the full documentation
 [here](https://oponomarov.com).
 
-
 [![macos](https://github.com/shmileee/dotfiles/actions/workflows/macos.yaml/badge.svg)](https://github.com/shmileee/dotfiles/actions/workflows/macos.yaml)
 [![docker](https://github.com/shmileee/dotfiles/actions/workflows/docker.yaml/badge.svg)](https://github.com/shmileee/dotfiles/actions/workflows/docker.yaml)
 
@@ -140,7 +139,6 @@ docker buildx build --platform linux/amd64 -t dotfiles --progress plain .
                 └─────────►│defaults write <system>│
                            └───────────────────────┘
 ```
-
 
 ## Credits
 
