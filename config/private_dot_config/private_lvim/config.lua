@@ -59,14 +59,15 @@ lvim.builtin.which_key.mappings["t"] = {
   w = { "<cmd>Trouble lsp_workspace_diagnostics<cr>", "Diagnostics" },
 }
 lvim.builtin.which_key.mappings["st"] = {
-  "<cmd>lua require('telescope.builtin').live_grep({cwd = require('telescope.utils').buffer_dir()})<CR>", "Search text in current directory"
+  "<cmd>lua require('telescope.builtin').live_grep({cwd = require('telescope.utils').buffer_dir()})<CR>",
+  "Search text in current directory"
 }
 
-lvim.builtin.dashboard.active = true
+lvim.builtin.alpha.active = true
 lvim.builtin.notify.active = true
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
-lvim.builtin.nvimtree.show_icons.git = 0
+-- lvim.builtin.nvimtree.show_icons.git = 0
 
 lvim.builtin.treesitter.ensure_installed = {
   "bash",
@@ -92,15 +93,15 @@ lvim.builtin.treesitter.highlight.enabled = true
 lvim.lsp.automatic_servers_installation = false
 
 require("lvim.lsp.manager").setup("dockerls", {
-    settings = {
-        docker = {
-            languageserver = {
-                formatter = {
-                    ignoreMultilineInstructions = true,
-                },
-            },
+  settings = {
+    docker = {
+      languageserver = {
+        formatter = {
+          ignoreMultilineInstructions = true,
         },
+      },
     },
+  },
 })
 
 local formatters = require "lvim.lsp.null-ls.formatters"
@@ -151,7 +152,7 @@ lvim.plugins = {
   },
   {
     "ntpeters/vim-better-whitespace",
-    config = function ()
+    config = function()
       vim.g.strip_whitespace_confirm = "0"
       vim.g.strip_whitelines_at_eof = "1"
       vim.g.strip_whitespace_on_save = "1"
@@ -169,9 +170,9 @@ vim.g.better_whitespace_filetypes_blacklist = {
 }
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
-lvim.autocommands.custom_groups = {
-  { "BufRead,BufNewFile", "*.md", "setlocal textwidth=80" },
-}
+-- lvim.autocommands.custom_groups = {
+--   { "BufRead,BufNewFile", "*.md", "setlocal textwidth=80" },
+-- }
 
 local init_custom_options = function()
   local custom_options = {
