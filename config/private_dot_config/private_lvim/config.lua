@@ -67,7 +67,6 @@ lvim.builtin.alpha.active = true
 lvim.builtin.notify.active = true
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
--- lvim.builtin.nvimtree.show_icons.git = 0
 
 lvim.builtin.treesitter.ensure_installed = {
   "bash",
@@ -92,6 +91,8 @@ lvim.builtin.treesitter.highlight.enabled = true
 -- generic LSP settings
 lvim.lsp.automatic_servers_installation = false
 
+require 'lspconfig'.marksman.setup {}
+
 require("lvim.lsp.manager").setup("dockerls", {
   settings = {
     docker = {
@@ -111,8 +112,8 @@ formatters.setup {
   { exe = "terraform_fmt", filetypes = { "terraform" } },
   {
     exe = "prettier",
-    args = { "--print-with", "100" },
-    filetypes = { "typescript", "typescriptreact" },
+    args = { "--print-with", "80" },
+    filetypes = { "typescript", "typescriptreact", "markdown" },
   },
 }
 
@@ -158,6 +159,19 @@ lvim.plugins = {
       vim.g.strip_whitespace_on_save = "1"
     end
   },
+  {
+    "wellle/targets.vim"
+  },
+  {
+    "christoomey/vim-titlecase"
+  },
+  {
+    'mrjones2014/dash.nvim',
+    run = 'make install',
+  },
+  {
+    'towolf/vim-helm'
+  }
 }
 
 vim.g.better_whitespace_filetypes_blacklist = {
@@ -169,10 +183,22 @@ vim.g.better_whitespace_filetypes_blacklist = {
   "TelescopePrompt",
 }
 
--- Autocommands (https://neovim.io/doc/user/autocmd.html)
--- lvim.autocommands.custom_groups = {
---   { "BufRead,BufNewFile", "*.md", "setlocal textwidth=80" },
--- }
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = {
+    "md", "markdown"
+  },
+  command = [[setlocal textwidth=80]]
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = {
+    "json5"
+  },
+  command = [[set filetype=json]]
+})
+
+
+lvim.lsp.buffer_options.formatexpr = "" -- don't use LSP for `gq`
 
 local init_custom_options = function()
   local custom_options = {
@@ -187,3 +213,12 @@ local init_custom_options = function()
 end
 
 init_custom_options()
+
+------------------------
+-- LSP
+------------------------
+lvim.lsp.on_attach_callback = function(client, bufnr)
+  if vim.bo[bufnr].buftype ~= "" or vim.bo[bufnr].filetype == "helm" then
+    vim.diagnostic.disable()
+  end
+end
