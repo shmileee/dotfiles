@@ -16,6 +16,7 @@ fish_add_path $HOME/.local/bin
 fish_add_path $HOME/bin
 fish_add_path $HOME/.cargo/bin
 fish_add_path /opt/homebrew/bin
+fish_add_path /opt/homebrew/opt/libpq/bin
 
 set -x GODEBUG asyncpreemptoff=1
 
@@ -29,3 +30,5 @@ set -gx FZF_DEFAULT_OPTS "--color=dark"
 # fish bobthefish-theme config
 set -g theme_date_format "+20%y/%m/%d %H:%M"
 set -g theme_display_ruby no
+
+source (which env_parallel.fish)
