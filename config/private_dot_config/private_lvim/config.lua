@@ -6,7 +6,8 @@ lvim.colorscheme = "onedarker"
 lvim.leader = "space"
 
 -- add your own keymapping
-lvim.keys.normal_mode["<C-p>"] = "<cmd>lua require('telescope.builtin').find_files({cwd = require('telescope.utils').buffer_dir()})<CR>"
+lvim.keys.normal_mode["<C-p>"] =
+"<cmd>lua require('telescope.builtin').find_files({cwd = require('telescope.utils').buffer_dir()})<CR>"
 lvim.keys.normal_mode["<Space><Space>"] = "<cmd>nohlsearch<CR>"
 lvim.keys.normal_mode["o"] = "o<Esc>"
 lvim.keys.normal_mode["O"] = "O<Esc>"
@@ -42,6 +43,7 @@ lvim.builtin.alpha.mode = "dashboard"
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
 lvim.builtin.nvimtree.setup.renderer.icons.show.git = true
+lvim.builtin.project.manual_mode = true
 
 -- if you don't want all the parsers change this to a table of the ones you want
 lvim.builtin.treesitter.ensure_installed = {
@@ -80,8 +82,8 @@ require("lvim.lsp.manager").setup("dockerls", {
 
 local formatters = require "lvim.lsp.null-ls.formatters"
 formatters.setup {
-  { exe = "black", filetypes = { "python" } },
-  { exe = "isort", filetypes = { "python" } },
+  { exe = "black",         filetypes = { "python" } },
+  { exe = "isort",         filetypes = { "python" } },
   { exe = "terraform_fmt", filetypes = { "terraform" } }
 }
 
@@ -107,9 +109,8 @@ lvim.plugins = {
   },
   {
     "iamcco/markdown-preview.nvim",
-    lazy = true,
+    lazy = false,
     ft = "markdown",
-    build = "cd app && yarn install"
   },
   {
     "ntpeters/vim-better-whitespace",

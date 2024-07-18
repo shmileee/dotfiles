@@ -1,2 +1,2 @@
 os:
-  editCommand: 'lvim'
+  edit: 'lvim {{filename}}'
