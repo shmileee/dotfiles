@@ -3,28 +3,18 @@ lvim.log.level = "warn"
 lvim.format_on_save = true
 lvim.colorscheme = "onedarker"
 
--- keymappings [view all the defaults by pressing <leader>Lk]
 lvim.leader = "space"
-
--- better putting
-lvim.keys.visual_mode["p"] = "pgvy"
-
-lvim.keys.normal_mode["k"] = "gk"
-lvim.keys.normal_mode["j"] = "gj"
-
--- better yanking
-lvim.keys.normal_mode["Y"] = "y$"
-lvim.keys.visual_mode["y"] = "ygv<esc>"
 
 -- add your own keymapping
 lvim.keys.normal_mode["<C-p>"] = "<cmd>lua require('telescope.builtin').find_files({cwd = require('telescope.utils').buffer_dir()})<CR>"
 lvim.keys.normal_mode["<Space><Space>"] = "<cmd>nohlsearch<CR>"
 lvim.keys.normal_mode["o"] = "o<Esc>"
 lvim.keys.normal_mode["O"] = "O<Esc>"
+lvim.keys.normal_mode["<S-h>"] = "<cmd>bnext<CR>"
+lvim.keys.normal_mode["<S-l>"] = "<cmd>bprev<CR>"
 
--- Change Telescope navigation to use j and k for navigation and n and p for
--- history in both input and normal mode. we use protected-mode (pcall) just in
--- case the plugin wasn't loaded yet.
+-- Change Telescope navigation to use j and k for navigation and n and p for history in both input and normal mode.
+-- we use protected-mode (pcall) just in case the plugin wasn't loaded yet.
 local _, actions = pcall(require, "telescope.actions")
 lvim.builtin.telescope.defaults.mappings = {
   -- for input mode
@@ -42,46 +32,33 @@ lvim.builtin.telescope.defaults.mappings = {
 }
 
 -- Use which-key to add extra bindings with the leader-key prefix
-lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
-lvim.builtin.which_key.mappings["n"] = { "<cmd>normal! mz[s1z=`z<CR>", "Fix spelling" }
-lvim.builtin.which_key.mappings["f"] = { "<cmd>NvimTreeToggle<CR>", "Explorer" }
-lvim.builtin.which_key.mappings["r"] = { ":%s///g<Left><Left>", "Replace" }
-lvim.builtin.which_key.mappings["e"] = {}
-lvim.builtin.which_key.mappings["q"] = {}
-lvim.builtin.which_key.mappings["h"] = {}
-lvim.builtin.which_key.mappings["t"] = {
-  name = "+Trouble",
-  r = { "<cmd>Trouble lsp_references<cr>", "References" },
-  f = { "<cmd>Trouble lsp_definitions<cr>", "Definitions" },
-  d = { "<cmd>Trouble lsp_document_diagnostics<cr>", "Diagnostics" },
-  q = { "<cmd>Trouble quickfix<cr>", "QuickFix" },
-  l = { "<cmd>Trouble loclist<cr>", "LocationList" },
-  w = { "<cmd>Trouble lsp_workspace_diagnostics<cr>", "Diagnostics" },
-}
 lvim.builtin.which_key.mappings["st"] = {
   "<cmd>lua require('telescope.builtin').live_grep({cwd = require('telescope.utils').buffer_dir()})<CR>",
   "Search text in current directory"
 }
 
 lvim.builtin.alpha.active = true
-lvim.builtin.notify.active = true
+lvim.builtin.alpha.mode = "dashboard"
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
+lvim.builtin.nvimtree.setup.renderer.icons.show.git = true
 
+-- if you don't want all the parsers change this to a table of the ones you want
 lvim.builtin.treesitter.ensure_installed = {
   "bash",
-  "hcl",
   "c",
+  "css",
+  "hcl",
+  "java",
   "javascript",
   "json",
+  "lua",
   "make",
   "markdown",
-  "lua",
   "python",
-  "typescript",
-  "css",
   "rust",
-  "java",
+  "tsx",
+  "typescript",
   "yaml",
 }
 
@@ -89,10 +66,6 @@ lvim.builtin.treesitter.ignore_install = { "haskell" }
 lvim.builtin.treesitter.highlight.enabled = true
 
 -- generic LSP settings
-lvim.lsp.automatic_servers_installation = false
-
-require 'lspconfig'.marksman.setup {}
-
 require("lvim.lsp.manager").setup("dockerls", {
   settings = {
     docker = {
@@ -109,36 +82,24 @@ local formatters = require "lvim.lsp.null-ls.formatters"
 formatters.setup {
   { exe = "black", filetypes = { "python" } },
   { exe = "isort", filetypes = { "python" } },
-  { exe = "terraform_fmt", filetypes = { "terraform" } },
-  {
-    exe = "prettier",
-    args = { "--print-with", "80" },
-    filetypes = { "typescript", "typescriptreact", "markdown" },
-  },
+  { exe = "terraform_fmt", filetypes = { "terraform" } }
 }
 
--- -- set additional linters
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {
+  { command = "flake8", filetypes = { "python" } },
   {
-    exe = "flake8",
-    filetypes = { "python" }
+    -- each linter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
+    command = "shellcheck",
+    extra_args = { "--severity", "warning" },
   },
   {
-    exe = "shellcheck",
-    filetypes = { "sh" },
-  },
-  {
-    exe = "codespell",
+    command = "codespell"
   },
 }
 
 -- Additional Plugins
 lvim.plugins = {
-  {
-    "folke/trouble.nvim",
-    cmd = "TroubleToggle",
-  },
   {
     "tpope/vim-surround",
     "tpope/vim-repeat",
@@ -147,9 +108,9 @@ lvim.plugins = {
   },
   {
     "iamcco/markdown-preview.nvim",
-    opt = true,
+    lazy = true,
     ft = "markdown",
-    run = "cd app && yarn install"
+    build = "cd app && yarn install"
   },
   {
     "ntpeters/vim-better-whitespace",
@@ -167,7 +128,7 @@ lvim.plugins = {
   },
   {
     'mrjones2014/dash.nvim',
-    run = 'make install',
+    build = 'make install',
   },
   {
     'towolf/vim-helm'
@@ -183,40 +144,6 @@ vim.g.better_whitespace_filetypes_blacklist = {
   "TelescopePrompt",
 }
 
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = {
-    "md", "markdown"
-  },
-  command = [[setlocal textwidth=80]]
-})
-
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = {
-    "json5"
-  },
-  command = [[set filetype=json]]
-})
-
-
-lvim.lsp.buffer_options.formatexpr = "" -- don't use LSP for `gq`
-
-local init_custom_options = function()
-  local custom_options = {
-    relativenumber = true, -- Set relative numbered lines
-    colorcolumn = "80",
-    shell = "/bin/sh"
-  }
-
-  for k, v in pairs(custom_options) do
-    vim.opt[k] = v
-  end
-end
-
-init_custom_options()
-
-------------------------
--- LSP
-------------------------
 lvim.lsp.on_attach_callback = function(client, bufnr)
   if vim.bo[bufnr].buftype ~= "" or vim.bo[bufnr].filetype == "helm" then
     vim.diagnostic.disable()

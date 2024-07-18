@@ -44,7 +44,7 @@
 - name: "set global software versions"
   ansible.builtin.command: >
     asdf global {{ item.name }}
-    {{ item.global | default(item.versions | difference(item.delete_versions|default([])) | sort | first) }}
+    {{ item.global | default(item.versions | difference(item.delete_versions|default([])) | map('string') | sort | first) }}
   environment:
     PATH: "{{ ansible_env.PATH }}:{{ ansible_user_dir }}/.asdf/bin"
   args:

@@ -12,17 +12,12 @@ brew:
     - aws/tap
     - carlocab/personal
     - homebrew/bundle
-    - homebrew/cask
-    - homebrew/cask-fonts
-    - homebrew/core
-    - cloudflare/cloudflare
   casks:
     - 1password
     - alacritty
     - alt-tab
     - aws-vault
     - brave-browser
-    - cloudflare/cloudflare/cf-terraforming
     - font-fira-code-nerd-font
     - hiddenbar
     - kdiff3
@@ -30,7 +25,6 @@ brew:
     - rectangle
     - slack
     - telegram
-    - tunnelblick
   packages:
     common:
       - asciinema
@@ -63,7 +57,7 @@ brew:
       - packer
       - pkg-config
       - pre-commit
-      - python-yq
+      - yq
       - ripgrep
       - sponge
       - terraform-docs
@@ -95,7 +89,8 @@ dotfiles:
   branch: 'master'
 
 neovim:
-  build_from_source: false
+  build_from_source: true
+  neovim_version: 0.9.5
   directory: "{{ ansible_user_dir }}/Development/repository/github.com/neovim/neovim"
   build_dependencies:
     - autoconf
@@ -111,19 +106,21 @@ neovim:
     - pkg-config
     - unzip
 
-asdf_version: "v0.9.0"
+asdf_version: "v0.14.0"
 asdf_plugins:
   - name: "python"
     repository: "https://github.com/danhper/asdf-python"
     versions:
       - 3.10.1
+      - 3.11.8
     delete_versions: []
-    global: system
+    global: 3.11.8
 
   - name: "golang"
     repository: "https://github.com/kennyp/asdf-golang"
     versions:
       - 1.18
+      - 1.22.5
     delete_versions: []
     global: system
 
@@ -138,6 +135,7 @@ asdf_plugins:
     repository: "https://github.com/asdf-vm/asdf-nodejs"
     versions:
       - 17.7.2
+      - 21.2.0
     delete_versions: []
     global: system
 
@@ -145,29 +143,30 @@ asdf_plugins:
     repository: "https://github.com/asdf-community/asdf-hashicorp"
     versions:
       - 1.1.7
+      - 1.9.2
     delete_versions: []
-    global: 1.1.7
+    global: 1.9.2
 
   - name: "terraform-ls"
     repository: "https://github.com/shihanng/asdf-terraform-ls"
     versions:
-      - 0.26.0
+      - 0.34.0
     delete_versions: []
-    global: 0.26.0
+    global: 0.34.0
 
   - name: "kubectl"
     repository: "https://github.com/asdf-community/asdf-kubectl"
     versions:
-      - 1.23.0
+      - 1.30.2
     delete_versions: []
-    global: 1.23.0
+    global: 1.30.2
 
   - name: "helm"
     repository: "https://github.com/Antiarchitect/asdf-helm"
     versions:
-      - 3.8.1
+      - 3.15.3
     delete_versions: []
-    global: 3.8.1
+    global: 3.15.3
 
 golang:
   path: '{{ ansible_user_dir }}/.go'

@@ -10,11 +10,11 @@
 #   - audio speakers
 #
 
-if ! command -v "SwitchAudioSource" &> /dev/null; then
-    echo "SwitchAudioSource could not be found."
-    echo "Run:"
-    echo "  - brew install switchaudio-osx"
-    exit
+if ! command -v "SwitchAudioSource" &>/dev/null; then
+  echo "SwitchAudioSource could not be found."
+  echo "Run:"
+  echo "  - brew install switchaudio-osx"
+  exit
 fi
 
 set_speakers() {
@@ -23,26 +23,26 @@ set_speakers() {
 }
 
 set_headphones() {
-  SwitchAudioSource -t input -s "Sennheiser SC60 for Lync"
-  SwitchAudioSource -t output -s "Sennheiser SC60 for Lync"
+  SwitchAudioSource -t input -s "Jabra Evolve2 40 SE"
+  SwitchAudioSource -t output -s "Jabra Evolve2 40 SE"
 }
 
 toggle() {
   if test "$(SwitchAudioSource -c)" == "MacBook Pro Speakers"; then
     set_headphones
-  elif test "$(SwitchAudioSource -c)" == "Sennheiser SC60 for Lync"; then
+  elif test "$(SwitchAudioSource -c)" == "Jabra Evolve2 40 SE"; then
     set_speakers
   fi
 }
 
 case "$1" in
-  headphones)
-    set_headphones
-    ;;
-  speakers)
-    set_speakers
-    ;;
-  *)
-    toggle
-;;
+headphones)
+  set_headphones
+  ;;
+speakers)
+  set_speakers
+  ;;
+*)
+  toggle
+  ;;
 esac

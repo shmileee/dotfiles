@@ -108,29 +108,6 @@ osx_global_defaults:
   #########################################
 
   - { name: "increase sound quality for bluetooth headphones/headsets", domain: com.apple.BluetoothAudioAgent, key: "Apple Bitpool Min (editable)", type: int, value: 40 }
-
-  #########################################
-  # Safari
-  #########################################
-
-  - { name: "don’t send search queries to apple", domain: com.apple.safari, key: UniversalSearchEnabled, type: bool, value: false }
-  - { name: "enable apple universal search", domain: com.apple.safari, key: UniversalSearchEnabled, type: bool, value: false }
-  - { name: "press tab to highlight each item on a web page", domain: com.apple.safari, key: WebKitTabToLinksPreferenceKey, type: bool, value: true }
-  - { name: "webkit tabs to links", domain: com.apple.safari, key: com.apple.Safari.ContentPageGroupIdentifier.WebKit2TabsToLinks, type: bool, value: true }
-  # (note: this still hides the scheme)
-  - { name: "show the full url in the address bar", domain: com.apple.safari, key: ShowFullURLInSmartSearchField, type: bool, value: true }
-  - { name: "set safari’s home page to `about:blank` for faster loading", domain: com.apple.safari, key: HomePage, type: string, value: "about:blank" }
-  - { name: "prevent safari from opening safe files automatically after downloading", domain: com.apple.safari, key: AutoOpenSafeDownloads, type: bool, value: false }
-  - { name: "allow hitting the backspace key to go to the previous page in history", domain: com.apple.safari, key: com.apple.Safari.ContentPageGroupIdentifier.WebKit2BackspaceKeyNavigationEnabled, type: bool, value: true }
-  - { name: "hide safari’s bookmarks bar by default", domain: com.apple.safari, key: ShowFavoritesBar, type: bool, value: false }
-  - { name: "hide safari’s sidebar in top sites", domain: com.apple.safari, key: ShowSidebarInTopSites, type: bool, value: false }
-  - { name: "disable safari’s thumbnail cache for history and top sites", domain: com.apple.safari, key: DebugSnapshotsUpdatePolicy, type: int, value: 2 }
-  - { name: "make safari’s search banners default to contains instead of starts with", domain: com.apple.safari, key: FindOnPageMatchesWordStartsOnly, type: bool, value: false }
-  - { name: "enable continuous spellchecking on the web", domain: com.apple.safari, key: WebContinuousSpellCheckingEnabled, type: bool, value: true }
-  - { name: "disable auto-correct", domain: com.apple.safari, key: WebAutomaticSpellingCorrectionEnabled, type: bool, value: false }
-  - { name: "block pop-up windows", domain: com.apple.safari, key: WebKitJavaScriptCanOpenWindowsAutomatically, type: bool, value: false }
-  - { name: "javascript cannot open windows automatically", domain: com.apple.safari, key: com.apple.Safari.ContentPageGroupIdentifier.WebKit2JavaScriptCanOpenWindowsAutomatically, type: bool, value: false }
-  - { name: "enable do not track", domain: com.apple.safari, key: SendDoNotTrackHTTPHeader, type: bool, value: true }
   - { name: "don't use natural scrolling", domain: NSGlobalDomain, key: com.apple.swipescrolldirection, type: bool, value: false }
   - { name: "set dark mode", domain: NSGlobalDomain, key: AppleInterfaceStyle, type: string, value: Dark }
   - { name: "quit printer app once jobs are complete", domain: com.apple.print.PrintingPrefs, key: 'Quit When Finished', type: boolean, value: true }
