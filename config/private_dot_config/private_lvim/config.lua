@@ -89,7 +89,6 @@ local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {
   { command = "flake8", filetypes = { "python" } },
   {
-    -- each linter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
     command = "shellcheck",
     extra_args = { "--severity", "warning" },
   },
@@ -132,6 +131,9 @@ lvim.plugins = {
   },
   {
     'towolf/vim-helm'
+  },
+  {
+    'terramate-io/vim-terramate'
   }
 }
 
@@ -149,3 +151,13 @@ lvim.lsp.on_attach_callback = function(client, bufnr)
     vim.diagnostic.disable()
   end
 end
+
+lvim.autocommands = {
+  {
+    "BufWritePre",
+    {
+      pattern = { "*.tm", "*.tm.hcl" },
+      command = "silent :execute '!terramate fmt' | edit! %",
+    }
+  },
+}
