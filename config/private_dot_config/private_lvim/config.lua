@@ -1,4 +1,8 @@
 -- general
+vim.opt.spell = true
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+
 lvim.log.level = "warn"
 lvim.format_on_save = true
 lvim.colorscheme = "onedarker"
@@ -13,6 +17,11 @@ lvim.keys.normal_mode["o"] = "o<Esc>"
 lvim.keys.normal_mode["O"] = "O<Esc>"
 lvim.keys.normal_mode["<S-h>"] = "<cmd>bnext<CR>"
 lvim.keys.normal_mode["<S-l>"] = "<cmd>bprev<CR>"
+lvim.keys.normal_mode["k"] = "gk"
+lvim.keys.normal_mode["j"] = "gj"
+lvim.keys.visual_mode["p"] = "pgvy"
+lvim.keys.normal_mode["Y"] = "y$"
+lvim.keys.visual_mode["y"] = "ygv<esc>"
 
 -- Change Telescope navigation to use j and k for navigation and n and p for history in both input and normal mode.
 -- we use protected-mode (pcall) just in case the plugin wasn't loaded yet.
@@ -37,6 +46,9 @@ lvim.builtin.which_key.mappings["st"] = {
   "<cmd>lua require('telescope.builtin').live_grep({cwd = require('telescope.utils').buffer_dir()})<CR>",
   "Search text in current directory"
 }
+
+lvim.builtin.which_key.mappings["n"] = { "<cmd>normal! mz[s1z=`z<CR>", "Fix spelling" }
+lvim.builtin.which_key.mappings["r"] = { ":%s///g<Left><Left>", "Replace" }
 
 lvim.builtin.alpha.active = true
 lvim.builtin.alpha.mode = "dashboard"
