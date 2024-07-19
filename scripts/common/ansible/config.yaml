@@ -39,7 +39,7 @@ brew:
       - direnv
       - dos2unix
       - dust
-      - exa
+      - eza
       - fd
       - fzf
       - gh

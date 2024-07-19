@@ -20,13 +20,13 @@ if command -v tree > /dev/null
   alias tree 'tree -a -I ".git|*.pyc|*pycache*"'
 end
 
-# exa
-if command -v exa > /dev/null
-  alias l="exa --icons"
-  alias ls="exa --git --icons"
-  alias la="exa --git -a --icons"
-  alias ll="exa -lab --git --icons"
-  alias tree="exa --tree --icons"
+# eza
+if command -v eza > /dev/null
+  alias l="eza --icons"
+  alias ls="eza --git --icons"
+  alias la="eza --git -a --icons"
+  alias ll="eza -lab --git --icons"
+  alias tree="eza --tree --icons"
 else
   alias l="ls"
   alias la="ls -a"

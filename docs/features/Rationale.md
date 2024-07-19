@@ -19,7 +19,7 @@ otherwise. One of the biggest advantages of Ansible is that (if properly
 described) tasks follow
 [idempotency](https://docs.ansible.com/ansible/latest/reference_appendices/glossary.html#term-Idempotency)
 principle, which means playbook can be run over and over again without having to
-worry about your precious files accidentally being removed. 
+worry about your precious files accidentally being removed.
 
 All in all - there are many automation solutions out there - I happen to enjoy
 using Ansible.
@@ -47,7 +47,7 @@ important features of chezmoi:
 - **Practical**: chezmoi manages hidden files (dot files), directories, private, and
   executable files.
 - **Fast, easy to use, and familiar**: chezmoi runs in fractions of a second and
-  includes commands to make most operations trivial. 
+  includes commands to make most operations trivial.
 
 The biggest driver for choosing chezmoi was my intention to follow single
 responsibility principle: dotfiles should be managed separately.
@@ -58,7 +58,7 @@ I used regular Vim for a couple of years until it has become really painful to
 manage a 500+ lines file. I've made an attempt to switch to Neovim after
 watching Vimconf hosted by [ThePrimagen](https://github.com/ThePrimeagen) and
 [TJ DeVries](https://github.com/tjdevries). This switch made me realize I don't
-understand half of the Lua configuration. 
+understand half of the Lua configuration.
 
 Luckily, it turned out that most of the keymaps, plugins and sane defaults I was
 trying to configure are not necessarily specific and lots of people tend to
@@ -74,7 +74,7 @@ than 10 options.
 
 Fish ecosystem is great for interactive shells. I still write day-to-day scripts
 in pure bash, but the amount of features that comes preconfigured with fish is just
-too good to resist. 
+too good to resist.
 
-!!! warning 
+!!! warning
     Fish is not POSIX compatible shell.
