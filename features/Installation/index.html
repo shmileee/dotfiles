@@ -633,10 +633,10 @@ xcode-select<span class="w"> </span>--install
 macOS).</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
+</div>
 <p>If your machine has already homebrew preinstalled, - make sure you have the full
 ownership over directories managed by <code>brew</code>. See
 <a href="https://github.com/homebrew/brew/issues/3665">this</a> issue for more information.</p>
-</div>
 <h2 id="running-setupsh">Running <code>setup.sh</code><a class="headerlink" href="#running-setupsh" title="Permanent link">&para;</a></h2>
 <p>Bootstrap the installation procedure by running
 <a href="https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh"><code>setup.sh</code></a>.
@@ -666,15 +666,15 @@ chmod<span class="w"> </span>+x<span class="w"> </span>setup.sh
 <p>Execute
   <a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible.sh"><code>ansible.sh</code></a>,
   which in turn will:</p>
-<ul>
-<li>Install <code>community.general</code> Ansible collection</li>
-<li>Check if passwordless <code>sudo</code> is available (if no, - the script will prompt you for
-  password)</li>
-<li>Execute
-  <a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/main.yaml"><code>main.yaml</code></a>
-  playbook</li>
-</ul>
 </li>
+<li>
+<p>Install <code>community.general</code> Ansible collection</p>
+</li>
+<li>Check if passwordless <code>sudo</code> is available (if no, - the script will prompt you for
+    password)</li>
+<li>Execute
+    <a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/main.yaml"><code>main.yaml</code></a>
+    playbook</li>
 </ul>
 <h2 id="ansible">Ansible<a class="headerlink" href="#ansible" title="Permanent link">&para;</a></h2>
 <p>The
@@ -683,7 +683,7 @@ playbook is the main entrypoint for configuring the actual system and dotfiles.<
 <p>The
 <a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml"><code>config.yaml</code></a>
 file allows you to personalize the setup to your needs. At most it contains a
-list of packages and their versions (in case of tools managed by <code>asdf</code>) to
+list of packages and their versions (in case of tools managed by <code>mise</code>) to
 install.</p>
 <p>The
 <a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml#L86-L88"><code>dotfiles:</code></a>
@@ -692,13 +692,13 @@ dotfiles to the system. If you tend to reuse this playbook, make sure to adjust
 the variable accordingly.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
+</div>
 <p>Certain Ansible tasks expect specific dotfiles to be in place, e.g.
 <a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/roles/tmux/tasks/main.yaml#L22-L26"><code>install tmux
-plugins</code></a>
+    plugins</code></a>
 will fail if
 <a href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf#L188"><code>tmux.conf</code></a>
 is missing or does not include <code>run '~/.tmux/plugins/tpm/tpm'</code> line.</p>
-</div>
 <p>Supported Ansible roles:</p>
 <ul>
 <li><code>common</code> - Install basic system dependencies for Debian-based distribution
@@ -713,7 +713,7 @@ is missing or does not include <code>run '~/.tmux/plugins/tpm/tpm'</code> line.<
   neovim will be compiled. Otherwise, download nightly deb package from
   GitHub. On macOS neovim is installed using HEAD revision via brew.</li>
 <li><code>lunarvim</code> - Install LunarVim and reapply chezmoi to populate <code>config.lua</code></li>
-<li><code>asdf</code> - Install asdf version manager for typical packages that need more
+<li><code>mise</code> - Install mise version manager for typical packages that need more
   granular control over. All tools and their respective versions are defined in
   <code>config.yaml</code>.</li>
 <li><code>docker</code> - Install docker using brew.</li>
@@ -801,7 +801,7 @@ is missing or does not include <code>run '~/.tmux/plugins/tpm/tpm'</code> line.<
      │
      │                 ┌────────────────────┐
      │  ┌────┐         │ install plugins    │
-     ├─►│asdf├────────►│ install tools      │
+     ├─►│mise├────────►│ install tools      │
      │  └────┘         │ set global versions│
      │                 └────────────────────┘
      │
