@@ -5,7 +5,7 @@ function fif --description="Using ripgrep combined with preview"
         rg --files-with-matches --no-messages "$argv[1]" | fzf --preview \
             "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' \
          --ignore-case --pretty --context 10 '$argv[1]' || rg --ignore-case \
-         --pretty --context 10 '$argv[1]' {}" | xargs -o lvim
+         --pretty --context 10 '$argv[1]' {}" | xargs -o nvim
     end
 end
 
@@ -19,9 +19,9 @@ function vdiff --description="Compare two files or dirs with vim"
         set --local right "$argv[2]"
 
         if [ -d "$left" ] && [ -d "$right" ]
-            lvim +"DirDiff $left $right"
+            nvim +"DirDiff $left $right"
         else
-            lvim -d "$left" "$right"
+            nvim -d "$left" "$right"
         end
     end
 end

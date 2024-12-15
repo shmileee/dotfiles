@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
-ecs_task_id=$(aws --profile tu-ops ecs list-tasks --cluster atlantis | jq '.taskArns[0]' -r | sed 's|.*/||')
+export AWS_REGION=eu-west-1
 
-aws --profile tu-ops ecs execute-command  \
-     --region eu-west-1 \
-     --cluster atlantis \
-     --task "${ecs_task_id}" \
-     --container atlantis \
-     --command "/bin/bash" \
-     --interactive
+ecs_task_id=$(aws --profile iris-operations ecs list-tasks --cluster atlantis | jq '.taskArns[0]' -r | sed 's|.*/||')
+
+aws --profile iris-operations ecs execute-command \
+  --region eu-west-1 \
+  --cluster atlantis \
+  --task "${ecs_task_id}" \
+  --container atlantis \
+  --command "/bin/bash" \
+  --interactive

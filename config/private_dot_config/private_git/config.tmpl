@@ -1,5 +1,7 @@
+[ghq "ssh://git@github.com/shmileee"]
+  root = ~/private
 [core]
-  editor = lvim
+  editor = nvim
   excludesfile = ~/.config/git/ignore
 [color "diff"]
   whitespace = red reverse
@@ -19,6 +21,8 @@
   path = ~/.config/git/work
 [includeIf "gitdir:/tmp/**/**"]
   path = ~/.config/git/work
+[includeIf "gitdir:~/private/**"]
+  path = ~/.config/git/personal
 [credential]
   helper = store
 [pull]
@@ -28,3 +32,5 @@
   defaultBranch = main
 [push]
   default = current
+[rerere]
+  enabled = true

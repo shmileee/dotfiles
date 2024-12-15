@@ -1,2 +1,2 @@
 os:
-  edit: 'lvim {{filename}}'
+  edit: 'nvim {{filename}}'
