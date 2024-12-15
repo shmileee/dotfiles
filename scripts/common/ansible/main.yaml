@@ -22,8 +22,8 @@
     - name: neovim
       tags: neovim
 
-    - name: lunarvim
-      tags: lunarvim
+    # - name: lunarvim
+    #   tags: lunarvim
 
     - name: asdf
       tags: asdf
