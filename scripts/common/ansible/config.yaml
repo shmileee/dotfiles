@@ -21,14 +21,12 @@ brew:
     - font-fira-code-nerd-font
     - hiddenbar
     - kdiff3
-    - multipass
     - rectangle
     - slack
     - telegram
   packages:
     common:
       - asciinema
-      - asdf
       - autoconf
       - automake
       - awscli
@@ -53,8 +51,8 @@ brew:
       - kustomize
       - lazygit
       - lua-language-server
+      - mise
       - p7zip
-      - packer
       - pkg-config
       - pre-commit
       - yq
@@ -85,8 +83,8 @@ brew:
     - duf
 
 dotfiles:
-  repo: 'https://github.com/shmileee/dotfiles'
-  branch: 'master'
+  repo: "https://github.com/shmileee/dotfiles"
+  branch: "master"
 
 neovim:
   build_from_source: true
@@ -169,7 +167,7 @@ asdf_plugins:
     global: 3.15.3
 
 golang:
-  path: '{{ ansible_user_dir }}/.go'
+  path: "{{ ansible_user_dir }}/.go"
   packages:
     - golang.org/x/tools/gopls@latest
 
