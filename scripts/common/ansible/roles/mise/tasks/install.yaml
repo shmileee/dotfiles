@@ -1,0 +1,34 @@
+---
+- name: "core :: install tools"
+  ansible.builtin.command: >
+    mise install {{ item.0.name }}@{{ item.1 }}
+  args:
+    creates: ".local/share/mise/installs/{{ item.0.name }}/{{ item.1 }}"
+    chdir: "{{ ansible_user_dir }}"
+  with_subelements:
+    - "{{ mise_tools.core }}"
+    - versions
+  when: mise_tools.core | length > 0
+
+- name: "core :: set the newest version as default"
+  ansible.builtin.command: >
+    mise use --global {{ item.name }}@{{ item.versions | sort | last }}
+  loop: "{{ mise_tools.core }}"
+  when: mise_tools.core | length > 0
+
+- name: "extra :: install tools with `aqua` backend"
+  ansible.builtin.command: >
+    mise use --global aqua:{{ item.0.name }}@{{ item.1 }}
+  args:
+    creates: ".local/share/mise/installs/aqua-{{ item.0.name }}/{{ item.1 }}"
+    chdir: "{{ ansible_user_dir }}"
+  with_subelements:
+    - "{{ mise_tools.aqua }}"
+    - versions
+  when: mise_tools.aqua | length > 0
+
+- name: "extra :: set the newest version as default"
+  ansible.builtin.command: >
+    mise use --global {{ item.name }}@{{ item.versions | sort | last }}
+  loop: "{{ mise_tools.core }}"
+  when: mise_tools.core | length > 0

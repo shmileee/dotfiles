@@ -104,67 +104,48 @@ neovim:
     - pkg-config
     - unzip
 
-asdf_version: "v0.14.0"
-asdf_plugins:
-  - name: "python"
-    repository: "https://github.com/danhper/asdf-python"
-    versions:
-      - 3.10.1
-      - 3.11.8
-    delete_versions: []
-    global: 3.11.8
+mise_tools:
+  core:
+    - name: "python"
+      versions:
+        - 3.11.8
 
-  - name: "golang"
-    repository: "https://github.com/kennyp/asdf-golang"
-    versions:
-      - 1.18
-      - 1.22.5
-    delete_versions: []
-    global: system
+    - name: "go"
+      versions:
+        - 1.23.4
+        - 1.21.0
 
-  - name: "ruby"
-    repository: "https://github.com/asdf-vm/asdf-ruby"
-    versions:
-      - 3.0.3
-    delete_versions: []
-    global: system
+    - name: "ruby"
+      versions:
+        - 3.3.6
 
-  - name: "nodejs"
-    repository: "https://github.com/asdf-vm/asdf-nodejs"
-    versions:
-      - 17.7.2
-      - 21.2.0
-    delete_versions: []
-    global: system
+    - name: "node"
+      versions:
+        - 21.2.0
+  aqua:
+    - name: "terraform"
+      versions:
+        - 1.10.2
 
-  - name: "terraform"
-    repository: "https://github.com/asdf-community/asdf-hashicorp"
-    versions:
-      - 1.1.7
-      - 1.9.2
-    delete_versions: []
-    global: 1.9.2
+    - name: "terraform-ls"
+      versions:
+        - 0.36.2
 
-  - name: "terraform-ls"
-    repository: "https://github.com/shihanng/asdf-terraform-ls"
-    versions:
-      - 0.34.0
-    delete_versions: []
-    global: 0.34.0
+    - name: "kubectl"
+      versions:
+        - 1.32.0
 
-  - name: "kubectl"
-    repository: "https://github.com/asdf-community/asdf-kubectl"
-    versions:
-      - 1.30.2
-    delete_versions: []
-    global: 1.30.2
+    - name: "helm"
+      versions:
+        - 3.16.3
 
-  - name: "helm"
-    repository: "https://github.com/Antiarchitect/asdf-helm"
-    versions:
-      - 3.15.3
-    delete_versions: []
-    global: 3.15.3
+    - name: "pre-commit"
+      versions:
+        - 4.0.1
+
+    - name: "terramate"
+      versions:
+        - 0.11.4
 
 golang:
   path: "{{ ansible_user_dir }}/.go"

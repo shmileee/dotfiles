@@ -1,9 +1,7 @@
 ---
-
 - name: "install packages"
   community.general.npm:
-    name: '{{ item }}'
+    name: "{{ item }}"
     global: true
-    executable: '{{ ansible_user_dir }}/.asdf/shims/npm'
-  with_items: '{{ nodejs.packages }}'
+  with_items: "{{ nodejs.packages }}"
   when: nodejs.packages

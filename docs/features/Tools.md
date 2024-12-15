@@ -24,8 +24,7 @@ Here's a non-exhaustive list of everything I used in my personal dotfiles.
 
 - [homebrew](https://brew.sh/) as primary package manager ([casks +
   formulas](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml#L10)).
-- [asdf](https://asdf-vm.com) as version manager for various system tools
-  ([packages](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml#L108)).
+- [mise](https://blog.oponomarov.com/posts/mise-faster-smarter-tool-versioning) as version manager for various system tools.
 
 **Apps**
 

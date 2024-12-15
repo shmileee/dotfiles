@@ -21,9 +21,9 @@ The Xcode Command Line Tools includes `git` and `make` (not available on stock
 macOS).
 
 !!! warning
-    If your machine has already homebrew preinstalled, - make sure you have the full
-    ownership over directories managed by `brew`. See
-    [this](https://github.com/homebrew/brew/issues/3665) issue for more information.
+If your machine has already homebrew preinstalled, - make sure you have the full
+ownership over directories managed by `brew`. See
+[this](https://github.com/homebrew/brew/issues/3665) issue for more information.
 
 ## Running `setup.sh`
 
@@ -62,25 +62,23 @@ The script will:
   [`ansible.sh`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible.sh),
   which in turn will:
 
-    - Install `community.general` Ansible collection
-    - Check if passwordless `sudo` is available (if no, - the script will prompt you for
-      password)
-    - Execute
-      [`main.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/main.yaml)
-      playbook
+  - Install `community.general` Ansible collection
+  - Check if passwordless `sudo` is available (if no, - the script will prompt you for
+    password)
+  - Execute
+    [`main.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/main.yaml)
+    playbook
 
 ## Ansible
-
 
 The
 [following](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/main.yaml)
 playbook is the main entrypoint for configuring the actual system and dotfiles.
-  
 
 The
 [`config.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml)
 file allows you to personalize the setup to your needs. At most it contains a
-list of packages and their versions (in case of tools managed by `asdf`) to
+list of packages and their versions (in case of tools managed by `mise`) to
 install.
 
 The
@@ -90,12 +88,12 @@ dotfiles to the system. If you tend to reuse this playbook, make sure to adjust
 the variable accordingly.
 
 !!! warning
-    Certain Ansible tasks expect specific dotfiles to be in place, e.g.
-    [`install tmux
+Certain Ansible tasks expect specific dotfiles to be in place, e.g.
+[`install tmux
     plugins`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/roles/tmux/tasks/main.yaml#L22-L26)
-    will fail if
-    [`tmux.conf`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf#L188)
-    is missing or does not include `run '~/.tmux/plugins/tpm/tpm'` line.
+will fail if
+[`tmux.conf`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf#L188)
+is missing or does not include `run '~/.tmux/plugins/tpm/tpm'` line.
 
 Supported Ansible roles:
 
@@ -111,7 +109,7 @@ Supported Ansible roles:
   neovim will be compiled. Otherwise, download nightly deb package from
   GitHub. On macOS neovim is installed using HEAD revision via brew.
 - `lunarvim` - Install LunarVim and reapply chezmoi to populate `config.lua`
-- `asdf` - Install asdf version manager for typical packages that need more
+- `mise` - Install mise version manager for typical packages that need more
   granular control over. All tools and their respective versions are defined in
   `config.yaml`.
 - `docker` - Install docker using brew.
@@ -201,7 +199,7 @@ Supported Ansible roles:
      │
      │                 ┌────────────────────┐
      │  ┌────┐         │ install plugins    │
-     ├─►│asdf├────────►│ install tools      │
+     ├─►│mise├────────►│ install tools      │
      │  └────┘         │ set global versions│
      │                 └────────────────────┘
      │
