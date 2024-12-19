@@ -22,9 +22,6 @@
     - name: neovim
       tags: neovim
 
-    # - name: lunarvim
-    #   tags: lunarvim
-
     - name: mise
       tags: mise
 

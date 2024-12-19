@@ -1,80 +1,76 @@
-# Rationale
+**Rationale**
+
 ---
 
 ## Goal
 
-Provide fully automated development environment that is easy to setup and
-maintain.
+The goal is to provide a fully automated development environment that’s both
+easy to set up and maintain.
 
-## Why Ansible?
+## Why `ansible`?
 
-In my experience Ansible has the easiest learning curve. It has its own caveats
-and gotchas, but overall it's pretty straightforward to read YAML configuration
-for a person that knows very little about how Ansible works. It's almost like
-reading plain English with very rare exceptions. Additionally, Ansible is a
-Swiss army knife orchestration tool. You can use it and abuse it in many
-different ways which might or might not be supported via other popular
-solution like [NixOS Home Manager](https://nixos.wiki/wiki/Home_Manager)
-otherwise. One of the biggest advantages of Ansible is that (if properly
-described) tasks follow
-[idempotency](https://docs.ansible.com/ansible/latest/reference_appendices/glossary.html#term-Idempotency)
-principle, which means playbook can be run over and over again without having to
-worry about your precious files accidentally being removed.
+In my experience, `ansible` is one of the easiest automation tools to learn.
+Although it has its share of nuances, its YAML-based configuration is generally
+straightforward to understand—even for users with limited knowledge of
+`ansible`. It’s almost like reading plain English most of the time.
 
-All in all - there are many automation solutions out there - I happen to enjoy
-using Ansible.
+Additionally, `ansible` is like a Swiss Army knife of orchestration tools. It
+can be adapted to a wide range of tasks, some of which might not be supported
+by other popular solutions like `NixOS Home Manager`. One of its greatest
+strengths is that tasks, when properly described, adhere to the principle of
+[idempotency](https://docs.ansible.com/ansible/latest/reference_appendices/glossary.html#term-Idempotency).
+This means you can rerun a playbook repeatedly without worrying about
+unintended removal or duplication of your files.
 
-## Why Chezmoi?
+In a world full of automation solutions, I simply happen to enjoy using
+`ansible` the most.
 
-Chezmoi is another tool for managing dotfiles. It seems to be [the most
-popular](https://dotfiles.github.io/utilities) choice these days with over 6k+
-stars. Prior to switch, I've used GNU Stow which had it's job done but
-unfortunately lacked a couple of features chezmoi tends to resolve. The most
-important features of chezmoi:
+## Why `chezmoi`?
 
-- **Flexible**: dotfiles can be templates (using text/template syntax). While this
-  can be achieved using Ansible builtin Jinja templates, - chezmoi provides a
-  set of variables that can be used inside the template for simple assertions
-  like the platform you're currently running on, architecture, hostname,
-  environmental variables lookup and many more. Additionally, testing Jinja
-  templates in Ansible is very cumbersome. With chezmoi this is as simple as
-  running `chezmoi execute-template < file.tmpl`.
-- **Portable**: chezmoi's configuration uses only visible, regular files and
-  directories and so is portable across version control systems and operating
-  systems.
-- **Transparent**: chezmoi includes verbose and dry run modes so you can review
-  exactly what changes it will make to your home directory before making them.
-- **Practical**: chezmoi manages hidden files (dot files), directories, private, and
-  executable files.
-- **Fast, easy to use, and familiar**: chezmoi runs in fractions of a second and
-  includes commands to make most operations trivial.
+`chezmoi` is a powerful tool for managing dotfiles. It’s currently one of the
+most popular solutions, boasting over 6k stars on GitHub. Before `chezmoi`, I
+used `gnu stow`, which worked fine but lacked several features that `chezmoi`
+conveniently provides.
 
-The biggest driver for choosing chezmoi was my intention to follow single
-responsibility principle: dotfiles should be managed separately.
+Key benefits of `chezmoi` include:
 
-## Why LunarVim?
+- **Flexible**: Dotfiles can be templates using text/template syntax. While
+  `ansible` has Jinja templates, `chezmoi` offers built-in variables for platform
+  detection, architecture, hostname, environment variables, and more. Testing
+  these templates in `chezmoi` is much simpler—just run `chezmoi execute-template
+< file.tmpl`.
+- **Portable**: `chezmoi` configurations rely solely on visible, regular files
+  and directories, ensuring portability across different version control systems
+  and operating systems.
+- **Transparent**: Verbose and dry-run modes let you preview changes before
+  they’re applied, giving you complete control over what happens in your home
+  directory.
+- **Practical**: `chezmoi` manages hidden files, directories, private files,
+  and executables—essentially all the typical elements of a dotfiles repository.
+- **Fast and Easy to Use**: `chezmoi` runs in fractions of a second, and it
+  provides commands that simplify most common operations.
 
-I used regular Vim for a couple of years until it has become really painful to
-manage a 500+ lines file. I've made an attempt to switch to Neovim after
-watching Vimconf hosted by [ThePrimagen](https://github.com/ThePrimeagen) and
-[TJ DeVries](https://github.com/tjdevries). This switch made me realize I don't
-understand half of the Lua configuration.
+By using `chezmoi`, I can adhere to the single-responsibility principle:
+managing dotfiles independently from other system configuration tasks.
 
-Luckily, it turned out that most of the keymaps, plugins and sane defaults I was
-trying to configure are not necessarily specific and lots of people tend to
-configure Neovim this way. In fact,
-[LunarVim](https://github.com/LunarVim/LunarVim) does this pretty well by
-providing a community driven framework for Neovim that acts like a wrapper with
-a bunch of common plugins. I happen to enjoy most of the stuff they ship out of
-the box. As an experienced Vim user, I found I only needed to install a couple
-more plugins to feel comfortable, rebind a couple of keys and configure less
-than 10 options.
+## Why `LazyVim`?
 
-## Why Fish?
+I used `vim` for years until my configuration ballooned to over 500 lines,
+making it a challenge to maintain. My switch to `neovim` was inspired by talks
+from [ThePrimagen](https://github.com/ThePrimeagen) and [TJ
+DeVries](https://github.com/tjdevries), which also made me realize I didn’t
+fully grasp the Lua-based configuration system that `neovim` uses.
 
-Fish ecosystem is great for interactive shells. I still write day-to-day scripts
-in pure bash, but the amount of features that comes preconfigured with fish is just
-too good to resist.
+It turned out that most of the common keymaps, plugins, and sensible defaults I
+was after were already configured by many in the `neovim` community. Enter
+`LazyVim`: it provides a community-driven framework for `neovim`, bundling
+common plugins and sensible defaults. This allowed me to avoid starting from
+scratch and reinventing the wheel. I only needed to add a few extra plugins,
+tweak some keybindings, and configure fewer than ten settings to feel
+completely at home.
 
-!!! warning
-    Fish is not POSIX compatible shell.
+## Why `fish`?
+
+The `fish` ecosystem excels as an interactive shell. While I still write my
+scripts in `bash` for portability, the out-of-the-box features in `fish`, such
+as autosuggestions and robust tab completions, are too convenient to pass up.

@@ -1,34 +1,34 @@
-# Tools
+**Tools**
 
 ---
 
-Here's a non-exhaustive list of everything I used in my personal dotfiles.
+Below is a non-exhaustive list of the tools and configurations used:
 
-- [Chezmoi](https://www.chezmoi.io) as dotfiles manager.
+- **Dotfiles Management**
 
-**Editor**
+  - [Chezmoi](https://www.chezmoi.io) for managing dotfiles.
 
-- [Neovim](https://neovim.io) as primary editor on the command line.
-  - [LunarVim](https://www.lunarvim.org) as primary neovim distribution
-    ([`config.lua`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_lvim/config.lua)).
+- **Editor**
 
-**Shell**
+  - [Neovim](https://neovim.io) as my primary command-line editor.
+    - [LazyVim](https://www.lazyvim.org/) as the main Neovim distribution.
 
-- [Fish Shell](https://fishshell.com) as primary shell ([`~/.config/fish`](https://github.com/shmileee/dotfiles/tree/master/config/private_dot_config/private_fish)).
-  - [Fisher](https://github.com/jorgebucaran/fisher) as plugin manager
-    ([`fish_plugins`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_fish/private_fish_plugins)).
-- [Tmux](https://github.com/tmux/tmux) as terminal multiplexer ([`tmux.conf`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf)).
-  - [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm) as plugin manager.
+- **Shell**
 
-**Packages**
+  - [Fish](https://fishshell.com) as my primary shell ([`~/.config/fish`](https://github.com/shmileee/dotfiles/tree/master/config/private_dot_config/private_fish)).
+    - [Fisher](https://github.com/jorgebucaran/fisher) for plugin management
+      ([`fish_plugins`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_fish/private_fish_plugins)).
+  - [Tmux](https://github.com/tmux/tmux) as a terminal multiplexer ([`tmux.conf`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf)).
+    - [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm) for managing Tmux plugins.
 
-- [homebrew](https://brew.sh/) as primary package manager ([casks +
-  formulas](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml#L10)).
-- [mise](https://blog.oponomarov.com/posts/mise-faster-smarter-tool-versioning) as version manager for various system tools.
+- **Package Management**
 
-**Apps**
+  - [Homebrew](https://brew.sh) as my primary package manager ([casks + formulas](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml#L10)).
+  - [Mise](https://blog.oponomarov.com/posts/mise-faster-smarter-tool-versioning) as a version manager for various system tools.
 
-- [Alacritty](https://alacritty.org) as terminal emulator ([`alacritty.toml`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_alacritty/alacritty.toml.tmpl)).
-- [Brave](https://brave.com) as primary web browser.
-- [Rectangle](https://rectangleapp.com) as windows manager.
-- [Fzf](https://github.com/junegunn/fzf) as command-line fuzzy finder.
+- **Applications**
+  - [Alacritty](https://alacritty.org) as my terminal emulator
+    ([`alacritty.toml`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_alacritty/alacritty.toml.tmpl)).
+  - [Brave](https://brave.com) as my primary web browser.
+  - [Rectangle](https://rectangleapp.com) for window management.
+  - [Fzf](https://github.com/junegunn/fzf) as a command-line fuzzy finder.
