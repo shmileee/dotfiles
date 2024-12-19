@@ -470,13 +470,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#installation-flow" class="md-nav__link">
-    Installation Flow
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -593,13 +586,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#installation-flow" class="md-nav__link">
-    Installation Flow
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -621,221 +607,96 @@
 <h1 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h1>
 <h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h2>
 <p><strong>Operating System</strong></p>
-<p>This Ansible playbook only supports macOS and Debian-based Linux distributions.
-This is by design to provide a consistent development experience across
-machines.</p>
+<p>This Ansible playbook currently supports macOS and Debian-based Linux
+distributions. This limitation is intentional, ensuring a consistent
+development environment across all machines.</p>
 <h3 id="macos">macOS<a class="headerlink" href="#macos" title="Permanent link">&para;</a></h3>
-<p>On a sparkling fresh installation of macOS:</p>
+<p>On a fresh installation of macOS, run the following commands:</p>
 <div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>softwareupdate<span class="w"> </span>-i<span class="w"> </span>-a
 xcode-select<span class="w"> </span>--install
 </code></pre></div>
-<p>The Xcode Command Line Tools includes <code>git</code> and <code>make</code> (not available on stock
-macOS).</p>
+<p>Installing the Xcode Command Line Tools provides <code>git</code> and <code>make</code>, which are not included by default on macOS.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 </div>
-<p>If your machine has already homebrew preinstalled, - make sure you have the full
-ownership over directories managed by <code>brew</code>. See
-<a href="https://github.com/homebrew/brew/issues/3665">this</a> issue for more information.</p>
+<p>If Homebrew is already installed on your machine, ensure that you have full
+ownership of all directories managed by <code>brew</code>. See <a href="https://github.com/homebrew/brew/issues/3665">this GitHub
+issue</a> for more details.</p>
 <h2 id="running-setupsh">Running <code>setup.sh</code><a class="headerlink" href="#running-setupsh" title="Permanent link">&para;</a></h2>
-<p>Bootstrap the installation procedure by running
-<a href="https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh"><code>setup.sh</code></a>.
-The script solves chicken or the egg problem by installing essential
-dependencies to run Ansible playbook.</p>
-<p>The script can be run directly with single <code>curl</code> command if you like living on
-the edge:</p>
+<p>Begin the installation process by running the
+<a href="https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh"><code>setup.sh</code></a>
+script. This script resolves the "chicken or the egg" problem by installing the
+essential dependencies needed to run the Ansible playbook.</p>
+<p>For a quick, one-step installation, you can run the script directly from a
+remote source (recommended only if you’re comfortable with this approach):</p>
 <div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-fsSL<span class="w"> </span>oponomarov.com/d<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh<span class="w"> </span>-s<span class="w"> </span>--<span class="w"> </span>--all
 </code></pre></div>
-<p>Otherwise, just download the file somewhere, review its content and execute with
-<code>--all</code> flag:</p>
+<p>Alternatively, you can download and review the script before executing it:</p>
 <div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://raw.githubusercontent.com/shmileee/dotfiles/master/scripts/setup.sh<span class="w"> </span>&gt;<span class="w"> </span>setup.sh
 chmod<span class="w"> </span>+x<span class="w"> </span>setup.sh
 ./setup.sh<span class="w"> </span>--all
 </code></pre></div>
-<p>The script will:</p>
+<p>This script will:</p>
 <ul>
-<li>Download <code>github.com/shmileee/dotfiles</code> into <code>/tmp/.dotfiles</code> using any of
-  the tools available (<code>git</code>, <code>curl</code>, <code>wget</code>)</li>
-<li>Install
-  <a href="https://github.com/shmileee/dotfiles/blob/master/scripts/linux/essentials.apt"><code>essential</code></a>
-  system dependencies if running on Linux</li>
-<li>Install Ansible (if running on Linux, this is part of the previous step,
-  otherwise it is installed via <code>brew</code> in the step)</li>
-<li>Attempt to install homebrew (if it does not exist yet)</li>
-<li>
-<p>Execute
-  <a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible.sh"><code>ansible.sh</code></a>,
-  which in turn will:</p>
-</li>
-<li>
-<p>Install <code>community.general</code> Ansible collection</p>
-</li>
-<li>Check if passwordless <code>sudo</code> is available (if no, - the script will prompt you for
-    password)</li>
-<li>Execute
+<li>Download <code>github.com/shmileee/dotfiles</code> into <code>/tmp/.dotfiles</code> using any
+  available tool (<code>git</code>, <code>curl</code>, or <code>wget</code>).</li>
+<li>If running on Linux, install the
+  <a href="https://github.com/shmileee/dotfiles/blob/master/scripts/linux/essentials.apt"><code>essentials</code></a>
+  system dependencies.</li>
+<li>Install Ansible. On Linux, this happens as part of the previous step, and on
+  macOS, it is handled via Homebrew.</li>
+<li>Attempt to install Homebrew if it is not already present.</li>
+<li>Execute <a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible.sh"><code>ansible.sh</code></a>,
+  which will:</li>
+<li>Install the <code>community.general</code> Ansible collection.</li>
+<li>Check for passwordless <code>sudo</code> availability. If not available, it will prompt for your password.</li>
+<li>Run the
     <a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/main.yaml"><code>main.yaml</code></a>
-    playbook</li>
+    Ansible playbook.</li>
 </ul>
 <h2 id="ansible">Ansible<a class="headerlink" href="#ansible" title="Permanent link">&para;</a></h2>
-<p>The
-<a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/main.yaml">following</a>
-playbook is the main entrypoint for configuring the actual system and dotfiles.</p>
-<p>The
-<a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml"><code>config.yaml</code></a>
-file allows you to personalize the setup to your needs. At most it contains a
-list of packages and their versions (in case of tools managed by <code>mise</code>) to
-install.</p>
+<p>The main configuration is handled by the <a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/main.yaml">primary
+playbook</a>,
+which sets up the system and dotfiles.</p>
+<p>You can customize the configuration in
+<a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml"><code>config.yaml</code></a>,
+where you’ll typically specify packages, versions (for tools managed by <code>mise</code>),
+and other preferences.</p>
 <p>The
 <a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml#L86-L88"><code>dotfiles:</code></a>
-dictionary defines from which repository and branch chezmoi shall install the
-dotfiles to the system. If you tend to reuse this playbook, make sure to adjust
-the variable accordingly.</p>
+dictionary defines which repository and branch <code>chezmoi</code> will use to install
+your dotfiles. If you’re reusing this playbook with your own dotfiles, make
+sure to update these variables accordingly.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 </div>
-<p>Certain Ansible tasks expect specific dotfiles to be in place, e.g.
-<a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/roles/tmux/tasks/main.yaml#L22-L26"><code>install tmux
-    plugins</code></a>
-will fail if
-<a href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf#L188"><code>tmux.conf</code></a>
-is missing or does not include <code>run '~/.tmux/plugins/tpm/tpm'</code> line.</p>
-<p>Supported Ansible roles:</p>
+<p>Some Ansible tasks assume certain dotfiles are present. For example, the
+<a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/roles/tmux/tasks/main.yaml"><code>install tmux
+plugins</code></a>
+task will fail if
+<a href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf"><code>tmux.conf</code></a>
+is missing or does not include <code>run '~/.tmux/plugins/tpm/tpm'</code>.</p>
+<p><strong>Supported Ansible Roles:</strong></p>
 <ul>
-<li><code>common</code> - Install basic system dependencies for Debian-based distribution
-  using <code>apt</code> package manager if cannot be installed otherwise. Install common
-  packages using homebrew. Install homebrew casks for macOS.</li>
-<li><code>fonts</code> - Install fonts with homebrew. This might change in the future between
-  platforms.</li>
-<li><code>dotfiles</code> - Install chezmoi using homebrew. Initiate dotfiles repository and
-  update files.</li>
-<li><code>fish</code> - Install fish using homebrew. Set default user's shell to fish. Configure fisher and install plugins.</li>
-<li><code>neovim</code> - Install neovim. If <code>neovim.build_from_source</code> is set to <code>true</code>, -
-  neovim will be compiled. Otherwise, download nightly deb package from
-  GitHub. On macOS neovim is installed using HEAD revision via brew.</li>
-<li><code>lunarvim</code> - Install LunarVim and reapply chezmoi to populate <code>config.lua</code></li>
-<li><code>mise</code> - Install mise version manager for typical packages that need more
-  granular control over. All tools and their respective versions are defined in
-  <code>config.yaml</code>.</li>
-<li><code>docker</code> - Install docker using brew.</li>
-<li><code>tmux</code> - Install tmux, tpm and plugins defined in <code>tmux.conf</code></li>
-<li><code>system_defaults</code> - Install sane macOS system settings. It will also configure
-  custom tweaks for applications like rectangle or alt-tab. Use this with
-  caution as the settings are very opinionated and might break your existing
-  setup. This role is also the subject for future changes - more things like
-  custom keybinding will be introduced shortly.</li>
+<li><code>common</code>: Installs basic system dependencies on Debian-based distributions
+  using <code>apt</code>, or Homebrew packages and casks on macOS.</li>
+<li><code>fonts</code>: Installs fonts using Homebrew. (Implementation may change in the
+  future.)</li>
+<li><code>dotfiles</code>: Installs <code>chezmoi</code> via Homebrew, initializes the dotfiles
+  repository, and updates files.</li>
+<li><code>fish</code>: Installs <code>fish</code> shell using Homebrew, sets it as the default shell,
+  and configures <code>fisher</code> and its plugins.</li>
+<li><code>neovim</code>: Installs <code>neovim</code>. If <code>neovim.build_from_source</code> is <code>true</code>, then it is
+  compiled from source. Otherwise, a nightly Debian package is downloaded, or on
+  macOS, it is installed via a HEAD build from Homebrew.</li>
+<li><code>mise</code>: Installs the <code>mise</code> version manager for granular control over specific
+  tools. All managed tools and their versions are defined in <code>config.yaml</code>.</li>
+<li><code>docker</code>: Installs Docker using Homebrew.</li>
+<li><code>tmux</code>: Installs Tmux, TPM, and the plugins specified in <code>tmux.conf</code>.</li>
+<li><code>system_defaults</code>: Applies opinionated macOS system settings and custom
+  tweaks for applications like Rectangle or Alt-Tab. Use with caution, as these
+  settings can be disruptive and may evolve over time.</li>
 </ul>
-<h2 id="installation-flow">Installation Flow<a class="headerlink" href="#installation-flow" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>   ┌────────────────────────────────────────────┐
-┌──┤curl -fsSL oponomarov.com/d | sh -s -- --all│
-│  └────────────────────────────────────────────┘
-│
-│
-│     ┌─────────────────────────────────────┐
-├───► │git clone shmileee/dotfiles.git /tmp │
-│     └─────────────────────────────────────┘
-│
-│     ┌─────────────────────────┐     ┌──────────────────────────┐
-├───► │./install_dependencies.sh├────►│ apt install &lt;essentials&gt; │
-│     └─────────────────────────┘     └──────────────────────────┘
-│
-│     ┌──────────────────┐
-├───► │./install_brew.sh │
-│     └──────────────────┘
-│
-│     ┌────────────┐
-└───► │./ansible.sh│
-      └─────┬──────┘
-            │
-   ┌────────┘
-   │
-   │  ┌─────────────────────────┐
-   ├─►│install community.general│
-   │  └─────────────────────────┘
-   │
-   │  ┌──────────────────────────┐
-   │  │ prompt for password if   │
-   ├─►│ sudo is not passwordless │
-   │  └──────────────────────────┘
-   │
-   │
-   │  ┌───────────────────────────────┐
-   └─►│ansible-playbook ... main.yaml │
-      └───────────────┬───────────────┘
-                      │
-     ┌────────────────┘
-     │                 ┌────────────────────────┐
-     │  ┌──────┐       │ brew install &lt;packages&gt;│
-     ├─►│common├──────►│ brew install &lt;casks&gt;   │
-     │  └──────┘       └────────────────────────┘
-     │
-     │  ┌───────┐
-     ├─►│ fonts │
-     │  └───────┘
-     │                 ┌───────────────┐
-     │  ┌──────────┐   │ chezmoi init  │
-     ├─►│ dotfiles ├──►│ chezmoi update│
-     │  └──────────┘   └───────────────┘
-     │
-     │
-     │
-     │  ┌────┐         ┌────────────────────┐
-     ├─►│fish├───────┐ │change default shell│
-     │  └────┘       └►│install fisher      │
-     │                 │install fish plugins│
-     │                 └────────────────────┘
-     │
-     │
-     │                 ┌──────────────────────┐
-     │  ┌──────┐       │ either:              │
-     ├─►│neovim├──────►│  - build from source │
-     │  └──────┘       │  - install binary    │
-     │                 └──────────────────────┘
-     │
-     │
-     │                 ┌───────────────────────────┐
-     │  ┌────────┐     │ download                  │
-     ├─►│lunarvim├────►│ install                   │
-     │  └────────┘     │ update config with chezmoi│
-     │                 └───────────────────────────┘
-     │
-     │
-     │                 ┌────────────────────┐
-     │  ┌────┐         │ install plugins    │
-     ├─►│mise├────────►│ install tools      │
-     │  └────┘         │ set global versions│
-     │                 └────────────────────┘
-     │
-     │  ┌────┐         ┌────────────────────┐
-     ├─►│ go ├────────►│ install go packages│
-     │  └────┘         └────────────────────┘
-     │
-     │  ┌────────┐
-     ├─►│ docker │
-     │  └────────┘     ┌──────────────────────┐
-     │                 │install plugin manager│
-     │  ┌──────┐    ┌─►│install plugins       │
-     ├─►│ tmux ├────┘  └──────────────────────┘
-     │  └──────┘
-     │
-     │  ┌─────────────────┐
-     └─►│ system_defaults │
-        └───────┬─────────┘
-                │          ┌───────────────────────────────┐
-                ├─────────►│ defaults write &lt;apps settings&gt;│
-                │          └───────────────────────────────┘
-                │
-                │          ┌────────────────────┐
-                ├─────────►│reorder apps in dock│
-                │          └────────────────────┘
-                │
-                │          ┌──────────────────────┐
-                ├─────────►│set custom keybindings│
-                │          └──────────────────────┘
-                │
-                │          ┌───────────────────────┐
-                └─────────►│defaults write &lt;system&gt;│
-                           └───────────────────────┘
-</code></pre></div>
 
 
 

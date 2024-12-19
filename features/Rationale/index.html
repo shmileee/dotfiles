@@ -75,7 +75,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#rationale" class="md-skip">
+        <a href="#goal" class="md-skip">
           Skip to content
         </a>
       
@@ -417,8 +417,6 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
-        
-      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
@@ -447,8 +445,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -465,28 +461,28 @@
       
         <li class="md-nav__item">
   <a href="#why-ansible" class="md-nav__link">
-    Why Ansible?
+    Why ansible?
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#why-chezmoi" class="md-nav__link">
-    Why Chezmoi?
+    Why chezmoi?
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#why-lunarvim" class="md-nav__link">
-    Why LunarVim?
+  <a href="#why-lazyvim" class="md-nav__link">
+    Why LazyVim?
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#why-fish" class="md-nav__link">
-    Why Fish?
+    Why fish?
   </a>
   
 </li>
@@ -544,8 +540,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -562,28 +556,28 @@
       
         <li class="md-nav__item">
   <a href="#why-ansible" class="md-nav__link">
-    Why Ansible?
+    Why ansible?
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#why-chezmoi" class="md-nav__link">
-    Why Chezmoi?
+    Why chezmoi?
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#why-lunarvim" class="md-nav__link">
-    Why LunarVim?
+  <a href="#why-lazyvim" class="md-nav__link">
+    Why LazyVim?
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#why-fish" class="md-nav__link">
-    Why Fish?
+    Why fish?
   </a>
   
 </li>
@@ -606,75 +600,69 @@
   
 
 
-<h1 id="rationale">Rationale<a class="headerlink" href="#rationale" title="Permanent link">&para;</a></h1>
+  <h1>Rationale</h1>
+
+<p><strong>Rationale</strong></p>
 <hr />
 <h2 id="goal">Goal<a class="headerlink" href="#goal" title="Permanent link">&para;</a></h2>
-<p>Provide fully automated development environment that is easy to setup and
-maintain.</p>
-<h2 id="why-ansible">Why Ansible?<a class="headerlink" href="#why-ansible" title="Permanent link">&para;</a></h2>
-<p>In my experience Ansible has the easiest learning curve. It has its own caveats
-and gotchas, but overall it's pretty straightforward to read YAML configuration
-for a person that knows very little about how Ansible works. It's almost like
-reading plain English with very rare exceptions. Additionally, Ansible is a
-Swiss army knife orchestration tool. You can use it and abuse it in many
-different ways which might or might not be supported via other popular
-solution like <a href="https://nixos.wiki/wiki/Home_Manager">NixOS Home Manager</a>
-otherwise. One of the biggest advantages of Ansible is that (if properly
-described) tasks follow
-<a href="https://docs.ansible.com/ansible/latest/reference_appendices/glossary.html#term-Idempotency">idempotency</a>
-principle, which means playbook can be run over and over again without having to
-worry about your precious files accidentally being removed.</p>
-<p>All in all - there are many automation solutions out there - I happen to enjoy
-using Ansible.</p>
-<h2 id="why-chezmoi">Why Chezmoi?<a class="headerlink" href="#why-chezmoi" title="Permanent link">&para;</a></h2>
-<p>Chezmoi is another tool for managing dotfiles. It seems to be <a href="https://dotfiles.github.io/utilities">the most
-popular</a> choice these days with over 6k+
-stars. Prior to switch, I've used GNU Stow which had it's job done but
-unfortunately lacked a couple of features chezmoi tends to resolve. The most
-important features of chezmoi:</p>
+<p>The goal is to provide a fully automated development environment that’s both
+easy to set up and maintain.</p>
+<h2 id="why-ansible">Why <code>ansible</code>?<a class="headerlink" href="#why-ansible" title="Permanent link">&para;</a></h2>
+<p>In my experience, <code>ansible</code> is one of the easiest automation tools to learn.
+Although it has its share of nuances, its YAML-based configuration is generally
+straightforward to understand—even for users with limited knowledge of
+<code>ansible</code>. It’s almost like reading plain English most of the time.</p>
+<p>Additionally, <code>ansible</code> is like a Swiss Army knife of orchestration tools. It
+can be adapted to a wide range of tasks, some of which might not be supported
+by other popular solutions like <code>NixOS Home Manager</code>. One of its greatest
+strengths is that tasks, when properly described, adhere to the principle of
+<a href="https://docs.ansible.com/ansible/latest/reference_appendices/glossary.html#term-Idempotency">idempotency</a>.
+This means you can rerun a playbook repeatedly without worrying about
+unintended removal or duplication of your files.</p>
+<p>In a world full of automation solutions, I simply happen to enjoy using
+<code>ansible</code> the most.</p>
+<h2 id="why-chezmoi">Why <code>chezmoi</code>?<a class="headerlink" href="#why-chezmoi" title="Permanent link">&para;</a></h2>
+<p><code>chezmoi</code> is a powerful tool for managing dotfiles. It’s currently one of the
+most popular solutions, boasting over 6k stars on GitHub. Before <code>chezmoi</code>, I
+used <code>gnu stow</code>, which worked fine but lacked several features that <code>chezmoi</code>
+conveniently provides.</p>
+<p>Key benefits of <code>chezmoi</code> include:</p>
 <ul>
-<li><strong>Flexible</strong>: dotfiles can be templates (using text/template syntax). While this
-  can be achieved using Ansible builtin Jinja templates, - chezmoi provides a
-  set of variables that can be used inside the template for simple assertions
-  like the platform you're currently running on, architecture, hostname,
-  environmental variables lookup and many more. Additionally, testing Jinja
-  templates in Ansible is very cumbersome. With chezmoi this is as simple as
-  running <code>chezmoi execute-template &lt; file.tmpl</code>.</li>
-<li><strong>Portable</strong>: chezmoi's configuration uses only visible, regular files and
-  directories and so is portable across version control systems and operating
-  systems.</li>
-<li><strong>Transparent</strong>: chezmoi includes verbose and dry run modes so you can review
-  exactly what changes it will make to your home directory before making them.</li>
-<li><strong>Practical</strong>: chezmoi manages hidden files (dot files), directories, private, and
-  executable files.</li>
-<li><strong>Fast, easy to use, and familiar</strong>: chezmoi runs in fractions of a second and
-  includes commands to make most operations trivial.</li>
+<li><strong>Flexible</strong>: Dotfiles can be templates using text/template syntax. While
+  <code>ansible</code> has Jinja templates, <code>chezmoi</code> offers built-in variables for platform
+  detection, architecture, hostname, environment variables, and more. Testing
+  these templates in <code>chezmoi</code> is much simpler—just run <code>chezmoi execute-template
+&lt; file.tmpl</code>.</li>
+<li><strong>Portable</strong>: <code>chezmoi</code> configurations rely solely on visible, regular files
+  and directories, ensuring portability across different version control systems
+  and operating systems.</li>
+<li><strong>Transparent</strong>: Verbose and dry-run modes let you preview changes before
+  they’re applied, giving you complete control over what happens in your home
+  directory.</li>
+<li><strong>Practical</strong>: <code>chezmoi</code> manages hidden files, directories, private files,
+  and executables—essentially all the typical elements of a dotfiles repository.</li>
+<li><strong>Fast and Easy to Use</strong>: <code>chezmoi</code> runs in fractions of a second, and it
+  provides commands that simplify most common operations.</li>
 </ul>
-<p>The biggest driver for choosing chezmoi was my intention to follow single
-responsibility principle: dotfiles should be managed separately.</p>
-<h2 id="why-lunarvim">Why LunarVim?<a class="headerlink" href="#why-lunarvim" title="Permanent link">&para;</a></h2>
-<p>I used regular Vim for a couple of years until it has become really painful to
-manage a 500+ lines file. I've made an attempt to switch to Neovim after
-watching Vimconf hosted by <a href="https://github.com/ThePrimeagen">ThePrimagen</a> and
-<a href="https://github.com/tjdevries">TJ DeVries</a>. This switch made me realize I don't
-understand half of the Lua configuration.</p>
-<p>Luckily, it turned out that most of the keymaps, plugins and sane defaults I was
-trying to configure are not necessarily specific and lots of people tend to
-configure Neovim this way. In fact,
-<a href="https://github.com/LunarVim/LunarVim">LunarVim</a> does this pretty well by
-providing a community driven framework for Neovim that acts like a wrapper with
-a bunch of common plugins. I happen to enjoy most of the stuff they ship out of
-the box. As an experienced Vim user, I found I only needed to install a couple
-more plugins to feel comfortable, rebind a couple of keys and configure less
-than 10 options.</p>
-<h2 id="why-fish">Why Fish?<a class="headerlink" href="#why-fish" title="Permanent link">&para;</a></h2>
-<p>Fish ecosystem is great for interactive shells. I still write day-to-day scripts
-in pure bash, but the amount of features that comes preconfigured with fish is just
-too good to resist.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Fish is not POSIX compatible shell.</p>
-</div>
+<p>By using <code>chezmoi</code>, I can adhere to the single-responsibility principle:
+managing dotfiles independently from other system configuration tasks.</p>
+<h2 id="why-lazyvim">Why <code>LazyVim</code>?<a class="headerlink" href="#why-lazyvim" title="Permanent link">&para;</a></h2>
+<p>I used <code>vim</code> for years until my configuration ballooned to over 500 lines,
+making it a challenge to maintain. My switch to <code>neovim</code> was inspired by talks
+from <a href="https://github.com/ThePrimeagen">ThePrimagen</a> and <a href="https://github.com/tjdevries">TJ
+DeVries</a>, which also made me realize I didn’t
+fully grasp the Lua-based configuration system that <code>neovim</code> uses.</p>
+<p>It turned out that most of the common keymaps, plugins, and sensible defaults I
+was after were already configured by many in the <code>neovim</code> community. Enter
+<code>LazyVim</code>: it provides a community-driven framework for <code>neovim</code>, bundling
+common plugins and sensible defaults. This allowed me to avoid starting from
+scratch and reinventing the wheel. I only needed to add a few extra plugins,
+tweak some keybindings, and configure fewer than ten settings to feel
+completely at home.</p>
+<h2 id="why-fish">Why <code>fish</code>?<a class="headerlink" href="#why-fish" title="Permanent link">&para;</a></h2>
+<p>The <code>fish</code> ecosystem excels as an interactive shell. While I still write my
+scripts in <code>bash</code> for portability, the out-of-the-box features in <code>fish</code>, such
+as autosuggestions and robust tab completions, are too convenient to pass up.</p>
 
 
 
