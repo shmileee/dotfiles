@@ -1,13 +1,13 @@
 FROM homebrew/ubuntu24.04:latest
 
-ENV TIMEZONE "Europe/Warsaw"
-ENV DEBIAN_FRONTEND noninteractive
+ENV TIMEZONE="Europe/Warsaw"
+ENV DEBIAN_FRONTEND="noninteractive"
 
 # Setup time zones.
 RUN sudo ln -snf "/usr/share/zoneinfo/$TIMEZONE" /etc/localtime && \
     echo $TIMEZONE | sudo tee /etc/timezone
 
-ENV DOCKERIZED true
+ENV DOCKERIZED=true
 
 # Configure dotfiles.
 COPY ./scripts/setup.sh /tmp/setup.sh

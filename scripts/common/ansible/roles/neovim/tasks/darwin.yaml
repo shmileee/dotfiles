@@ -1,8 +1,7 @@
 ---
-
 - name: "install"
   community.general.homebrew:
-    state: head
+    state: present
     name:
-      - 'luajit'
-      - 'neovim'
+      - "luajit"
+      - "neovim"
