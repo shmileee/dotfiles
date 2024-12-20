@@ -20,6 +20,7 @@ jobs:
         uses: Tiryoh/actions-mkdocs@v0
         with:
           configfile: ".github/mkdocs.yaml"
+          requirements: ".github/docs-requirements.txt"
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
