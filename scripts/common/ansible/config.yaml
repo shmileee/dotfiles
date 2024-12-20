@@ -88,7 +88,7 @@ dotfiles:
 
 neovim:
   build_from_source: true
-  neovim_version: 0.9.5
+  neovim_version: 0.10.2
   directory: "{{ ansible_user_dir }}/Development/repository/github.com/neovim/neovim"
   build_dependencies:
     - autoconf
