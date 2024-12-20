@@ -4,6 +4,11 @@ repo_url: https://github.com/shmileee/dotfiles
 repo_name: shmileee/dotfiles
 copyright: Copyright &copy; 2021 - 2025 Oleksandr Ponomarov
 
+nav:
+  - Overview: index.md
+  - What, How & Why?: what-how-and-why.md
+  - Hotkeys: hotkeys.md
+
 theme:
   name: material
   palette:
@@ -26,19 +31,27 @@ theme:
   features:
     - navigation.instant
     - navigation.expand
-    - navigation.tabs
+    # - navigation.tabs
 
 markdown_extensions:
   - admonition
   - pymdownx.highlight
   - pymdownx.superfences
   - pymdownx.keys
+  - pymdownx.details
   - toc:
       permalink: true
+  - pymdownx.superfences:
+      # make exceptions to highlighting of code:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:mermaid2.fence_mermaid_custom
 
 plugins:
   - search:
       lang: en
+  - mermaid2
 
 extra:
   social:
