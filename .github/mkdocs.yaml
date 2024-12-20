@@ -1,7 +1,7 @@
 docs_dir: ../docs
 site_name: Hitchhiker's Guide to the Dotfiles
 repo_url: https://github.com/shmileee/dotfiles
-repo_name: shmileee/dotfiles
+edit_uri: blob/master/docs
 copyright: Copyright &copy; 2021 - 2025 Oleksandr Ponomarov
 
 nav:
@@ -12,16 +12,20 @@ nav:
 theme:
   name: material
   palette:
-    - scheme: default
-      primary: red
+    - media: "(prefers-color-scheme)"
       toggle:
-        icon: material/weather-night
-        name: Switch to dark mode
-    - scheme: slate
-      primary: red
-      toggle:
-        icon: material/weather-sunny
+        icon: material/brightness-auto
         name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
   language: en
   font:
     text: Roboto
@@ -31,7 +35,15 @@ theme:
   features:
     - navigation.instant
     - navigation.expand
-    # - navigation.tabs
+    - content.action.edit
+    - content.code.copy
+    - navigation.footer
+    - navigation.instant.progress
+    - navigation.tracking
+    - navigation.prune
+    - toc.follow
+    - navigation.top
+    - header.autohide
 
 markdown_extensions:
   - admonition
@@ -42,7 +54,6 @@ markdown_extensions:
   - toc:
       permalink: true
   - pymdownx.superfences:
-      # make exceptions to highlighting of code:
       custom_fences:
         - name: mermaid
           class: mermaid
@@ -54,6 +65,9 @@ plugins:
   - mermaid2
 
 extra:
+  generator: false
   social:
-    - icon: fontawesome/brands/github
-      link: https:/github.com/shmileee
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/aleksandr-ponomarov
+    - icon: fontawesome/brands/docker
+      link: https://hub.docker.com/r/shmileee/dotfiles/tags
