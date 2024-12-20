@@ -1,7 +1,7 @@
-FROM homebrew/ubuntu20.04:3.4.2
+FROM homebrew/ubuntu24.04:latest
 
 ENV TIMEZONE "Europe/Warsaw"
-ENV DEBIAN_FRONTEND=noninteractive
+ENV DEBIAN_FRONTEND noninteractive
 
 # Setup time zones.
 RUN sudo ln -snf "/usr/share/zoneinfo/$TIMEZONE" /etc/localtime && \

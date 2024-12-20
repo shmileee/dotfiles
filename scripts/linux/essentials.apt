@@ -4,7 +4,6 @@ git
 gpg
 locales
 make
-software-properties-common
 sudo
 
 # Editor

@@ -4,21 +4,21 @@ name: macos
 on:
   push:
     branches:
-      - 'master'
+      - "master"
     paths:
-      - 'config/**'
-      - 'scripts/**'
-      - '.github/workflows/macos.yaml'
-      - '!**.md'
-      - '!.github/mkdocs.yaml'
-      - '!docs/**'
+      - "config/**"
+      - "scripts/**"
+      - ".github/workflows/macos.yaml"
+      - "!**.md"
+      - "!.github/mkdocs.yaml"
+      - "!docs/**"
 
 jobs:
   macos:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-11.0]
+        os: [macos-latest]
 
     steps:
       - name: Clean up installed software
