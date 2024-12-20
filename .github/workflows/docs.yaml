@@ -4,25 +4,25 @@ name: docs
 on:
   push:
     branches:
-      - 'master'
+      - "master"
     paths:
-      - 'docs/**'
-      - '.github/mkdocs.yaml'
+      - "docs/**"
+      - ".github/mkdocs.yaml"
 
 jobs:
   docs:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Build
         uses: Tiryoh/actions-mkdocs@v0
         with:
-          configfile: '.github/mkdocs.yaml'
+          configfile: ".github/mkdocs.yaml"
 
       - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./.github/site
