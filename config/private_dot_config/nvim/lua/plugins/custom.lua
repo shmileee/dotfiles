@@ -4,6 +4,17 @@ return {
   { "mfussenegger/nvim-lint", enabled = false },
   { "ibhagwan/fzf-lua", keys = { { "<leader><space>", false } } },
   {
+    "echasnovski/mini.move",
+    opts = {
+      mappings = {
+        left = "<S-h>",
+        right = "<S-l>",
+        down = "<S-j>",
+        up = "<S-k>",
+      },
+    },
+  },
+  {
     "echasnovski/mini.surround",
     opts = {
       mappings = {
@@ -61,6 +72,7 @@ return {
     },
   },
   -- custom plugins:
+  { "tpope/vim-repeat" },
   { "terramate-io/vim-terramate" },
   { "christoomey/vim-titlecase" },
   {

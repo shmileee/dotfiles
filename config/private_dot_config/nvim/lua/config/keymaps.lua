@@ -6,3 +6,7 @@ map({ "n" }, "o", "o<Esc>")
 map({ "n" }, "O", "O<Esc>")
 
 map({ "n" }, "<leader><leader>", "<cmd>nohlsearch<cr>")
+
+-- https://github.com/LazyVim/LazyVim/discussions/1239
+map({ "v" }, ">", ">")
+map({ "v" }, "<", "<")
