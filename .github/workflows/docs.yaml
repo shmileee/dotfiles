@@ -14,16 +14,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Build
-        uses: Tiryoh/actions-mkdocs@v0
+        uses: Tiryoh/actions-mkdocs@c9944d37d46488196a79d8d5e128c1d2af8f3d78 # v0
         with:
           configfile: ".github/mkdocs.yaml"
           requirements: ".github/docs-requirements.txt"
 
       - name: Deploy
-        uses: peaceiris/actions-gh-pages@v4
+        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./.github/site
