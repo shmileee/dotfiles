@@ -605,11 +605,12 @@ handled by the <a href="https://github.com/shmileee/dotfiles/blob/master/scripts
 playbook</a>,
 which sets up the system and dotfiles. You can customize the configuration in
 <a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml"><code>config.yaml</code></a>,
-where you’ll typically specify packages, versions (for tools managed by
-<code>mise</code>), and other preferences. The
+where you’ll typically specify packages and other preferences. The
 <a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml#L86-L88"><code>dotfiles{}</code></a>
 dictionary defines which repository and branch <code>chezmoi</code> will use to install
-your dotfiles from.</p>
+your dotfiles from.
+<a href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/mise/config.toml"><code>mise/config.toml</code></a>
+defines what tools and runtimes are managed with <code>mise</code>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>If you’re reusing this playbook with your own dotfiles, make
