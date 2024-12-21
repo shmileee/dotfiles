@@ -30,7 +30,7 @@ Below is a non-exhaustive list of the tools used to achieve the desired setup:
     - [`alacritty`](https://alacritty.org) as my terminal emulator
       ([`alacritty.toml`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_alacritty/alacritty.toml.tmpl)).
     - [`tmux`](https://github.com/tmux/tmux) as a terminal multiplexer ([`tmux.conf`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf)).
-      - [`tpm`](https://github.com/tmux-plugins/tpm) for managing `tmux` plugins.
+        - [`tpm`](https://github.com/tmux-plugins/tpm) for managing `tmux` plugins.
 - **Package management**:
     - [`homebrew`](https://brew.sh) as my primary package manager ([casks + formulas](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml#L10)).
     - [`mise`](https://blog.oponomarov.com/posts/mise-faster-smarter-tool-versioning) as a version manager for various system tools.
