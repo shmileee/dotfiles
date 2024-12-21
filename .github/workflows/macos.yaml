@@ -42,3 +42,5 @@ jobs:
           if [ "$RUNNER_OS" == "macOS" ]; then
             ./scripts/setup.sh --all
           fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
