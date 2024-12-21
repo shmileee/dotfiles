@@ -40,11 +40,12 @@ handled by the [primary
 playbook](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/main.yaml),
 which sets up the system and dotfiles. You can customize the configuration in
 [`config.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml),
-where you’ll typically specify packages, versions (for tools managed by
-`mise`), and other preferences. The
+where you’ll typically specify packages and other preferences. The
 [`dotfiles{}`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml#L86-L88)
 dictionary defines which repository and branch `chezmoi` will use to install
 your dotfiles from.
+[`mise/config.toml`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/mise/config.toml)
+defines what tools and runtimes are managed with `mise`.
 
 !!! warning
 

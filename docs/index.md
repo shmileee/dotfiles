@@ -55,7 +55,7 @@ flowchart TD
     B --> D["./install_brew.sh"]
 
     B --> E["./ansible.sh"]
-    E --> F["install community.general, prompt if needed"]
+    E --> F["install community.general, prompt for password if needed"]
     E --> G["ansible-playbook ... main.yaml"]
 ```
 

@@ -104,49 +104,6 @@ neovim:
     - pkg-config
     - unzip
 
-mise_tools:
-  core:
-    - name: "python"
-      versions:
-        - 3.11.8
-
-    - name: "go"
-      versions:
-        - 1.23.4
-        - 1.21.0
-
-    - name: "ruby"
-      versions:
-        - 3.3.6
-
-    - name: "node"
-      versions:
-        - 21.2.0
-  aqua:
-    - name: "terraform"
-      versions:
-        - 1.10.2
-
-    - name: "terraform-ls"
-      versions:
-        - 0.36.2
-
-    - name: "kubectl"
-      versions:
-        - 1.32.0
-
-    - name: "helm"
-      versions:
-        - 3.16.3
-
-    - name: "pre-commit"
-      versions:
-        - 4.0.1
-
-    - name: "terramate"
-      versions:
-        - 0.11.4
-
 golang:
   path: "{{ ansible_user_dir }}/.go"
   packages:
