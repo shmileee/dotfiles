@@ -2,7 +2,11 @@ return {
   -- disable "bad" defaults:
   { "folke/flash.nvim", enabled = false },
   { "mfussenegger/nvim-lint", enabled = false },
-  { "ibhagwan/fzf-lua", keys = { { "<leader><space>", false } } },
+  {
+    "ibhagwan/fzf-lua",
+    event = "VimEnter",
+    keys = { { "<leader><space>", false } },
+  },
   {
     "echasnovski/mini.move",
     opts = {
