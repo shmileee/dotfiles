@@ -1,4 +1,4 @@
-FROM homebrew/ubuntu24.04:latest@sha256:296e736f6542e4ff06bb82c3d3443bcfee527c21376e4e271599044787ccdd0e
+FROM homebrew/ubuntu24.04:latest@sha256:897f81830de5c10a559f22ac558360e427417edca2982a0134a1d3a3d73a30c1
 
 ENV TIMEZONE="Europe/Warsaw"
 ENV DEBIAN_FRONTEND="noninteractive"
