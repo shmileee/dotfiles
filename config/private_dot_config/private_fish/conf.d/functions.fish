@@ -40,3 +40,21 @@ function vault_auth
     set -gx VAULT_ADDR https://$env.vault.tuadm.net:8200
     set -gx TF_VAR_vault_token_$env (vault login -method=oidc -path=okta role=admin -format=json 2>/dev/null | jq '.auth.client_token' -r)
 end
+
+# `cd` and then `ls` if the destination is a dir
+# - including backwards with -
+# - including to home with no arguments
+#
+# `$EDITOR <dest>` if the destination(s) is/are a file
+function t
+    if test (count $argv) -eq 1 -a \( -d "$argv[1]" -o "$argv[1]" = - \)
+        cd "$argv[1]" || return
+        ls
+    else if test (count $argv) -eq 0
+        cd "$HOME" || return
+    else if test -f "$argv[1]"; or test ! -e "$argv[1]"; or test (count $argv) -gt 1
+        $EDITOR $argv
+    else
+        echo "t: case not accounted for"
+    end
+end
