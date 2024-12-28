@@ -106,4 +106,25 @@ return {
       })
     end,
   },
+  {
+    "chrisgrieser/nvim-spider",
+    keys = {
+      {
+        "w",
+        "<cmd>lua require('spider').motion('w')<CR>",
+        mode = { "n", "o", "x" },
+      },
+      {
+        "b",
+        "<cmd>lua require('spider').motion('b')<CR>",
+        mode = { "n", "o", "x" },
+      },
+    },
+  },
+  {
+    "nmac427/guess-indent.nvim",
+    opts = {
+      auto_cmd = true,
+    },
+  },
 }
