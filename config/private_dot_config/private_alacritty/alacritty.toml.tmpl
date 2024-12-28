@@ -23,7 +23,7 @@ foreground = "#ffffff"
 TERM = "xterm-256color"
 
 [font]
-size = 19.0
+size = 14.0
 
 [font.normal]
 family = "FiraCode Nerd Font"
@@ -62,4 +62,5 @@ bindings = [
   { key = "R", mods = "Command|Shift", command = { program = "{{ $tmux }}", args = ["command-prompt", "rename-session -- '%%'"] } },  # Rename session
   { key = "W", mods = "Command",  command = { program = "{{ $tmux }}", args = ["kill-window"] } },  # Kill window
   { key = "X", mods = "Command",  command = { program = "{{ $tmux }}", args = ["kill-pane"] } },  # Kill pane
+  { key = "Key0", mods = "Command", action = "ResetFontSize" },
 ]
