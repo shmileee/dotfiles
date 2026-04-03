@@ -31,7 +31,10 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push
         uses: docker/build-push-action@67a2d409c0a876cbe6b11854e3e25193efe4e62d # v6
+        env:
+          DOCKER_BUILD_SUMMARY: false
         with:
           context: .
           push: true
           tags: shmileee/dotfiles:latest
+          provenance: false
