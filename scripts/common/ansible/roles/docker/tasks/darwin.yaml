@@ -1,8 +1,8 @@
 ---
 
-- name: "install docker"
+- name: "install rancher desktop"
   community.general.homebrew_cask:
-    name: "docker"
+    name: "rancher"
     state: present
     greedy: true
     accept_external_apps: true
