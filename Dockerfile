@@ -12,6 +12,6 @@ COPY . /tmp/.dotfiles
 RUN HOMEBREW_NO_AUTO_UPDATE=1 \
     ANSIBLE_DEPRECATION_WARNINGS=false \
     /tmp/.dotfiles/scripts/setup.sh --all && \
-    rm -rf /tmp/.dotfiles
+    sudo rm -rf /tmp/.dotfiles
 
 CMD ["fish", "-l"]
