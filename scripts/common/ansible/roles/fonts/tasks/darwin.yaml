@@ -7,7 +7,7 @@
       name:
         - font-powerline-symbols
         - font-fira-code-nerd-font
-      install_options: no-quarantine
+      greedy: true
       accept_external_apps: true
 
   tags:

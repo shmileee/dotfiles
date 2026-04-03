@@ -19,7 +19,7 @@
   community.general.homebrew_cask:
     name: "{{ brew.casks }}"
     state: present
-    install_options: no-quarantine
+    greedy: true
     accept_external_apps: true
   when:
     - brew.casks is defined

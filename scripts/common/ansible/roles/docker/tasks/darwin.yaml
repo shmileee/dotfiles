@@ -4,6 +4,6 @@
   community.general.homebrew_cask:
     name: "docker"
     state: present
-    install_options: no-quarantine
+    greedy: true
     accept_external_apps: true
   tags: homebrew
