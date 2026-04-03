@@ -9,7 +9,9 @@ RUN sudo ln -snf "/usr/share/zoneinfo/${TIMEZONE}" /etc/localtime && \
 ENV DOCKERIZED=true
 
 COPY . /tmp/.dotfiles
-RUN /tmp/.dotfiles/scripts/setup.sh --all && \
+RUN HOMEBREW_NO_AUTO_UPDATE=1 \
+    ANSIBLE_DEPRECATION_WARNINGS=false \
+    /tmp/.dotfiles/scripts/setup.sh --all && \
     rm -rf /tmp/.dotfiles
 
 CMD ["fish", "-l"]
