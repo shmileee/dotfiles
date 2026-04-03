@@ -4,4 +4,4 @@
     name: "{{ item }}"
     global: true
   with_items: "{{ nodejs.packages }}"
-  when: nodejs.packages
+  when: nodejs.packages | length > 0

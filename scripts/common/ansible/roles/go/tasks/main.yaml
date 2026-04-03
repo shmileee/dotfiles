@@ -4,7 +4,7 @@
   ansible.builtin.shell: |
     go install {{ item | quote }}
   with_items: '{{ golang.packages }}'
-  when: golang.packages
+  when: golang.packages | length > 0
   register: go_install_result
   changed_when:
     - '"Downloading" in go_install_result.stderr'
