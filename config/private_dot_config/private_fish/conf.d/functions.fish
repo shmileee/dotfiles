@@ -58,3 +58,24 @@ function t
         echo "t: case not accounted for"
     end
 end
+
+function projects-fzf -d 'fzf ghq jumper (includes ~/.config Git dirs)'
+    set ghq_projects (ghq list)
+
+    # Combine both sources and show in fzf
+    set selected (printf "%s\n" $ghq_projects | fzf --height 40% --reverse)
+
+    if test -n "$selected"
+        if test -d (ghq root)/$selected
+            cd (ghq root)/$selected
+        end
+
+        if test $fish_bind_mode != paste
+            set _omp_new_prompt true
+        end
+    end
+
+    commandline --function repaint
+end
+
+bind \cG projects-fzf

@@ -1,6 +1,7 @@
 return {
   -- disable "bad" defaults:
   { "folke/flash.nvim", enabled = false },
+  { "copilot.lua", enabled = false },
   { "mfussenegger/nvim-lint", enabled = false },
   {
     "ibhagwan/fzf-lua",
@@ -8,7 +9,7 @@ return {
     keys = { { "<leader><space>", false } },
   },
   {
-    "echasnovski/mini.move",
+    "nvim-mini/mini.move",
     opts = {
       mappings = {
         left = "<S-h>",
@@ -19,7 +20,7 @@ return {
     },
   },
   {
-    "echasnovski/mini.surround",
+    "nvim-mini/mini.surround",
     opts = {
       mappings = {
         add = "ys",
@@ -48,7 +49,7 @@ return {
     },
   },
   {
-    "echasnovski/mini.comment",
+    "nvim-mini/mini.comment",
     event = "VeryLazy",
     opts = {
       mappings = {
@@ -66,6 +67,10 @@ return {
         terramate = { "terramate" },
       },
       formatters = {
+        -- # Example of using shfmt with extra args
+        shfmt = {
+          prepend_args = { "-i", "2", "-ci", "-sr" },
+        },
         terramate = {
           command = "terramate",
           args = { "fmt", "$FILENAME" },
