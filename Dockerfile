@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 homebrew/ubuntu24.04:latest@sha256:faf9c858df426b09a1b171b1deadd31b1dd76dfdb4039e4dedc09ba908a7f0a2
+FROM --platform=linux/amd64 homebrew/ubuntu24.04:latest@sha256:7c2c366ebb40bb9be461a7e40dae4f300b8f417ed2e23f3f90d66d5f8988f11f
 
 ENV TIMEZONE="Europe/Warsaw"
 ENV DEBIAN_FRONTEND="noninteractive"
