@@ -26,11 +26,14 @@ copy_command "pbcopy"
 {{- end }}
 
 keybinds {
+    unbind "Ctrl p"
+
     shared_except "locked" "tmux" {
         bind "Ctrl a" { SwitchToMode "Tmux"; }
     }
     tmux {
         bind "Ctrl a" { Write 1; SwitchToMode "Normal"; }
+        bind "Ctrl c" { SwitchToMode "Normal"; }
         bind "Esc" { SwitchToMode "Normal"; }
         bind "h" { MoveFocus "Left"; SwitchToMode "Normal"; }
         bind "j" { MoveFocus "Down"; SwitchToMode "Normal"; }
@@ -59,6 +62,7 @@ keybinds {
         bind "[" { SwitchToMode "Scroll"; }
         bind "|" { NewPane "Right"; SwitchToMode "Normal"; }
         bind "-" { NewPane "Down"; SwitchToMode "Normal"; }
+        bind "_" { NewPane "Down"; SwitchToMode "Normal"; }
         bind "x" { CloseFocus; SwitchToMode "Normal"; }
         bind "+" { ToggleFocusFullscreen; SwitchToMode "Normal"; }
     }

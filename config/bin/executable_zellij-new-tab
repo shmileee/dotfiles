@@ -3,8 +3,8 @@
 set -euo pipefail
 
 zellij="$HOME/.local/bin/zellij"
-tab_id="$($zellij --session main action new-tab)"
+session="${ZELLIJ_SESSION_NAME:-main}"
+"$zellij" --session "$session" action new-tab --name fish >/dev/null
 
 sleep 0.1
-"$zellij" --session main action rename-tab --tab-id "$tab_id" ""
-"$zellij" --session main action switch-mode rename-tab
+"$zellij" --session "$session" action switch-mode normal
