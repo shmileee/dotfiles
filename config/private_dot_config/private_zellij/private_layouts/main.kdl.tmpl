@@ -1,0 +1,39 @@
+layout {
+    default_tab_template {
+        children
+        pane size=2 borderless=true {
+            plugin location="https://github.com/dj95/zjstatus/releases/download/v0.24.0/zjstatus.wasm" {
+                format_left "{mode} #[fg=#cdd6f4,bold]{session}"
+                format_center "{tabs}"
+                format_right "{command_kubernetes} {datetime}"
+                format_space ""
+
+                border_enabled "true"
+                border_char "─"
+                border_format "#[fg=#45475a]{char}"
+                border_position "top"
+
+                mode_normal "#[fg=#1e1e2e,bg=#89b4fa,bold] {name} "
+                mode_tmux "#[fg=#1e1e2e,bg=#fab387,bold] PREFIX "
+                mode_scroll "#[fg=#1e1e2e,bg=#a6e3a1,bold] SCROLL "
+                mode_rename_tab "#[fg=#1e1e2e,bg=#f9e2af,bold] RENAME "
+                mode_default_to_mode "normal"
+
+                tab_normal "#[fg=#6c7086] {index}:{name} "
+                tab_active "#[fg=#1e1e2e,bg=#cba6f7,bold] {index}:{name} "
+                tab_rename "#[fg=#1e1e2e,bg=#f9e2af,bold] {index}:{name} "
+                tab_separator "#[fg=#45475a]│"
+                tab_zero_based_index "false"
+
+                command_kubernetes_command "{{ .chezmoi.homeDir }}/bin/zellij-kube-status"
+                command_kubernetes_format "#[fg=#89b4fa] {stdout}"
+                command_kubernetes_interval "10"
+                command_kubernetes_rendermode "static"
+
+                datetime "#[fg=#a6adc8] {format} "
+                datetime_format "%Y-%m-%d %H:%M:%S"
+                datetime_timezone "Europe/Warsaw"
+            }
+        }
+    }
+}

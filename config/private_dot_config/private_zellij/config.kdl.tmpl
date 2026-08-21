@@ -1,0 +1,69 @@
+{{- $shell := "" -}}
+{{- if eq .chezmoi.os "darwin" -}}
+  {{- if eq .chezmoi.arch "arm64" -}}
+    {{- $shell = "/opt/homebrew/bin/fish" -}}
+  {{- else if eq .chezmoi.arch "amd64" -}}
+    {{- $shell = "/usr/local/bin/fish" -}}
+  {{- end -}}
+{{- else if or (env "DOCKERIZED") (eq .chezmoi.os "linux") -}}
+  {{- $shell = "/home/linuxbrew/.linuxbrew/bin/fish" -}}
+{{- end -}}
+
+default_shell "{{ $shell }}"
+default_layout "main"
+pane_frames false
+mouse_mode true
+scroll_buffer_size 50000
+copy_clipboard "system"
+copy_on_select true
+session_serialization false
+serialize_pane_viewport false
+show_startup_tips false
+show_release_notes false
+nested_session_handling "never"
+{{- if eq .chezmoi.os "darwin" }}
+copy_command "pbcopy"
+{{- end }}
+
+keybinds {
+    shared_except "locked" "tmux" {
+        bind "Ctrl a" { SwitchToMode "Tmux"; }
+    }
+    tmux {
+        bind "Ctrl a" { Write 1; SwitchToMode "Normal"; }
+        bind "Esc" { SwitchToMode "Normal"; }
+        bind "h" { MoveFocus "Left"; SwitchToMode "Normal"; }
+        bind "j" { MoveFocus "Down"; SwitchToMode "Normal"; }
+        bind "k" { MoveFocus "Up"; SwitchToMode "Normal"; }
+        bind "l" { MoveFocus "Right"; SwitchToMode "Normal"; }
+        bind "Tab" { ToggleTab; SwitchToMode "Normal"; }
+        bind "{" { GoToPreviousTab; SwitchToMode "Normal"; }
+        bind "}" { GoToNextTab; SwitchToMode "Normal"; }
+        bind "r" { SwitchToMode "RenameTab"; TabNameInput 0; }
+        bind "c" {
+            Run "{{ .chezmoi.homeDir }}/bin/zellij-new-tab" {
+                close_on_exit true
+                floating true
+            }
+        }
+        bind "1" { GoToTab 1; SwitchToMode "Normal"; }
+        bind "2" { GoToTab 2; SwitchToMode "Normal"; }
+        bind "3" { GoToTab 3; SwitchToMode "Normal"; }
+        bind "4" { GoToTab 4; SwitchToMode "Normal"; }
+        bind "5" { GoToTab 5; SwitchToMode "Normal"; }
+        bind "6" { GoToTab 6; SwitchToMode "Normal"; }
+        bind "7" { GoToTab 7; SwitchToMode "Normal"; }
+        bind "8" { GoToTab 8; SwitchToMode "Normal"; }
+        bind "9" { GoToTab 9; SwitchToMode "Normal"; }
+        bind "d" { Detach; }
+        bind "[" { SwitchToMode "Scroll"; }
+        bind "|" { NewPane "Right"; SwitchToMode "Normal"; }
+        bind "-" { NewPane "Down"; SwitchToMode "Normal"; }
+        bind "x" { CloseFocus; SwitchToMode "Normal"; }
+        bind "+" { ToggleFocusFullscreen; SwitchToMode "Normal"; }
+    }
+    scroll {
+        bind "Space" { SelectCommandAtScrollPosition; }
+        bind "Enter" { Copy; SwitchToMode "Normal"; }
+    }
+}

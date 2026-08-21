@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+zellij="$HOME/.local/bin/zellij"
+tab_id="$($zellij --session main action new-tab)"
+
+sleep 0.1
+"$zellij" --session main action rename-tab --tab-id "$tab_id" ""
+"$zellij" --session main action switch-mode rename-tab

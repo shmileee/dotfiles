@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+set -u
+
+kubectl="$(command -v kubectl)" || exit 0
+context="$($kubectl config current-context 2>/dev/null)" || exit 0
+
+if [[ -z "$context" ]]; then
+  exit 0
+fi
+
+namespace="$($kubectl config view --minify --output 'jsonpath={..namespace}' 2>/dev/null)" || namespace=""
+
+printf 'k8s:%s' "$context"
+if [[ -n "$namespace" ]]; then
+  printf '/%s' "$namespace"
+fi
