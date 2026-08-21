@@ -47,6 +47,7 @@ brew:
       - jq
       - jsonnet
       - k9s
+      - kubectx
       - kustomize
       - lazygit
       - lua-language-server
