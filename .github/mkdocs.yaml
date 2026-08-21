@@ -1,3 +1,4 @@
+---
 docs_dir: ../docs
 site_name: Hitchhiker's Guide to the Dotfiles
 repo_url: https://github.com/shmileee/dotfiles
@@ -7,6 +8,7 @@ copyright: Copyright &copy; 2021 - 2025 Oleksandr Ponomarov
 nav:
   - Overview: index.md
   - What, How & Why?: what-how-and-why.md
+  - Terminal (Zellij): zellij.md
   - Hotkeys: hotkeys.md
 
 theme:
