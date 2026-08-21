@@ -5,6 +5,13 @@ zellij_release_base_url: https://github.com/zellij-org/zellij/releases/download
 zellij_bin_dir: "{{ ansible_facts['user_dir'] }}/.local/bin"
 zellij_cache_dir: "{{ ansible_facts['user_dir'] }}/.cache/zellij-install"
 zellij_install_root: "{{ ansible_facts['user_dir'] }}/.local/lib/zellij"
+zjstatus_version: "0.24.0"
+zjstatus_release_base_url: https://github.com/dj95/zjstatus/releases/download
+zjstatus_checksum: >-
+  1ccedece1ded62cf3e209be690cdd39ca6fb9e8228ed71a951f6507f9956669b
+zjstatus_plugin_dir: >-
+  {{ ansible_facts['user_dir'] }}/.local/share/zellij/plugins
+zjstatus_plugin_path: "{{ zjstatus_plugin_dir }}/zjstatus.wasm"
 zellij_release_assets:
   Darwin:
     arm64:

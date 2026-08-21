@@ -32,6 +32,7 @@
     - "{{ zellij_bin_dir }}"
     - "{{ zellij_cache_dir }}"
     - "{{ zellij_install_root }}/{{ zellij_version }}"
+    - "{{ zjstatus_plugin_dir }}"
 
 - name: "download zellij {{ zellij_version }}"
   ansible.builtin.get_url:
@@ -42,6 +43,16 @@
       {{ zellij_cache_dir ~ '/' ~ zellij_version ~ '-'
       ~ zellij_archive_name }}
     checksum: "sha256:{{ zellij_release_asset.checksum }}"
+    mode: "0644"
+  when: not ansible_check_mode
+
+- name: "download zjstatus {{ zjstatus_version }}"
+  ansible.builtin.get_url:
+    url: >-
+      {{ zjstatus_release_base_url ~ '/v' ~ zjstatus_version
+      ~ '/zjstatus.wasm' }}
+    dest: "{{ zjstatus_plugin_path }}"
+    checksum: "sha256:{{ zjstatus_checksum }}"
     mode: "0644"
   when: not ansible_check_mode
 
