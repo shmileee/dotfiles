@@ -13,3 +13,12 @@
   tags: homebrew
   when:
     - ansible_system in ["Linux", "Darwin"]
+
+- name: "tmux | remove configuration and plugins"
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - "{{ ansible_user_dir }}/.config/tmux"
+    - "{{ ansible_user_dir }}/.tmux"
+  tags: tmux

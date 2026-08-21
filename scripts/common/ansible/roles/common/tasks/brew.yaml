@@ -30,6 +30,13 @@
     name: "{{ pkgs }}"
   when: pkgs is defined
 
+- name: "brew | remove absent packages"
+  community.general.homebrew:
+    name: "{{ brew.packages_absent }}"
+    state: absent
+  when: brew.packages_absent is defined
+  tags: tmux
+
 - name: "brew | install packages from source"
   community.general.homebrew:
     name: "{{ brew.packages_from_source }}"

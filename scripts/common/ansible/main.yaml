@@ -34,8 +34,5 @@
     - name: zellij
       tags: zellij
 
-    - name: tmux
-      tags: tmux
-
     - name: system_defaults
       tags: system_defaults

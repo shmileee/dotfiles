@@ -80,6 +80,8 @@ brew:
     linux: []
   packages_from_source:
     - duf
+  packages_absent:
+    - tmux
 
 dotfiles:
   repo: "https://github.com/shmileee/dotfiles"
