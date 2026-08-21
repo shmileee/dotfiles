@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -u
+
+zellij="$HOME/.local/bin/zellij"
+
+if [[ ! -x "$zellij" ]]; then
+  exit 0
+fi
+
+"$zellij" --session main action "$@" >/dev/null 2>&1 || true
