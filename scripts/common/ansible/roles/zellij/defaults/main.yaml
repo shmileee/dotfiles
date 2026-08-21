@@ -1,0 +1,22 @@
+---
+
+zellij_version: "0.45.0"
+zellij_release_base_url: https://github.com/zellij-org/zellij/releases/download
+zellij_bin_dir: "{{ ansible_facts['user_dir'] }}/.local/bin"
+zellij_cache_dir: "{{ ansible_facts['user_dir'] }}/.cache/zellij-install"
+zellij_install_root: "{{ ansible_facts['user_dir'] }}/.local/lib/zellij"
+zellij_release_assets:
+  Darwin:
+    arm64:
+      target: aarch64-apple-darwin
+      checksum: b3167bca9d75d2e2a676d1dabfa87537009f44b3878bc03fe6ed4cf651e337db
+    x86_64:
+      target: x86_64-apple-darwin
+      checksum: ce499f2e5673750e22e980eb6bbe62fee9d8242cb6ff9d4e1ae33c7db1970d44
+  Debian:
+    aarch64:
+      target: aarch64-unknown-linux-musl
+      checksum: d8b311d0f9ec7a03f3341563331aac12c9f52990ecc96a36ed44b1add9dfa035
+    x86_64:
+      target: x86_64-unknown-linux-musl
+      checksum: ab8b2494d80c20c07da4361041a25b96b93c73df992d2d54143e70fb9b1a1063

@@ -31,6 +31,9 @@
     - name: docker
       tags: docker
 
+    - name: zellij
+      tags: zellij
+
     - name: tmux
       tags: tmux
 

@@ -1,0 +1,67 @@
+---
+
+- name: "validate supported zellij platform"
+  ansible.builtin.assert:
+    that:
+      - ansible_facts["os_family"] in zellij_release_assets
+      - >-
+        ansible_facts["architecture"] in
+        zellij_release_assets[ansible_facts["os_family"]]
+    fail_msg: >-
+      zellij {{ zellij_version }} does not support
+      {{ ansible_facts["os_family"] }}/{{ ansible_facts["architecture"] }}
+      in this role
+
+- name: "select zellij release asset"
+  ansible.builtin.set_fact:
+    zellij_release_asset: >-
+      {{ zellij_release_assets[ansible_facts["os_family"]]
+      [ansible_facts["architecture"]] }}
+
+- name: "build zellij archive name"
+  ansible.builtin.set_fact:
+    zellij_archive_name: >-
+      zellij-{{ zellij_release_asset.target }}.tar.gz
+
+- name: "create zellij installation directories"
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0755"
+  loop:
+    - "{{ zellij_bin_dir }}"
+    - "{{ zellij_cache_dir }}"
+    - "{{ zellij_install_root }}/{{ zellij_version }}"
+
+- name: "download zellij {{ zellij_version }}"
+  ansible.builtin.get_url:
+    url: >-
+      {{ zellij_release_base_url ~ '/v' ~ zellij_version ~ '/'
+      ~ zellij_archive_name }}
+    dest: >-
+      {{ zellij_cache_dir ~ '/' ~ zellij_version ~ '-'
+      ~ zellij_archive_name }}
+    checksum: "sha256:{{ zellij_release_asset.checksum }}"
+    mode: "0644"
+  when: not ansible_check_mode
+
+- name: "unpack zellij {{ zellij_version }}"
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/tar
+      - -xzf
+      - >-
+        {{ zellij_cache_dir ~ '/' ~ zellij_version ~ '-'
+        ~ zellij_archive_name }}
+      - -C
+      - "{{ zellij_install_root }}/{{ zellij_version }}"
+    creates: "{{ zellij_install_root }}/{{ zellij_version }}/zellij"
+  when: not ansible_check_mode
+
+- name: "activate zellij {{ zellij_version }}"
+  ansible.builtin.file:
+    src: "{{ zellij_install_root }}/{{ zellij_version }}/zellij"
+    dest: "{{ zellij_bin_dir }}/zellij"
+    state: link
+    force: true
+  when: not ansible_check_mode
