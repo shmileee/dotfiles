@@ -66,7 +66,7 @@ mode.
 
 ## Prefix bindings and tab names
 
-`Ctrl+a` enters a one-shot tmux-style prefix mode. Actions return to normal mode
+`Ctrl+a` enters a one-shot prefix mode. Actions return to normal mode
 unless they enter scroll or rename mode.
 
 | Binding | Behavior |
@@ -97,7 +97,7 @@ their own mouse handling.
 In scroll mode, use `h`, `j`, `k`, `l`, page keys, `Ctrl+b`, `Ctrl+f`, `d`, and
 `u` for vi-style movement. On Zellij 0.45.0, `Space` selects the OSC 133 shell
 command and output at the scroll cursor; `Enter` copies the selection and returns
-to normal mode. Zellij does not expose tmux's arbitrary keyboard visual-selection
+to normal mode. Zellij does not expose an arbitrary keyboard visual-selection
 action, so command-output selection is the supported keyboard path. Mouse
 selection remains available for arbitrary text.
 
@@ -117,22 +117,3 @@ the active tab, Kubernetes context and namespace, and the local Warsaw timestamp
 as `YYYY-MM-DD HH:mm:ss`. The Kubernetes helper reads only local kubeconfig data.
 Missing `kubectl`, a missing context, or a missing namespace produces no error
 output.
-
-## Dormant tmux fallback
-
-The migration branch keeps the existing tmux package, configuration, TPM, and
-plugins. Launch it manually only when Zellij is unavailable:
-
-```bash
-fish -lc 'exec tmux -u new-session -As main ";" set-option -g detach-on-destroy off'
-```
-
-There is intentionally no alternate Alacritty profile, environment switch, or
-fallback shortcut.
-
-## Accepted differences from tmux
-
-The Zellij workflow does not reproduce cross-session linked windows, attach-time
-environment refresh, the 20-item tmux paste-buffer ring, exact pane-index swaps,
-generic tmux prompts, TPM compatibility, the OpenCode waiting notifier,
-automatic session resurrection, pane renaming, or a dedicated close-tab key.
