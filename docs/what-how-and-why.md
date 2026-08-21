@@ -29,8 +29,10 @@ Below is a non-exhaustive list of the tools used to achieve the desired setup:
 - **Terminal**:
     - [`alacritty`](https://alacritty.org) as my terminal emulator
       ([`alacritty.toml`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_alacritty/alacritty.toml.tmpl)).
-    - [`tmux`](https://github.com/tmux/tmux) as a terminal multiplexer ([`tmux.conf`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf)).
-        - [`tpm`](https://github.com/tmux-plugins/tpm) for managing `tmux` plugins.
+    - [`Zellij`](https://zellij.dev) as the primary terminal multiplexer.
+      See the [terminal guide](zellij.md) for session behavior and shortcuts.
+    - [`tmux`](https://github.com/tmux/tmux) remains installed as a dormant
+      fallback during the migration.
 - **Package management**:
     - [`homebrew`](https://brew.sh) as my primary package manager ([casks + formulas](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml#L10)).
     - [`mise`](https://blog.oponomarov.com/posts/mise-faster-smarter-tool-versioning) as a version manager for various system tools.
@@ -67,7 +69,10 @@ defines what tools and runtimes are managed with `mise`.
     - `mise`: Installs the `mise` version manager for granular control over specific
       tools. All managed tools and their versions are defined in `config.yaml`.
     - `docker`: Installs Docker using `brew`.
-    - `tmux`: Installs `tmux`, `tpm`, and the plugins specified in `tmux.conf`.
+    - `zellij`: Installs a pinned Zellij release for supported macOS and Debian
+      architectures and verifies the downloaded archive checksum.
+    - `tmux`: Installs the dormant fallback, `tpm`, and the plugins specified in
+      `tmux.conf`.
     - `system_defaults`: Applies opinionated macOS system settings and custom
       tweaks for applications like Rectangle or Alt-Tab. Use with caution, as these
       settings can be disruptive and may evolve over time.
