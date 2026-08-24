@@ -1,5 +1,6 @@
 .config/opencode/lib/contextual-notifier-runtime.ts
 .config/opencode/lib/contextual-notifier.ts
+.config/opencode/package.json
 .config/opencode/plugin/contextual-notifier.ts
 .config/opencode/test/contextual-notifier-adapter.test.ts
 .config/opencode/test/contextual-notifier-plugin.test.ts
@@ -7,3 +8,4 @@
 .config/opencode/test/contextual-notifier.test.ts
 .config/opencode/test/tmux-waiting-marker.test.ts
 .config/opencode/tmux-waiting-marker.sh
+.config/opencode/tsconfig.json
