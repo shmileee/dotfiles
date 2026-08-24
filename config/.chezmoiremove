@@ -5,3 +5,5 @@
 .config/opencode/test/contextual-notifier-plugin.test.ts
 .config/opencode/test/contextual-notifier-race.test.ts
 .config/opencode/test/contextual-notifier.test.ts
+.config/opencode/test/tmux-waiting-marker.test.ts
+.config/opencode/tmux-waiting-marker.sh
