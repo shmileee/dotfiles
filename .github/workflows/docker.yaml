@@ -17,6 +17,8 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
@@ -38,3 +40,5 @@ jobs:
           push: true
           tags: shmileee/dotfiles:latest
           provenance: false
+          secrets: |
+            GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
