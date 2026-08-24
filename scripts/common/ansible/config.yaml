@@ -11,6 +11,7 @@ brew:
   taps:
     - aws/tap
     - carlocab/personal
+    - terraform-linters/tap
   casks:
     - 1password
     - alacritty
@@ -58,7 +59,7 @@ brew:
       - ripgrep
       - sponge
       - terraform-docs
-      - tflint
+      - terraform-linters/tap/tflint
       - tfsec
       - tldr
       - tre-command

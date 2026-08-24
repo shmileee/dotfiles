@@ -5,6 +5,18 @@
     msg: "{{ pkgs }}"
   when: pkgs is defined
 
+- name: "brew | list taps"
+  ansible.builtin.command: brew tap
+  register: brew_taps
+  changed_when: false
+  when: ansible_system == "Linux"
+
+- name: "brew | remove legacy core tap"
+  ansible.builtin.command: brew untap --force homebrew/core
+  when:
+    - ansible_system == "Linux"
+    - "'homebrew/core' in (brew_taps.stdout_lines | default([]))"
+
 - name: "brew | update"
   community.general.homebrew:
     update_homebrew: true
@@ -13,6 +25,7 @@
   community.general.homebrew_tap:
     name: "{{ brew.taps }}"
     state: present
+    trust: true
   when: brew.taps is defined
 
 - name: "brew | install casks"
