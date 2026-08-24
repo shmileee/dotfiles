@@ -1,18 +1,30 @@
 # OpenCode and OmO
 
-Chezmoi manages the global OpenCode configuration, the local contextual
-notification plugin, and the unified OmO routing configuration.
+Chezmoi manages the global OpenCode configuration, the released contextual
+notification package declaration, its tmux presentation, and the unified OmO
+routing configuration.
 
 Managed targets:
 
 - `~/.config/opencode/opencode.json`
-- `~/.config/opencode/package.json`
-- `~/.config/opencode/tsconfig.json`
-- `~/.config/opencode/lib/`
-- `~/.config/opencode/plugin/`
-- `~/.config/opencode/test/`
-- `~/.config/opencode/tmux-waiting-marker.sh`
+- `~/.config/tmux/tmux.conf`
 - `~/.omo/omo.jsonc`
+
+## Contextual notifications
+
+`opencode.json` pins `opencode-contextual-notifier@0.1.0`. OpenCode installs
+the npm package with Bun on the next startup, so restart every running OpenCode
+process after changing the declaration.
+
+The released package owns the OpenCode event handling and the tmux marker
+helper. The managed tmux configuration renders `@opencode_waiting` in the
+originating window and clears it when that window is selected or focused. OmO's
+`session-notification` hook remains disabled to prevent duplicate macOS
+notifications.
+
+The notifier implementation, its tests, and its TypeScript toolchain live in
+the package repository and are intentionally not copied into
+`~/.config/opencode`.
 
 ## Local secrets
 
