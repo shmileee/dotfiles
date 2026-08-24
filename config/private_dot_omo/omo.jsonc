@@ -1,0 +1,166 @@
+// OMO configuration
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/dev/assets/omo.schema.json",
+  "[opencode]": {
+    "disabled_hooks": [
+      "session-notification"
+    ],
+    "agents": {
+      "sisyphus": {
+        "model": "anthropic/claude-fable-5",
+        "reasoning": "max",
+        "ultrawork": {
+          "model": "anthropic/claude-fable-5",
+          "reasoning": "max"
+        },
+        "fallback_models": [
+          { "model": "openai/gpt-5.6-sol", "reasoning": "xhigh" }
+        ]
+      },
+      "prometheus": {
+        "model": "anthropic/claude-fable-5",
+        "reasoning": "max",
+        "fallback_models": [
+          { "model": "openai/gpt-5.6-sol", "reasoning": "high" }
+        ]
+      },
+      "metis": {
+        "model": "anthropic/claude-sonnet-5",
+        "fallback_models": [
+          { "model": "openai/gpt-5.6-sol", "reasoning": "high" }
+        ]
+      },
+      "momus": {
+        "model": "openai/gpt-5.6-terra",
+        "reasoning": "high",
+        "fallback_models": [
+          { "model": "openai/gpt-5.6-sol", "reasoning": "xhigh" }
+        ]
+      },
+      "oracle": {
+        "model": "openai/gpt-5.6-sol",
+        "reasoning": "high",
+        "ultrawork": {
+          "model": "openai/gpt-5.6-sol",
+          "reasoning": "xhigh"
+        },
+        "fallback_models": [
+          { "model": "openai/gpt-5.6-terra", "reasoning": "high" }
+        ]
+      },
+      "hephaestus": {
+        "model": "openai/gpt-5.6-sol",
+        "reasoning": "xhigh",
+        "fallback_models": [
+          { "model": "openai/gpt-5.6-terra", "reasoning": "high" }
+        ]
+      },
+      "atlas": {
+        "model": "anthropic/claude-sonnet-5",
+        "fallback_models": [
+          { "model": "openai/gpt-5.6-terra", "reasoning": "xhigh" }
+        ]
+      },
+      "sisyphus-junior": {
+        "model": "anthropic/claude-sonnet-5",
+        "ultrawork": {
+          "model": "anthropic/claude-fable-5",
+          "reasoning": "high"
+        },
+        "fallback_models": [
+          { "model": "openai/gpt-5.6-terra", "reasoning": "xhigh" }
+        ]
+      },
+      "librarian": {
+        "model": "openai/gpt-5.4-mini",
+        "fallback_models": [
+          { "model": "openai/gpt-5.6-luna-fast", "reasoning": "low" }
+        ]
+      },
+      "explore": {
+        "model": "openai/gpt-5.4-mini",
+        "fallback_models": [
+          { "model": "openai/gpt-5.6-luna-fast", "reasoning": "low" }
+        ]
+      },
+      "multimodal-looker": {
+        "model": "openai/gpt-5.6-sol",
+        "reasoning": "xhigh",
+        "fallback_models": [
+          { "model": "openai/gpt-5.6-luna", "reasoning": "xhigh" }
+        ]
+      }
+    },
+    "categories": {
+      "visual-engineering": {
+        "model": "openai/gpt-5.6-sol",
+        "reasoning": "high",
+        "fallback_models": [
+          { "model": "openai/gpt-5.6-terra", "reasoning": "high" }
+        ]
+      },
+      "artistry": {
+        "model": "openai/gpt-5.6-sol",
+        "reasoning": "xhigh",
+        "fallback_models": [
+          { "model": "openai/gpt-5.6-terra", "reasoning": "high" }
+        ]
+      },
+      "ultrabrain": {
+        "model": "anthropic/claude-fable-5",
+        "reasoning": "max",
+        "fallback_models": [
+          { "model": "openai/gpt-5.6-sol", "reasoning": "xhigh" }
+        ]
+      },
+      "deep": {
+        "model": "openai/gpt-5.6-terra",
+        "reasoning": "xhigh",
+        "fallback_models": [
+          { "model": "openai/gpt-5.6-sol", "reasoning": "high" }
+        ]
+      },
+      "writing": {
+        "model": "anthropic/claude-fable-5",
+        "reasoning": "high",
+        "fallback_models": [
+          { "model": "openai/gpt-5.6-terra", "reasoning": "xhigh" }
+        ]
+      },
+      "quick": {
+        "model": "openai/gpt-5.4-mini",
+        "fallback_models": [
+          { "model": "openai/gpt-5.6-luna", "reasoning": "low" }
+        ]
+      },
+      "unspecified-low": {
+        "model": "openai/gpt-5.6-luna",
+        "reasoning": "xhigh",
+        "fallback_models": [
+          { "model": "openai/gpt-5.4-mini" }
+        ]
+      },
+      "unspecified-high": {
+        "model": "anthropic/claude-fable-5",
+        "reasoning": "max",
+        "fallback_models": [
+          { "model": "openai/gpt-5.6-sol", "reasoning": "xhigh" }
+        ]
+      }
+    },
+    "model_fallback": true,
+    "runtime_fallback": {
+      "enabled": false,
+      "retry_on_errors": [402, 429, 500, 502, 503, 504, 529],
+      "max_fallback_attempts": 1,
+      "cooldown_seconds": 60,
+      "timeout_seconds": 30,
+      "notify_on_fallback": true,
+      "restore_primary_after_cooldown": false
+    }
+  },
+  "_migrations": [
+    "2026-07-opencode-config-unification",
+    "2026-08-reasoning-unification"
+  ]
+}
