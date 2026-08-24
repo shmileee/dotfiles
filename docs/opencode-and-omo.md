@@ -12,7 +12,7 @@ Managed targets:
 
 ## Contextual notifications
 
-`opencode.json` pins `opencode-contextual-notifier@0.1.1`. OpenCode installs
+`opencode.json` pins `opencode-contextual-notifier@0.1.2`. OpenCode installs
 the npm package with Bun on the next startup, so restart every running OpenCode
 process after changing the declaration.
 
