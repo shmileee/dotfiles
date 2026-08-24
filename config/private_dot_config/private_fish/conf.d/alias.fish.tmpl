@@ -22,11 +22,11 @@ end
 
 # eza
 if command -v eza > /dev/null
-  alias l="eza --icons"
-  alias ls="eza --git --icons"
-  alias la="eza --git -a --icons"
-  alias ll="eza -lab --git --icons"
-  alias tree="eza --tree --icons"
+  alias l="eza --icons=auto"
+  alias ls="eza --git --icons=auto"
+  alias la="eza --git -a --icons=auto"
+  alias ll="eza -lab --git --icons=auto"
+  alias tree="eza --tree --icons=auto"
 else
   alias l="ls"
   alias la="ls -a"

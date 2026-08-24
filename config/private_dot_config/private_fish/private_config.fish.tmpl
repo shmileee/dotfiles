@@ -2,13 +2,13 @@
 fish_add_path /home/linuxbrew/.linuxbrew/bin
 {{- end }}
 
-if command -v bat > /dev/null
-  set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
+if command -v bat >/dev/null
+    set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
 end
 
 set -x XDG_CONFIG_HOME $HOME/.config
 set -x XDG_CACHE_HOME $HOME/.cache
-set -x EDITOR vim
+set -x EDITOR nvim
 set -x GOPATH $HOME/go
 
 fish_add_path $GOPATH/bin
@@ -23,6 +23,8 @@ set -x GODEBUG asyncpreemptoff=1
 
 set -gx HOMEBREW_NO_ANALYTICS 1
 
+set -gx DIRENV_BASH /bin/bash
+
 # fzf
 set -gx FZF_CTRL_T_COMMAND "rg --files --hidden --follow --glob '!.git'"
 set -gx FZF_DEFAULT_COMMAND "rg --files --hidden --follow --glob '!.git'"
@@ -34,4 +36,10 @@ set -g theme_display_ruby no
 set -g theme_nerd_fonts yes
 set -g theme_newline_cursor yes
 
-source (which env_parallel.fish)
+# source (which env_parallel.fish)
+
+{{ if eq .chezmoi.os "darwin" -}}
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+set --export --prepend PATH "{{ .chezmoi.homeDir }}/.rd/bin"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
+{{- end }}
