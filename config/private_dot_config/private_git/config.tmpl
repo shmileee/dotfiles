@@ -23,6 +23,10 @@
   path = ~/.config/git/work
 [includeIf "gitdir:~/private/**"]
   path = ~/.config/git/personal
+[includeIf "gitdir:~/ghq/personalgit/**"]
+  path = ~/.config/git/personal
+[includeIf "gitdir:~/ghq/workgit/**"]
+  path = ~/.config/git/work
 [credential]
   helper = store
 [pull]
