@@ -26,6 +26,6 @@
   "plugin": [
     "opencode-claude-auth@latest",
     "oh-my-openagent@4.19.4",
-    "file://{env:HOME}/.config/opencode/plugin/contextual-notifier.ts"
+    "opencode-contextual-notifier@0.1.0"
   ]
 }
