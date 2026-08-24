@@ -39,7 +39,7 @@ startup_mode = "Maximized"
 
 [terminal.shell]
 program = "{{ $shell }}"
-args = ["-lc", "tmux -u new-session -As main \";\" set-option -g detach-on-destroy off"]
+args = ["-lc", "exec {{ $tmux }} -u new-session -As main \";\" set-option -g detach-on-destroy off"]
 
 [keyboard]
 bindings = [
@@ -49,7 +49,6 @@ bindings = [
   { key = "Tab", mods = "Control", command = { program = "{{ $tmux }}", args = ["select-window", "-t", "+"] } },  # Next window
   { key = "Tab", mods = "Shift|Control", command = { program = "{{ $tmux }}", args = ["select-window", "-t", "-"] } },  # Previous window
   { key = "F", mods = "Command", command = { program = "{{ $tmux }}", args = [ "copy-mode;", "command-prompt", "-i", "-I", "#{pane_search_string}", "-p", "(search down)", "send -X search-forward-incremental \"%%%\"" ] } },  # Search forward incrementally
-  { key = "Key0", mods = "Command", command = { program = "{{ $tmux }}", args = ["select-window", "-t 0"] } },  # Switch to window 0
   { key = "Key1", mods = "Command", command = { program = "{{ $tmux }}", args = ["select-window", "-t 1"] } },  # Switch to window 1
   { key = "Key2", mods = "Command", command = { program = "{{ $tmux }}", args = ["select-window", "-t 2"] } },  # Switch to window 2
   { key = "Key3", mods = "Command", command = { program = "{{ $tmux }}", args = ["select-window", "-t 3"] } },  # Switch to window 3
@@ -58,6 +57,7 @@ bindings = [
   { key = "Key6", mods = "Command", command = { program = "{{ $tmux }}", args = ["select-window", "-t 6"] } },  # Switch to window 6
   { key = "Key7", mods = "Command", command = { program = "{{ $tmux }}", args = ["select-window", "-t 7"] } },  # Switch to window 7
   { key = "Key8", mods = "Command", command = { program = "{{ $tmux }}", args = ["select-window", "-t 8"] } },  # Switch to window 8
+  { key = "Key9", mods = "Command", command = { program = "{{ $tmux }}", args = ["select-window", "-t 9"] } },  # Switch to window 9
   { key = "T", mods = "Command", command = { program = "{{ $tmux }}", args = ["new-window", "-c", "#{pane_current_path}"] } },  # Create a new tmux window
   { key = "R", mods = "Command|Shift", command = { program = "{{ $tmux }}", args = ["command-prompt", "rename-session -- '%%'"] } },  # Rename session
   { key = "W", mods = "Command",  command = { program = "{{ $tmux }}", args = ["kill-window"] } },  # Kill window
