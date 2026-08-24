@@ -12,15 +12,15 @@ Managed targets:
 
 ## Contextual notifications
 
-`opencode.json` pins `opencode-contextual-notifier@0.1.0`. OpenCode installs
+`opencode.json` pins `opencode-contextual-notifier@0.1.1`. OpenCode installs
 the npm package with Bun on the next startup, so restart every running OpenCode
 process after changing the declaration.
 
-The released package owns the OpenCode event handling and the tmux marker
-helper. The managed tmux configuration renders `@opencode_waiting` in the
-originating window and clears it when that window is selected or focused. OmO's
-`session-notification` hook remains disabled to prevent duplicate macOS
-notifications.
+The released package owns the OpenCode event handling, tmux marker helper, and
+TPM companion. The managed tmux configuration declares that companion; its
+entrypoint renders `@opencode_waiting` in the originating window and clears it
+when that window is selected or focused. OmO's `session-notification` hook
+remains disabled to prevent duplicate macOS notifications.
 
 The notifier implementation, its tests, and its TypeScript toolchain live in
 the package repository and are intentionally not copied into

@@ -26,6 +26,6 @@
   "plugin": [
     "opencode-claude-auth@latest",
     "oh-my-openagent@4.19.4",
-    "opencode-contextual-notifier@0.1.0"
+    "opencode-contextual-notifier@0.1.1"
   ]
 }
