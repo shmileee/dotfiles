@@ -9,7 +9,7 @@ needs_become_pass() { ! sudo -n true 2>/dev/null; }
 
 install_collections() {
 	echo "⚪ [ansible] installing collections..."
-	ansible-galaxy collection install community.general
+	ansible-galaxy collection install community.general ansible.posix
 }
 
 run_playbook() {
