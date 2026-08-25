@@ -1,22 +1,47 @@
-FROM --platform=linux/amd64 homebrew/ubuntu24.04:latest@sha256:ba10c293072721071cafdba7d1a396979f06ee623bf48abf55c9e84cb15f945b
+# syntax=docker/dockerfile:1.7
+
+FROM ubuntu:24.04@sha256:95fa486768020359141f1318720f43e7982ef926c792891d984aef9aaf05e7ea
 
 ENV TIMEZONE="Europe/Warsaw"
 ENV DEBIAN_FRONTEND="noninteractive"
-
-RUN sudo ln -snf "/usr/share/zoneinfo/${TIMEZONE}" /etc/localtime && \
-    echo "${TIMEZONE}" | sudo tee /etc/timezone
-
 ENV DOCKERIZED=true
+ENV ANSIBLE_DEPRECATION_WARNINGS=false
+ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:${PATH}"
 
-COPY . /tmp/.dotfiles
-RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
-    HOMEBREW_NO_AUTO_UPDATE=1 \
-    HOMEBREW_GITHUB_API_TOKEN="${GITHUB_TOKEN}" \
-    GIT_CONFIG_COUNT=1 \
-    GIT_CONFIG_KEY_0=http.version \
-    GIT_CONFIG_VALUE_0=HTTP/1.1 \
-    ANSIBLE_DEPRECATION_WARNINGS=false \
-    /tmp/.dotfiles/scripts/setup.sh --all && \
-    sudo rm -rf /tmp/.dotfiles
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+USER root
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
+    apt-get update && \
+    apt-get install --yes --no-install-recommends ca-certificates sudo && \
+    groupmod --new-name linuxbrew ubuntu && \
+    usermod --login linuxbrew --home /home/linuxbrew --move-home ubuntu && \
+    echo "linuxbrew ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/linuxbrew && \
+    chmod 0440 /etc/sudoers.d/linuxbrew && \
+    ln -snf "/usr/share/zoneinfo/${TIMEZONE}" /etc/localtime && \
+    echo "${TIMEZONE}" > /etc/timezone
+USER linuxbrew
+WORKDIR /tmp/.dotfiles
+
+COPY --chown=linuxbrew:linuxbrew . .
+RUN --mount=type=secret,id=GITHUB_TOKEN,uid=1000,gid=1000 \
+    GITHUB_TOKEN="$(cat /run/secrets/GITHUB_TOKEN 2>/dev/null || true)" && \
+    export GITHUB_TOKEN && \
+    export HOMEBREW_GITHUB_API_TOKEN="${GITHUB_TOKEN}" && \
+    export HOMEBREW_NO_AUTO_UPDATE=1 && \
+    export GIT_CONFIG_COUNT=1 && \
+    export GIT_CONFIG_KEY_0=http.version && \
+    export GIT_CONFIG_VALUE_0=HTTP/1.1 && \
+    scripts/docker/profile.sh full-ansible-install scripts/setup.sh --all
+
+RUN chezmoi \
+    --source /tmp/.dotfiles/config \
+    --working-tree /tmp/.dotfiles \
+    apply
+
+RUN scripts/docker/profile.sh neovim-bootstrap scripts/docker/neovim-bootstrap.sh
+
+RUN scripts/docker/profile.sh e2e-assertions scripts/docker/assertions.sh
 
 CMD ["fish", "-l"]

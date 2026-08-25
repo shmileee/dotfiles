@@ -1,0 +1,10 @@
+.git
+.github
+.codegraph
+.omo
+.debug-journal.md
+.gitignore
+.pre-commit-config.yaml
+.prettierrc.json
+README.md
+docs
