@@ -40,7 +40,7 @@ curl -fsSL oponomarov.com/d | sh -s -- --all
     - Installs Ansible. For Linux, this happens during the system dependencies step; for macOS, it is managed through Homebrew.
     - Installs Homebrew if it is not already available (macOS only).
     - Executes the [`ansible.sh`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible.sh) script, which:
-        - Installs the `community.general` Ansible collection.
+        - Installs the `community.general` and `ansible.posix` Ansible collections.
         - Checks for passwordless `sudo` access or prompts for a password if needed.
         - Runs the [`main.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/main.yaml) Ansible playbook.
 
@@ -67,7 +67,7 @@ pushed](https://github.com/shmileee/dotfiles/actions/workflows/docker.yaml)
 using GitHub Actions. Alternatively, you can build it yourself:
 
 ```bash
-docker buildx build --platform linux/amd64 -t dotfiles --progress plain .
+docker buildx build --platform linux/arm64 -t dotfiles --progress plain .
 ```
 
 ## Credits
