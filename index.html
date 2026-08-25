@@ -269,7 +269,7 @@ chmod<span class="w"> </span>+x<span class="w"> </span>setup.sh
 <li>Installs Ansible. For Linux, this happens during the system dependencies step; for macOS, it is managed through Homebrew.</li>
 <li>Installs Homebrew if it is not already available (macOS only).</li>
 <li>Executes the <a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible.sh"><code>ansible.sh</code></a> script, which:<ul>
-<li>Installs the <code>community.general</code> Ansible collection.</li>
+<li>Installs the <code>community.general</code> and <code>ansible.posix</code> Ansible collections.</li>
 <li>Checks for passwordless <code>sudo</code> access or prompts for a password if needed.</li>
 <li>Runs the <a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/main.yaml"><code>main.yaml</code></a> Ansible playbook.</li>
 </ul>
@@ -293,7 +293,7 @@ chmod<span class="w"> </span>+x<span class="w"> </span>setup.sh
 automatically <a href="https://github.com/shmileee/dotfiles/actions/workflows/docker.yaml">built and
 pushed</a>
 using GitHub Actions. Alternatively, you can build it yourself:</p>
-<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>buildx<span class="w"> </span>build<span class="w"> </span>--platform<span class="w"> </span>linux/amd64<span class="w"> </span>-t<span class="w"> </span>dotfiles<span class="w"> </span>--progress<span class="w"> </span>plain<span class="w"> </span>.
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>buildx<span class="w"> </span>build<span class="w"> </span>--platform<span class="w"> </span>linux/arm64<span class="w"> </span>-t<span class="w"> </span>dotfiles<span class="w"> </span>--progress<span class="w"> </span>plain<span class="w"> </span>.
 </code></pre></div>
 <h2 id="credits">Credits<a class="headerlink" href="#credits" title="Permanent link">¶</a></h2>
 <p>Many thanks to the <a href="https://dotfiles.github.io">dotfiles community</a>.</p>
