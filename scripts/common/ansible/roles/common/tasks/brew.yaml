@@ -20,6 +20,7 @@
 - name: "brew | update"
   community.general.homebrew:
     update_homebrew: true
+  when: not (lookup('env', 'DOCKERIZED') | bool)
 
 - name: "brew | install taps"
   community.general.homebrew_tap:

@@ -18,13 +18,6 @@
     state: present
   when: packages is defined
 
-- name: "apt | upgrade to the latest version"
-  become: true
-  ansible.builtin.apt:
-    upgrade: safe
-  changed_when: false
-  when: ansible_os_family == "Debian"
-
 - name: "apt | clean"
   become: true
   ansible.builtin.apt:
