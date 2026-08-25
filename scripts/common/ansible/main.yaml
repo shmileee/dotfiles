@@ -30,6 +30,7 @@
 
     - name: docker
       tags: docker
+      when: not (lookup('env', 'DOCKERIZED') | bool)
 
     - name: tmux
       tags: tmux
