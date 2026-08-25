@@ -1,10 +1,14 @@
 # Bare Necessities
 ca-certificates
+build-essential
+file
 git
 gpg
 locales
 make
+procps
 sudo
+unzip
 
 # Editor
 vim
