@@ -32,7 +32,10 @@ require("lazy").setup({
     -- Neovim install.
     version = false, -- always use the latest git commit
   },
-  install = { colorscheme = { "tokyonight", "habamax" } },
+  install = {
+    colorscheme = { "tokyonight", "habamax" },
+    missing = vim.env.DOCKERIZED ~= "true",
+  },
   checker = {
     enabled = true, -- check for plugin updates periodically
     notify = false, -- notify on update
