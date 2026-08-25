@@ -1,4 +1,4 @@
-return {
+local plugins = {
   -- disable "bad" defaults:
   { "folke/flash.nvim", enabled = false },
   { "copilot.lua", enabled = false },
@@ -133,3 +133,21 @@ return {
     },
   },
 }
+
+if vim.env.DOCKERIZED == "true" then
+  table.insert(plugins, {
+    "mason-org/mason.nvim",
+    opts = function(_, opts)
+      opts.ensure_installed = {}
+    end,
+  })
+  table.insert(plugins, {
+    "nvim-treesitter/nvim-treesitter",
+    build = false,
+    opts = function(_, opts)
+      opts.ensure_installed = {}
+    end,
+  })
+end
+
+return plugins
