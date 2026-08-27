@@ -60,6 +60,7 @@ brew:
 dotfiles:
   repo: "https://github.com/shmileee/dotfiles"
   branch: "master"
+  checkout: "{{ playbook_dir }}/../../.."
 
 dockitems:
   - name: Google Chrome
