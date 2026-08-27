@@ -67,7 +67,8 @@
           - fisher update
       when: >-
         download_result.changed or
-        fisher_plugins.stdout_lines !=
+        fisher_plugins.stdout_lines | map('lower') | list !=
         lookup('ansible.builtin.file', ansible_facts['user_dir'] + '/.config/fish/fish_plugins').splitlines()
+        | map('lower') | list
 
   tags: fish_config
