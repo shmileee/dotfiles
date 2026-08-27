@@ -6,31 +6,34 @@
   vars_files:
     - config.yaml
 
+  vars:
+    ansible_python_interpreter: "{{ ansible_playbook_python }}"
+
   roles:
-    - name: common
+    - role: common
       tags: common
 
-    - name: fonts
+    - role: fonts
       tags: fonts
 
-    - name: dotfiles
+    - role: dotfiles
       tags: dotfiles
 
-    - name: fish
+    - role: fish
       tags: fish
 
-    - name: mise
+    - role: mise
       tags: mise
 
-    - name: neovim
+    - role: neovim
       tags: neovim
 
-    - name: docker
+    - role: docker
       tags: docker
-      when: not (lookup('env', 'DOCKERIZED') | bool)
+      when: lookup('env', 'DOCKERIZED') != 'true'
 
-    - name: tmux
+    - role: tmux
       tags: tmux
 
-    - name: system_defaults
+    - role: system_defaults
       tags: system_defaults

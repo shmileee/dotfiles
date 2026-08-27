@@ -9,14 +9,27 @@ check_mode=false
 needs_become_pass() { ! sudo -n true 2>/dev/null; }
 
 install_collections() {
+	local collections_dir="${HOME}/.ansible/collections"
+
+	if [[ -d "${collections_dir}/ansible_collections/community/general" &&
+		-d "${collections_dir}/ansible_collections/ansible/posix" ]]; then
+		echo "✅ [ansible] collections already installed!"
+		return
+	fi
+
 	echo "⚪ [ansible] installing collections..."
-	ansible-galaxy collection install community.general ansible.posix
+	ansible-galaxy collection install \
+		--force \
+		--collections-path "$collections_dir" \
+		community.general \
+		ansible.posix
 }
 
 run_playbook() {
 	echo "⚪ [ansible] running playbook..."
 	local command=(
 		ansible-playbook
+		--inventory "127.0.0.1,"
 		-e "ansible_user=$(whoami)"
 		"${cwd}/ansible/main.yaml"
 	)

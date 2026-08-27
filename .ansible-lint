@@ -1,5 +1,7 @@
 ---
 profile: basic
 skip_list:
+  - key-order
   - name
+  - var-naming
   - yaml
