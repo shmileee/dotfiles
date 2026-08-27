@@ -4,7 +4,7 @@ set -euoE pipefail
 
 cwd="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 action=""
-extra_playbook_opts=()
+check_mode=false
 
 needs_become_pass() { ! sudo -n true 2>/dev/null; }
 
@@ -15,20 +15,28 @@ install_collections() {
 
 run_playbook() {
 	echo "⚪ [ansible] running playbook..."
-	local playbook_opts=("${extra_playbook_opts[@]}")
+	local command=(
+		ansible-playbook
+		-e "ansible_user=$(whoami)"
+		"${cwd}/ansible/main.yaml"
+	)
+
+	if [[ "$check_mode" == true ]]; then
+		command+=("--check")
+	fi
 
 	if needs_become_pass; then
-		playbook_opts+=("--ask-become-pass")
+		command+=("--ask-become-pass")
 	fi
 
 	export ANSIBLE_CONFIG="${cwd}/ansible/ansible.cfg"
 
 	if [[ -z "${CI:-}" && -z "${DOCKERIZED:-}" ]]; then
-		playbook_opts+=("-v")
+		command+=("-v")
 	fi
 
-	echo "ansible-playbook -e ansible_user=$(whoami) ${cwd}/ansible/main.yaml ${playbook_opts[*]}"
-	ansible-playbook -e "ansible_user=$(whoami)" "${cwd}/ansible/main.yaml" "${playbook_opts[@]}"
+	echo "${command[*]}"
+	"${command[@]}"
 	echo "✅ [ansible] configured!"
 }
 
@@ -45,7 +53,7 @@ while [[ $# -gt 0 ]]; do
 		action="all"
 		;;
 	--check)
-		extra_playbook_opts+=("--check")
+		check_mode=true
 		;;
 	*)
 		echo "Unknown argument: $arg" >&2
