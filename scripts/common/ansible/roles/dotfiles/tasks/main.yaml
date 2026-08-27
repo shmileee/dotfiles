@@ -12,7 +12,16 @@
   args:
     creates: "{{ ansible_user_dir }}/.local/share/chezmoi"
 
-- name: "chezmoi update"
-  ansible.builtin.command: chezmoi update --force
-  register: chezmoi_update
-  changed_when: '"Updating" in chezmoi_update.stderr'
+- name: "chezmoi apply current checkout"
+  ansible.builtin.command:
+    argv:
+      - chezmoi
+      - --source
+      - "{{ dotfiles.checkout }}/config"
+      - --working-tree
+      - "{{ dotfiles.checkout }}"
+      - apply
+      - --force
+      - --verbose
+  register: chezmoi_apply
+  changed_when: chezmoi_apply.stdout | length > 0
