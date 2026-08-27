@@ -2,10 +2,6 @@
 fish_add_path /home/linuxbrew/.linuxbrew/bin
 {{- end }}
 
-if command -v bat >/dev/null
-    set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
-end
-
 set -x XDG_CONFIG_HOME $HOME/.config
 set -x XDG_CACHE_HOME $HOME/.cache
 set -x EDITOR nvim
@@ -25,18 +21,19 @@ set -gx HOMEBREW_NO_ANALYTICS 1
 
 set -gx DIRENV_BASH /bin/bash
 
-# fzf
-set -gx FZF_CTRL_T_COMMAND "rg --files --hidden --follow --glob '!.git'"
-set -gx FZF_DEFAULT_COMMAND "rg --files --hidden --follow --glob '!.git'"
-set -gx FZF_DEFAULT_OPTS "--color=dark"
+if status is-interactive
+    if type -q bat
+        set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
+    end
 
-# fish bobthefish-theme config
-set -g theme_date_format "+20%y/%m/%d %H:%M"
-set -g theme_display_ruby no
-set -g theme_nerd_fonts yes
-set -g theme_newline_cursor yes
+    set -gx FZF_DEFAULT_OPTS "--color=dark"
 
-# source (which env_parallel.fish)
+    # fish bobthefish-theme config
+    set -g theme_date_format "+20%y/%m/%d %H:%M"
+    set -g theme_display_ruby no
+    set -g theme_nerd_fonts yes
+    set -g theme_newline_cursor yes
+end
 
 {{ if eq .chezmoi.os "darwin" -}}
 ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)

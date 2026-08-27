@@ -1,15 +1,12 @@
 ---
 
-- block:
-
-  - name: "install fonts"
-    community.general.homebrew_cask:
-      name:
-        - font-powerline-symbols
-        - font-fira-code-nerd-font
-      greedy: true
-      accept_external_apps: true
-
+- name: "install fonts"
+  community.general.homebrew_cask:
+    name:
+      - font-powerline-symbols
+      - font-fira-code-nerd-font
+    greedy: true
+    accept_external_apps: true
   tags:
     - font_install
     - homebrew

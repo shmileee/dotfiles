@@ -1,5 +1,7 @@
 # set up aliases
 
+status is-interactive; or return
+
 {{- if (eq .chezmoi.os "darwin") }}
 if command -v gsed > /dev/null
   alias sed 'gsed'

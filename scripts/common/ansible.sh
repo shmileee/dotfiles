@@ -2,8 +2,9 @@
 
 set -euoE pipefail
 
-# shellcheck disable=SC2086
-cwd="$(cd "$(dirname ${BASH_SOURCE[0]})" && pwd)"
+cwd="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+action=""
+extra_playbook_opts=()
 
 needs_become_pass() { ! sudo -n true 2>/dev/null; }
 
@@ -14,7 +15,7 @@ install_collections() {
 
 run_playbook() {
 	echo "⚪ [ansible] running playbook..."
-	local playbook_opts=()
+	local playbook_opts=("${extra_playbook_opts[@]}")
 
 	if needs_become_pass; then
 		playbook_opts+=("--ask-become-pass")
@@ -22,30 +23,51 @@ run_playbook() {
 
 	export ANSIBLE_CONFIG="${cwd}/ansible/ansible.cfg"
 
-	local verbosity=""
 	if [[ -z "${CI:-}" && -z "${DOCKERIZED:-}" ]]; then
-		verbosity="-v"
+		playbook_opts+=("-v")
 	fi
 
-	echo "ansible-playbook -e ansible_user=$(whoami) ${cwd}/ansible/main.yaml ${verbosity} ${playbook_opts[*]+"${playbook_opts[*]}"}"
-	ansible-playbook -e "ansible_user=$(whoami)" "${cwd}/ansible/main.yaml" ${verbosity} ${playbook_opts[@]+"${playbook_opts[@]}"}
+	echo "ansible-playbook -e ansible_user=$(whoami) ${cwd}/ansible/main.yaml ${playbook_opts[*]}"
+	ansible-playbook -e "ansible_user=$(whoami)" "${cwd}/ansible/main.yaml" "${playbook_opts[@]}"
 	echo "✅ [ansible] configured!"
 }
 
-# process arguments
 while [[ $# -gt 0 ]]; do
 	arg=$1
 	case $arg in
 	--install)
-		install_collections
+		action="install"
 		;;
 	--run)
-		run_playbook
+		action="run"
 		;;
 	--all)
-		install_collections
-		run_playbook
+		action="all"
+		;;
+	--check)
+		extra_playbook_opts+=("--check")
+		;;
+	*)
+		echo "Unknown argument: $arg" >&2
+		exit 1
 		;;
 	esac
 	shift
 done
+
+case $action in
+install)
+	install_collections
+	;;
+run)
+	run_playbook
+	;;
+all)
+	install_collections
+	run_playbook
+	;;
+*)
+	echo "Usage: $0 --install|--run|--all [--check]" >&2
+	exit 1
+	;;
+esac

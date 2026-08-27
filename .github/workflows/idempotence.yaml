@@ -1,20 +1,8 @@
 ---
-name: macos
+name: idempotence
 
 on:
-  push:
-    branches:
-      - "master"
-    paths:
-      - "config/**"
-      - "scripts/**"
-      - ".ansible-lint"
-      - ".pre-commit-config.yaml"
-      - ".yamllint.yaml"
-      - ".github/workflows/macos.yaml"
-      - "!**.md"
-      - "!.github/mkdocs.yaml"
-      - "!docs/**"
+  workflow_dispatch:
 
 jobs:
   macos:
@@ -32,18 +20,17 @@ jobs:
           brew cleanup --prune-prefix
           /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall.sh)"
 
-      # - name: Download and install available system updates
-      #   if: startsWith(matrix.os, 'macos')
-      #   run: |
-      #     sudo softwareupdate -i -a
-
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
-      - name: Install using setup.sh
+      - name: Install
         run: ./scripts/setup.sh --all
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Validate
-        run: mise exec -- prek run --all-files
+      - name: Run playbook again
+        run: |
+          ./scripts/common/ansible.sh --run | tee /tmp/ansible-idempotence.log
+          grep -Eq 'changed=0 +unreachable=0 +failed=0' /tmp/ansible-idempotence.log
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

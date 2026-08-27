@@ -1,10 +1,5 @@
 ---
 
-- name: "brew | list packages"
-  ansible.builtin.debug:
-    msg: "{{ pkgs }}"
-  when: pkgs is defined
-
 - name: "brew | list taps"
   ansible.builtin.command: brew tap
   register: brew_taps
@@ -27,7 +22,6 @@
     name: "{{ brew.taps }}"
     state: present
     trust: true
-  when: brew.taps is defined
 
 - name: "brew | install casks"
   community.general.homebrew_cask:
@@ -36,16 +30,8 @@
     greedy: true
     accept_external_apps: true
   when:
-    - brew.casks is defined
     - ansible_system == "Darwin"
 
 - name: "brew | install packages"
   community.general.homebrew:
     name: "{{ pkgs }}"
-  when: pkgs is defined
-
-- name: "brew | install packages from source"
-  community.general.homebrew:
-    name: "{{ brew.packages_from_source }}"
-    install_options: build-from-source
-  when: brew.packages_from_source is defined

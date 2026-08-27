@@ -1,3 +1,5 @@
+status is-interactive; or return
+
 function dstop --description="Stop all containers"
     docker stop (docker ps -a -q)
 end
