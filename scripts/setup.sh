@@ -2,13 +2,18 @@
 
 set -euoE pipefail
 
-# shellcheck disable=SC2086
-cwd="$(cd "$(dirname ${BASH_SOURCE[0]})" && pwd)"
-
 source="https://github.com/shmileee/dotfiles"
-branch="${branch:-master}"
+branch="master"
 tarball="$source/tarball/$branch"
-target="/tmp/.dotfiles"
+repository=""
+temporary_repository=""
+
+if [[ -n "${BASH_SOURCE[0]:-}" ]]; then
+	script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+	if [[ -x "${script_dir}/common/ansible.sh" ]]; then
+		repository="$(cd "${script_dir}/.." && pwd)"
+	fi
+fi
 
 display_help() {
 	echo "Usage: ./setup.sh [arguments]..."
@@ -43,30 +48,43 @@ ensure_brew_in_path() {
 }
 
 download_repository() {
-	mkdir -p "$target"
-	if is_executable "git"; then
-		git clone -b "$branch" "$source" "$target"
-	elif is_executable "curl"; then
-		curl -#L "$tarball" | tar -xzv -C "$target" --strip-components=1 --exclude='{.gitignore}'
+	temporary_repository="$(mktemp -d "${TMPDIR:-/tmp}/dotfiles.XXXXXX")"
+	repository="$temporary_repository"
+	trap '[[ -z "$temporary_repository" ]] || rm -rf -- "$temporary_repository"' EXIT
+
+	if is_executable "curl"; then
+		curl -fsSL "$tarball" | tar -xz -C "$repository" --strip-components=1
 	elif is_executable "wget"; then
-		wget --no-check-certificate -O - "$tarball" | tar -xzv -C "$target" --strip-components=1 --exclude='{.gitignore}'
+		wget -qO- "$tarball" | tar -xz -C "$repository" --strip-components=1
+	elif is_executable "git"; then
+		git clone --depth 1 --branch "$branch" "$source" "$repository"
 	else
 		exit_help "No git, curl or wget available. Aborting."
 	fi
 }
 
 setup_all() {
-	test -d "$target" || download_repository
-	if linux; then
-		"${target}/scripts/linux/install_dependencies.sh"
+	if ! macos && ! linux; then
+		exit_help "Only macOS and Linux are supported."
 	fi
-	"${target}/scripts/common/install_brew.sh"
+
+	[[ -n "$repository" ]] || download_repository
+	if linux; then
+		"${repository}/scripts/linux/install_dependencies.sh"
+	fi
+	"${repository}/scripts/common/install_brew.sh"
 	ensure_brew_in_path
 	if macos; then
 		brew install ansible
 	fi
-	"${target}/scripts/common/ansible.sh" --all
+	"${repository}/scripts/common/ansible.sh" --all
 }
+
+require_local_repository() {
+	[[ -n "$repository" ]] || exit_help "This option must be run from a repository checkout."
+}
+
+[[ $# -gt 0 ]] || set -- --all
 
 # process arguments
 while [[ $# -gt 0 ]]; do
@@ -77,13 +95,17 @@ while [[ $# -gt 0 ]]; do
 		exit 0
 		;;
 	--deps)
-		"${cwd}/linux/install_dependencies.sh"
+		require_local_repository
+		linux || exit_help "--deps is only supported on Linux."
+		"${repository}/scripts/linux/install_dependencies.sh"
 		;;
 	--brew)
-		"${cwd}/common/install_brew.sh"
+		require_local_repository
+		"${repository}/scripts/common/install_brew.sh"
 		;;
 	--ansible)
-		"${cwd}/common/ansible.sh"
+		require_local_repository
+		"${repository}/scripts/common/ansible.sh" --all
 		;;
 	--all)
 		setup_all

@@ -1,7 +1,8 @@
 local plugins = {
   -- disable "bad" defaults:
   { "folke/flash.nvim", enabled = false },
-  { "copilot.lua", enabled = false },
+  { "zbirenbaum/copilot.lua", enabled = false },
+  { "CopilotC-Nvim/CopilotChat.nvim", enabled = false },
   { "mfussenegger/nvim-lint", enabled = false },
   {
     "ibhagwan/fzf-lua",

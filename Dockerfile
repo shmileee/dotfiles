@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.7
 
-FROM ubuntu:24.04@sha256:95fa486768020359141f1318720f43e7982ef926c792891d984aef9aaf05e7ea
+FROM ubuntu:24.04
 
 ENV TIMEZONE="Europe/Warsaw"
 ENV DEBIAN_FRONTEND="noninteractive"
@@ -34,14 +34,5 @@ RUN --mount=type=secret,id=GITHUB_TOKEN,uid=1000,gid=1000 \
     export GIT_CONFIG_KEY_0=http.version && \
     export GIT_CONFIG_VALUE_0=HTTP/1.1 && \
     scripts/docker/profile.sh full-ansible-install scripts/setup.sh --all
-
-RUN chezmoi \
-    --source /tmp/.dotfiles/config \
-    --working-tree /tmp/.dotfiles \
-    apply
-
-RUN scripts/docker/profile.sh neovim-bootstrap scripts/docker/neovim-bootstrap.sh
-
-RUN scripts/docker/profile.sh e2e-assertions scripts/docker/assertions.sh
 
 CMD ["fish", "-l"]

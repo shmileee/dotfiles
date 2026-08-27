@@ -1,3 +1,5 @@
+status is-interactive; or return
+
 function fif --description="Using ripgrep combined with preview"
     if test (count $argv) -lt 1; or test $argv[1] = --help
         printf "Need a string to search for."

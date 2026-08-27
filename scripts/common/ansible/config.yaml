@@ -9,33 +9,27 @@ packages:
 
 brew:
   taps:
-    - aws/tap
     - carlocab/personal
-    - terraform-linters/tap
   casks:
     - 1password
     - alacritty
     - alt-tab
     - aws-vault
-    - brave-browser
-    - font-fira-code-nerd-font
+    - chatgpt
+    - google-chrome
     - hiddenbar
     - kdiff3
+    - microsoft-outlook
     - rectangle
     - slack
+    - spotify
     - telegram
   packages:
     common:
-      - asciinema
-      - autoconf
-      - automake
-      - awscli
-      - azure-cli
       - bat
-      - codespell
       - coreutils
       - direnv
-      - dos2unix
+      - duf
       - dust
       - eza
       - fd
@@ -43,29 +37,14 @@ brew:
       - gh
       - ghq
       - git-delta
-      - hadolint
       - highlight
       - jq
-      - jsonnet
-      - k9s
-      - kustomize
       - lazygit
-      - lua-language-server
       - mise
-      - p7zip
-      - pkg-config
-      - pre-commit
       - yq
       - ripgrep
       - sponge
-      - terraform-docs
-      - terraform-linters/tap/tflint
-      - tfsec
-      - tldr
-      - tre-command
       - tree
-      - tree-sitter
-      - yamllint
       - zoxide
     darwin:
       - carlocab/personal/unrar
@@ -73,90 +52,53 @@ brew:
       - switchaudio-osx
       - ffmpeg
       - gawk
-      - gnu-getopt
       - gnu-sed
-      - watch
       - wget
       - xz
     linux: []
-  packages_from_source:
-    - duf
 
 dotfiles:
   repo: "https://github.com/shmileee/dotfiles"
   branch: "master"
 
-neovim:
-  build_from_source: true
-  binary_version: 0.11.4
-  neovim_version: 0.10.2
-  directory: "{{ ansible_user_dir }}/Development/repository/github.com/neovim/neovim"
-  build_dependencies:
-    - autoconf
-    - automake
-    - cmake
-    - curl
-    - doxygen
-    - g++
-    - gettext
-    - libtool
-    - libtool-bin
-    - ninja-build
-    - pkg-config
-    - unzip
-
-golang:
-  path: "{{ ansible_user_dir }}/.go"
-  packages:
-    - golang.org/x/tools/gopls@latest
-
-nodejs:
-  packages:
-    - yarn
-
-dockitems_disabled:
-  - App Store
-  - Contacts
-  - FaceTime
-  - Launchpad
-  - Mail
-  - Maps
-  - Messages
-  - Notes
-  - Photos
-  - Reminders
-  - Safari
-  - Terminal
-  - iBooks
-  - iTunes
-
-dockitems_enabled:
-  - name: Brave Browser
-    path: "/Applications/Brave Browser.app"
-    pos: 1
+dockitems:
+  - name: Google Chrome
+    path: "/Applications/Google Chrome.app"
   - name: Alacritty
     path: "/Applications/Alacritty.app"
-    pos: 2
   - name: Slack
     path: "/Applications/Slack.app"
-    pos: 3
+  - name: ChatGPT
+    path: "/Applications/ChatGPT.app"
   - name: Telegram
     path: "/Applications/Telegram.app"
-    pos: 4
   - name: Spotify
     path: "/Applications/Spotify.app"
-    pos: 5
+  - name: Microsoft Outlook
+    path: "/Applications/Microsoft Outlook.app"
+  - name: Calendar
+    path: "/System/Applications/Calendar.app"
+  - name: System Settings
+    path: "/System/Applications/System Settings.app"
+  - name: Downloads
+    path: "{{ ansible_user_dir }}/Downloads"
+    section: others
+    options: [--view, auto, --display, stack, --sort, dateadded]
+
+keyboard_modifier_mapping:
+  - HIDKeyboardModifierMappingSrc: 30064771129
+    HIDKeyboardModifierMappingDst: 30064771113
 
 darwin_hotkeys:
   # remap "show spotlight search` to `⌘ + g`
   64:
-    parameters: "103, 5, 1048576"
-    enabled: 1
+    parameters: [103, 5, 1048576]
+    enabled: true
   # disable "select the previous source in input menu"
   60:
-    parameters: "32, 49, 262144"
-    enabled: 0
+    parameters: [32, 49, 262144]
+    enabled: false
   # remap "select the next source in input menu" to `⌘ + space`
   61:
-    parameters: "32, 49, 1048576"
-    enabled: 1
+    parameters: [32, 49, 1048576]
+    enabled: true

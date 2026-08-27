@@ -1,21 +1,31 @@
 ---
 
 - name: "remap capslock to escape"
-  osx_keybindings:
-    source_key: "caps_lock"
-    destination_key: "escape"
+  community.general.osx_defaults:
+    domain: NSGlobalDomain
+    host: currentHost
+    key: com.apple.keyboard.modifiermapping.0-0-0
+    type: array
+    value: "{{ keyboard_modifier_mapping }}"
+  notify: apply keyboard modifier mapping
 
-  # `osx_defaults` does not support `dict` yet, see this PR:
-  # https://github.com/ansible-collections/community.general/pull/3420
 - name: "remap system shortcuts"
-  ansible.builtin.command: >
-    defaults write com.apple.symbolichotkeys
-    AppleSymbolicHotKeys -dict-add {{ item.key }}
-    "{
-      enabled = {{ item.value.enabled }};
-      value = {
-        parameters = ({{ item.value.parameters }});
-        type = 'standard';
-      };
-    }"
+  community.general.osx_defaults:
+    domain: com.apple.symbolichotkeys
+    key: AppleSymbolicHotKeys
+    type: dict
+    dict_mode: add
+    value: >-
+      {{
+        {
+          item.key | string: {
+            'enabled': item.value.enabled,
+            'value': {
+              'parameters': item.value.parameters,
+              'type': 'standard'
+            }
+          }
+        }
+      }}
   loop: "{{ darwin_hotkeys | dict2items }}"
+  notify: restart preference services

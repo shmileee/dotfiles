@@ -57,9 +57,8 @@ osx_global_defaults:
   - { name: "remove the auto-hiding dock delay", domain: com.apple.dock, key: autohide-delay, type: float, value: 0.0 }
   - { name: "remove the animation when hiding/showing the dock", domain: com.apple.dock, key: autohide-time-modifier, type: float, value: 0.0 }
   - { name: "automatically hide and show the dock", domain: com.apple.dock, key: autohide, type: bool, value: true }
-  - { name: "don’t show recent applications in dock", domain: com.apple.dock, key: autohide, type: bool, value: true }
-  - { name: "change minimize/maximize window effect to scale", domain: com.apple.dock, key: show-recents, type: bool, value: false }
-  - { name: "minimize windows into their application’s icon", domain: com.apple.dock, key: mineffect, type: string, value: scale }
+  - { name: "don’t show recent applications in dock", domain: com.apple.dock, key: show-recents, type: bool, value: false }
+  - { name: "change minimize/maximize window effect to scale", domain: com.apple.dock, key: mineffect, type: string, value: scale }
   - { name: "enable spring loading (dragging items to app icons) for all dock items", domain: com.apple.dock, key: enable-spring-load-actions-on-all-items, type: bool, value: true }
   - { name: "show indicator lights for open applications in the dock", domain: com.apple.dock, key: show-process-indicators, type: bool, value: true }
   - { name: "don’t animate opening applications from the dock", domain: com.apple.dock, key: launchanim, type: bool, value: false }

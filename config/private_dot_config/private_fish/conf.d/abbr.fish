@@ -1,5 +1,7 @@
 # set up abbreviations
 
+status is-interactive; or return
+
 abbr g git
 abbr c clear
 abbr lg lazygit

@@ -1,0 +1,5 @@
+---
+profile: basic
+skip_list:
+  - name
+  - yaml

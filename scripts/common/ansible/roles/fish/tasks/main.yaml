@@ -17,7 +17,6 @@
       ansible.builtin.user:
         name: '{{ ansible_user }}'
         shell: '{{ fish_path.stdout }}'
-        system: true
 
   tags: fish_chsh
 
@@ -42,7 +41,7 @@
 
     - name: "install fisher"
       ansible.builtin.get_url:
-        url: https://git.io/fisher
+        url: https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish
         dest: "{{ ansible_user_dir }}/.config/fish/functions/fisher.fish"
         mode: '0755'
       register: download_result
@@ -50,10 +49,24 @@
       retries: 3
       delay: 5
 
-    - name: "install plugins with fisher"
-      ansible.builtin.shell: "source {{ ansible_user_dir }}/.config/fish/functions/fisher.fish; fisher update"
-      args:
-        executable: '{{ fish_path.stdout }}'
+    - name: "list fisher plugins"
+      ansible.builtin.command:
+        argv:
+          - '{{ fish_path.stdout }}'
+          - -c
+          - fisher list
+      register: fisher_plugins
       changed_when: false
+
+    - name: "update fisher plugins"
+      ansible.builtin.command:
+        argv:
+          - '{{ fish_path.stdout }}'
+          - -c
+          - fisher update
+      when: >-
+        download_result.changed or
+        fisher_plugins.stdout_lines !=
+        lookup('ansible.builtin.file', ansible_user_dir + '/.config/fish/fish_plugins').splitlines()
 
   tags: fish_config

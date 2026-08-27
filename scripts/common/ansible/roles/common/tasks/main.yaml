@@ -5,7 +5,7 @@
 
 - name: "merge common and platform specific packages"
   ansible.builtin.set_fact:
-    brew_pkgs_merged: "{{ brew.packages.common | union(brew.packages[ansible_system|lower] | d([])) }}"
+    brew_pkgs_merged: "{{ brew.packages.common + brew.packages[ansible_system | lower] }}"
 
 - import_tasks: brew.yaml
   vars:

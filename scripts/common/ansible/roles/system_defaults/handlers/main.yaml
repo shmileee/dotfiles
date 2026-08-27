@@ -1,12 +1,16 @@
 ---
 
-- name: "clear cache"
-  become: true
-  ansible.builtin.shell: "{{ item }}" # noqa command-instead-of-shell
-  with_items:
-    - 'find /private/var/folders/ -name com.apple.iconservices -exec rm -rf {} \; | true'
-    - 'find /private/var/folders/ -name com.apple.dock.iconcache -exec rm -rf {} \; | true'
-    - 'rm -rf /Library/Caches/com.apple.iconservices.store | true'
+- name: "apply keyboard modifier mapping"
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/hidutil
+      - property
+      - --set
+      - "{{ {'UserKeyMapping': keyboard_modifier_mapping} | to_json }}"
+
+- name: "restart preference services"
+  ansible.builtin.command: /usr/bin/killall cfprefsd
+  failed_when: false
 
 - name: "restart dock"
   ansible.builtin.command: /usr/bin/killall Dock

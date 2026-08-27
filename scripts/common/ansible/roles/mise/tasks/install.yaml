@@ -5,4 +5,6 @@
   environment:
     GITHUB_TOKEN: "{{ lookup('env', 'GITHUB_TOKEN') }}"
   register: mise_install_result
-  changed_when: "'all runtimes are installed' not in mise_install_result.stderr"
+  changed_when: >-
+    'all tools are installed' not in
+    (mise_install_result.stdout + mise_install_result.stderr)

@@ -19,14 +19,11 @@
     - name: fish
       tags: fish
 
-    - name: neovim
-      tags: neovim
-
     - name: mise
       tags: mise
 
-    - name: go
-      tags: go
+    - name: neovim
+      tags: neovim
 
     - name: docker
       tags: docker
