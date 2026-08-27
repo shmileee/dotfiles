@@ -1,6 +1,6 @@
 ---
 
-- name: "install plugins"
+- name: "install LazyVim and plugins"
   ansible.builtin.command:
     cmd: mise exec -- nvim --headless "+Lazy! install" +qa
   register: neovim_plugins

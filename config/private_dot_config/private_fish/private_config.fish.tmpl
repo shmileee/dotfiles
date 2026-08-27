@@ -27,6 +27,12 @@ if status is-interactive
     end
 
     set -gx FZF_DEFAULT_OPTS "--color=dark"
+    set -gx FZF_DEFAULT_COMMAND "rg --files --hidden --follow --glob '!.git'"
+    set -g fzf_fd_opts --hidden --follow --exclude .git
+
+    if type -q fzf_configure_bindings
+        fzf_configure_bindings --directory=\ct
+    end
 
     # fish bobthefish-theme config
     set -g theme_date_format "+20%y/%m/%d %H:%M"
