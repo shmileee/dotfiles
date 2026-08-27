@@ -4,7 +4,7 @@ legacy_version_file = false
 
 [tools]
 "aqua:helm" = "4.2.4"
-"aqua:kubectl" = "1.36.3"
+"aqua:kubectl" = "1.37.0"
 "aqua:aws/aws-cli" = "2"
 "aqua:derailed/k9s" = "0.50"
 "aqua:hadolint/hadolint" = "2"
