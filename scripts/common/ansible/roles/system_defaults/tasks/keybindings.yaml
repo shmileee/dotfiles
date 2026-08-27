@@ -1,12 +1,47 @@
 ---
 
+- name: "read current host preferences"
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/defaults
+      - -currentHost
+      - export
+      - NSGlobalDomain
+      - "-"
+  register: current_host_preferences
+  changed_when: false
+  check_mode: false
+
+- name: "read capslock modifier mapping"
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/plutil
+      - -extract
+      - com\.apple\.keyboard\.modifiermapping\.0-0-0
+      - json
+      - -o
+      - "-"
+      - --
+      - "-"
+    stdin: "{{ current_host_preferences.stdout }}"
+  register: current_keyboard_modifier_mapping
+  changed_when: false
+  failed_when: current_keyboard_modifier_mapping.rc not in [0, 1]
+  check_mode: false
+
 - name: "remap capslock to escape"
-  community.general.osx_defaults:
-    domain: NSGlobalDomain
-    host: currentHost
-    key: com.apple.keyboard.modifiermapping.0-0-0
-    type: array
-    value: "{{ keyboard_modifier_mapping }}"
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/defaults
+      - -currentHost
+      - write
+      - NSGlobalDomain
+      - com.apple.keyboard.modifiermapping.0-0-0
+      - -array
+      - "{{ keyboard_modifier_mapping_plist }}"
+  when: >-
+    current_keyboard_modifier_mapping.stdout | default('[]', true) | from_json
+    != keyboard_modifier_mapping
   notify: apply keyboard modifier mapping
 
 - name: "remap system shortcuts"
