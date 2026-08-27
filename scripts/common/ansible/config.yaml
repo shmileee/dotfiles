@@ -85,9 +85,9 @@ dockitems:
     section: others
     options: [--view, auto, --display, stack, --sort, dateadded]
 
-keyboard_modifier_mapping:
-  - HIDKeyboardModifierMappingSrc: 30064771129
-    HIDKeyboardModifierMappingDst: 30064771113
+keyboard_key_codes:
+  caps_lock: 30064771129
+  escape: 30064771113
 
 darwin_hotkeys:
   # remap "show spotlight search` to `⌘ + g`
