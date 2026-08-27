@@ -23,7 +23,7 @@
 - block:
     - name: "create fish config dir"
       ansible.builtin.file:
-        path: "{{ ansible_user_dir }}/.config/fish"
+        path: "{{ ansible_facts['user_dir'] }}/.config/fish"
         state: directory
         mode: '0700'
 
@@ -35,14 +35,14 @@
 
     - name: "create functions dir"
       ansible.builtin.file:
-        path: "{{ ansible_user_dir }}/.config/fish/functions"
+        path: "{{ ansible_facts['user_dir'] }}/.config/fish/functions"
         state: directory
         mode: '0755'
 
     - name: "install fisher"
       ansible.builtin.get_url:
         url: https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish
-        dest: "{{ ansible_user_dir }}/.config/fish/functions/fisher.fish"
+        dest: "{{ ansible_facts['user_dir'] }}/.config/fish/functions/fisher.fish"
         mode: '0755'
       register: download_result
       until: download_result is succeeded
@@ -57,6 +57,7 @@
           - fisher list
       register: fisher_plugins
       changed_when: false
+      failed_when: fisher_plugins.rc not in [0, 1]
 
     - name: "update fisher plugins"
       ansible.builtin.command:
@@ -67,6 +68,6 @@
       when: >-
         download_result.changed or
         fisher_plugins.stdout_lines !=
-        lookup('ansible.builtin.file', ansible_user_dir + '/.config/fish/fish_plugins').splitlines()
+        lookup('ansible.builtin.file', ansible_facts['user_dir'] + '/.config/fish/fish_plugins').splitlines()
 
   tags: fish_config

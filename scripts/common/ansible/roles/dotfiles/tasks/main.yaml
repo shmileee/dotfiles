@@ -10,7 +10,7 @@
   ansible.builtin.command:
     cmd: chezmoi init {{ dotfiles.repo }} --branch {{ dotfiles.branch }}
   args:
-    creates: "{{ ansible_user_dir }}/.local/share/chezmoi"
+    creates: "{{ ansible_facts['user_dir'] }}/.local/share/chezmoi"
 
 - name: "chezmoi apply current checkout"
   ansible.builtin.command:

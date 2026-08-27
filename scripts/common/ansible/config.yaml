@@ -82,7 +82,7 @@ dockitems:
   - name: System Settings
     path: "/System/Applications/System Settings.app"
   - name: Downloads
-    path: "{{ ansible_user_dir }}/Downloads"
+    path: "{{ ansible_facts['user_dir'] }}/Downloads"
     section: others
     options: [--view, auto, --display, stack, --sort, dateadded]
 
