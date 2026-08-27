@@ -4,12 +4,12 @@
   ansible.builtin.command: brew tap
   register: brew_taps
   changed_when: false
-  when: ansible_system == "Linux"
+  when: ansible_facts["system"] == "Linux"
 
 - name: "brew | remove legacy core tap"
   ansible.builtin.command: brew untap --force homebrew/core
   when:
-    - ansible_system == "Linux"
+    - ansible_facts["system"] == "Linux"
     - "'homebrew/core' in (brew_taps.stdout_lines | default([]))"
 
 - name: "brew | update"
@@ -30,7 +30,7 @@
     greedy: true
     accept_external_apps: true
   when:
-    - ansible_system == "Darwin"
+    - ansible_facts["system"] == "Darwin"
 
 - name: "brew | install packages"
   community.general.homebrew:

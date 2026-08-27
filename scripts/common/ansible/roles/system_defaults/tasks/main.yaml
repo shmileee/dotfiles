@@ -1,4 +1,4 @@
 ---
 
 - import_tasks: darwin.yaml
-  when: ansible_system == "Darwin"
+  when: ansible_facts["system"] == "Darwin"
