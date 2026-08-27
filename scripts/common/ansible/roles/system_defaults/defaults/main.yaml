@@ -118,8 +118,6 @@ osx_alt_tab_defaults:
   - { name: "alt-tab | do not send crash reports", domain: com.lwouis.alt-tab-macos, key: crashPolicy, type: string, value: 0, state: present }
   - { name: "alt-tab | disable automatic updates", domain: com.lwouis.alt-tab-macos, key: SUAutomaticallyUpdate, type: bool, value: false, state: present }
   - { name: "alt-tab | disable automatic update checks", domain: com.lwouis.alt-tab-macos, key: SUEnableAutomaticChecks, type: bool, value: false, state: present }
-  # use lowercase `\u` to pass unicode
-  - { name: "alt-tab | set shortcuts #1", domain: com.lwouis.alt-tab-macos, key: holdShortcut, type: string, value: "\u2318", state: present }
 
 osx_rectangle_defaults:
   - { name: "rectangle | set spectacle-compatible shortcuts", domain: com.knollsoft.Rectangle, key: alternateDefaultShortcuts, type: int, value: 0, state: present }

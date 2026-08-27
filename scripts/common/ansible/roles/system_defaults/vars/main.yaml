@@ -11,3 +11,20 @@ keyboard_modifier_mapping_plist: >-
   <key>HIDKeyboardModifierMappingDst</key>
   <integer>{{ keyboard_key_codes.escape }}</integer>
   </dict>
+
+symbolic_hotkey_plist: >-
+  <dict>
+  <key>enabled</key>
+  <{{ item.value.enabled | ternary('true', 'false') }}/>
+  <key>value</key>
+  <dict>
+  <key>parameters</key>
+  <array>
+  {% for parameter in item.value.parameters %}
+  <integer>{{ parameter }}</integer>
+  {% endfor %}
+  </array>
+  <key>type</key>
+  <string>standard</string>
+  </dict>
+  </dict>

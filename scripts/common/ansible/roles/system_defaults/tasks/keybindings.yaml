@@ -44,23 +44,94 @@
     != keyboard_modifier_mapping
   notify: apply keyboard modifier mapping
 
+- name: "read alt-tab preferences"
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/defaults
+      - export
+      - com.lwouis.alt-tab-macos
+      - "-"
+  register: alt_tab_preferences
+  changed_when: false
+  failed_when: alt_tab_preferences.rc not in [0, 1]
+  check_mode: false
+
+- name: "read alt-tab shortcut"
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/plutil
+      - -extract
+      - holdShortcut
+      - raw
+      - -o
+      - "-"
+      - --
+      - "-"
+    stdin: "{{ alt_tab_preferences.stdout }}"
+  register: alt_tab_shortcut
+  changed_when: false
+  failed_when: alt_tab_shortcut.rc not in [0, 1]
+  check_mode: false
+
+- name: "alt-tab | set shortcut"
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/defaults
+      - write
+      - com.lwouis.alt-tab-macos
+      - holdShortcut
+      - -string
+      - "⌘"
+  when: alt_tab_shortcut.stdout != '⌘'
+
+- name: "read symbolic hotkeys preferences"
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/defaults
+      - export
+      - com.apple.symbolichotkeys
+      - "-"
+  register: symbolic_hotkeys_preferences
+  changed_when: false
+  failed_when: symbolic_hotkeys_preferences.rc not in [0, 1]
+  check_mode: false
+
+- name: "read symbolic hotkeys"
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/plutil
+      - -extract
+      - AppleSymbolicHotKeys
+      - json
+      - -o
+      - "-"
+      - --
+      - "-"
+    stdin: "{{ symbolic_hotkeys_preferences.stdout }}"
+  register: current_symbolic_hotkeys
+  changed_when: false
+  failed_when: current_symbolic_hotkeys.rc not in [0, 1]
+  check_mode: false
+
 - name: "remap system shortcuts"
-  community.general.osx_defaults:
-    domain: com.apple.symbolichotkeys
-    key: AppleSymbolicHotKeys
-    type: dict
-    dict_mode: add
-    value: >-
-      {{
-        {
-          item.key | string: {
-            'enabled': item.value.enabled,
-            'value': {
-              'parameters': item.value.parameters,
-              'type': 'standard'
-            }
-          }
-        }
-      }}
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/defaults
+      - write
+      - com.apple.symbolichotkeys
+      - AppleSymbolicHotKeys
+      - -dict-add
+      - "{{ item.key }}"
+      - "{{ symbolic_hotkey_plist }}"
   loop: "{{ darwin_hotkeys | dict2items }}"
+  when: >-
+    (current_symbolic_hotkeys.stdout | default('{}', true) | from_json)
+    [item.key | string] | default({})
+    != {
+      'enabled': item.value.enabled,
+      'value': {
+        'parameters': item.value.parameters,
+        'type': 'standard'
+      }
+    }
   notify: restart preference services
