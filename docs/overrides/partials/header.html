@@ -1,15 +1,20 @@
 <header class="site-header" data-site-header data-md-component="header">
   <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
   <div class="header-inner">
-    <a class="brand-link" href="https://portfolio.oponomarov.com/" aria-label="Oleksandr Ponomarov portfolio">~/oleksandr-ponomarov</a>
+    <a class="brand-link" href="https://portfolio.oponomarov.com/" aria-label="Oleksandr Ponomarov portfolio">
+      <span class="brand-full">~/oleksandr-ponomarov</span>
+      <span class="brand-short" aria-hidden="true">~/op</span>
+    </a>
     <a class="docs-home" href="{{ nav.homepage.url | url }}">dotfiles</a>
 
     <nav class="site-nav" aria-label="Primary navigation">
-      <a href="{{ 'index.md' | url }}">Overview</a>
-      <a href="{{ 'what-how-and-why.md' | url }}">Why</a>
-      <a href="{{ 'hotkeys.md' | url }}">Hotkeys</a>
+      {% for nav_item in nav %}
+        {% if loop.index <= 3 %}
+          <a href="{{ nav_item.url | url }}">{{ nav_item.title }}</a>
+        {% endif %}
+      {% endfor %}
       <a href="https://portfolio.oponomarov.com/">Portfolio</a>
-      <a href="{{ config.repo_url }}">GitHub</a>
+      <a href="https://github.com/shmileee/dotfiles">GitHub</a>
     </nav>
 
     <div class="header-actions">
