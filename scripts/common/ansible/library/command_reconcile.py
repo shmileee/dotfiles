@@ -47,6 +47,11 @@ options:
     description: Treat an unavailable probe dependency as predicted drift in check mode.
     type: bool
     default: false
+  probe_success_rc:
+    description: Probe return codes that represent a readable state.
+    type: list
+    elements: int
+    default: [0]
 author:
   - dotfiles maintainers
 attributes:
@@ -115,9 +120,13 @@ def probe(module: AnsibleModule) -> subprocess.CompletedProcess[str] | None:
         if module.check_mode:
             return None
         module.fail_json(msg=f"Probe executable was not found: {error}")
-    if result.returncode != 0 and module.check_mode and module.params["probe_failure_means_changed_in_check"]:
+    if (
+        result.returncode not in module.params["probe_success_rc"]
+        and module.check_mode
+        and module.params["probe_failure_means_changed_in_check"]
+    ):
         return None
-    if result.returncode != 0:
+    if result.returncode not in module.params["probe_success_rc"]:
         module.fail_json(
             msg="Probe command failed",
             rc=result.returncode,
@@ -142,6 +151,7 @@ def main() -> None:
             "sort_lines": {"type": "bool", "default": False},
             "environment": {"type": "dict", "default": {}},
             "probe_failure_means_changed_in_check": {"type": "bool", "default": False},
+            "probe_success_rc": {"type": "list", "elements": "int", "default": [0]},
         },
         supports_check_mode=True,
     )

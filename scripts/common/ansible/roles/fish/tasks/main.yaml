@@ -70,5 +70,6 @@
         normalize_case: true
         sort_lines: true
         probe_failure_means_changed_in_check: true
+        probe_success_rc: [0, 1]
 
   tags: fish_config
