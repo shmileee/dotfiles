@@ -108,7 +108,7 @@ osx_global_defaults:
   - { name: "don't open imagecapture when camera plugged in", domain: com.apple.ImageCapture, key: disableHotPlug, type: boolean, value: true }
 
 osx_alt_tab_defaults:
-  - { name: "alt-tab | set shortcut", domain: com.lwouis.alt-tab-macos, key: holdShortcut, type: dict, value: { string: "⌘" }, dict_mode: add, state: present }
+  - { name: "alt-tab | set shortcut", domain: com.lwouis.alt-tab-macos, key: holdShortcut, type: dict, value: { string: "⌘" }, dict_mode: merge, state: present }
   - { name: "alt-tab | use the medium appearance", domain: com.lwouis.alt-tab-macos, key: appearanceSize, type: string, value: "1", state: present }
   - { name: "alt-tab | show windows from screen showing alt-tab", domain: com.lwouis.alt-tab-macos, key: screensToShow, type: string, value: 1, state: present }
   - { name: "alt-tab | show on the screen containing the pointer", domain: com.lwouis.alt-tab-macos, key: showOnScreen, type: string, value: "1", state: present }

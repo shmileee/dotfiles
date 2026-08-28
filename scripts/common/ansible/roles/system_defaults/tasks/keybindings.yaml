@@ -14,6 +14,6 @@
     domain: com.apple.symbolichotkeys
     key: AppleSymbolicHotKeys
     value_type: dict
-    dict_mode: add
+    dict_mode: merge
     value: "{{ darwin_hotkeys }}"
   notify: restart preference services
