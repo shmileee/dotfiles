@@ -90,7 +90,7 @@ system defaults.
   <a href="/hotkeys/">
     <span>02 · Reference</span>
     <strong>Find a keyboard shortcut</strong>
-    <p>Look up macOS, Alacritty, tmux, and Neovim bindings by task.</p>
+    <p>Look up bindings for macOS, Alacritty, tmux, and Neovim.</p>
   </a>
   <a href="/opencode-and-omo/">
     <span>03 · AI tooling</span>

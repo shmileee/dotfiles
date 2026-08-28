@@ -26,6 +26,8 @@
     const searchClose = document.querySelector('.md-search .md-search__icon[for="__search"]');
     const searchToggle = document.querySelector("#__search");
     const drawerToggle = document.querySelector("#__drawer");
+    const primarySidebar = document.querySelector(".md-sidebar--primary");
+    const drawerTocToggle = primarySidebar?.querySelector("#__toc");
     const progress = document.querySelector("[data-reading-progress]");
 
     applyTheme(localStorage.getItem("om-theme") || "dark");
@@ -39,6 +41,46 @@
       if (active) link.setAttribute("aria-current", "page");
       else link.removeAttribute("aria-current");
     });
+
+    document.querySelectorAll(".md-typeset .headerlink").forEach((link) => {
+      const heading = link.closest("h1, h2, h3, h4, h5, h6");
+      if (!heading) return;
+      const copy = heading.cloneNode(true);
+      copy.querySelector(".headerlink")?.remove();
+      const title = copy.textContent.trim();
+      heading.setAttribute("aria-label", title);
+      link.setAttribute("aria-label", `Permanent link to “${title}”`);
+    });
+
+    const tocLinks = [...document.querySelectorAll(".md-sidebar--secondary .md-nav--secondary .md-nav__link")];
+    if (tocLinks.length && !tocLinks.some((link) => link.classList.contains("md-nav__link--active"))) {
+      tocLinks[0].classList.add("md-nav__link--active");
+    }
+
+    const sourceToc = document.querySelector(".md-sidebar--secondary .md-nav--secondary > .md-nav__list");
+    const pageLead = document.querySelector(".md-content__inner .page-lead");
+    if (sourceToc && pageLead && tocLinks.length >= 6) {
+      const details = document.createElement("details");
+      details.className = "mobile-page-toc";
+      details.dataset.mobilePageToc = "";
+
+      const summary = document.createElement("summary");
+      summary.innerHTML = '<span>On this page</span><span class="mobile-page-toc__marker" aria-hidden="true"></span>';
+
+      const nav = document.createElement("nav");
+      nav.className = "mobile-page-toc__nav";
+      nav.setAttribute("aria-label", "On this page");
+      const list = sourceToc.cloneNode(true);
+      list.removeAttribute("data-md-component");
+      list.removeAttribute("data-md-scrollfix");
+      nav.append(list);
+      details.append(summary, nav);
+      pageLead.after(details);
+
+      nav.addEventListener("click", (event) => {
+        if (event.target.closest("a")) details.open = false;
+      }, { signal });
+    }
 
     const activateOnKeyboard = (control) => {
       control?.addEventListener(
@@ -60,18 +102,60 @@
       drawerButton?.setAttribute("aria-label", drawerIsOpen ? "Close navigation" : "Open navigation");
     };
 
+    const setTabbable = (elements, enabled) => {
+      elements.forEach((element) => {
+        if (enabled) {
+          if (!("drawerTabindex" in element.dataset)) return;
+          const original = element.dataset.drawerTabindex;
+          if (original) element.setAttribute("tabindex", original);
+          else element.removeAttribute("tabindex");
+          delete element.dataset.drawerTabindex;
+        } else {
+          if (!("drawerTabindex" in element.dataset)) {
+            element.dataset.drawerTabindex = element.getAttribute("tabindex") || "";
+          }
+          element.setAttribute("tabindex", "-1");
+        }
+      });
+    };
+
+    const syncDrawerFocus = () => {
+      if (!primarySidebar) return;
+      const drawerIsOpen = Boolean(drawerToggle?.checked);
+      primarySidebar.inert = !drawerIsOpen;
+      if (!drawerIsOpen) return;
+
+      const secondaryNav = primarySidebar.querySelector(".md-nav--secondary");
+      const all = [...primarySidebar.querySelectorAll('a, button, label[for], [tabindex]')];
+      const secondary = secondaryNav ? all.filter((element) => secondaryNav.contains(element)) : [];
+      const primary = secondaryNav ? all.filter((element) => !secondaryNav.contains(element)) : all;
+      const tocIsOpen = Boolean(drawerTocToggle?.checked);
+      setTabbable(primary, !tocIsOpen);
+      setTabbable(secondary, tocIsOpen);
+    };
+
     searchClose?.setAttribute("aria-label", "Close search");
     searchClose?.setAttribute("role", "button");
     searchClose?.setAttribute("tabindex", "0");
     activateOnKeyboard(searchButton);
-    activateOnKeyboard(drawerButton);
     activateOnKeyboard(searchClose);
+
+    drawerButton?.addEventListener(
+      "click",
+      () => {
+        if (!drawerToggle) return;
+        drawerToggle.checked = !drawerToggle.checked;
+        drawerToggle.dispatchEvent(new Event("change", { bubbles: true }));
+      },
+      { signal },
+    );
 
     searchToggle?.addEventListener(
       "change",
       () => {
         if (searchToggle.checked && drawerToggle?.checked) drawerToggle.checked = false;
         syncControls();
+        syncDrawerFocus();
       },
       { signal },
     );
@@ -81,13 +165,31 @@
       () => {
         if (drawerToggle.checked && searchToggle?.checked) searchToggle.checked = false;
         syncControls();
+        syncDrawerFocus();
       },
       { signal },
     );
 
+    drawerTocToggle?.addEventListener("change", syncDrawerFocus, { signal });
+
     document.addEventListener(
       "keydown",
       (event) => {
+        if (event.key === "Tab" && drawerToggle?.checked && primarySidebar) {
+          const focusable = [drawerButton, ...primarySidebar.querySelectorAll('a:not([tabindex="-1"]), button:not([tabindex="-1"]), label[for]:not([tabindex="-1"]), [tabindex]:not([tabindex="-1"])')]
+            .filter((element) => !element.inert && element.getBoundingClientRect().width > 0);
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last?.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first?.focus();
+          }
+          return;
+        }
+
         if (event.key !== "Escape") return;
         if (searchToggle?.checked) {
           searchToggle.checked = false;
@@ -96,6 +198,7 @@
         } else if (drawerToggle?.checked) {
           drawerToggle.checked = false;
           syncControls();
+          syncDrawerFocus();
           drawerButton?.focus();
         }
       },
@@ -103,6 +206,31 @@
     );
 
     syncControls();
+    syncDrawerFocus();
+
+    const syncShortcutRows = () => {
+      const rows = document.querySelectorAll(".shortcut-reference table:not(:has(th:nth-child(3))) tbody tr");
+      rows.forEach((row) => row.classList.remove("shortcut-row--stacked"));
+      if (window.innerWidth > 480) return;
+      rows.forEach((row) => {
+        const shortcut = row.querySelector("td:first-child");
+        if (shortcut && shortcut.scrollWidth > shortcut.clientWidth + 1) {
+          row.classList.add("shortcut-row--stacked");
+        }
+      });
+    };
+
+    let shortcutResizeScheduled = false;
+    const scheduleShortcutRows = () => {
+      if (shortcutResizeScheduled) return;
+      shortcutResizeScheduled = true;
+      requestAnimationFrame(() => {
+        syncShortcutRows();
+        shortcutResizeScheduled = false;
+      });
+    };
+    window.addEventListener("resize", scheduleShortcutRows, { signal });
+    syncShortcutRows();
 
     themeButton?.addEventListener(
       "click",

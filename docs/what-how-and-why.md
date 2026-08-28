@@ -7,6 +7,19 @@ description: Review, install, customize, and reapply the workstation configurati
 
 <p class="page-lead">Use the review-first path for an existing machine. The one-line installer is intended for a new machine or a configuration you already trust.</p>
 
+<nav class="setup-paths" aria-label="Choose an installation path">
+  <a href="#recommended-review-then-run">
+    <span>Existing or customized machine</span>
+    <strong>Review first</strong>
+    <p>Clone the repository, inspect the configuration, and run the local checkout.</p>
+  </a>
+  <a href="#fast-path-bootstrap-a-new-machine">
+    <span>Fresh or already trusted machine</span>
+    <strong>Use the fast path</strong>
+    <p>Run the hosted bootstrap and apply the complete configuration.</p>
+  </a>
+</nav>
+
 ## Before you begin
 
 The full setup can:
@@ -122,6 +135,8 @@ setup, and removes the temporary checkout when it exits.
 
 Stage flags must be run from a repository checkout.
 
+<div class="setup-reference" markdown>
+
 | Command | Purpose |
 | --- | --- |
 | `./scripts/setup.sh --deps` | Install Linux apt prerequisites. Linux only. |
@@ -129,6 +144,8 @@ Stage flags must be run from a repository checkout.
 | `./scripts/setup.sh --ansible` | Install Ansible collections and run every role. |
 | `./scripts/setup.sh --all` | Run the complete platform-specific sequence. |
 | `./scripts/setup.sh` | Same as `--all`. |
+
+</div>
 
 If the prerequisites are already present, ask Ansible to preview supported
 changes:
@@ -147,6 +164,8 @@ changes:
 
 Make changes in three places:
 
+<div class="setup-reference setup-reference--three" markdown>
+
 | Area | Source of truth | Typical changes |
 | --- | --- | --- |
 | Packages and applications | `scripts/common/ansible/config.yaml` | Homebrew packages, casks, Dock items, hotkeys |
@@ -154,11 +173,15 @@ Make changes in three places:
 | Home-directory files | `config/` | Fish, Git, tmux, Neovim, Alacritty, OpenCode |
 | Tool versions | `config/private_dot_config/mise/config.toml` | Language runtimes and developer tools |
 
+</div>
+
 The `dotfiles` section in `config.yaml` controls which repository and branch
 chezmoi initializes. The playbook then applies the current checkout's `config/`
 directory, which makes a fork straightforward to test before publishing it.
 
 ### Ansible roles
+
+<div class="setup-reference" markdown>
 
 | Role | Responsibility |
 | --- | --- |
@@ -171,6 +194,8 @@ directory, which makes a fork straightforward to test before publishing it.
 | `docker` | Install Docker outside the validation container |
 | `tmux` | Install tmux, TPM, and declared plugins |
 | `system_defaults` | Apply macOS preferences, Dock items, and keyboard settings |
+
+</div>
 
 ## Reapply after an update
 

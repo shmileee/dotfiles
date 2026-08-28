@@ -1,20 +1,20 @@
 <header class="site-header" data-site-header data-md-component="header">
   <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
   <div class="header-inner">
-    <a class="brand-link" href="https://portfolio.oponomarov.com/" aria-label="Oleksandr Ponomarov portfolio">
+    <span class="brand-link" aria-label="Oleksandr Ponomarov">
       <span class="brand-full">~/oleksandr-ponomarov</span>
       <span class="brand-short" aria-hidden="true">~/op</span>
-    </a>
+    </span>
     <a class="docs-home{% if nav.homepage.active %} is-active{% endif %}" href="{{ nav.homepage.url | url }}"{% if nav.homepage.active %} aria-current="page"{% endif %}>dotfiles</a>
 
     <nav class="site-nav" aria-label="Primary navigation">
       {% for nav_item in nav %}
         {% if not loop.first %}
-          <a href="{{ nav_item.url | url }}"{% if nav_item.active %} class="is-active" aria-current="page"{% endif %}>{% if nav_item.title == "Setup guide" %}Setup{% elif nav_item.title == "OpenCode & OmO" %}OpenCode{% else %}{{ nav_item.title }}{% endif %}</a>
+          <a href="{{ nav_item.url | url }}"{% if nav_item.active %} class="is-active" aria-current="page"{% endif %}>{{ nav_item.title }}</a>
         {% endif %}
       {% endfor %}
       <span class="site-nav-separator" aria-hidden="true">·</span>
-      <a href="https://portfolio.oponomarov.com/">Portfolio</a>
+      <a href="https://portfolio.oponomarov.com/">Portfolio <span aria-hidden="true">↗</span></a>
     </nav>
 
     <div class="header-actions">
@@ -25,9 +25,9 @@
       <label class="header-icon md-icon" for="__search" role="button" tabindex="0" aria-controls="__search" aria-expanded="false" aria-label="Search documentation" data-search-toggle>
         {% include ".icons/material/magnify.svg" %}
       </label>
-      <label class="header-icon header-menu md-icon" for="__drawer" role="button" tabindex="0" aria-controls="__drawer" aria-expanded="false" aria-label="Open navigation" data-drawer-toggle>
+      <button class="header-icon header-menu md-icon" type="button" aria-controls="__drawer" aria-expanded="false" aria-label="Open navigation" data-drawer-toggle>
         {% include ".icons/material/menu.svg" %}
-      </label>
+      </button>
     </div>
   </div>
   {% include "partials/search.html" %}
