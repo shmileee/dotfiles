@@ -13,6 +13,9 @@
   "major": {
     "dependencyDashboardApproval": true
   },
+  "lockFileMaintenance": {
+    "enabled": false
+  },
   "vulnerabilityAlerts": {
     "enabled": true,
     "schedule": ["at any time"],
@@ -81,6 +84,14 @@
       "groupSlug": "container-images",
       "semanticCommitType": "build",
       "semanticCommitScope": "deps"
+    },
+    {
+      "description": "Allow for the slower release cadence of stable tooling",
+      "matchPackageNames": [
+        "koalaman/shellcheck",
+        "pre-commit/pre-commit-hooks"
+      ],
+      "abandonmentThreshold": "2 years"
     }
   ]
 }
