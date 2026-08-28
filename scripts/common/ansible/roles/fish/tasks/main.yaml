@@ -25,6 +25,7 @@
       ansible.builtin.user:
         name: '{{ ansible_user }}'
         shell: '{{ fish_path }}'
+      when: ansible_facts['user_shell'] != fish_path
 
   tags: fish_chsh
 

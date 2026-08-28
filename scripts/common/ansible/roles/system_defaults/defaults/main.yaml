@@ -61,7 +61,6 @@ osx_global_defaults:
   - { name: "enable spring loading (dragging items to app icons) for all dock items", domain: com.apple.dock, key: enable-spring-load-actions-on-all-items, type: bool, value: true }
   - { name: "show indicator lights for open applications in the dock", domain: com.apple.dock, key: show-process-indicators, type: bool, value: true }
   - { name: "don’t animate opening applications from the dock", domain: com.apple.dock, key: launchanim, type: bool, value: false }
-  - { name: "speed up mission control animations", domain: com.apple.dock, key: expose-animation-duration, type: float, value: 0.1 }
   - { name: "don’t automatically rearrange spaces based on most recent use", domain: com.apple.dock, key: mru-spaces, type: bool, value: false }
   - { name: "expand save panel by default", domain: NSGlobalDomain, key: NSNavPanelExpandedStateForSaveMode, type: bool, value: true }
   - { name: "auto-expand navigation panel for save modes", domain: NSGlobalDomain, key: NSNavPanelExpandedStateForSaveMode2, type: bool, value: true }
@@ -110,12 +109,16 @@ osx_global_defaults:
 
 osx_alt_tab_defaults:
   - { name: "alt-tab | set shortcut", domain: com.lwouis.alt-tab-macos, key: holdShortcut, type: dict, value: { string: "⌘" }, dict_mode: add, state: present }
+  - { name: "alt-tab | use the medium appearance", domain: com.lwouis.alt-tab-macos, key: appearanceSize, type: string, value: "1", state: present }
   - { name: "alt-tab | show windows from screen showing alt-tab", domain: com.lwouis.alt-tab-macos, key: screensToShow, type: string, value: 1, state: present }
-  - { name: "alt-tab | show windows active space only", domain: com.lwouis.alt-tab-macos, key: spacesToShow, type: string, value: 1, state: present }
-  - { name: "alt-tab | do not send crash reports", domain: com.lwouis.alt-tab-macos, key: crashPolicy, type: string, value: 0, state: present }
-  - { name: "alt-tab | disable automatic updates", domain: com.lwouis.alt-tab-macos, key: SUAutomaticallyUpdate, type: bool, value: false, state: present }
-  - { name: "alt-tab | disable automatic update checks", domain: com.lwouis.alt-tab-macos, key: SUEnableAutomaticChecks, type: bool, value: false, state: present }
+  - { name: "alt-tab | show on the screen containing the pointer", domain: com.lwouis.alt-tab-macos, key: showOnScreen, type: string, value: "1", state: present }
 
 osx_rectangle_defaults:
-  - { name: "rectangle | set spectacle-compatible shortcuts", domain: com.knollsoft.Rectangle, key: alternateDefaultShortcuts, type: int, value: 0, state: present }
   - { name: "rectangle | launch on login", domain: com.knollsoft.Rectangle, key: launchOnLogin, type: int, value: 1, state: present }
+  - { name: "rectangle | set left-half shortcut", domain: com.knollsoft.Rectangle, key: leftHalf, type: dict, value: { keyCode: 4, modifierFlags: 1179648 }, state: present }
+  - { name: "rectangle | set right-half shortcut", domain: com.knollsoft.Rectangle, key: rightHalf, type: dict, value: { keyCode: 37, modifierFlags: 1179648 }, state: present }
+  - { name: "rectangle | set top-half shortcut", domain: com.knollsoft.Rectangle, key: topHalf, type: dict, value: { keyCode: 40, modifierFlags: 1179648 }, state: present }
+  - { name: "rectangle | set bottom-half shortcut", domain: com.knollsoft.Rectangle, key: bottomHalf, type: dict, value: { keyCode: 38, modifierFlags: 1179648 }, state: present }
+  - { name: "rectangle | set maximize shortcut", domain: com.knollsoft.Rectangle, key: maximize, type: dict, value: { keyCode: 3, modifierFlags: 1572864 }, state: present }
+  - { name: "rectangle | set todo toggle shortcut", domain: com.knollsoft.Rectangle, key: toggleTodo, type: dict, value: { keyCode: 11, modifierFlags: 786432 }, state: present }
+  - { name: "rectangle | set todo reflow shortcut", domain: com.knollsoft.Rectangle, key: reflowTodo, type: dict, value: { keyCode: 45, modifierFlags: 786432 }, state: present }

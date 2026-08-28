@@ -15,6 +15,16 @@ repos:
 
   - repo: local
     hooks:
+      - id: shfmt
+        name: shfmt
+        entry: shfmt --write --indent 2 --case-indent --space-redirects
+        language: system
+        types: [shell]
+      - id: fish-indent
+        name: fish_indent
+        entry: fish_indent --write
+        language: system
+        files: \.fish$
       - id: shellcheck
         name: shellcheck
         entry: shellcheck

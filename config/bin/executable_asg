@@ -2,13 +2,13 @@
 #
 set -o pipefail
 
-list_asgs () {
-  aws autoscaling describe-auto-scaling-groups \
-    | jq -r '.AutoScalingGroups[].AutoScalingGroupName'
+list_asgs() {
+  aws autoscaling describe-auto-scaling-groups |
+    jq -r '.AutoScalingGroups[].AutoScalingGroupName'
 }
 
-print_usage () {
-    cat <<-EOF
+print_usage() {
+  cat <<- EOF
 usage: asg <command>
 command:
     list:  List ASGs
@@ -17,19 +17,19 @@ EOF
 }
 
 case "$1" in
-  list )
+  list)
     list_asgs
 
     ;;
-  refresh )
-    list_asgs \
-      | fzf \
-      | xargs -I '{}' \
+  refresh)
+    list_asgs |
+      fzf |
+      xargs -I '{}' \
         aws autoscaling start-instance-refresh \
-            --auto-scaling-group-name {} \
-            --preferences '{"InstanceWarmup": 0, "MinHealthyPercentage": 0}'
+        --auto-scaling-group-name {} \
+        --preferences '{"InstanceWarmup": 0, "MinHealthyPercentage": 0}'
     ;;
-  * )
+  *)
     print_usage
-;;
+    ;;
 esac

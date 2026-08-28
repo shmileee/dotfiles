@@ -13,10 +13,16 @@
 
 - name: "brew | install casks"
   community.general.homebrew_cask:
-    name: "{{ brew.casks }}"
+    name: "{{ item }}"
     state: latest
-    greedy: true
     accept_external_apps: true
+  loop: "{{ brew.casks }}"
+  register: brew_cask_result
+  # community.general 13.3.0 only recognizes Homebrew's old unprefixed
+  # external-app message. Homebrew 6 prefixes it with the cask token.
+  failed_when:
+    - brew_cask_result is failed
+    - "'It seems there is already an App at' not in brew_cask_result.msg"
   when:
     - ansible_facts["system"] == "Darwin"
 

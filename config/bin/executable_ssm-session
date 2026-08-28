@@ -16,8 +16,7 @@
 set -o pipefail
 
 ssm_instance_ids() {
-  aws ssm describe-instance-information\
-    --query "InstanceInformationList[].InstanceId" \
+  aws ssm describe-instance-information --query "InstanceInformationList[].InstanceId" \
     --output=text
 }
 
@@ -32,7 +31,7 @@ list_instances() {
 }
 
 print_usage() {
-    cat <<-EOF
+  cat <<- EOF
 usage: ssm-session <command>
 command:
     list:  List target sessions
@@ -40,23 +39,22 @@ command:
 EOF
 }
 
-
 case "$1" in
-  list )
+  list)
     list_instances
 
     ;;
-  start )
+  start)
     # Ignore SIGINT(Ctrl-C) to prevent accidental exit from session
     trap '' 2
 
-    list_instances \
-      | fzf \
-      | cut -f 1 \
-      | xargs -o aws ssm start-session --target
+    list_instances |
+      fzf |
+      cut -f 1 |
+      xargs -o aws ssm start-session --target
 
     ;;
-  * )
+  *)
     print_usage
-;;
+    ;;
 esac

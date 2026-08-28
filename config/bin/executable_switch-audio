@@ -10,7 +10,7 @@
 #   - audio speakers
 #
 
-if ! command -v "SwitchAudioSource" &>/dev/null; then
+if ! command -v "SwitchAudioSource" &> /dev/null; then
   echo "SwitchAudioSource could not be found."
   echo "Run:"
   echo "  - brew install switchaudio-osx"
@@ -36,13 +36,13 @@ toggle() {
 }
 
 case "$1" in
-headphones)
-  set_headphones
-  ;;
-speakers)
-  set_speakers
-  ;;
-*)
-  toggle
-  ;;
+  headphones)
+    set_headphones
+    ;;
+  speakers)
+    set_speakers
+    ;;
+  *)
+    toggle
+    ;;
 esac
