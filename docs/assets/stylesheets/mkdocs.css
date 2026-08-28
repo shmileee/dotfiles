@@ -120,12 +120,18 @@ body[data-md-color-scheme] {
   min-height: 2.75rem;
   display: inline-flex;
   align-items: center;
-  border-left: 1px solid var(--border-default);
-  padding-left: var(--space-5);
-  color: var(--accent-soft);
+  justify-content: center;
+  color: var(--text-secondary);
   font-size: 0.75rem;
   font-weight: 500;
+  letter-spacing: 0.14em;
   text-decoration: none;
+  text-transform: uppercase;
+  transition: color 130ms ease-out;
+}
+
+.docs-home:hover {
+  color: var(--text-primary);
 }
 
 .docs-home.is-active {
@@ -1973,11 +1979,6 @@ button.header-icon {
 @media (max-width: 480px) {
   .header-inner {
     gap: var(--space-2);
-  }
-
-  .docs-home {
-    border-left: 0;
-    padding-left: 0;
   }
 
   .shortcut-reference table:not(:has(th:nth-child(3))) tr.shortcut-row--stacked {
