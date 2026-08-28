@@ -174,6 +174,14 @@
 <nav aria-label="Validate locally" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
+<a class="md-nav__link" href="#shell-style">
+<span class="md-ellipsis">
+      Shell style
+    </span>
+</a>
+<nav aria-label="Shell style" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
 <a class="md-nav__link" href="#installation-flow">
 <span class="md-ellipsis">
       Installation Flow
@@ -186,6 +194,9 @@
       Running Inside Docker
     </span>
 </a>
+</li>
+</ul>
+</nav>
 </li>
 </ul>
 </nav>
@@ -258,6 +269,14 @@
 <nav aria-label="Validate locally" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
+<a class="md-nav__link" href="#shell-style">
+<span class="md-ellipsis">
+      Shell style
+    </span>
+</a>
+<nav aria-label="Shell style" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
 <a class="md-nav__link" href="#installation-flow">
 <span class="md-ellipsis">
       Installation Flow
@@ -270,6 +289,9 @@
       Running Inside Docker
     </span>
 </a>
+</li>
+</ul>
+</nav>
 </li>
 </ul>
 </nav>
@@ -301,7 +323,7 @@ Debian-family systems remain best effort.</p>
 <h2 id="updating">Updating<a class="headerlink" href="#updating" title="Permanent link">¶</a></h2>
 <p><code>./scripts/setup.sh --all</code> installs declared state and reapplies configuration.
 It is intentionally allowed to refresh Homebrew metadata and update managed
-formulae and greedy casks. After a long gap, a run can therefore introduce
+formulae and versioned casks. After a long gap, a run can therefore introduce
 upstream changes. To review local dotfile changes before running it, clone the
 repository and invoke the checked-out script; Ansible applies that checkout
 rather than fetching <code>master</code> again.</p>
@@ -329,12 +351,20 @@ intentional edits to the chezmoi-managed source before rerunning Ansible.</p>
 </ul>
 <h2 id="validate-locally">Validate locally<a class="headerlink" href="#validate-locally" title="Permanent link">¶</a></h2>
 <p>Run the same repository checks used by CI:</p>
-<div class="highlight"><pre><span></span><code>mise<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--<span class="w"> </span>prek<span class="w"> </span>run<span class="w"> </span>--all-files
-<span class="nv">ANSIBLE_CONFIG</span><span class="o">=</span>scripts/common/ansible/ansible.cfg<span class="w"> </span><span class="se">\</span>
+<div class="highlight"><pre><span></span><code>mise<span class="w"> </span>install
+mise<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--<span class="w"> </span>prek<span class="w"> </span>run<span class="w"> </span>--all-files
+mise<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--<span class="w"> </span>env<span class="w"> </span><span class="nv">ANSIBLE_CONFIG</span><span class="o">=</span>scripts/common/ansible/ansible.cfg<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>ansible-playbook<span class="w"> </span>--inventory<span class="w"> </span><span class="s1">'127.0.0.1,'</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--syntax-check<span class="w"> </span>scripts/common/ansible/main.yaml
-./scripts/common/ansible.sh<span class="w"> </span>--run<span class="w"> </span>--check
+mise<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--<span class="w"> </span>./scripts/common/ansible.sh<span class="w"> </span>--run<span class="w"> </span>--check
 </code></pre></div>
+<h3 id="shell-style">Shell style<a class="headerlink" href="#shell-style" title="Permanent link">¶</a></h3>
+<p>Bash formatting follows the
+<a href="https://google.github.io/styleguide/shellguide.html">Google Shell Style Guide</a>:
+two-space indentation without tabs, indented <code>case</code> alternatives, and binary
+operators at the start of continued lines. <code>shfmt</code> applies that formatting and
+ShellCheck checks correctness through pre-commit. Fish scripts use their native
+<code>fish_indent</code> formatter.</p>
 <details class="explanation">
 <summary>Explanation</summary>
 <p>The <a href="https://oponomarov.com/d"><code>oponomarov.com/d</code></a> is a short redirect URL
