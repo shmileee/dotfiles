@@ -1,5 +1,86 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:best-practices"],
-  "timezone": "Europe/Warsaw"
+  "extends": ["config:best-practices", ":enablePreCommit"],
+  "timezone": "Europe/Warsaw",
+  "schedule": ["* 0-5 * * 1"],
+  "updateNotScheduled": false,
+  "minimumReleaseAge": "3 days",
+  "prConcurrentLimit": 4,
+  "prHourlyLimit": 2,
+  "rebaseWhen": "conflicted",
+  "groupSingleUpdates": true,
+  "semanticCommits": "enabled",
+  "major": {
+    "dependencyDashboardApproval": true
+  },
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "schedule": ["at any time"],
+    "minimumReleaseAge": "0 days",
+    "semanticCommitType": "fix",
+    "semanticCommitScope": "security"
+  },
+  "packageRules": [
+    {
+      "description": "Group updates across the repository's GitHub Actions",
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions",
+      "groupSlug": "github-actions",
+      "semanticCommitType": "ci",
+      "semanticCommitScope": "deps"
+    },
+    {
+      "description": "Group documentation build dependencies",
+      "matchManagers": ["pip_requirements"],
+      "matchFileNames": ["requirements-docs.txt"],
+      "groupName": "documentation dependencies",
+      "groupSlug": "docs",
+      "semanticCommitType": "docs",
+      "semanticCommitScope": "deps"
+    },
+    {
+      "description": "Group Ansible content used to provision machines",
+      "matchManagers": ["ansible-galaxy"],
+      "matchFileNames": ["scripts/common/ansible/requirements.yml"],
+      "groupName": "provisioning dependencies",
+      "groupSlug": "ansible",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "ansible"
+    },
+    {
+      "description": "Group tools used to develop and validate this repository",
+      "matchManagers": ["mise"],
+      "matchFileNames": ["mise.toml"],
+      "groupName": "repository toolchain",
+      "groupSlug": "repo-toolchain",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "tooling"
+    },
+    {
+      "description": "Include pre-commit hooks in the repository toolchain group",
+      "matchManagers": ["pre-commit"],
+      "groupName": "repository toolchain",
+      "groupSlug": "repo-toolchain",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "tooling"
+    },
+    {
+      "description": "Keep workstation changes separate from repository tooling",
+      "matchManagers": ["mise"],
+      "matchFileNames": ["config/private_dot_config/mise/config.toml"],
+      "groupName": "workstation toolchain",
+      "groupSlug": "workstation-toolchain",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "workstation"
+    },
+    {
+      "description": "Group the runtime and frontend images used by Docker builds",
+      "matchManagers": ["dockerfile"],
+      "matchFileNames": ["Dockerfile"],
+      "groupName": "container images",
+      "groupSlug": "container-images",
+      "semanticCommitType": "build",
+      "semanticCommitScope": "deps"
+    }
+  ]
 }
