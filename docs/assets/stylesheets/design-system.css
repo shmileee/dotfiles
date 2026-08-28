@@ -1,0 +1,197 @@
+/*
+ * Cross-site design primitives copied from portfolio commit f1cad70.
+ * The portfolio's DESIGN.md and src/assets/css/site.css are the visual contract.
+ */
+@font-face {
+  font-family: "Bricolage Grotesque";
+  font-style: normal;
+  font-weight: 400 800;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("../fonts/bricolage-grotesque-latin.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Public Sans";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("../fonts/public-sans-latin.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Public Sans";
+  font-style: italic;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("../fonts/public-sans-latin-italic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/ibm-plex-mono-latin-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("../fonts/ibm-plex-mono-latin-500.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("../fonts/ibm-plex-mono-latin-600.woff2") format("woff2");
+}
+
+:root {
+  color-scheme: dark;
+  --surface-primary: #0b1220;
+  --surface-secondary: #111827;
+  --surface-header: rgba(11, 18, 32, 0.96);
+  --text-primary: #ffffff;
+  --text-body: rgba(255, 255, 255, 0.78);
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --text-tertiary: #aab4c3;
+  --border-default: rgba(255, 255, 255, 0.16);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --accent-primary: #60a5fa;
+  --accent-soft: #93c5fd;
+  --accent-surface: rgba(37, 99, 235, 0.14);
+  --selection-surface: rgba(96, 165, 250, 0.12);
+  --accent-border: rgba(96, 165, 250, 0.35);
+  --progress: #f9423a;
+  --focus-ring: #93c5fd;
+  --code-surface: #0b1220;
+  --code-toolbar: rgba(255, 255, 255, 0.03);
+  --code-border: #aab4c3;
+  --code-text: rgba(255, 255, 255, 0.82);
+  --code-muted: #9ca3af;
+  --code-keyword: #93c5fd;
+  --code-value: #60a5fa;
+  --diagram-surface: #111827;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --page-gutter: clamp(var(--space-5), 5vw, var(--space-12));
+  --page-width: 71.25rem;
+  --reading-width: 46rem;
+  --md-text-font: "Public Sans", system-ui, sans-serif;
+  --md-code-font: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --surface-primary: #f4f5f7;
+  --surface-secondary: #ffffff;
+  --surface-header: rgba(244, 245, 247, 0.95);
+  --text-primary: #111827;
+  --text-body: rgba(17, 24, 39, 0.84);
+  --text-secondary: rgba(17, 24, 39, 0.66);
+  --text-tertiary: #4b5563;
+  --border-default: rgba(17, 24, 39, 0.16);
+  --border-subtle: rgba(17, 24, 39, 0.09);
+  --accent-primary: #1d4ed8;
+  --accent-soft: #2563eb;
+  --accent-surface: rgba(37, 99, 235, 0.14);
+  --selection-surface: rgba(37, 99, 235, 0.1);
+  --accent-border: rgba(37, 99, 235, 0.4);
+  --focus-ring: #1d4ed8;
+  --code-surface: #ffffff;
+  --code-toolbar: #f4f5f7;
+  --code-border: #4b5563;
+  --code-text: #111827;
+  --code-muted: #4b5563;
+  --code-keyword: #1d4ed8;
+  --code-value: #0f766e;
+  --diagram-surface: #ffffff;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+}
+
+body {
+  background: var(--surface-primary);
+  color: var(--text-body);
+  font-family: "Public Sans", system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: normal;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+a {
+  color: var(--accent-primary);
+  text-decoration-color: color-mix(in srgb, var(--accent-primary) 40%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--accent-soft);
+  text-decoration-color: var(--accent-soft);
+}
+
+p {
+  text-wrap: pretty;
+}
+
+::selection {
+  background: #2563eb;
+  color: #fff;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+  box-shadow: none;
+}
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline-color: Highlight;
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,4 +1,21 @@
-Install everything with single `curl` command:
+---
+title: Dotfiles
+description: Reproducible macOS and Linux workstation setup by Oleksandr Ponomarov.
+---
+
+<section class="docs-hero" markdown>
+  <p class="section-eyebrow">Personal workstation · documented in public</p>
+  <h1>Hitchhiker's Guide to the Dotfiles<span class="hero-cursor" aria-hidden="true"></span></h1>
+  <p class="hero-copy">A reproducible workstation built with Ansible, Homebrew, and a deliberately small bootstrap path. The setup supports macOS and Debian-based Linux without hiding what it changes.</p>
+  <div class="hero-actions">
+    <a class="primary-link" href="#install-everything">Install everything →</a>
+    <a class="secondary-link" href="https://portfolio.oponomarov.com/">View the engineering portfolio ↗</a>
+  </div>
+</section>
+
+## Install everything
+
+Start a complete installation with a single `curl` command:
 
 ```bash
 curl -fsSL oponomarov.com/d | sh -s -- --all
