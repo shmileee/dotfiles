@@ -39,18 +39,25 @@ hide:
 </dialog>
 </div>
 
+<section class="home-overview" markdown>
+<div class="home-overview__summary" markdown>
 ## What it builds
 
 The result is an opinionated terminal-first environment built around fish,
 tmux, Alacritty, Neovim, mise, Git tools, and a curated set of command-line
 utilities. On macOS, it also installs desktop applications and applies personal
 system defaults.
+</div>
 
-!!! warning "This is a personal configuration"
+<aside class="home-caution" markdown>
+### Before you run it
 
-    The playbook changes the login shell, applies dotfiles with `--force`, and
-    modifies macOS preferences. Read the [setup guide](setup.md)
-    before running it on a machine with configuration you want to keep.
+This is a personal configuration. The playbook changes the login shell,
+applies dotfiles with `--force`, and modifies macOS preferences.
+
+[Review the setup guide first →](setup.md)
+</aside>
+</section>
 
 ## How the pieces fit together
 
@@ -107,11 +114,11 @@ system defaults.
 
 ## Design principles
 
-- **Repeatable over clever.** Repeated runs should converge on the same state.
-- **Visible over magical.** Package lists, roles, and managed files stay in the repository.
-- **Portable where practical.** Shared behavior works on macOS and Linux; platform-specific changes stay explicit.
-- **Personal by design.** This is a working environment, not a universal starter kit.
+<dl class="principle-grid">
+  <div><dt>Repeatable over clever</dt><dd>Repeated runs should converge on the same state.</dd></div>
+  <div><dt>Visible over magical</dt><dd>Package lists, roles, and managed files stay in the repository.</dd></div>
+  <div><dt>Portable where practical</dt><dd>Shared behavior works on macOS and Linux; platform-specific changes stay explicit.</dd></div>
+  <div><dt>Personal by design</dt><dd>This is a working environment, not a universal starter kit.</dd></div>
+</dl>
 
-The implementation is tested continuously on macOS and in an Ubuntu-based
-container. The container is useful for validating the Linux path, but it does
-not reproduce macOS applications or system preferences.
+<p class="home-validation">Tested continuously on macOS and in an Ubuntu-based container. The container validates the Linux path; it does not reproduce macOS applications or system preferences.</p>
