@@ -2105,39 +2105,12 @@ body:has(.context-help[open]) .context-help-trigger {
 }
 
 @media (max-width: 63.9844em) {
-  html {
-    scroll-padding-top: 7rem;
-  }
-
-  .header-inner {
-    flex-wrap: wrap;
-    row-gap: 0;
+  .header-menu {
+    display: inline-flex;
   }
 
   .site-nav {
-    order: 10;
-    width: 100%;
-    display: flex;
-    justify-content: flex-start;
-    gap: var(--space-6);
-    margin-left: 0;
-    overflow-x: auto;
-    border-top: 1px solid var(--border-subtle);
-    scrollbar-width: none;
-    overscroll-behavior-inline: contain;
-  }
-
-  .site-nav::-webkit-scrollbar {
     display: none;
-  }
-
-  .site-nav a,
-  .site-nav-separator {
-    flex: 0 0 auto;
-  }
-
-  .site-nav a {
-    min-height: 2.75rem;
   }
 
   .header-actions {
@@ -2146,8 +2119,12 @@ body:has(.context-help[open]) .context-help-trigger {
 }
 
 @media (max-width: 900px) {
+  html {
+    scroll-padding-top: 7rem;
+  }
+
   .header-inner {
-    column-gap: var(--space-3);
+    gap: var(--space-3);
   }
 
   .md-main__inner {
@@ -2205,22 +2182,6 @@ body:has(.context-help[open]) .context-help-trigger {
 }
 
 @media (max-width: 600px) {
-  html {
-    scroll-padding-top: 5rem;
-  }
-
-  .header-inner {
-    flex-wrap: nowrap;
-  }
-
-  .site-nav {
-    display: none;
-  }
-
-  .header-menu {
-    display: inline-flex;
-  }
-
   .brand-full {
     display: none;
   }
