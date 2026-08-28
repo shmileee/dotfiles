@@ -21,7 +21,10 @@ description: Review, install, customize, and reapply the workstation configurati
 </nav>
 
 <details class="concept-primer" data-mobile-toc-anchor markdown>
-<summary>New to workstation automation? Key terms</summary>
+<summary>
+  <span class="concept-primer__summary"><strong>Quick context</strong><small>Plain-language definitions</small></span>
+  <svg class="concept-primer__chevron" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m4 6 4 4 4-4" /></svg>
+</summary>
 <dl class="concept-primer__terms">
   <div><dt>Bootstrap</dt><dd>The small first step that downloads the repository and starts the setup.</dd></div>
   <div><dt>Playbook</dt><dd>The ordered Ansible plan that describes the desired workstation state.</dd></div>

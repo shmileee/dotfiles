@@ -14,7 +14,10 @@ description: A reproducible macOS and Linux workstation built with Ansible and c
 </section>
 
 <details class="concept-primer" markdown>
-<summary>New to dotfiles? Start here</summary>
+<summary>
+  <span class="concept-primer__summary"><strong>Quick context</strong><small>Plain-language definitions</small></span>
+  <svg class="concept-primer__chevron" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m4 6 4 4 4-4" /></svg>
+</summary>
 <dl class="concept-primer__terms">
   <div><dt>Dotfiles</dt><dd>Configuration files that store how command-line tools and applications behave.</dd></div>
   <div><dt>Ansible</dt><dd>Automation that installs software and applies machine settings in a repeatable order.</dd></div>
