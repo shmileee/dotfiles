@@ -15,8 +15,11 @@ brew:
     - alacritty
     - alt-tab
     - aws-vault
+    - chatgpt
+    - google-chrome
     - hiddenbar
     - kdiff3
+    - microsoft-outlook
     - rectangle
     - slack
     - spotify
