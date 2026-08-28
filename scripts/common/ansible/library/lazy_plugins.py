@@ -18,6 +18,15 @@ options:
     description: Directory containing lazy.nvim plugin checkouts.
     type: path
     required: true
+  active_lock_file:
+    description: Lock file used by the active Neovim configuration.
+    type: path
+    required: true
+  install_argv:
+    description: Command used to install plugins missing from an empty setup.
+    type: list
+    elements: str
+    required: true
   restore_argv:
     description: Command used to restore the locked plugin state.
     type: list
@@ -40,6 +49,8 @@ EXAMPLES = r"""
   lazy_plugins:
     lock_file: ~/.config/nvim/lazy-lock.json
     plugin_root: ~/.local/share/nvim/lazy
+    active_lock_file: ~/.config/nvim/lazy-lock.json
+    install_argv: [mise, exec, --, nvim, --headless, +Lazy! install, +qa]
     restore_argv: [mise, exec, --, nvim, --headless, +Lazy! restore, +qa]
     verify_argv: [mise, exec, --, nvim, --headless, +qa]
 """
@@ -54,6 +65,7 @@ drifted_plugins:
 
 import json
 import os
+import shutil
 import subprocess
 
 from ansible.module_utils.basic import AnsibleModule
@@ -93,6 +105,8 @@ def main() -> None:
         argument_spec={
             "lock_file": {"type": "path", "required": True},
             "plugin_root": {"type": "path", "required": True},
+            "active_lock_file": {"type": "path", "required": True},
+            "install_argv": {"type": "list", "elements": "str", "required": True},
             "restore_argv": {"type": "list", "elements": "str", "required": True},
             "verify_argv": {"type": "list", "elements": "str", "required": True},
         },
@@ -108,6 +122,11 @@ def main() -> None:
         invoke(module, module.params["verify_argv"], "Neovim startup verification")
         module.exit_json(changed=False, drifted_plugins=[])
 
+    invoke(module, module.params["install_argv"], "Lazy install")
+    try:
+        shutil.copyfile(module.params["lock_file"], module.params["active_lock_file"])
+    except OSError as error:
+        module.fail_json(msg=f"Could not restore the committed Lazy lock file: {error}")
     invoke(module, module.params["restore_argv"], "Lazy restore")
     final = drifted(module.params["lock_file"], module.params["plugin_root"])
     if final:
