@@ -10,7 +10,7 @@
     <nav class="site-nav" aria-label="Primary navigation">
       {% for nav_item in nav %}
         {% if loop.index <= 3 %}
-          <a href="{{ nav_item.url | url }}">{{ nav_item.title }}</a>
+          <a href="{{ nav_item.url | url }}"{% if nav_item.active %} class="is-active" aria-current="page"{% endif %}>{{ nav_item.title }}</a>
         {% endif %}
       {% endfor %}
       <a href="https://portfolio.oponomarov.com/">Portfolio</a>
@@ -19,10 +19,10 @@
 
     <div class="header-actions">
       <button class="theme-toggle" type="button" aria-label="Switch to light color scheme" data-theme-toggle>light</button>
-      <label class="header-icon md-icon" for="__search" aria-label="Search documentation">
+      <label class="header-icon md-icon" for="__search" role="button" tabindex="0" aria-controls="__search" aria-expanded="false" aria-label="Search documentation" data-search-toggle>
         {% include ".icons/material/magnify.svg" %}
       </label>
-      <label class="header-icon header-menu md-icon" for="__drawer" aria-label="Open navigation">
+      <label class="header-icon header-menu md-icon" for="__drawer" role="button" tabindex="0" aria-controls="__drawer" aria-expanded="false" aria-label="Open navigation" data-drawer-toggle>
         {% include ".icons/material/menu.svg" %}
       </label>
     </div>
