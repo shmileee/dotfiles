@@ -1,0 +1,12 @@
+{% extends "main.html" %}
+
+{% block extrahead %}
+  {{ super() }}
+  <meta http-equiv="refresh" content="0; url={{ page.meta.redirect_to | url }}">
+  <meta name="robots" content="noindex">
+{% endblock %}
+
+{% block content %}
+  <h1>This page moved</h1>
+  <p>Continue to the <a href="{{ page.meta.redirect_to | url }}">{{ page.meta.redirect_label }}</a>.</p>
+{% endblock %}

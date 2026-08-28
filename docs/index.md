@@ -8,7 +8,7 @@ description: A reproducible macOS and Linux workstation built with Ansible and c
   <h1>A workstation I can rebuild.<span class="hero-cursor" aria-hidden="true"></span></h1>
   <p class="hero-copy">This repository turns a fresh macOS or Debian-based Linux machine into my development environment. Ansible installs and configures the system; chezmoi puts the files in place.</p>
   <div class="hero-actions">
-    <a class="primary-link" href="/what-how-and-why/">Read the setup guide →</a>
+    <a class="primary-link" href="/setup/">Read the setup guide →</a>
     <a class="secondary-link" href="https://github.com/shmileee/dotfiles">Browse the repository ↗</a>
   </div>
 </section>
@@ -42,7 +42,7 @@ system defaults.
 !!! warning "This is a personal configuration"
 
     The playbook changes the login shell, applies dotfiles with `--force`, and
-    modifies macOS preferences. Read the [setup guide](what-how-and-why.md)
+    modifies macOS preferences. Read the [setup guide](setup.md)
     before running it on a machine with configuration you want to keep.
 
 ## How the pieces fit together
@@ -81,17 +81,17 @@ system defaults.
 ## Choose what you need
 
 <div class="doc-card-grid">
-  <a href="/what-how-and-why/">
+  <a href="/setup/">
     <span>01 · Start here</span>
     <strong>Set up or customize a machine</strong>
     <p>Review the changes, choose an installation path, and learn how to reapply the configuration.</p>
   </a>
-  <a href="/hotkeys/">
+  <a href="/shortcuts/">
     <span>02 · Reference</span>
     <strong>Find a keyboard shortcut</strong>
     <p>Look up bindings for macOS, Alacritty, tmux, and Neovim.</p>
   </a>
-  <a href="/opencode-and-omo/">
+  <a href="/opencode/">
     <span>03 · AI tooling</span>
     <strong>Configure OpenCode + OmO</strong>
     <p>Set up local secrets, corporate overlays, model routing, and contextual notifications.</p>
