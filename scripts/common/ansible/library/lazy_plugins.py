@@ -60,7 +60,7 @@ drifted_plugins:
   description: Missing plugins or plugins at the wrong revision.
   returned: always
   type: list
-  elements: str
+  elements: dict
 """
 
 import json
@@ -71,7 +71,7 @@ import subprocess
 from ansible.module_utils.basic import AnsibleModule
 
 
-def drifted(lock_file: str, plugin_root: str) -> list[str]:
+def drifted(lock_file: str, plugin_root: str) -> list[dict[str, str]]:
     with open(lock_file, encoding="utf-8") as handle:
         lock = json.load(handle)
     result = []
@@ -81,7 +81,13 @@ def drifted(lock_file: str, plugin_root: str) -> list[str]:
             ["git", "-C", checkout, "rev-parse", "HEAD"], capture_output=True, check=False, text=True
         )
         if revision.returncode != 0 or revision.stdout.strip() != metadata["commit"]:
-            result.append(name)
+            result.append(
+                {
+                    "name": name,
+                    "expected": metadata["commit"],
+                    "actual": revision.stdout.strip() if revision.returncode == 0 else "missing",
+                }
+            )
     return result
 
 
@@ -122,15 +128,23 @@ def main() -> None:
         invoke(module, module.params["verify_argv"], "Neovim startup verification")
         module.exit_json(changed=False, drifted_plugins=[])
 
-    invoke(module, module.params["install_argv"], "Lazy install")
+    install = invoke(module, module.params["install_argv"], "Lazy install")
     try:
         shutil.copyfile(module.params["lock_file"], module.params["active_lock_file"])
     except OSError as error:
         module.fail_json(msg=f"Could not restore the committed Lazy lock file: {error}")
-    invoke(module, module.params["restore_argv"], "Lazy restore")
+    restore = invoke(module, module.params["restore_argv"], "Lazy restore")
     final = drifted(module.params["lock_file"], module.params["plugin_root"])
     if final:
-        module.fail_json(msg="Plugins still differ after Lazy restore", changed=True, drifted_plugins=final)
+        module.fail_json(
+            msg="Plugins still differ after Lazy restore",
+            changed=True,
+            drifted_plugins=final,
+            install_stdout=install.stdout,
+            install_stderr=install.stderr,
+            restore_stdout=restore.stdout,
+            restore_stderr=restore.stderr,
+        )
     invoke(module, module.params["verify_argv"], "Neovim startup verification")
     module.exit_json(changed=True, drifted_plugins=[])
 
