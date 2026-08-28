@@ -3,7 +3,7 @@
 - name: "install rancher desktop"
   community.general.homebrew_cask:
     name: "rancher"
-    state: present
+    state: latest
     greedy: true
     accept_external_apps: true
   tags: homebrew

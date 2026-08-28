@@ -1,4 +1,5 @@
 ---
 
-- import_tasks: darwin.yaml
+- name: "configure macOS defaults"
+  ansible.builtin.import_tasks: darwin.yaml
   when: ansible_facts["system"] == "Darwin"

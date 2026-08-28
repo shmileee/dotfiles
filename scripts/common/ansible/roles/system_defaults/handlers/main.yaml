@@ -9,9 +9,17 @@
       - "{{ {'UserKeyMapping': keyboard_modifier_mapping} | to_json }}"
 
 - name: "restart preference services"
-  ansible.builtin.command: /usr/bin/killall cfprefsd
-  failed_when: false
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/killall
+      - cfprefsd
+  register: restart_preference_services
+  failed_when: restart_preference_services.rc not in [0, 1]
 
 - name: "restart dock"
-  ansible.builtin.command: /usr/bin/killall Dock
-  failed_when: false
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/killall
+      - Dock
+  register: restart_dock
+  failed_when: restart_dock.rc not in [0, 1]

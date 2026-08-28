@@ -4,17 +4,30 @@
   community.general.homebrew:
     name:
       - chezmoi
+    state: latest
   tags: homebrew
 
 - name: "chezmoi init"
   ansible.builtin.command:
-    cmd: chezmoi init {{ dotfiles.repo }} --branch {{ dotfiles.branch }}
+    argv:
+      - chezmoi
+      - init
+      - "{{ dotfiles.repo }}"
+      - --branch
+      - "{{ dotfiles.branch }}"
   args:
     creates: "{{ ansible_facts['user_dir'] }}/.local/share/chezmoi"
 
 - name: "chezmoi apply current checkout"
-  ansible.builtin.command:
-    argv:
+  command_reconcile:
+    probe_argv:
+      - chezmoi
+      - --source
+      - "{{ dotfiles.checkout }}/config"
+      - --working-tree
+      - "{{ dotfiles.checkout }}"
+      - status
+    apply_argv:
       - chezmoi
       - --source
       - "{{ dotfiles.checkout }}/config"
@@ -23,5 +36,4 @@
       - apply
       - --force
       - --verbose
-  register: chezmoi_apply
-  changed_when: chezmoi_apply.stdout | length > 0
+    comparison: empty

@@ -24,7 +24,7 @@ osx_global_defaults:
   - { name: "allow quitting via ⌘ + q; doing so will also hide desktop icons", domain: com.apple.finder, key: QuitMenuItem, type: bool, value: true }
   - { name: "disable window animations and get info animations", domain: com.apple.finder, key: DisableAllAnimations, type: bool, value: true }
   - { name: "set desktop as the default location for new finder windows", domain: com.apple.finder, key: NewWindowTarget, type: string, value: "PfDe" }
-  - { name: "set target path for new finder windows", domain: com.apple.finder, key: NewWindowTargetPath, type: string, value: "file://{{ lookup('env', 'HOME') }}/Desktop/" }
+  - { name: "set target path for new finder windows", domain: com.apple.finder, key: NewWindowTargetPath, type: string, value: "file://{{ ansible_facts['user_dir'] }}/Desktop/" }
   - { name: "show icons for hard drives, servers, and removable media on the desktop", domain: com.apple.finder, key: ShowExternalHardDrivesOnDesktop, type: bool, value: true }
   - { name: "show hard drive icons on desktop", domain: com.apple.finder, key: ShowHardDrivesOnDesktop, type: bool, value: true }
   - { name: "show mounted servers on desktop", domain: com.apple.finder, key: ShowMountedServersOnDesktop, type: bool, value: true }
@@ -43,7 +43,6 @@ osx_global_defaults:
   - { name: "don't write ds_store files on usb drives", domain: com.apple.desktopservices, key: DSDontWriteUSBStores, type: bool, value: true }
   # Four-letter codes for the other view modes: `icnv`, `clmv`, `glyv`
   - { name: "use list view in all finder windows by default", domain: com.apple.finder, key: FXPreferredViewStyle, type: string, value: "Nlsv" }
-  - { name: "open disk images as read-only", domain: com.apple.frameworks.diskimages, key: auto-open-ro-root, type: bool, value: true }
   - { name: "automatically open a new finder window when a volume is mounted", domain: com.apple.frameworks.diskimages, key: auto-open-ro-root, type: bool, value: true }
   - { name: "open new windows for new removable disks", domain: com.apple.finder, key: OpenWindowForNewRemovableDisk, type: bool, value: true }
   - { name: "disable the warning before emptying the trash", domain: com.apple.finder, key: WarnOnEmptyTrash, type: bool, value: false }
@@ -63,8 +62,6 @@ osx_global_defaults:
   - { name: "show indicator lights for open applications in the dock", domain: com.apple.dock, key: show-process-indicators, type: bool, value: true }
   - { name: "don’t animate opening applications from the dock", domain: com.apple.dock, key: launchanim, type: bool, value: false }
   - { name: "speed up mission control animations", domain: com.apple.dock, key: expose-animation-duration, type: float, value: 0.1 }
-  - { name: "disable dashboard", domain: com.apple.dock, key: mcx-disabled, type: bool, value: true }
-  - { name: "don’t show dashboard as a space", domain: com.apple.dock, key: dashboard-in-overlay, type: bool, value: true }
   - { name: "don’t automatically rearrange spaces based on most recent use", domain: com.apple.dock, key: mru-spaces, type: bool, value: false }
   - { name: "expand save panel by default", domain: NSGlobalDomain, key: NSNavPanelExpandedStateForSaveMode, type: bool, value: true }
   - { name: "auto-expand navigation panel for save modes", domain: NSGlobalDomain, key: NSNavPanelExpandedStateForSaveMode2, type: bool, value: true }
@@ -87,7 +84,7 @@ osx_global_defaults:
 
   - { name: "disable shadow in screenshots", domain: com.apple.screencapture, key: disable-shadow, type: bool, value: true }
   - { name: "remove date and time from the screenshot file names", domain: com.apple.screencapture, key: include-date, type: bool, value: false }
-  - { name: "save screenshots to the screenshots folder", domain: com.apple.screencapture, key: location, type: string, value: "~/Pictures/Screenshots" }
+  - { name: "save screenshots to the screenshots folder", domain: com.apple.screencapture, key: location, type: string, value: "{{ ansible_facts['user_dir'] }}/Pictures/Screenshots" }
   - { name: "display thumbnail after taking a screenshot", domain: com.apple.screencapture, key: show-thumbnail, type: bool, value: true }
   # other options: BMP, GIF, JPG, PDF, TIFF
   - { name: "save screenshots in png format", domain: com.apple.screencapture, key: type, type: string, value: "png" }
@@ -106,13 +103,13 @@ osx_global_defaults:
   # Miscellaneous
   #########################################
 
-  - { name: "increase sound quality for bluetooth headphones/headsets", domain: com.apple.BluetoothAudioAgent, key: "Apple Bitpool Min (editable)", type: int, value: 40 }
   - { name: "don't use natural scrolling", domain: NSGlobalDomain, key: com.apple.swipescrolldirection, type: bool, value: false }
   - { name: "set dark mode", domain: NSGlobalDomain, key: AppleInterfaceStyle, type: string, value: Dark }
   - { name: "quit printer app once jobs are complete", domain: com.apple.print.PrintingPrefs, key: 'Quit When Finished', type: boolean, value: true }
   - { name: "don't open imagecapture when camera plugged in", domain: com.apple.ImageCapture, key: disableHotPlug, type: boolean, value: true }
 
 osx_alt_tab_defaults:
+  - { name: "alt-tab | set shortcut", domain: com.lwouis.alt-tab-macos, key: holdShortcut, type: dict, value: { string: "⌘" }, dict_mode: add, state: present }
   - { name: "alt-tab | show windows from screen showing alt-tab", domain: com.lwouis.alt-tab-macos, key: screensToShow, type: string, value: 1, state: present }
   - { name: "alt-tab | show windows active space only", domain: com.lwouis.alt-tab-macos, key: spacesToShow, type: string, value: 1, state: present }
   - { name: "alt-tab | do not send crash reports", domain: com.lwouis.alt-tab-macos, key: crashPolicy, type: string, value: 0, state: present }

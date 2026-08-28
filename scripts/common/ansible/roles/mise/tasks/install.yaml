@@ -1,10 +1,9 @@
 ---
+
 - name: "install tools"
-  ansible.builtin.command: >
-    mise install
-  environment:
-    GITHUB_TOKEN: "{{ lookup('env', 'GITHUB_TOKEN') }}"
-  register: mise_install_result
-  changed_when: >-
-    'all tools are installed' not in
-    (mise_install_result.stdout + mise_install_result.stderr)
+  command_reconcile:
+    probe_argv: [mise, ls, --missing, --json]
+    apply_argv: [mise, install]
+    comparison: json_empty
+    environment:
+      GITHUB_TOKEN: "{{ lookup('ansible.builtin.env', 'GITHUB_TOKEN') }}"

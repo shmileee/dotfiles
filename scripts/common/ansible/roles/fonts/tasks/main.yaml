@@ -1,7 +1,9 @@
 ---
 
-- import_tasks: darwin.yaml
+- name: Install macOS fonts
+  ansible.builtin.import_tasks: darwin.yaml
   when: ansible_facts["os_family"] == "Darwin"
 
-- import_tasks: debian.yaml
+- name: Install Debian fonts
+  ansible.builtin.import_tasks: debian.yaml
   when: ansible_facts["os_family"] == "Debian"

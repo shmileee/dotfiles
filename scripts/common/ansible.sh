@@ -11,18 +11,10 @@ needs_become_pass() { ! sudo -n true 2>/dev/null; }
 install_collections() {
 	local collections_dir="${HOME}/.ansible/collections"
 
-	if [[ -d "${collections_dir}/ansible_collections/community/general" &&
-		-d "${collections_dir}/ansible_collections/ansible/posix" ]]; then
-		echo "✅ [ansible] collections already installed!"
-		return
-	fi
-
-	echo "⚪ [ansible] installing collections..."
-	ansible-galaxy collection install \
-		--force \
+	echo "⚪ [ansible] reconciling collections..."
+	ANSIBLE_COLLECTIONS_PATH="$collections_dir" ansible-galaxy collection install \
 		--collections-path "$collections_dir" \
-		community.general \
-		ansible.posix
+		--requirements-file "${cwd}/ansible/requirements.yml"
 }
 
 run_playbook() {
@@ -37,7 +29,6 @@ run_playbook() {
 	if [[ "$check_mode" == true ]]; then
 		command+=("--check")
 	fi
-
 	if needs_become_pass; then
 		command+=("--ask-become-pass")
 	fi

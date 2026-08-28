@@ -35,17 +35,20 @@ Below is a non-exhaustive list of the tools used to achieve the desired setup:
     - [`homebrew`](https://brew.sh) as my primary package manager ([casks + formulas](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml#L10)).
     - [`mise`](https://blog.oponomarov.com/posts/mise-faster-smarter-tool-versioning) as a version manager for various system tools.
 
-All of these tools are installed with `ansible`. The main configuration is
+These tools are orchestrated by `ansible`, but each layer retains one clear
+owner. The main machine configuration is
 handled by the [primary
 playbook](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/main.yaml),
 which sets up the system and dotfiles. You can customize the configuration in
 [`config.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml),
-where you’ll typically specify packages and other preferences. The
+where you’ll typically specify OS packages and other machine preferences. The
 [`dotfiles{}`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml#L86-L88)
 dictionary defines which repository and branch `chezmoi` will use to install
 your dotfiles from.
 [`mise/config.toml`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/mise/config.toml)
-defines what tools and runtimes are managed with `mise`.
+defines the developer tools and runtimes managed with `mise`. Fisher, TPM, and
+Lazy own their respective plugin sets; Lazy’s resolved Neovim graph is committed
+as `lazy-lock.json`.
 
 !!! warning
 
@@ -61,11 +64,10 @@ defines what tools and runtimes are managed with `mise`.
       repository, and updates files.
     - `fish`: Installs `fish` shell using `brew`, sets it as the default shell,
       and configures `fisher` and its plugins.
-    - `neovim`: Installs `neovim`. If `neovim.build_from_source` is `true`, then it is
-      compiled from source. Otherwise, a nightly Debian package is downloaded, or on
-      macOS, it is installed via a `brew`.
+    - `neovim`: Restores the committed Lazy plugin graph and verifies that the
+      mise-managed Neovim starts headlessly.
     - `mise`: Installs the `mise` version manager for granular control over specific
-      tools. All managed tools and their versions are defined in `config.yaml`.
+      tools. Managed tools and versions are defined in the mise configuration.
     - `docker`: Installs Docker using `brew`.
     - `tmux`: Installs `tmux`, `tpm`, and the plugins specified in `tmux.conf`.
     - `system_defaults`: Applies opinionated macOS system settings and custom

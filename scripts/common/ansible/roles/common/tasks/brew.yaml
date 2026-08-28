@@ -1,21 +1,9 @@
 ---
 
-- name: "brew | list taps"
-  ansible.builtin.command: brew tap
-  register: brew_taps
-  changed_when: false
-  when: ansible_facts["system"] == "Linux"
-
-- name: "brew | remove legacy core tap"
-  ansible.builtin.command: brew untap --force homebrew/core
-  when:
-    - ansible_facts["system"] == "Linux"
-    - "'homebrew/core' in (brew_taps.stdout_lines | default([]))"
-
 - name: "brew | update"
   community.general.homebrew:
     update_homebrew: true
-  when: lookup('env', 'DOCKERIZED') != 'true'
+  when: not dockerized
 
 - name: "brew | install taps"
   community.general.homebrew_tap:
@@ -26,7 +14,7 @@
 - name: "brew | install casks"
   community.general.homebrew_cask:
     name: "{{ brew.casks }}"
-    state: present
+    state: latest
     greedy: true
     accept_external_apps: true
   when:
@@ -35,3 +23,4 @@
 - name: "brew | install packages"
   community.general.homebrew:
     name: "{{ pkgs }}"
+    state: latest

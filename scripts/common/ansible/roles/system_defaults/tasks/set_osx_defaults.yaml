@@ -8,4 +8,4 @@
     type: "{{ item.type }}"
     value: "{{ item.value }}"
     array_add: "{{ item.array | default(omit) }}"
-    state: present
+    state: "{{ item.state | default('present') }}"

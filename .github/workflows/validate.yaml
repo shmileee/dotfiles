@@ -1,0 +1,66 @@
+---
+name: validate
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  static:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+
+      - name: Set up mise
+        uses: jdx/mise-action@5228313ee0372e111a38da051671ca30fc5a96db # v3
+        with:
+          install: false
+
+      - name: Install Fish
+        run: sudo apt-get update && sudo apt-get install --yes --no-install-recommends fish
+
+      - name: Validate Fish syntax
+        run: find config -type f -name '*.fish' -print0 | xargs -0 fish --no-execute
+
+      - name: Render and validate Fish templates
+        run: |
+          mise x aqua:twpayne/chezmoi@2.72.0 -- bash -c '
+            chezmoi execute-template \
+              < config/private_dot_config/private_fish/private_config.fish.tmpl \
+              | fish --no-execute
+            chezmoi execute-template \
+              < config/private_dot_config/private_fish/conf.d/alias.fish.tmpl \
+              | fish --no-execute
+          '
+
+      - name: Run repository checks
+        run: |
+          mise x pipx:ansible-core@2.21.3 -- scripts/common/ansible.sh --install
+          mise x \
+            prek@0.4.14 \
+            shellcheck@0.11.0 \
+            pipx:yamllint@1.38.0 \
+            pipx:ansible-lint@26.8.0 \
+            -- prek run --all-files
+
+      - name: Validate Ansible syntax
+        run: |
+          mise x pipx:ansible-core@2.21.3 -- bash -c '
+            ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
+              ansible-playbook \
+              --inventory "127.0.0.1," \
+              --syntax-check scripts/common/ansible/main.yaml
+          '

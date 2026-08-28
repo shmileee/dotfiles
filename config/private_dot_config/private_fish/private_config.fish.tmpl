@@ -5,6 +5,7 @@ fish_add_path /home/linuxbrew/.linuxbrew/bin
 set -x XDG_CONFIG_HOME $HOME/.config
 set -x XDG_CACHE_HOME $HOME/.cache
 set -x EDITOR nvim
+set -x VISUAL nvim
 set -x GOPATH $HOME/go
 
 fish_add_path $GOPATH/bin
@@ -14,8 +15,6 @@ fish_add_path $HOME/.cargo/bin
 fish_add_path /opt/homebrew/bin
 fish_add_path /opt/homebrew/sbin
 fish_add_path /opt/homebrew/opt/libpq/bin
-
-set -x GODEBUG asyncpreemptoff=1
 
 set -gx HOMEBREW_NO_ANALYTICS 1
 
@@ -27,7 +26,6 @@ if status is-interactive
     end
 
     set -gx FZF_DEFAULT_OPTS "--color=dark"
-    set -gx FZF_DEFAULT_COMMAND "rg --files --hidden --follow --glob '!.git'"
     set -g fzf_fd_opts --hidden --follow --exclude .git
 
     if type -q fzf_configure_bindings
