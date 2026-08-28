@@ -5,6 +5,7 @@ on:
   pull_request:
     paths:
       - "docs/**"
+      - "docs-overrides/**"
       - "mkdocs.yml"
       - "requirements-docs.txt"
       - ".github/workflows/docs.yaml"
@@ -13,6 +14,7 @@ on:
       - "master"
     paths:
       - "docs/**"
+      - "docs-overrides/**"
       - "mkdocs.yml"
       - "requirements-docs.txt"
       - ".github/workflows/docs.yaml"

@@ -15,7 +15,7 @@ theme:
   name: material
   # Preserve Material's DOM and visual defaults while moving to Zensical.
   variant: classic
-  custom_dir: docs/overrides
+  custom_dir: docs-overrides
   palette:
     scheme: slate
   language: en
