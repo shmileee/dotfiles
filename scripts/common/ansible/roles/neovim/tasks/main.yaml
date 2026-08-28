@@ -12,6 +12,12 @@
       - +qa
     creates: "{{ ansible_facts['user_dir'] }}/.local/share/nvim/lazy/LazyVim"
 
+- name: "restore the managed LazyVim lockfile after bootstrap"
+  ansible.builtin.copy:
+    src: "{{ dotfiles.checkout }}/config/private_dot_config/nvim/lazy-lock.json"
+    dest: "{{ ansible_facts['user_dir'] }}/.config/nvim/lazy-lock.json"
+    mode: '0600'
+
 - name: "install LazyVim plugin specifications"
   ansible.builtin.command:
     argv:
