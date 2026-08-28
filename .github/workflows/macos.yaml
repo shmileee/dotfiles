@@ -84,6 +84,7 @@ jobs:
       - name: Validate
         run: |
           mise install
+          mise exec -- scripts/common/ansible.sh --install
           mise exec -- prek run --all-files
 
       - name: Verify a second run is idempotent
