@@ -403,7 +403,7 @@ button.header-icon {
   border-radius: 0.25rem;
   padding: 0.08em 0.32em;
   background: var(--accent-surface);
-  color: var(--accent-soft);
+  color: var(--inline-code-text);
   box-decoration-break: clone;
   font-size: 0.82em;
   font-weight: 500;
@@ -2033,6 +2033,7 @@ body:has(.context-help[open]) .context-help-trigger {
   .mobile-page-toc__label small {
     color: var(--text-tertiary);
     font: 500 0.6875rem/1.4 "IBM Plex Mono", ui-monospace, monospace;
+    opacity: 1;
   }
 
   .md-typeset .mobile-page-toc > summary::before,
@@ -2283,6 +2284,10 @@ body:has(.context-help[open]) .context-help-trigger {
 
   .shortcut-filter__scopes button {
     min-height: 2.75rem;
+  }
+
+  .md-typeset .tabbed-labels {
+    width: calc(100% + 1.6rem);
   }
 
   .shortcut-reference table thead {

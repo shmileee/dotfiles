@@ -68,7 +68,7 @@ and the files under
 
 ### Platform requirements
 
-=== "Apple Silicon macOS"
+=== "macOS"
 
     Install available system updates and the Xcode Command Line Tools on a
     fresh machine:
@@ -78,7 +78,7 @@ and the files under
     xcode-select --install
     ```
 
-=== "Ubuntu 24.04 ARM64"
+=== "Ubuntu"
 
     Use an account with `sudo` access. The bootstrap installs the apt
     prerequisites, adds the Ansible PPA, and then installs Homebrew.
