@@ -239,7 +239,37 @@
     const shortcutEmpty = document.querySelector("[data-shortcut-empty]");
     const shortcutSections = [...document.querySelectorAll("[data-shortcut-section]")];
     const shortcutRows = shortcutSections.flatMap((section) => [...section.querySelectorAll("tbody tr")]);
+    const shortcutHeadingIds = new Set(
+      shortcutSections.flatMap((section) => [...section.querySelectorAll("h2[id], h3[id]")].map((heading) => heading.id)),
+    );
+    const shortcutTocRoots = [
+      ...document.querySelectorAll(".md-nav--secondary"),
+      ...document.querySelectorAll(".mobile-page-toc__nav"),
+    ];
     let shortcutScope = "all";
+
+    const syncShortcutToc = () => {
+      shortcutTocRoots.forEach((toc) => {
+        const links = [...toc.querySelectorAll('.md-nav__link[href*="#"]')];
+
+        links.forEach((link) => {
+          const id = decodeURIComponent(new URL(link.href, window.location.href).hash.slice(1));
+          const heading = document.getElementById(id);
+          const isFilterControlled = shortcutHeadingIds.has(id);
+          const isHidden = isFilterControlled
+            && (!heading || heading.hidden || Boolean(heading.closest("[data-shortcut-section][hidden]")));
+          const item = link.closest(".md-nav__item");
+
+          if (item) item.hidden = isHidden;
+          if (isHidden) link.classList.remove("md-nav__link--active");
+        });
+
+        const visibleLinks = links.filter((link) => !link.closest(".md-nav__item")?.hidden);
+        if (visibleLinks.length && !visibleLinks.some((link) => link.classList.contains("md-nav__link--active"))) {
+          visibleLinks[0].classList.add("md-nav__link--active");
+        }
+      });
+    };
 
     const syncShortcutFilter = () => {
       if (!shortcutFilter || !shortcutQuery) return;
@@ -281,7 +311,9 @@
       shortcutClear.hidden = !query;
       shortcutEmpty.hidden = visibleCount !== 0;
       shortcutStatus.textContent = `Showing ${visibleCount} of ${shortcutRows.length} shortcuts`;
+      syncShortcutToc();
       syncShortcutRows();
+      syncDrawerFocus();
     };
 
     if (shortcutFilter && shortcutQuery && shortcutClear && shortcutStatus && shortcutEmpty) {
