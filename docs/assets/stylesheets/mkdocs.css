@@ -1682,27 +1682,31 @@ body:has(.context-help[open]) .context-help-trigger {
     grid-template-columns: minmax(0, 1fr);
   }
 
+  .md-main__inner:has(.md-sidebar--secondary:not([hidden])) {
+    grid-template-columns: minmax(0, var(--reading-width)) 13rem;
+    justify-content: center;
+    column-gap: clamp(var(--space-8), 4vw, var(--space-16));
+  }
+
   .md-sidebar--primary {
     display: none;
   }
 
-  .md-content,
-  .md-sidebar--secondary {
+  .md-content {
     grid-area: 1 / 1;
   }
 
-  [dir] .md-main__inner .md-sidebar--secondary:not([hidden]) ~ .md-content > .md-content__inner {
-    position: relative;
-    left: 50%;
-    margin-right: 0;
-    margin-left: 0;
-    transform: translateX(-50%);
+  .md-main__inner:has(.md-sidebar--secondary:not([hidden])) .md-content__inner {
+    width: 100%;
+    margin-inline: 0;
   }
 
   .md-sidebar--secondary {
+    grid-area: 1 / 2;
     z-index: 1;
-    justify-self: end;
-    transform: translateX(calc(var(--page-gutter) + var(--space-8)));
+    width: 13rem;
+    justify-self: stretch;
+    transform: none;
   }
 }
 
