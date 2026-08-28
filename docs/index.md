@@ -1,6 +1,6 @@
 ---
 title: Home
-description: A reproducible macOS and Linux workstation built with Ansible and chezmoi.
+description: A reproducible Apple Silicon macOS workstation and Ubuntu ARM64 integration environment built with Ansible and chezmoi.
 hide:
   - toc
 ---
@@ -8,13 +8,13 @@ hide:
 <section class="docs-hero docs-hero--home" markdown>
   <p class="section-eyebrow">Personal workstation · documented publicly</p>
   <h1>A workstation I can rebuild.<span class="hero-cursor" aria-hidden="true"></span></h1>
-  <p class="hero-copy">This repository turns a fresh macOS or Debian-based Linux machine into my development environment. Ansible, the automation engine, configures the system; chezmoi, the dotfile manager, puts the files in place.</p>
+  <p class="hero-copy">This repository rebuilds my Apple Silicon macOS workstation and continuously tests the shared setup in Ubuntu 24.04 ARM64. Ansible, the automation engine, configures the system; chezmoi, the dotfile manager, puts the files in place.</p>
   <div class="hero-actions">
     <a class="primary-link" href="/setup/">Read the setup guide →</a>
     <a class="secondary-link" href="https://github.com/shmileee/dotfiles">Browse the repository ↗</a>
   </div>
   <dl class="hero-signals">
-    <div><dt>Platforms</dt><dd>macOS + Linux</dd></div>
+    <div><dt>Targets</dt><dd>macOS + Ubuntu</dd></div>
     <div><dt>Automation</dt><dd>Ansible</dd></div>
     <div><dt>Dotfiles</dt><dd>chezmoi</dd></div>
   </dl>
@@ -66,14 +66,14 @@ applies dotfiles with `--force`, and modifies macOS preferences.
     <span>01</span>
     <div>
       <strong>Bootstrap</strong>
-      <p><a class="repo-path" href="https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh"><code>scripts/setup.sh</code></a> chooses the macOS or Linux path and prepares the machine.</p>
+      <p><a class="repo-path" href="https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh"><code>scripts/setup.sh</code></a> detects the platform and prepares the supported installation path.</p>
     </div>
   </li>
   <li>
     <span>02</span>
     <div>
       <strong>Install prerequisites</strong>
-      <p>On Linux, the script installs the required apt packages; on both platforms, it prepares Homebrew and Ansible.</p>
+      <p>On Ubuntu, the script installs the required apt packages; on both targets, it prepares Homebrew and Ansible.</p>
     </div>
   </li>
   <li>
@@ -94,7 +94,7 @@ applies dotfiles with `--force`, and modifies macOS preferences.
 
 <aside class="home-validation">
   <strong>Continuously tested</strong>
-  <p>The setup runs on macOS and in an Ubuntu-based container. The container exercises the Linux installation path; macOS applications and system preferences are validated only on macOS.</p>
+  <p>The setup is tested on Apple Silicon macOS and in an Ubuntu 24.04 ARM64 container. The container exercises the shared Linux path; macOS applications and system preferences are validated on macOS.</p>
 </aside>
 
 ## Choose what you need
@@ -108,7 +108,7 @@ applies dotfiles with `--force`, and modifies macOS preferences.
   <a href="/shortcuts/">
     <span>02 · Reference</span>
     <strong>Find a keyboard shortcut</strong>
-    <p>Look up bindings for macOS, Alacritty, tmux, and Neovim.</p>
+    <p>Look up bindings for macOS, Alacritty, fish, tmux, and Neovim.</p>
   </a>
   <a href="/opencode/">
     <span>03 · AI tooling</span>
@@ -122,6 +122,6 @@ applies dotfiles with `--force`, and modifies macOS preferences.
 <dl class="principle-grid">
   <div><dt>Repeatable over clever</dt><dd>Repeated runs should converge on the same state.</dd></div>
   <div><dt>Visible over magical</dt><dd>Package lists, roles, and managed files stay in the repository.</dd></div>
-  <div><dt>Portable where practical</dt><dd>Shared behavior works on macOS and Linux; platform-specific changes stay explicit.</dd></div>
+  <div><dt>Portable where practical</dt><dd>Shared behavior works on macOS and the Ubuntu integration environment; platform-specific changes stay explicit.</dd></div>
   <div><dt>Personal by design</dt><dd>This is a working environment, not a universal starter kit.</dd></div>
 </dl>

@@ -1,11 +1,11 @@
 ---
 title: Shortcut reference
-description: Keyboard shortcuts configured for macOS, Alacritty, tmux, and Neovim.
+description: Keyboard shortcuts configured for macOS, Alacritty, fish, tmux, and Neovim.
 ---
 
 # Keyboard shortcuts
 
-<p class="page-lead">Choose the layer where the shortcut runs. Alacritty, the terminal application, sends many macOS-style shortcuts directly to tmux; tmux commands use <kbd>Ctrl</kbd> + <kbd>A</kbd> as their prefix.</p>
+<p class="page-lead">Choose the layer where the shortcut runs. Alacritty, the terminal application, sends many macOS-style shortcuts directly to tmux; fish adds command-line bindings; tmux commands use <kbd>Ctrl</kbd> + <kbd>A</kbd> as their prefix.</p>
 
 <form class="shortcut-filter" role="search" data-shortcut-filter data-mobile-toc-anchor>
   <label for="shortcut-query">Find a shortcut</label>
@@ -17,6 +17,7 @@ description: Keyboard shortcuts configured for macOS, Alacritty, tmux, and Neovi
     <button type="button" aria-pressed="true" data-shortcut-scope="all">All</button>
     <button type="button" aria-pressed="false" data-shortcut-scope="macos">macOS</button>
     <button type="button" aria-pressed="false" data-shortcut-scope="alacritty">Alacritty</button>
+    <button type="button" aria-pressed="false" data-shortcut-scope="fish">fish</button>
     <button type="button" aria-pressed="false" data-shortcut-scope="tmux">tmux</button>
     <button type="button" aria-pressed="false" data-shortcut-scope="neovim">Neovim</button>
   </div>
@@ -91,6 +92,22 @@ These shortcuts work from Alacritty without first entering the tmux prefix.
 
 </section>
 
+<section class="shortcut-reference shortcut-filter-section" data-shortcut-section="fish" markdown>
+
+## fish shell
+
+These bindings act on the current fish command line.
+
+| Shortcut | Action |
+| --- | --- |
+| ++alt+s++ | Prepend `sudo` unless the command line already starts with it |
+| ++ctrl+g++ | Open the project chooser powered by fzf |
+
+Some additional character bindings are keyboard-layout dependent. See the
+source file for the exact mappings used by this configuration.
+
+</section>
+
 <section class="shortcut-reference shortcut-filter-section" data-shortcut-section="tmux" markdown>
 
 ## tmux prefix commands
@@ -162,5 +179,6 @@ LazyVim provides most editor mappings. This repository adds only a small set:
 
 - macOS shortcuts: [`config.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml)
 - Alacritty shortcuts: [`alacritty.toml.tmpl`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_alacritty/alacritty.toml.tmpl)
+- fish shortcuts: [`binds.fish`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_fish/conf.d/binds.fish)
 - tmux shortcuts: [`tmux.conf`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf)
 - Neovim additions: [`keymaps.lua`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/nvim/lua/config/keymaps.lua)
