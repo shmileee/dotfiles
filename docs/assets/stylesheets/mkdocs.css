@@ -143,8 +143,16 @@ body[data-md-color-scheme] {
 }
 
 .site-nav a:hover,
+.site-nav a.is-active,
 .theme-toggle:hover {
   color: var(--text-primary);
+}
+
+.site-nav a.is-active {
+  text-decoration: underline;
+  text-decoration-color: var(--accent-primary);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.45rem;
 }
 
 .header-actions {
@@ -191,7 +199,8 @@ body[data-md-color-scheme] {
   inset: 0;
   z-index: 100;
   width: auto;
-  height: auto;
+  height: 100vh;
+  height: 100dvh;
   display: none;
   padding: clamp(4.5rem, 12vh, 8rem) var(--page-gutter) var(--space-8);
   background: rgba(11, 18, 32, 0.72);
@@ -222,7 +231,10 @@ body[data-md-color-scheme] {
   left: auto;
   width: min(100%, 42rem);
   height: auto;
+  float: none;
   margin: 0 auto;
+  overflow: visible;
+  opacity: 1;
   transform: none;
 }
 
@@ -240,12 +252,53 @@ body[data-md-color-scheme] {
 }
 
 .site-header .md-search__output {
-  max-height: min(65vh, 36rem);
-  border: 1px solid var(--border-default);
-  border-top: 0;
+  position: relative;
+  inset: auto;
+  height: 0;
+  max-height: none;
+  overflow: hidden;
+  border: 0 solid var(--border-default);
   border-radius: 0 0 0.5rem 0.5rem;
   background: var(--surface-secondary);
+  opacity: 1;
   box-shadow: none;
+  transition: height 160ms ease-out;
+}
+
+.site-header .md-search__form:valid + .md-search__output {
+  height: min(65vh, 36rem);
+  border-width: 0 1px 1px;
+}
+
+.site-header .md-search__scrollwrap {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  overscroll-behavior: contain;
+  scrollbar-color: var(--border-default) transparent;
+}
+
+.site-header .md-search-result__article {
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+
+.site-header .md-search-result__article pre {
+  margin: var(--space-2) 0;
+}
+
+.site-header .md-search-result__article pre > code {
+  padding: var(--space-2) 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.site-header .md-search .md-search__icon[for="__search"] svg:first-child {
+  display: none;
+}
+
+.site-header .md-search .md-search__icon[for="__search"] svg:last-child {
+  display: block;
 }
 
 .md-container,
@@ -405,12 +458,19 @@ body[data-md-color-scheme] {
   border-radius: 0.5rem;
   background: var(--surface-secondary);
   box-shadow: none;
+  font-size: 0.8125rem;
+  line-height: 1.55;
 }
 
 .md-typeset table:not([class]) th {
   background: var(--accent-surface);
   color: var(--text-primary);
   font-family: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+.md-typeset__scrollwrap {
+  overscroll-behavior-inline: contain;
+  scrollbar-color: var(--border-default) transparent;
 }
 
 .md-typeset .keys kbd {
@@ -430,13 +490,20 @@ body[data-md-color-scheme] {
 
 .md-nav {
   color: var(--text-secondary);
-  font-size: 0.72rem;
+  font-size: 0.8125rem;
 }
 
 .md-nav__title {
   background: transparent;
   color: var(--text-primary);
   box-shadow: none;
+}
+
+.md-nav--primary > .md-nav__title {
+  height: auto;
+  min-height: 3.5rem;
+  white-space: normal;
+  line-height: 1.4;
 }
 
 .md-nav__link {
@@ -542,7 +609,7 @@ body[data-md-color-scheme] {
 
 .doc-card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(11rem, 100%), 1fr));
   gap: var(--space-4);
   margin: var(--space-6) 0 var(--space-10);
 }
@@ -845,6 +912,26 @@ body[data-md-color-scheme] {
   .header-menu {
     display: inline-flex;
   }
+
+  .site-nav {
+    display: none;
+  }
+
+  .header-actions {
+    margin-left: auto;
+  }
+
+  .md-sidebar--primary .md-sidebar__scrollwrap {
+    top: 3.5rem;
+  }
+
+  .md-nav--primary > .md-nav__title .md-logo {
+    display: none;
+  }
+
+  .md-nav--primary > .md-nav__title {
+    padding: var(--space-4) 0.8rem;
+  }
 }
 
 @media (max-width: 900px) {
@@ -854,14 +941,6 @@ body[data-md-color-scheme] {
 
   .header-inner {
     gap: var(--space-3);
-  }
-
-  .site-nav {
-    display: none;
-  }
-
-  .header-actions {
-    margin-left: auto;
   }
 
   .md-main__inner {
@@ -891,6 +970,9 @@ body[data-md-color-scheme] {
     grid-template-columns: minmax(0, 1fr);
   }
 
+  .doc-card-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 @media (max-width: 480px) {
