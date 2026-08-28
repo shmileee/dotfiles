@@ -1496,31 +1496,36 @@ body:has(.context-help[open]) .context-help-trigger {
 }
 
 .hero-signals {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
   gap: 0;
-  margin: var(--space-12) calc(-1 * var(--home-hero-padding)) calc(-1 * var(--home-hero-padding));
+  margin: var(--space-12) 0 0;
   border-top: 1px solid var(--border-default);
-  padding: var(--space-5) var(--home-hero-padding);
-  background: color-mix(in srgb, var(--surface-primary) 32%, transparent);
+  padding-top: var(--space-5);
 }
 
 .hero-signals div {
-  width: max-content;
-  max-width: 100%;
-  min-width: 0;
+  width: auto;
   display: grid;
-  justify-self: center;
-  justify-items: start;
-  padding-inline: var(--space-4);
+  grid-template-columns: max-content max-content;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding-right: var(--space-8);
   text-align: left;
 }
 
+.hero-signals div + div {
+  margin-left: var(--space-8);
+  border-left: 1px solid var(--border-default);
+  padding-left: var(--space-8);
+}
+
 .hero-signals dt {
-  margin: 0 0 var(--space-1);
+  margin: 0;
   color: var(--text-tertiary);
-  font: 600 0.625rem/1.4 "IBM Plex Mono", ui-monospace, monospace;
-  letter-spacing: 0.12em;
+  font: 500 0.625rem/1.4 "IBM Plex Mono", ui-monospace, monospace;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
@@ -2070,10 +2075,34 @@ body:has(.context-help[open]) .context-help-trigger {
   }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 800px) {
   .install-flow li > div {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--space-2);
+  }
+
+  .hero-signals {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .hero-signals div {
+    width: 100%;
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    align-items: baseline;
+    gap: var(--space-3);
+    margin: 0;
+    border-left: 0;
+    padding: var(--space-3) 0;
+    text-align: left;
+  }
+
+  .hero-signals div + div {
+    margin-left: 0;
+    border-top: 1px solid var(--border-subtle);
+    border-left: 0;
+    padding-left: 0;
   }
 }
 
@@ -2146,26 +2175,6 @@ body:has(.context-help[open]) .context-help-trigger {
 
     border-radius: 0.625rem;
     padding: var(--home-hero-padding);
-  }
-
-  .hero-signals {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0;
-  }
-
-  .hero-signals div {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 7rem minmax(0, 1fr);
-    align-items: baseline;
-    justify-self: stretch;
-    gap: var(--space-3);
-    padding: var(--space-2) 0;
-    text-align: left;
-  }
-
-  .hero-signals div + div {
-    border-top: 1px solid var(--border-subtle);
   }
 
   .principle-grid {

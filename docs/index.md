@@ -14,9 +14,9 @@ hide:
     <a class="secondary-link" href="https://github.com/shmileee/dotfiles">Browse the repository ↗</a>
   </div>
   <dl class="hero-signals">
-    <div><dt>Targets</dt><dd>macOS + Linux</dd></div>
+    <div><dt>Platforms</dt><dd>macOS + Linux</dd></div>
     <div><dt>Automation</dt><dd>Ansible</dd></div>
-    <div><dt>Managed files</dt><dd>chezmoi</dd></div>
+    <div><dt>Dotfiles</dt><dd>chezmoi</dd></div>
   </dl>
 </section>
 
