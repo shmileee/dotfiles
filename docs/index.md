@@ -92,6 +92,11 @@ applies dotfiles with `--force`, and modifies macOS preferences.
   </li>
 </ol>
 
+<aside class="home-validation">
+  <strong>Continuously tested</strong>
+  <p>The setup runs on macOS and in an Ubuntu-based container. The container exercises the Linux installation path; macOS applications and system preferences are validated only on macOS.</p>
+</aside>
+
 ## Choose what you need
 
 <div class="doc-card-grid">
@@ -120,5 +125,3 @@ applies dotfiles with `--force`, and modifies macOS preferences.
   <div><dt>Portable where practical</dt><dd>Shared behavior works on macOS and Linux; platform-specific changes stay explicit.</dd></div>
   <div><dt>Personal by design</dt><dd>This is a working environment, not a universal starter kit.</dd></div>
 </dl>
-
-<p class="home-validation">Tested continuously on macOS and in an Ubuntu-based container. The container validates the Linux path; it does not reproduce macOS applications or system preferences.</p>
