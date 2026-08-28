@@ -18,6 +18,19 @@
   args:
     creates: "{{ ansible_facts['user_dir'] }}/.local/share/chezmoi"
 
+- name: "inspect chezmoi-managed files"
+  ansible.builtin.command:
+    argv:
+      - chezmoi
+      - --source
+      - "{{ dotfiles.checkout }}/config"
+      - --working-tree
+      - "{{ dotfiles.checkout }}"
+      - status
+  check_mode: false
+  register: chezmoi_status
+  changed_when: chezmoi_status.stdout | trim | length > 0
+
 - name: "chezmoi apply current checkout"
   ansible.builtin.command:
     argv:
@@ -29,5 +42,4 @@
       - apply
       - --force
       - --verbose
-  register: chezmoi_apply
-  changed_when: chezmoi_apply.stdout | trim | length > 0
+  when: chezmoi_status is changed
