@@ -10,3 +10,32 @@ legacy_version_file = false
 prek = "0.4.14"
 shellcheck = "0.11.0"
 shfmt = "3.13.1"
+uv = "0.12.6"
+
+[tasks.docs]
+description = "Preview the documentation at http://localhost:8000"
+run = "uv run --python 3.14 --with-requirements requirements-docs.txt zensical serve"
+raw = true
+
+[tasks."docs:build"]
+description = "Build the documentation with CI's strict settings"
+run = "uv run --python 3.14 --with-requirements requirements-docs.txt zensical build --strict"
+
+[tasks.reconcile]
+description = "Install Ansible collections and reconcile this machine"
+run = "scripts/common/ansible.sh --all"
+raw = true
+
+[tasks."reconcile:check"]
+description = "Preview the Ansible reconciliation (check mode has limits)"
+run = "scripts/common/ansible.sh --all --check"
+raw = true
+
+[tasks.import]
+description = "Import modified managed files from $HOME into config/"
+run = "chezmoi re-add"
+raw = true
+
+[tasks.status]
+description = "Show differences between config/ and the files in $HOME"
+run = "chezmoi status"

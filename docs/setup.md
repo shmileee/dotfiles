@@ -7,6 +7,7 @@ tags:
   - Ubuntu
   - Ansible
   - chezmoi
+  - mise
 hide:
   - tags
 ---
@@ -41,6 +42,7 @@ hide:
   <div><dt>Playbook</dt><dd>The ordered Ansible plan that describes the desired workstation state.</dd></div>
   <div><dt>Role</dt><dd>A focused part of the playbook, such as configuring fish, tmux, or Neovim.</dd></div>
   <div><dt>Check mode</dt><dd>An Ansible preview that reports many expected changes without applying them.</dd></div>
+  <div><dt>mise task</dt><dd>A named command for routine work after the initial setup has installed mise.</dd></div>
   <div><dt>Homebrew and apt</dt><dd>Package managers used to install software on macOS and Ubuntu.</dd></div>
   <div><dt>Docker image</dt><dd>A packaged Linux environment used to test the setup away from your machine.</dd></div>
 </dl>
@@ -238,14 +240,81 @@ repository or branch setting.
 
 </div>
 
+## Routine work with mise
+
+The initial setup installs `mise` and the tools pinned by this repository.
+After that bootstrap, run routine workflows from the repository checkout with
+`mise run`. List the available tasks and their descriptions at any time:
+
+```bash
+mise tasks
+```
+
+<div class="setup-reference" markdown>
+
+| Command | Purpose |
+| --- | --- |
+| `mise run reconcile` | Install the required Ansible collections and reconcile the machine. |
+| `mise run reconcile:check` | Preview the reconciliation using Ansible check mode. |
+| `mise run status` | Show differences between the chezmoi source and files in the home directory. |
+| `mise run import` | Import all modified, non-template managed files into `config/`. |
+| `mise run import ~/.config/nvim` | Import one managed file or directory. |
+| `mise run docs` | Serve the documentation at <http://localhost:8000> and rebuild it on changes. |
+| `mise run docs:build` | Run the strict documentation build used by CI. |
+
+</div>
+
+!!! important "Bootstrap before using tasks"
+
+    `mise` is the task runner, but it is also installed by Ansible. On a new
+    machine, run `./scripts/setup.sh --all` first. The mise tasks are the
+    post-bootstrap interface, not a replacement for initial setup.
+
+Task execution installs any missing tools declared in `mise.toml`
+automatically.
+
+### Import local dotfile changes
+
+When a managed file was edited directly in the home directory, inspect the
+differences before copying them back into the repository:
+
+```bash
+mise run status
+mise run import ~/.config/nvim
+git diff -- config
+```
+
+Omit the path to import every modified managed file. The task uses
+`chezmoi re-add`, which deliberately does not overwrite template source files.
+For a rendered file backed by `config/**/*.tmpl`, reconcile the local change
+with its template explicitly. Always review the resulting Git diff before
+committing.
+
+### Preview the documentation
+
+Start the local Zensical server with:
+
+```bash
+mise run docs
+```
+
+Open <http://localhost:8000>. The preview rebuilds when documentation,
+configuration, templates, CSS, or JavaScript change. Before committing a docs
+change, run the same strict build as CI:
+
+```bash
+mise run docs:build
+```
+
 ## Reapply after an update
 
-Pull the latest changes, review them, and rerun the Ansible stage:
+After the initial setup has installed `mise`, pull the latest changes, review
+them, and rerun the Ansible stage:
 
 ```bash
 git pull --ff-only
 git diff HEAD@{1} -- scripts/common/ansible config
-./scripts/setup.sh --ansible
+mise run reconcile
 ```
 
 The roles are designed to be rerun, and a repeated run should leave converged
@@ -295,7 +364,7 @@ mise exec -- env ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
 If the prerequisites are installed, preview the playbook too:
 
 ```bash
-mise exec -- ./scripts/common/ansible.sh --run --check
+mise run reconcile:check
 ```
 
 ## Why Ansible and chezmoi?
