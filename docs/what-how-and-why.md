@@ -185,15 +185,15 @@ directory, which makes a fork straightforward to test before publishing it.
 
 | Role | Responsibility |
 | --- | --- |
-| `common` | Shared Homebrew packages plus platform-specific packages and applications |
-| `fonts` | Developer fonts for macOS or Debian |
-| `dotfiles` | Install chezmoi and apply the current checkout |
-| `fish` | Install Fish, make it the login shell, and synchronize Fisher plugins |
-| `mise` | Install the tools declared in mise configuration |
-| `neovim` | Install LazyVim plugins in headless mode |
-| `docker` | Install Docker outside the validation container |
-| `tmux` | Install tmux, TPM, and declared plugins |
-| `system_defaults` | Apply macOS preferences, Dock items, and keyboard settings |
+| [`common`](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/common) | Shared Homebrew packages plus platform-specific packages and applications |
+| [`fonts`](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/fonts) | Developer fonts for macOS or Debian |
+| [`dotfiles`](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/dotfiles) | Install chezmoi and apply the current checkout |
+| [`fish`](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/fish) | Install Fish, make it the login shell, and synchronize Fisher plugins |
+| [`mise`](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/mise) | Install the tools declared in mise configuration |
+| [`neovim`](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/neovim) | Install LazyVim plugins in headless mode |
+| [`docker`](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/docker) | Install Docker outside the validation container |
+| [`tmux`](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/tmux) | Install tmux, TPM, and declared plugins |
+| [`system_defaults`](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/system_defaults) | Apply macOS preferences, Dock items, and keyboard settings |
 
 </div>
 
