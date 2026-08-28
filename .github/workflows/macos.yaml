@@ -68,6 +68,7 @@ jobs:
       - name: Validate
         run: |
           mise install
+          mise exec -- scripts/common/ansible.sh --install
           mise exec -- prek run --all-files
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
