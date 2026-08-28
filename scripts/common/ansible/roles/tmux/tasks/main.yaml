@@ -9,7 +9,7 @@
 - name: "install tmux plugins"
   ansible.builtin.git:
     repo: "{{ item['repo'] }}"
-    dest: "{{ ansible_facts['user_dir'] }}/.tmux/plugins/{{ item['name'] }}"
+    dest: "{{ ansible_facts['user_dir'] }}/.config/tmux/plugins/{{ item['name'] }}"
     version: "{{ item['version'] }}"
     update: "{{ item['update'] }}"
   loop: "{{ tmux_plugins }}"

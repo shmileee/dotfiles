@@ -66,7 +66,6 @@ files.
 
 - `tui.json` currently contains server-side OpenAgent plugin declarations;
   OpenCode's TUI plugin list is a separate extension surface.
-- `opencode-notifier.json` is not referenced by the active contextual notifier.
 - `opencode.corp.json` is a machine-local corporate overlay.
 - Runtime state, caches, backups, dependency directories, and lockfiles are
   generated locally and remain unmanaged.
