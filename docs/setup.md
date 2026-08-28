@@ -33,7 +33,7 @@ description: Review, install, customize, and reapply the workstation configurati
   <div><dt>Playbook</dt><dd>The ordered Ansible plan that describes the desired workstation state.</dd></div>
   <div><dt>Role</dt><dd>A focused part of the playbook, such as configuring fish, tmux, or Neovim.</dd></div>
   <div><dt>Check mode</dt><dd>An Ansible preview that reports many expected changes without applying them.</dd></div>
-  <div><dt>Homebrew and apt</dt><dd>Package managers used to install software on macOS and Debian-based Linux.</dd></div>
+  <div><dt>Homebrew and apt</dt><dd>Package managers used to install software on macOS and Ubuntu.</dd></div>
   <div><dt>Docker image</dt><dd>A packaged Linux environment used to test the setup away from your machine.</dd></div>
 </dl>
 </div>
@@ -58,7 +58,7 @@ and the files under
 
 ### Platform requirements
 
-=== "macOS"
+=== "Apple Silicon macOS"
 
     Install available system updates and the Xcode Command Line Tools on a
     fresh machine:
@@ -68,14 +68,15 @@ and the files under
     xcode-select --install
     ```
 
-=== "Debian-based Linux"
+=== "Ubuntu 24.04 ARM64"
 
     Use an account with `sudo` access. The bootstrap installs the apt
     prerequisites, adds the Ansible PPA, and then installs Homebrew.
 
-The documented Linux path targets Debian-based distributions. Other Linux
-distributions are not supported. Systems other than macOS and Linux are
-rejected.
+Apple Silicon macOS is the supported workstation target. Ubuntu 24.04 ARM64 is
+the continuously tested container and integration target. The setup may work
+on other Debian-family systems, but those systems are best effort. Other
+operating systems are rejected.
 
 ## Recommended: review, then run
 
@@ -140,8 +141,8 @@ setup, and removes the temporary checkout when it exits.
   <li>
     <span>02</span>
     <div>
-      <strong>Prepare Linux</strong>
-      <p>On Linux, install the required apt packages and Ansible before the shared setup begins.</p>
+      <strong>Prepare Ubuntu</strong>
+      <p>On the tested Linux target, install the required apt packages and Ansible before the shared setup begins.</p>
     </div>
   </li>
   <li>
@@ -168,7 +169,7 @@ Stage flags must be run from a repository checkout.
 
 | Command | Purpose |
 | --- | --- |
-| `./scripts/setup.sh --deps` | Install the Linux apt prerequisites. Linux only. |
+| `./scripts/setup.sh --deps` | Install apt prerequisites on Linux; tested on Ubuntu 24.04 ARM64. |
 | `./scripts/setup.sh --brew` | Install Homebrew if it is missing. |
 | `./scripts/setup.sh --ansible` | Install Ansible collections and run every role. |
 | `./scripts/setup.sh --all` | Run the complete platform-specific sequence. |
@@ -204,12 +205,12 @@ Make changes in four places:
 
 </div>
 
-The `dotfiles` section in
+The `dotfiles.checkout` value in
 [`config.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml)
-controls which repository and branch chezmoi initializes. The playbook then
-applies the current checkout's
-[`config/`](https://github.com/shmileee/dotfiles/tree/master/config) directory,
-which makes a fork straightforward to test before publishing it.
+points chezmoi at the current repository checkout. The role force-applies that
+checkout's [`config/`](https://github.com/shmileee/dotfiles/tree/master/config)
+directory, so a fork or local changes can be tested without changing a separate
+repository or branch setting.
 
 ### Ansible roles
 
@@ -218,7 +219,7 @@ which makes a fork straightforward to test before publishing it.
 | Role | Responsibility |
 | --- | --- |
 | [`common` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/common){ .role-link aria-label="common role on GitHub" } | Install shared command-line tools and platform-specific packages and applications |
-| [`fonts` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/fonts){ .role-link aria-label="fonts role on GitHub" } | Install developer fonts on macOS or Debian-based Linux |
+| [`fonts` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/fonts){ .role-link aria-label="fonts role on GitHub" } | Install developer fonts on macOS or the Ubuntu integration environment |
 | [`dotfiles` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/dotfiles){ .role-link aria-label="dotfiles role on GitHub" } | Install chezmoi and apply the current checkout |
 | [`fish` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/fish){ .role-link aria-label="fish role on GitHub" } | Install fish, make it the login shell, and synchronize Fisher plugins |
 | [`mise` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/mise){ .role-link aria-label="mise role on GitHub" } | Install the tools declared in the mise configuration |
@@ -239,9 +240,17 @@ git diff HEAD@{1} -- scripts/common/ansible config
 ./scripts/setup.sh --ansible
 ```
 
-The roles are designed to be rerun. A repeated run should leave converged state
-unchanged, although tools managed by external installers may still report
-their own updates.
+The roles are designed to be rerun, and a repeated run should leave converged
+state unchanged. Setup may still refresh Homebrew metadata and update managed
+formulae or versioned casks, so review changes before rerunning after a long
+gap.
+
+There is no repository-wide upgrade command. Use `brew upgrade` for an
+intentional full Homebrew upgrade, let Renovate propose changes to versions
+declared in the repository, and use Lazy, Fisher, or TPM for intentional plugin
+updates. Review and commit any resulting lockfile, manifest, or Ansible pin
+changes. The checked-out chezmoi source remains authoritative and is
+force-applied during setup.
 
 ## Try the Linux path in Docker
 
@@ -257,9 +266,29 @@ Or build the current checkout:
 docker buildx build --platform linux/arm64 -t dotfiles --progress plain .
 ```
 
-The image uses Ubuntu and runs the full Ansible installation as the
-non-root `linuxbrew` user. The `docker` role is intentionally skipped inside the
-container.
+The image uses Ubuntu 24.04 ARM64 and runs the full Ansible installation as the
+non-root `linuxbrew` user. Its smoke test verifies the installed tools and a
+second, idempotent provisioning pass. The `docker` role is intentionally
+skipped inside the container.
+
+## Validate changes locally
+
+Run the same static checks and Ansible syntax validation used by CI:
+
+```bash
+mise install
+mise exec -- scripts/common/ansible.sh --install
+mise exec -- prek run --all-files
+mise exec -- env ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
+  ansible-playbook --inventory '127.0.0.1,' \
+  --syntax-check scripts/common/ansible/main.yaml
+```
+
+If the prerequisites are installed, preview the playbook too:
+
+```bash
+mise exec -- ./scripts/common/ansible.sh --run --check
+```
 
 ## Why Ansible and chezmoi?
 
@@ -269,6 +298,6 @@ explicit, and repeated runs provide a practical convergence check.
 
 chezmoi owns files in the home directory. It renders templates using facts such
 as the operating system and architecture, which keeps one source tree useful
-across macOS, Linux, and the validation container. Keeping these responsibilities
-separate makes it clear whether a change belongs to the machine or to the
-user's configuration.
+across macOS and the Ubuntu integration environment. Keeping these
+responsibilities separate makes it clear whether a change belongs to the
+machine or to the user's configuration.
