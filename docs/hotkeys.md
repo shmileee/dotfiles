@@ -5,7 +5,7 @@ description: Keyboard shortcuts configured for macOS, Alacritty, tmux, and Neovi
 
 # Keyboard shortcuts
 
-<p class="page-lead">Start with the task you want to perform. Alacritty sends many macOS-style shortcuts directly to tmux; tmux commands use <kbd>Ctrl</kbd> + <kbd>A</kbd> as their prefix.</p>
+<p class="page-lead">Choose the layer where the shortcut runs. Alacritty sends many macOS-style shortcuts directly to tmux; tmux commands use <kbd>Ctrl</kbd> + <kbd>A</kbd> as their prefix.</p>
 
 <nav class="shortcut-jump" aria-label="Shortcut groups">
   <a href="#macos-system-shortcuts"><span>01</span>macOS</a>

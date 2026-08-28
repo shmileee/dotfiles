@@ -1,14 +1,14 @@
 docs_dir: ../docs
-site_name: Hitchhiker's Guide to the Dotfiles
+site_name: dotfiles
 site_description: Reproducible workstation setup and the reasoning behind it.
 site_url: https://dotfiles.oponomarov.com
 copyright: Copyright &copy; 2021 - 2026 Oleksandr Ponomarov
 
 nav:
   - Overview: index.md
-  - Setup guide: what-how-and-why.md
+  - Setup: what-how-and-why.md
   - Shortcuts: hotkeys.md
-  - OpenCode & OmO: opencode-and-omo.md
+  - OpenCode + OmO: opencode-and-omo.md
 
 theme:
   name: material
