@@ -52,7 +52,7 @@ system defaults.
     <span>01</span>
     <div>
       <strong>Bootstrap</strong>
-      <p><code>scripts/setup.sh</code> chooses the macOS or Linux path and prepares the machine.</p>
+      <p><a class="repo-path" href="https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh"><code>scripts/setup.sh</code></a> chooses the macOS or Linux path and prepares the machine.</p>
     </div>
   </li>
   <li>
@@ -73,7 +73,7 @@ system defaults.
     <span>04</span>
     <div>
       <strong>Apply the dotfiles</strong>
-      <p>chezmoi renders the files in <code>config/</code> for the current operating system and architecture.</p>
+      <p>chezmoi renders the files in <a class="repo-path" href="https://github.com/shmileee/dotfiles/tree/master/config"><code>config/</code></a> for the current operating system and architecture.</p>
     </div>
   </li>
 </ol>

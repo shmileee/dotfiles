@@ -985,6 +985,18 @@ button.header-icon {
   line-height: 1.7;
 }
 
+.md-typeset .repo-path {
+  display: inline-flex;
+  max-width: 100%;
+  text-decoration: none;
+}
+
+.md-typeset .repo-path:hover code,
+.md-typeset .repo-path:focus-visible code {
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
 .surface-grid p {
   margin: 0;
   color: var(--text-secondary);
