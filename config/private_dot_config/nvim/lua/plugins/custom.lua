@@ -36,7 +36,9 @@ local plugins = {
     opts = {
       servers = {
         -- prevent ls spam in huge monorepos
-        terraformls = { cmd = { "terraform-ls", "serve", "-log-file", "/dev/null" } },
+        terraformls = {
+          cmd = { "terraform-ls", "serve", "-log-file", "/dev/null" },
+        },
       },
     },
   },

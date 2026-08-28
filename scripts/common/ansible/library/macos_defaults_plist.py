@@ -137,7 +137,9 @@ def export_domain(module: AnsibleModule, defaults: str) -> Dict[str, Any]:
     stderr_text = stderr.decode("utf-8", "replace")
     if rc != 0:
         missing_markers = ("does not exist", "not found", "domain/default pair")
-        if rc == 1 and any(marker in stderr_text.lower() for marker in missing_markers):
+        if rc == 1 and any(
+            marker in stderr_text.lower() for marker in missing_markers
+        ):
             return {}
         module.fail_json(
             msg="Could not export defaults domain",
@@ -206,7 +208,10 @@ def main() -> None:
         supports_check_mode=True,
     )
 
-    if module.params["dict_mode"] == "merge" and module.params["value_type"] != "dict":
+    if (
+        module.params["dict_mode"] == "merge"
+        and module.params["value_type"] != "dict"
+    ):
         module.fail_json(msg="dict_mode=merge requires value_type=dict")
 
     try:
@@ -239,7 +244,9 @@ def main() -> None:
         module.exit_json(**result)
 
     write_preference(module, defaults, desired)
-    persisted = export_domain(module, defaults).get(module.params["key"], MISSING)
+    persisted = export_domain(module, defaults).get(
+        module.params["key"], MISSING
+    )
     if persisted is MISSING or persisted != desired:
         module.fail_json(
             msg="Preference still differs after reconciliation",

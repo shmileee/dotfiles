@@ -186,8 +186,13 @@ LazyVim provides most editor mappings. This repository adds only a small set:
 
 ## Source of truth
 
-- macOS shortcuts: [`config.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml)
-- Alacritty shortcuts: [`alacritty.toml.tmpl`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_alacritty/alacritty.toml.tmpl)
-- fish shortcuts: [`binds.fish`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_fish/conf.d/binds.fish)
-- tmux shortcuts: [`tmux.conf`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf)
-- Neovim additions: [`keymaps.lua`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/nvim/lua/config/keymaps.lua)
+*   macOS shortcuts:
+    [`config.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml)
+*   Alacritty shortcuts:
+    [`alacritty.toml.tmpl`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_alacritty/alacritty.toml.tmpl)
+*   fish shortcuts:
+    [`binds.fish`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_fish/conf.d/binds.fish)
+*   tmux shortcuts:
+    [`tmux.conf`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf)
+*   Neovim additions:
+    [`keymaps.lua`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/nvim/lua/config/keymaps.lua)

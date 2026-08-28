@@ -54,12 +54,12 @@ hide:
 
 The full setup can:
 
-- install apt packages, Homebrew packages, and macOS applications;
-- change your login shell to fish;
-- initialize chezmoi and force-apply files from this repository;
-- install tmux and Neovim plugins;
-- install Rancher Desktop on macOS; and
-- change macOS defaults, Dock contents, and keyboard shortcuts.
+*   install apt packages, Homebrew packages, and macOS applications;
+*   change your login shell to fish;
+*   initialize chezmoi and force-apply files from this repository;
+*   install tmux and Neovim plugins;
+*   install Rancher Desktop on macOS; and
+*   change macOS defaults, Dock contents, and keyboard shortcuts.
 
 Back up your existing configuration before continuing. At minimum, inspect
 [`config.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml)
