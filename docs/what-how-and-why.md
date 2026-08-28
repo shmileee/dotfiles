@@ -217,13 +217,13 @@ their own updates.
 
 Run the published image:
 
-```bash
+```bash {.terminal-command}
 docker run --rm -it shmileee/dotfiles
 ```
 
 Or build the current checkout:
 
-```bash
+```bash {.terminal-command}
 docker buildx build --platform linux/arm64 -t dotfiles --progress plain .
 ```
 

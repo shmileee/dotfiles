@@ -70,7 +70,7 @@
   --accent-border: rgba(96, 165, 250, 0.35);
   --progress: #f9423a;
   --focus-ring: #93c5fd;
-  --code-surface: #111827;
+  --code-surface: #0a101c;
   --code-toolbar: rgba(255, 255, 255, 0.03);
   --code-border: #aab4c3;
   --code-text: #e5e7eb;
@@ -121,8 +121,8 @@
   --selection-surface: rgba(37, 99, 235, 0.1);
   --accent-border: rgba(37, 99, 235, 0.4);
   --focus-ring: #1d4ed8;
-  --code-surface: #ffffff;
-  --code-toolbar: #f4f5f7;
+  --code-surface: #f8fafc;
+  --code-toolbar: #eef2f7;
   --code-border: #4b5563;
   --code-text: #111827;
   --code-muted: #64748b;
