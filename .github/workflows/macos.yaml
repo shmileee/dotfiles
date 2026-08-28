@@ -47,7 +47,7 @@ jobs:
       HOMEBREW_NO_INSTALL_CLEANUP: "1"
 
     steps:
-      - name: Reset Homebrew
+      - name: Reset Homebrew formulae
         run: |
           formulae="$(brew list --formula)"
           if [[ -n "$formulae" ]]; then
@@ -57,11 +57,9 @@ jobs:
             brew uninstall --formula --ignore-dependencies --force $formulae
           fi
 
-          # Keep runner-provided GUI applications. The Dock configuration
-          # references apps that are intentionally not managed by brew.casks.
+          # Keep runner-provided GUI applications and their cask metadata;
+          # Ansible installs any configured applications that are missing.
           brew cleanup --prune-prefix
-          NONINTERACTIVE=1 /bin/bash -c \
-            "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)"
 
       - name: Checkout
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
