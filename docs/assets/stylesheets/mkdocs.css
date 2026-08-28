@@ -683,9 +683,9 @@ button.header-icon {
   line-height: 1.45;
 }
 
-.md-typeset .setup-reference th,
-.md-typeset .setup-reference td {
-  vertical-align: middle;
+.md-typeset .setup-reference--three table:not([class]) th,
+.md-typeset .setup-reference--three table:not([class]) td {
+  vertical-align: middle !important;
 }
 
 .md-typeset__scrollwrap {
