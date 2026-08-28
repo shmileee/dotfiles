@@ -56,3 +56,6 @@ jobs:
             ansible-playbook \
             --inventory "127.0.0.1," \
             --syntax-check scripts/common/ansible/main.yaml
+
+      - name: Test local Ansible module helpers
+        run: python3 -m unittest discover -s tests/unit -v

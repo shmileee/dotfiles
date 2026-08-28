@@ -79,7 +79,9 @@ dockitems:
   - name: Downloads
     path: "{{ ansible_facts['user_dir'] }}/Downloads"
     section: others
-    options: [--view, auto, --display, stack, --sort, dateadded]
+    view: auto
+    display: stack
+    sort: dateadded
 
 keyboard_key_codes:
   caps_lock: 30064771129
