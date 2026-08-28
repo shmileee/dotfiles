@@ -53,7 +53,9 @@ def normalize_plist_value(value: Any, value_type: str) -> Any:
     try:
         plistlib.dumps([normalized], fmt=plistlib.FMT_XML, sort_keys=False)
     except (TypeError, ValueError) as error:
-        raise ValueError("value is not plist-serializable: {0}".format(error)) from error
+        raise ValueError(
+            "value is not plist-serializable: {0}".format(error)
+        ) from error
     return normalized
 
 
@@ -83,7 +85,9 @@ def json_safe_plist(value: Any) -> Any:
     if isinstance(value, str):
         return value.encode("utf-8", "replace").decode("utf-8")
     if isinstance(value, dict):
-        return {json_safe_plist(key): json_safe_plist(item) for key, item in value.items()}
+        return {
+            json_safe_plist(key): json_safe_plist(item) for key, item in value.items()
+        }
     if isinstance(value, list):
         return [json_safe_plist(item) for item in value]
     return value
@@ -96,7 +100,9 @@ def normalize_location(value: str) -> str:
         path = posixpath.normpath(unquote(parsed.path or "/"))
         if parsed.path.endswith("/") and path != "/":
             path += "/"
-        return urlunsplit((parsed.scheme.lower(), parsed.netloc, path, parsed.query, parsed.fragment))
+        return urlunsplit(
+            (parsed.scheme.lower(), parsed.netloc, path, parsed.query, parsed.fragment)
+        )
 
     path = unquote(parsed.path) if parsed.scheme == "file" else value
     expanded = str(Path(path).expanduser())
@@ -113,12 +119,16 @@ def parse_dockutil_output(output: str) -> List[Dict[str, str]]:
         fields = line.split("\t")
         if len(fields) < 4:
             raise ValueError(
-                "unexpected dockutil output on line {0}: {1!r}".format(line_number, line)
+                "unexpected dockutil output on line {0}: {1!r}".format(
+                    line_number, line
+                )
             )
         section = sections.get(fields[2])
         if section is None:
             raise ValueError(
-                "unexpected Dock section on line {0}: {1!r}".format(line_number, fields[2])
+                "unexpected Dock section on line {0}: {1!r}".format(
+                    line_number, fields[2]
+                )
             )
         items.append(
             {
@@ -141,11 +151,16 @@ def dock_states_match(
         return False
 
     for actual, expected in zip(current_list, desired_list):
-        if actual["path"] != expected["path"] or actual["section"] != expected["section"]:
+        if (
+            actual["path"] != expected["path"]
+            or actual["section"] != expected["section"]
+        ):
             return False
         expected_options = expected.get("options", {})
         actual_options = actual.get("options", {})
-        if any(actual_options.get(key) != value for key, value in expected_options.items()):
+        if any(
+            actual_options.get(key) != value for key, value in expected_options.items()
+        ):
             return False
     return True
 

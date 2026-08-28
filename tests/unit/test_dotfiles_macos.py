@@ -60,8 +60,12 @@ class PlistHelpersTest(unittest.TestCase):
 
 class DockHelpersTest(unittest.TestCase):
     def test_normalizes_paths_file_urls_and_network_urls(self):
-        self.assertEqual(normalize_location("/Applications/Test.app/"), "/Applications/Test.app")
-        self.assertEqual(normalize_location("file:///Users/me/My%20Folder/"), "/Users/me/My Folder")
+        self.assertEqual(
+            normalize_location("/Applications/Test.app/"), "/Applications/Test.app"
+        )
+        self.assertEqual(
+            normalize_location("file:///Users/me/My%20Folder/"), "/Users/me/My Folder"
+        )
         self.assertEqual(
             normalize_location("HTTPS://example.test/a%20folder/"),
             "https://example.test/a folder/",
@@ -114,11 +118,12 @@ class DockHelpersTest(unittest.TestCase):
 
     def test_generates_options_in_a_stable_order(self):
         self.assertEqual(
-            dock_option_arguments({"sort": "dateadded", "display": "stack", "view": "auto"}),
+            dock_option_arguments(
+                {"sort": "dateadded", "display": "stack", "view": "auto"}
+            ),
             ["--view", "auto", "--display", "stack", "--sort", "dateadded"],
         )
 
 
 if __name__ == "__main__":
     unittest.main()
-    json_safe_plist,
