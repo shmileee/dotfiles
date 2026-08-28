@@ -3,8 +3,8 @@
 set -o pipefail
 
 list_asgs() {
-  aws autoscaling describe-auto-scaling-groups |
-    jq -r '.AutoScalingGroups[].AutoScalingGroupName'
+  aws autoscaling describe-auto-scaling-groups \
+    | jq -r '.AutoScalingGroups[].AutoScalingGroupName'
 }
 
 print_usage() {
@@ -22,9 +22,9 @@ case "$1" in
 
     ;;
   refresh)
-    list_asgs |
-      fzf |
-      xargs -I '{}' \
+    list_asgs \
+      | fzf \
+      | xargs -I '{}' \
         aws autoscaling start-instance-refresh \
         --auto-scaling-group-name {} \
         --preferences '{"InstanceWarmup": 0, "MinHealthyPercentage": 0}'

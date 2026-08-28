@@ -29,8 +29,8 @@ disable_exec() {
 exec_enabled=$(
   aws_ecs describe-services \
     --cluster "${ecs_cluster}" \
-    --services "${ecs_service}" |
-    jq -r '.services[0].enableExecuteCommand'
+    --services "${ecs_service}" \
+    | jq -r '.services[0].enableExecuteCommand'
 )
 
 if [[ "${exec_enabled}" == "true" ]]; then
@@ -53,8 +53,8 @@ fi
 mapfile -t task_arns < <(
   aws_ecs list-tasks \
     --cluster "${ecs_cluster}" \
-    --desired-status RUNNING |
-    jq -r '.taskArns[]?'
+    --desired-status RUNNING \
+    | jq -r '.taskArns[]?'
 )
 
 if [[ ${#task_arns[@]} -eq 0 ]]; then
@@ -65,8 +65,8 @@ fi
 ecs_task_id=$(
   aws_ecs describe-tasks \
     --cluster "${ecs_cluster}" \
-    --tasks "${task_arns[@]}" |
-    jq -r '
+    --tasks "${task_arns[@]}" \
+    | jq -r '
       .tasks
       | map(select(any(.containers[]?; .name == "atlantis" and .lastStatus == "RUNNING")))
       | sort_by(.createdAt)

@@ -17,7 +17,7 @@ repos:
     hooks:
       - id: shfmt
         name: shfmt
-        entry: shfmt --write --indent 2 --case-indent --space-redirects
+        entry: shfmt --write --indent 2 --binary-next-line --case-indent --space-redirects
         language: system
         types: [shell]
       - id: fish-indent

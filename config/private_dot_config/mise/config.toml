@@ -19,7 +19,6 @@ legacy_version_file = false
 "aqua:tree-sitter/tree-sitter" = "0"
 "aqua:aquasecurity/tfsec" = "1"
 "go:golang.org/x/tools/gopls" = "0.23.0"
-"pipx:ansible-lint" = "26.8.0"
 "pipx:azure-cli" = "2"
 "pipx:yamllint" = "1.38.0"
 bun = "1.4.0"

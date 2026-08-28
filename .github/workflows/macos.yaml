@@ -8,6 +8,7 @@ on:
       - "scripts/**"
       - ".ansible-lint"
       - ".pre-commit-config.yaml"
+      - "mise.toml"
       - ".yamllint.yaml"
       - ".github/workflows/macos.yaml"
       - "!**.md"

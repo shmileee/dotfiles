@@ -12,8 +12,8 @@ login_shell_is_fish() {
     Darwin)
       desired_shell="$(brew --prefix)/bin/fish"
       current_shell="$(
-        /usr/bin/dscl -plist . -read "/Users/$(id -un)" UserShell |
-          /usr/bin/plutil -extract dsAttrTypeStandard:UserShell.0 raw -o - -
+        /usr/bin/dscl -plist . -read "/Users/$(id -un)" UserShell \
+          | /usr/bin/plutil -extract dsAttrTypeStandard:UserShell.0 raw -o - -
       )"
       ;;
     Linux)

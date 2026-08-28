@@ -70,7 +70,7 @@ local plugins = {
       formatters = {
         -- # Example of using shfmt with extra args
         shfmt = {
-          prepend_args = { "-i", "2", "-ci", "-sr" },
+          prepend_args = { "-i", "2", "-bn", "-ci", "-sr" },
         },
         terramate = {
           command = "terramate",

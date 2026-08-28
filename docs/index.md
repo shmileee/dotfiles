@@ -12,7 +12,7 @@ Debian-family systems remain best effort.
 
 `./scripts/setup.sh --all` installs declared state and reapplies configuration.
 It is intentionally allowed to refresh Homebrew metadata and update managed
-formulae and greedy casks. After a long gap, a run can therefore introduce
+formulae and versioned casks. After a long gap, a run can therefore introduce
 upstream changes. To review local dotfile changes before running it, clone the
 repository and invoke the checked-out script; Ansible applies that checkout
 rather than fetching `master` again.
@@ -45,12 +45,22 @@ intentional edits to the chezmoi-managed source before rerunning Ansible.
 Run the same repository checks used by CI:
 
 ```bash
+mise install
 mise exec -- prek run --all-files
-ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
+mise exec -- env ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
   ansible-playbook --inventory '127.0.0.1,' \
   --syntax-check scripts/common/ansible/main.yaml
-./scripts/common/ansible.sh --run --check
+mise exec -- ./scripts/common/ansible.sh --run --check
 ```
+
+### Shell style
+
+Bash formatting follows the
+[Google Shell Style Guide](https://google.github.io/styleguide/shellguide.html):
+two-space indentation without tabs, indented `case` alternatives, and binary
+operators at the start of continued lines. `shfmt` applies that formatting and
+ShellCheck checks correctness through pre-commit. Fish scripts use their native
+`fish_indent` formatter.
 
 ??? Explanation
 
