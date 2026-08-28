@@ -117,29 +117,43 @@ body[data-md-color-scheme] {
 }
 
 .docs-home {
-  min-height: 2.75rem;
+  min-height: 2.5rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-secondary);
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
+  gap: var(--space-2);
+  border: 1px solid var(--border-default);
+  border-radius: 999px;
+  padding: 0 var(--space-3);
+  background: var(--surface-secondary);
+  color: var(--text-primary);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
   text-decoration: none;
   text-transform: uppercase;
-  transition: color 130ms ease-out;
+  transition: border-color 130ms ease-out, background-color 130ms ease-out, color 130ms ease-out;
+}
+
+.docs-home::before {
+  width: 0.375rem;
+  height: 0.375rem;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: var(--accent-primary);
+  content: "";
 }
 
 .docs-home:hover {
-  color: var(--text-primary);
+  border-color: var(--accent-border);
+  background: var(--accent-surface);
+  color: var(--accent-soft);
 }
 
 .docs-home.is-active {
-  color: var(--text-primary);
-  text-decoration: underline;
-  text-decoration-color: var(--accent-primary);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.45rem;
+  border-color: var(--accent-border);
+  background: var(--accent-surface);
+  color: var(--accent-soft);
 }
 
 .site-nav {
@@ -832,13 +846,15 @@ button.header-icon {
 }
 
 .docs-hero--home {
+  --home-hero-padding: clamp(var(--space-8), 6vw, var(--space-16));
+
   position: relative;
   isolation: isolate;
   width: 100%;
   overflow: hidden;
   border: 1px solid var(--border-default);
   border-radius: 0.75rem;
-  padding: clamp(var(--space-8), 6vw, var(--space-16));
+  padding: var(--home-hero-padding);
   background:
     radial-gradient(circle at 88% 10%, var(--accent-surface), transparent 38%),
     var(--surface-secondary);
@@ -864,6 +880,17 @@ button.header-icon {
 
 .md-typeset .docs-hero--home .headerlink {
   display: none;
+}
+
+.docs-hero--home .section-eyebrow,
+.md-typeset .docs-hero--home h1,
+.docs-hero--home .hero-copy {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.docs-hero--home .hero-actions {
+  justify-content: center;
 }
 
 .page-lead {
@@ -1483,9 +1510,10 @@ body:has(.context-help[open]) .context-help-trigger {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0;
-  margin: var(--space-12) 0 0;
+  margin: var(--space-12) calc(-1 * var(--home-hero-padding)) calc(-1 * var(--home-hero-padding));
   border-top: 1px solid var(--border-default);
-  padding-top: var(--space-5);
+  padding: var(--space-5) var(--home-hero-padding);
+  background: color-mix(in srgb, var(--surface-primary) 32%, transparent);
 }
 
 .hero-signals div {
@@ -1557,7 +1585,7 @@ body:has(.context-help[open]) .context-help-trigger {
 .install-flow {
   max-width: none;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 0;
   margin: var(--space-6) 0 var(--space-10) !important;
   overflow: hidden;
@@ -1578,11 +1606,7 @@ body:has(.context-help[open]) .context-help-trigger {
   background: transparent;
 }
 
-.install-flow li:nth-child(even) {
-  border-left: 1px solid var(--border-default);
-}
-
-.install-flow li:nth-child(n + 3) {
+.install-flow li:nth-child(n + 2) {
   border-top: 1px solid var(--border-default);
 }
 
@@ -1614,12 +1638,16 @@ body:has(.context-help[open]) .context-help-trigger {
 
 .install-flow li > div {
   min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(11rem, 0.7fr) minmax(0, 1.3fr);
+  align-items: start;
+  gap: var(--space-6);
   padding-top: 0.125rem;
 }
 
 .install-flow li strong {
   display: block;
-  margin-bottom: var(--space-2);
+  margin: 0;
   color: var(--text-primary);
   font-family: "Bricolage Grotesque", "Public Sans", sans-serif;
   font-size: 1rem;
@@ -2054,16 +2082,9 @@ body:has(.context-help[open]) .context-help-trigger {
 }
 
 @media (max-width: 760px) {
-  .install-flow {
+  .install-flow li > div {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .install-flow li:nth-child(even) {
-    border-left: 0;
-  }
-
-  .install-flow li:nth-child(n + 2) {
-    border-top: 1px solid var(--border-default);
+    gap: var(--space-2);
   }
 }
 
@@ -2132,8 +2153,10 @@ body:has(.context-help[open]) .context-help-trigger {
   }
 
   .docs-hero--home {
+    --home-hero-padding: var(--space-6);
+
     border-radius: 0.625rem;
-    padding: var(--space-6);
+    padding: var(--home-hero-padding);
   }
 
   .hero-signals {
