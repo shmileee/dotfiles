@@ -25,7 +25,9 @@
       - +qa
   register: lazy_install
   changed_when: "'clone' in lazy_install.stdout"
-  when: lazy_bootstrap is changed or chezmoi_status is changed
+  when:
+    - lazy_bootstrap is not changed
+    - chezmoi_status is changed
 
 - name: "restore the managed LazyVim lockfile after installation"
   ansible.builtin.copy:
