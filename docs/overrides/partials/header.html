@@ -5,18 +5,23 @@
       <span class="brand-full">~/oleksandr-ponomarov</span>
       <span class="brand-short" aria-hidden="true">~/op</span>
     </a>
-    <a class="docs-home" href="{{ nav.homepage.url | url }}">dotfiles</a>
+    <a class="docs-home{% if nav.homepage.active %} is-active{% endif %}" href="{{ nav.homepage.url | url }}"{% if nav.homepage.active %} aria-current="page"{% endif %}>dotfiles</a>
 
     <nav class="site-nav" aria-label="Primary navigation">
       {% for nav_item in nav %}
-        <a href="{{ nav_item.url | url }}"{% if nav_item.active %} class="is-active" aria-current="page"{% endif %}>{{ nav_item.title }}</a>
+        {% if not loop.first %}
+          <a href="{{ nav_item.url | url }}"{% if nav_item.active %} class="is-active" aria-current="page"{% endif %}>{% if nav_item.title == "Setup guide" %}Setup{% elif nav_item.title == "OpenCode & OmO" %}OpenCode{% else %}{{ nav_item.title }}{% endif %}</a>
+        {% endif %}
       {% endfor %}
+      <span class="site-nav-separator" aria-hidden="true">·</span>
       <a href="https://portfolio.oponomarov.com/">Portfolio</a>
-      <a href="https://github.com/shmileee/dotfiles">GitHub</a>
     </nav>
 
     <div class="header-actions">
       <button class="theme-toggle" type="button" aria-label="Switch to light color scheme" data-theme-toggle>light</button>
+      <a class="header-icon md-icon" href="https://github.com/shmileee/dotfiles" aria-label="View the dotfiles repository on GitHub">
+        {% include ".icons/fontawesome/brands/github.svg" %}
+      </a>
       <label class="header-icon md-icon" for="__search" role="button" tabindex="0" aria-controls="__search" aria-expanded="false" aria-label="Search documentation" data-search-toggle>
         {% include ".icons/material/magnify.svg" %}
       </label>
