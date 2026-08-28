@@ -7,7 +7,7 @@ description: Review, install, customize, and reapply the workstation configurati
 
 <p class="page-lead">Use the review-first path for an existing machine. The one-line installer is intended for a new machine or for a configuration you already trust.</p>
 
-<nav class="setup-paths" aria-label="Choose an installation path">
+<nav class="setup-paths" aria-label="Choose an installation path" data-mobile-toc-anchor>
   <a href="#recommended-review-then-run">
     <span>Existing or customized machine</span>
     <strong>Review first</strong>
@@ -20,12 +20,15 @@ description: Review, install, customize, and reapply the workstation configurati
   </a>
 </nav>
 
-<details class="concept-primer" data-mobile-toc-anchor markdown>
-<summary>
-  <span class="concept-primer__summary"><strong>Quick context</strong><small>Plain-language definitions</small></span>
-  <svg class="concept-primer__chevron" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m4 6 4 4 4-4" /></svg>
-</summary>
-<dl class="concept-primer__terms">
+<div class="context-help-source" hidden>
+<button class="context-help-trigger" type="button" aria-label="Open quick context" aria-controls="context-help" aria-haspopup="dialog" title="Quick context" data-context-open data-context-ui><span aria-hidden="true">?</span></button>
+<dialog class="context-help" id="context-help" aria-labelledby="context-help-title" data-context-dialog data-context-ui>
+<div class="context-help__panel">
+<header class="context-help__header">
+  <div><p>Quick context</p><h2 id="context-help-title">Terms used on this page</h2></div>
+  <button type="button" aria-label="Close quick context" data-context-close><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m4 4 8 8m0-8-8 8" /></svg></button>
+</header>
+<dl class="context-help__terms">
   <div><dt>Bootstrap</dt><dd>The small first step that downloads the repository and starts the setup.</dd></div>
   <div><dt>Playbook</dt><dd>The ordered Ansible plan that describes the desired workstation state.</dd></div>
   <div><dt>Role</dt><dd>A focused part of the playbook, such as configuring fish, tmux, or Neovim.</dd></div>
@@ -33,7 +36,9 @@ description: Review, install, customize, and reapply the workstation configurati
   <div><dt>Homebrew and apt</dt><dd>Package managers used to install software on macOS and Debian-based Linux.</dd></div>
   <div><dt>Docker image</dt><dd>A packaged Linux environment used to test the setup away from your machine.</dd></div>
 </dl>
-</details>
+</div>
+</dialog>
+</div>
 
 ## Before you begin
 

@@ -20,6 +20,12 @@
     pageController?.abort();
     pageController = new AbortController();
     const { signal } = pageController;
+    document.querySelectorAll("body > [data-context-ui]").forEach((element) => element.remove());
+    const contextHelpTrigger = document.querySelector(".md-content [data-context-open]");
+    const contextHelpDialog = document.querySelector(".md-content [data-context-dialog]");
+    if (contextHelpTrigger && contextHelpDialog) {
+      document.body.append(contextHelpTrigger, contextHelpDialog);
+    }
     const themeButton = document.querySelector("[data-theme-toggle]");
     const searchButton = document.querySelector("[data-search-toggle]");
     const drawerButton = document.querySelector("[data-drawer-toggle]");
@@ -31,6 +37,29 @@
     const progress = document.querySelector("[data-reading-progress]");
 
     applyTheme(localStorage.getItem("om-theme") || "dark");
+
+    const closeContextHelp = () => {
+      if (!contextHelpDialog?.open) return;
+      if (typeof contextHelpDialog.close === "function") contextHelpDialog.close();
+      else contextHelpDialog.removeAttribute("open");
+    };
+
+    contextHelpTrigger?.addEventListener("click", () => {
+      if (!contextHelpDialog || contextHelpDialog.open) return;
+      if (typeof contextHelpDialog.showModal === "function") contextHelpDialog.showModal();
+      else contextHelpDialog.setAttribute("open", "");
+    }, { signal });
+    contextHelpDialog?.querySelector("[data-context-close]")?.addEventListener("click", closeContextHelp, { signal });
+    contextHelpDialog?.addEventListener("click", (event) => {
+      if (event.target !== contextHelpDialog) return;
+      const bounds = contextHelpDialog.getBoundingClientRect();
+      const isInside = event.clientX >= bounds.left
+        && event.clientX <= bounds.right
+        && event.clientY >= bounds.top
+        && event.clientY <= bounds.bottom;
+      if (!isInside) closeContextHelp();
+    }, { signal });
+    contextHelpDialog?.addEventListener("close", () => contextHelpTrigger?.focus(), { signal });
 
     const currentPath = window.location.pathname.replace(/index\.html$/, "").replace(/\/$/, "") || "/";
     document.querySelectorAll(".site-nav a, .docs-home").forEach((link) => {

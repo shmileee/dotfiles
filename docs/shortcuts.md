@@ -7,7 +7,7 @@ description: Keyboard shortcuts configured for macOS, Alacritty, tmux, and Neovi
 
 <p class="page-lead">Choose the layer where the shortcut runs. Alacritty, the terminal application, sends many macOS-style shortcuts directly to tmux; tmux commands use <kbd>Ctrl</kbd> + <kbd>A</kbd> as their prefix.</p>
 
-<form class="shortcut-filter" role="search" data-shortcut-filter>
+<form class="shortcut-filter" role="search" data-shortcut-filter data-mobile-toc-anchor>
   <label for="shortcut-query">Find a shortcut</label>
   <div class="shortcut-filter__search">
     <input id="shortcut-query" type="search" inputmode="search" autocomplete="off" placeholder="Search keys or actions" data-shortcut-query>
@@ -23,12 +23,15 @@ description: Keyboard shortcuts configured for macOS, Alacritty, tmux, and Neovi
   <p class="shortcut-filter__status" aria-live="polite" data-shortcut-status></p>
 </form>
 
-<details class="concept-primer" data-mobile-toc-anchor markdown>
-<summary>
-  <span class="concept-primer__summary"><strong>Quick context</strong><small>Plain-language definitions</small></span>
-  <svg class="concept-primer__chevron" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m4 6 4 4 4-4" /></svg>
-</summary>
-<dl class="concept-primer__terms">
+<div class="context-help-source" hidden>
+<button class="context-help-trigger" type="button" aria-label="Open quick context" aria-controls="context-help" aria-haspopup="dialog" title="Quick context" data-context-open data-context-ui><span aria-hidden="true">?</span></button>
+<dialog class="context-help" id="context-help" aria-labelledby="context-help-title" data-context-dialog data-context-ui>
+<div class="context-help__panel">
+<header class="context-help__header">
+  <div><p>Quick context</p><h2 id="context-help-title">Terms used on this page</h2></div>
+  <button type="button" aria-label="Close quick context" data-context-close><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m4 4 8 8m0-8-8 8" /></svg></button>
+</header>
+<dl class="context-help__terms">
   <div><dt>tmux prefix</dt><dd>A key sequence pressed before most tmux commands; here it is Ctrl + A.</dd></div>
   <div><dt>Pane</dt><dd>One terminal area inside a tmux window.</dd></div>
   <div><dt>Window</dt><dd>A tmux workspace that can contain one or more panes.</dd></div>
@@ -36,7 +39,9 @@ description: Keyboard shortcuts configured for macOS, Alacritty, tmux, and Neovi
   <div><dt>Leader</dt><dd>A prefix key used by Neovim mappings; LazyVim normally uses the Space key.</dd></div>
   <div><dt>Normal and Visual mode</dt><dd>Neovim modes for running commands and selecting text.</dd></div>
 </dl>
-</details>
+</div>
+</dialog>
+</div>
 
 <p class="shortcut-filter-empty" data-shortcut-empty hidden>No shortcuts match this search.</p>
 

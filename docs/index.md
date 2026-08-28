@@ -1,9 +1,11 @@
 ---
 title: Dotfiles
 description: A reproducible macOS and Linux workstation built with Ansible and chezmoi.
+hide:
+  - toc
 ---
 
-<section class="docs-hero" markdown>
+<section class="docs-hero docs-hero--home" markdown>
   <p class="section-eyebrow">Personal workstation · documented publicly</p>
   <h1>A workstation I can rebuild.<span class="hero-cursor" aria-hidden="true"></span></h1>
   <p class="hero-copy">This repository turns a fresh macOS or Debian-based Linux machine into my development environment. Ansible, the automation engine, configures the system; chezmoi, the dotfile manager, puts the files in place.</p>
@@ -11,42 +13,33 @@ description: A reproducible macOS and Linux workstation built with Ansible and c
     <a class="primary-link" href="/setup/">Read the setup guide →</a>
     <a class="secondary-link" href="https://github.com/shmileee/dotfiles">Browse the repository ↗</a>
   </div>
+  <dl class="hero-signals">
+    <div><dt>Targets</dt><dd>macOS + Linux</dd></div>
+    <div><dt>Automation</dt><dd>Ansible</dd></div>
+    <div><dt>Managed files</dt><dd>chezmoi</dd></div>
+  </dl>
 </section>
 
-<details class="concept-primer" markdown>
-<summary>
-  <span class="concept-primer__summary"><strong>Quick context</strong><small>Plain-language definitions</small></span>
-  <svg class="concept-primer__chevron" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m4 6 4 4 4-4" /></svg>
-</summary>
-<dl class="concept-primer__terms">
+<div class="context-help-source" hidden>
+<button class="context-help-trigger" type="button" aria-label="Open quick context" aria-controls="context-help" aria-haspopup="dialog" title="Quick context" data-context-open data-context-ui><span aria-hidden="true">?</span></button>
+<dialog class="context-help" id="context-help" aria-labelledby="context-help-title" data-context-dialog data-context-ui>
+<div class="context-help__panel">
+<header class="context-help__header">
+  <div><p>Quick context</p><h2 id="context-help-title">Terms used on this page</h2></div>
+  <button type="button" aria-label="Close quick context" data-context-close><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m4 4 8 8m0-8-8 8" /></svg></button>
+</header>
+<dl class="context-help__terms">
   <div><dt>Dotfiles</dt><dd>Configuration files that store how command-line tools and applications behave.</dd></div>
   <div><dt>Ansible</dt><dd>Automation that installs software and applies machine settings in a repeatable order.</dd></div>
   <div><dt>chezmoi</dt><dd>A tool that safely renders and places configuration files in your home directory.</dd></div>
   <div><dt>Role</dt><dd>A focused group of Ansible tasks responsible for one tool or system area.</dd></div>
   <div><dt>Homebrew</dt><dd>A package manager used here to install command-line tools and macOS applications.</dd></div>
 </dl>
-</details>
-
-## At a glance
-
-<div class="fact-grid">
-  <div>
-    <span>Platforms</span>
-    <strong>macOS + Debian-based Linux</strong>
-  </div>
-  <div>
-    <span>Orchestration</span>
-    <strong>Ansible</strong>
-  </div>
-  <div>
-    <span>Dotfile manager</span>
-    <strong>chezmoi</strong>
-  </div>
-  <div>
-    <span>Package layer</span>
-    <strong>Homebrew + apt</strong>
-  </div>
 </div>
+</dialog>
+</div>
+
+## What it builds
 
 The result is an opinionated terminal-first environment built around fish,
 tmux, Alacritty, Neovim, mise, Git tools, and a curated set of command-line
