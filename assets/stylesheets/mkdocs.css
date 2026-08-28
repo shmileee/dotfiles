@@ -137,7 +137,10 @@ body[data-md-color-scheme] {
   letter-spacing: 0.12em;
   text-decoration: none;
   text-transform: uppercase;
-  transition: border-color 130ms ease-out, background-color 130ms ease-out, color 130ms ease-out;
+  transition:
+    border-color 130ms ease-out,
+    background-color 130ms ease-out,
+    color 130ms ease-out;
 }
 
 .docs-home::before {
@@ -527,9 +530,21 @@ button.header-icon {
   height: 2.25rem;
   border-bottom: 1px solid var(--border-subtle);
   background:
-    radial-gradient(circle at 1rem 50%, var(--code-muted) 0 0.14rem, transparent 0.16rem),
-    radial-gradient(circle at 1.65rem 50%, var(--code-muted) 0 0.14rem, transparent 0.16rem),
-    radial-gradient(circle at 2.3rem 50%, var(--code-muted) 0 0.14rem, transparent 0.16rem),
+    radial-gradient(
+      circle at 1rem 50%,
+      var(--code-muted) 0 0.14rem,
+      transparent 0.16rem
+    ),
+    radial-gradient(
+      circle at 1.65rem 50%,
+      var(--code-muted) 0 0.14rem,
+      transparent 0.16rem
+    ),
+    radial-gradient(
+      circle at 2.3rem 50%,
+      var(--code-muted) 0 0.14rem,
+      transparent 0.16rem
+    ),
     var(--code-toolbar);
   opacity: 0.72;
 }
@@ -680,7 +695,10 @@ button.header-icon {
   min-height: auto;
   padding: 0 0 var(--space-3) var(--space-4);
   color: var(--text-primary);
-  font: 600 0.6875rem/1.4 "IBM Plex Mono", ui-monospace, monospace;
+  font:
+    600 0.6875rem / 1.4 "IBM Plex Mono",
+    ui-monospace,
+    monospace;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
@@ -808,7 +826,12 @@ button.header-icon {
     linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
   background-size: 2rem 2rem;
   content: "";
-  mask-image: linear-gradient(120deg, transparent 10%, rgb(0 0 0 / 55%), transparent 85%);
+  mask-image: linear-gradient(
+    120deg,
+    transparent 10%,
+    rgb(0 0 0 / 55%),
+    transparent 85%
+  );
   opacity: 0.45;
   pointer-events: none;
 }
@@ -831,7 +854,10 @@ button.header-icon {
 
 .context-help-trigger {
   position: fixed;
-  right: max(var(--space-4), calc((100vw - var(--page-width)) / 2 + var(--space-4)));
+  right: max(
+    var(--space-4),
+    calc((100vw - var(--page-width)) / 2 + var(--space-4))
+  );
   bottom: calc(var(--space-5) + env(safe-area-inset-bottom));
   z-index: 45;
   width: 2.75rem;
@@ -844,8 +870,14 @@ button.header-icon {
   color: var(--text-primary);
   box-shadow: 0 0.5rem 1.75rem rgb(0 0 0 / 18%);
   cursor: pointer;
-  font: 650 1rem/1 "Bricolage Grotesque", "Public Sans", sans-serif;
-  transition: border-color 130ms ease-out, background-color 130ms ease-out, transform 130ms ease-out;
+  font:
+    650 1rem / 1 "Bricolage Grotesque",
+    "Public Sans",
+    sans-serif;
+  transition:
+    border-color 130ms ease-out,
+    background-color 130ms ease-out,
+    transform 130ms ease-out;
 }
 
 .context-help-trigger:hover {
@@ -902,7 +934,10 @@ body:has(.context-help[open]) .context-help-trigger {
 .context-help__header p {
   margin: 0 0 var(--space-1);
   color: var(--accent-primary);
-  font: 600 0.65625rem/1.4 "IBM Plex Mono", ui-monospace, monospace;
+  font:
+    600 0.65625rem / 1.4 "IBM Plex Mono",
+    ui-monospace,
+    monospace;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
@@ -912,7 +947,10 @@ body:has(.context-help[open]) .context-help-trigger {
   border: 0;
   padding: 0;
   color: var(--text-primary);
-  font: 650 1.375rem/1.2 "Bricolage Grotesque", "Public Sans", sans-serif;
+  font:
+    650 1.375rem / 1.2 "Bricolage Grotesque",
+    "Public Sans",
+    sans-serif;
   letter-spacing: -0.01em;
 }
 
@@ -960,13 +998,19 @@ body:has(.context-help[open]) .context-help-trigger {
 
 .context-help__terms dt {
   color: var(--text-primary);
-  font: 600 0.8125rem/1.45 "IBM Plex Mono", ui-monospace, monospace;
+  font:
+    600 0.8125rem / 1.45 "IBM Plex Mono",
+    ui-monospace,
+    monospace;
 }
 
 .context-help__terms dd {
   margin: 0;
   color: var(--text-secondary);
-  font: 400 0.9375rem/1.6 "Public Sans", system-ui, sans-serif;
+  font:
+    400 0.9375rem / 1.6 "Public Sans",
+    system-ui,
+    sans-serif;
 }
 
 .setup-paths {
@@ -988,7 +1032,9 @@ body:has(.context-help[open]) .context-help-trigger {
   background: var(--surface-secondary);
   color: var(--text-secondary);
   text-decoration: none;
-  transition: border-color 130ms ease-out, background-color 130ms ease-out;
+  transition:
+    border-color 130ms ease-out,
+    background-color 130ms ease-out;
 }
 
 .md-typeset .setup-paths a:hover {
@@ -1019,7 +1065,10 @@ body:has(.context-help[open]) .context-help-trigger {
   display: block;
   margin-bottom: var(--space-2);
   color: var(--accent-primary);
-  font: 600 0.65625rem/1.4 "IBM Plex Mono", ui-monospace, monospace;
+  font:
+    600 0.65625rem / 1.4 "IBM Plex Mono",
+    ui-monospace,
+    monospace;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
@@ -1041,7 +1090,9 @@ body:has(.context-help[open]) .context-help-trigger {
   background: var(--surface-secondary);
   color: var(--text-body);
   text-decoration: none;
-  transition: border-color 130ms ease-out, background-color 130ms ease-out;
+  transition:
+    border-color 130ms ease-out,
+    background-color 130ms ease-out;
 }
 
 .md-typeset .doc-card-grid a:hover {
@@ -1086,7 +1137,10 @@ body:has(.context-help[open]) .context-help-trigger {
   display: block;
   margin: 0;
   color: var(--accent-primary);
-  font: 600 0.6875rem/1.4 "IBM Plex Mono", ui-monospace, monospace;
+  font:
+    600 0.6875rem / 1.4 "IBM Plex Mono",
+    ui-monospace,
+    monospace;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
@@ -1166,7 +1220,10 @@ body:has(.context-help[open]) .context-help-trigger {
 
 .shortcut-filter > label {
   color: var(--text-primary);
-  font: 600 0.75rem/1.4 "IBM Plex Mono", ui-monospace, monospace;
+  font:
+    600 0.75rem / 1.4 "IBM Plex Mono",
+    ui-monospace,
+    monospace;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -1183,7 +1240,10 @@ body:has(.context-help[open]) .context-help-trigger {
   padding: 0.625rem 4.5rem 0.625rem var(--space-4);
   background: var(--surface-secondary);
   color: var(--text-primary);
-  font: 400 0.875rem/1.5 "Public Sans", system-ui, sans-serif;
+  font:
+    400 0.875rem / 1.5 "Public Sans",
+    system-ui,
+    sans-serif;
 }
 
 .shortcut-filter__search input::placeholder {
@@ -1204,7 +1264,10 @@ body:has(.context-help[open]) .context-help-trigger {
   padding: 0 var(--space-3);
   background: transparent;
   color: var(--accent-soft);
-  font: 500 0.75rem/1 "IBM Plex Mono", ui-monospace, monospace;
+  font:
+    500 0.75rem / 1 "IBM Plex Mono",
+    ui-monospace,
+    monospace;
   cursor: pointer;
   transition: color 130ms ease-out;
 }
@@ -1231,9 +1294,15 @@ body:has(.context-help[open]) .context-help-trigger {
   padding: 0.375rem 0.875rem;
   background: var(--surface-secondary);
   color: var(--text-secondary);
-  font: 500 0.75rem/1 "IBM Plex Mono", ui-monospace, monospace;
+  font:
+    500 0.75rem / 1 "IBM Plex Mono",
+    ui-monospace,
+    monospace;
   cursor: pointer;
-  transition: border-color 130ms ease-out, background-color 130ms ease-out, color 130ms ease-out;
+  transition:
+    border-color 130ms ease-out,
+    background-color 130ms ease-out,
+    color 130ms ease-out;
 }
 
 .shortcut-filter__scopes button:hover {
@@ -1251,7 +1320,10 @@ body:has(.context-help[open]) .context-help-trigger {
   min-height: 1.25rem;
   margin: 0 !important;
   color: var(--text-tertiary);
-  font: 400 0.75rem/1.5 "IBM Plex Mono", ui-monospace, monospace;
+  font:
+    400 0.75rem / 1.5 "IBM Plex Mono",
+    ui-monospace,
+    monospace;
 }
 
 .shortcut-filter-empty {
@@ -1285,7 +1357,9 @@ body:has(.context-help[open]) .context-help-trigger {
 .role-link > span {
   color: var(--text-tertiary);
   font-size: 0.75rem;
-  transition: color 130ms ease-out, transform 130ms ease-out;
+  transition:
+    color 130ms ease-out,
+    transform 130ms ease-out;
 }
 
 .role-link:hover > span {
@@ -1341,7 +1415,11 @@ body:has(.context-help[open]) .context-help-trigger {
 }
 
 .shortcut-reference table tbody tr:hover {
-  background: color-mix(in srgb, var(--surface-secondary) 88%, var(--accent-primary));
+  background: color-mix(
+    in srgb,
+    var(--surface-secondary) 88%,
+    var(--accent-primary)
+  );
 }
 
 .shortcut-reference table tbody td {
@@ -1349,12 +1427,24 @@ body:has(.context-help[open]) .context-help-trigger {
 }
 
 .shortcut-reference table tbody tr:hover td {
-  background-color: color-mix(in srgb, var(--surface-secondary) 90%, var(--accent-primary));
+  background-color: color-mix(
+    in srgb,
+    var(--surface-secondary) 90%,
+    var(--accent-primary)
+  );
 }
 
-.shortcut-reference table:not(:has(th:nth-child(3))) tbody tr:hover td:first-child,
+.shortcut-reference
+  table:not(:has(th:nth-child(3)))
+  tbody
+  tr:hover
+  td:first-child,
 .shortcut-reference table:has(th:nth-child(3)) tbody tr:hover td:nth-child(2) {
-  background-color: color-mix(in srgb, var(--code-toolbar) 82%, var(--accent-primary));
+  background-color: color-mix(
+    in srgb,
+    var(--code-toolbar) 82%,
+    var(--accent-primary)
+  );
 }
 
 .md-typeset .shortcut-reference table th,
@@ -1430,7 +1520,10 @@ body:has(.context-help[open]) .context-help-trigger {
 
 .shortcut-reference table:has(th:nth-child(3)) td:first-child {
   color: var(--text-tertiary);
-  font: 600 0.6875rem/1.4 "IBM Plex Mono", ui-monospace, monospace;
+  font:
+    600 0.6875rem / 1.4 "IBM Plex Mono",
+    ui-monospace,
+    monospace;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -1459,7 +1552,11 @@ body:has(.context-help[open]) .context-help-trigger {
 }
 
 .md-typeset .shortcut-reference table td:first-child code,
-.md-typeset .shortcut-reference table:has(th:nth-child(3)) td:nth-child(2) code {
+.md-typeset
+  .shortcut-reference
+  table:has(th:nth-child(3))
+  td:nth-child(2)
+  code {
   min-width: 1.75rem;
   display: inline-block;
   border-color: var(--border-default);
@@ -1563,7 +1660,10 @@ body:has(.context-help[open]) .context-help-trigger {
 .hero-signals dt {
   margin: 0;
   color: var(--text-tertiary);
-  font: 500 0.625rem/1.4 "IBM Plex Mono", ui-monospace, monospace;
+  font:
+    500 0.625rem / 1.4 "IBM Plex Mono",
+    ui-monospace,
+    monospace;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -1571,7 +1671,10 @@ body:has(.context-help[open]) .context-help-trigger {
 .hero-signals dd {
   margin: 0;
   color: var(--text-primary);
-  font: 600 0.9375rem/1.4 "Public Sans", system-ui, sans-serif;
+  font:
+    600 0.9375rem / 1.4 "Public Sans",
+    system-ui,
+    sans-serif;
 }
 
 .home-overview {
@@ -1681,7 +1784,10 @@ body:has(.context-help[open]) .context-help-trigger {
   border-radius: 999px;
   background: var(--accent-surface);
   color: var(--accent-soft);
-  font: 600 0.75rem/1 "IBM Plex Mono", ui-monospace, monospace;
+  font:
+    600 0.75rem / 1 "IBM Plex Mono",
+    ui-monospace,
+    monospace;
 }
 
 .install-flow li > div {
@@ -1737,7 +1843,10 @@ body:has(.context-help[open]) .context-help-trigger {
 .principle-grid dt {
   margin-bottom: var(--space-2);
   color: var(--text-primary);
-  font: 600 1rem/1.4 "Bricolage Grotesque", "Public Sans", sans-serif;
+  font:
+    600 1rem / 1.4 "Bricolage Grotesque",
+    "Public Sans",
+    sans-serif;
 }
 
 .principle-grid dd {
@@ -1762,7 +1871,10 @@ body:has(.context-help[open]) .context-help-trigger {
 
 .home-validation strong {
   color: var(--accent-soft);
-  font: 600 0.6875rem/1.4 "IBM Plex Mono", ui-monospace, monospace;
+  font:
+    600 0.6875rem / 1.4 "IBM Plex Mono",
+    ui-monospace,
+    monospace;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -1792,7 +1904,10 @@ body:has(.context-help[open]) .context-help-trigger {
   font-size: 0.78125rem;
   font-weight: 500;
   letter-spacing: 0.04em;
-  transition: border-color 130ms ease-out, background-color 130ms ease-out, color 130ms ease-out;
+  transition:
+    border-color 130ms ease-out,
+    background-color 130ms ease-out,
+    color 130ms ease-out;
 }
 
 .md-typeset .secondary-link {
@@ -1836,7 +1951,9 @@ body:has(.context-help[open]) .context-help-trigger {
   background: var(--surface-secondary);
   color: var(--text-secondary);
   text-decoration: none;
-  transition: border-color 130ms ease-out, background-color 130ms ease-out;
+  transition:
+    border-color 130ms ease-out,
+    background-color 130ms ease-out;
 }
 
 .docs-adjacent a:hover {
@@ -2027,12 +2144,18 @@ body:has(.context-help[open]) .context-help-trigger {
   }
 
   .mobile-page-toc__label strong {
-    font: 600 0.875rem/1.4 "Public Sans", system-ui, sans-serif;
+    font:
+      600 0.875rem / 1.4 "Public Sans",
+      system-ui,
+      sans-serif;
   }
 
   .mobile-page-toc__label small {
     color: var(--text-tertiary);
-    font: 500 0.6875rem/1.4 "IBM Plex Mono", ui-monospace, monospace;
+    font:
+      500 0.6875rem / 1.4 "IBM Plex Mono",
+      ui-monospace,
+      monospace;
     opacity: 1;
   }
 
@@ -2092,7 +2215,10 @@ body:has(.context-help[open]) .context-help-trigger {
     display: flex;
     align-items: center;
     color: var(--text-secondary);
-    font: 400 0.875rem/1.35 "Public Sans", system-ui, sans-serif;
+    font:
+      400 0.875rem / 1.35 "Public Sans",
+      system-ui,
+      sans-serif;
     text-decoration: none;
   }
 
@@ -2149,7 +2275,6 @@ body:has(.context-help[open]) .context-help-trigger {
   .home-caution {
     max-width: 38rem;
   }
-
 }
 
 @media (max-width: 800px) {
@@ -2394,7 +2519,10 @@ body:has(.context-help[open]) .context-help-trigger {
     padding-bottom: var(--space-1);
     background: var(--surface-secondary);
     color: var(--text-tertiary);
-    font: 600 0.6875rem/1.4 "IBM Plex Mono", ui-monospace, monospace;
+    font:
+      600 0.6875rem / 1.4 "IBM Plex Mono",
+      ui-monospace,
+      monospace;
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
