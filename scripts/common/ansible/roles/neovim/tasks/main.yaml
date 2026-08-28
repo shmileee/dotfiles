@@ -1,6 +1,6 @@
 ---
 
-- name: "bootstrap LazyVim plugins"
+- name: "bootstrap LazyVim"
   ansible.builtin.command:
     argv:
       - mise
@@ -8,29 +8,5 @@
       - --
       - nvim
       - --headless
-      - "+lua require('lazy').install({ wait = true, lockfile = true })"
       - +qa
     creates: "{{ ansible_facts['user_dir'] }}/.local/share/nvim/lazy/LazyVim"
-  register: lazy_bootstrap
-
-- name: "install LazyVim plugin specifications"
-  ansible.builtin.command:
-    argv:
-      - mise
-      - exec
-      - --
-      - nvim
-      - --headless
-      - "+lua require('lazy').install({ wait = true, lockfile = true })"
-      - +qa
-  register: lazy_install
-  changed_when: "'clone' in lazy_install.stdout"
-  when:
-    - lazy_bootstrap is not changed
-    - chezmoi_status is changed
-
-- name: "restore the managed LazyVim lockfile after installation"
-  ansible.builtin.copy:
-    src: "{{ dotfiles.checkout }}/config/private_dot_config/nvim/lazy-lock.json"
-    dest: "{{ ansible_facts['user_dir'] }}/.config/nvim/lazy-lock.json"
-    mode: '0600'

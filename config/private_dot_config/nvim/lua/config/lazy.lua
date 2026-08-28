@@ -34,7 +34,6 @@ require("lazy").setup({
   },
   install = {
     colorscheme = { "tokyonight", "habamax" },
-    missing = vim.env.DOCKERIZED ~= "true",
   },
   checker = {
     enabled = true, -- check for plugin updates periodically
