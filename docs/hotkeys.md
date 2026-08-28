@@ -33,11 +33,11 @@ These mappings are applied by the `system_defaults` Ansible role.
 
 | Shortcut | Action |
 | --- | --- |
-| ++cmd+g++ | Show Spotlight search |
+| ++cmd+g++ | Open Spotlight |
 | ++cmd+space++ | Select the next input source |
 
-The default “select previous input source” shortcut is disabled to prevent it
-from competing with the configured next-source binding.
+The default shortcut for selecting the previous input source is disabled so it
+does not conflict with the configured next-source binding.
 
 </section>
 
@@ -45,7 +45,7 @@ from competing with the configured next-source binding.
 
 ## Alacritty and tmux
 
-These shortcuts work from Alacritty without entering the tmux prefix first.
+These shortcuts work from Alacritty without first entering the tmux prefix.
 
 ### Windows and sessions
 
@@ -73,7 +73,7 @@ These shortcuts work from Alacritty without entering the tmux prefix first.
 
 ## tmux prefix commands
 
-Press ++ctrl+a++, release it, then press the command key.
+Press ++ctrl+a++, release it, and then press the command key.
 
 ### Create and arrange
 
@@ -90,7 +90,7 @@ Press ++ctrl+a++, release it, then press the command key.
 
 | Command | Action |
 | --- | --- |
-| ++ctrl+a++ then `h` / `j` / `k` / `l` | Move to the pane on the left / down / up / right |
+| ++ctrl+a++ then `h` / `j` / `k` / `l` | Move one pane left, down, up, or right |
 | ++ctrl+a++ then `[` / `]` | Select the previous / next pane |
 | ++ctrl+a++ then `{` / `}` | Select the previous / next window |
 | ++ctrl+a++ then ++tab++ | Return to the most recently used window |
@@ -116,8 +116,8 @@ Press ++ctrl+a++, release it, then press the command key.
 | ++ctrl+a++ then `p` | Paste the latest tmux buffer |
 | ++ctrl+a++ then ++ctrl+p++ | Choose a tmux buffer |
 
-Copy mode uses vi keys and supports the mouse wheel, Page Up/Down, and
-Option-based line or half-page scrolling.
+Copy mode uses vi keys and supports the mouse wheel, Page Up and Page Down, and
+Option-based scrolling by line or half page.
 
 </section>
 
@@ -125,13 +125,13 @@ Option-based line or half-page scrolling.
 
 ## Neovim additions
 
-LazyVim provides most editor mappings. This repository adds only a small layer:
+LazyVim provides most editor mappings. This repository adds only a small set:
 
 | Mode | Shortcut | Action |
 | --- | --- | --- |
 | Normal | `o` | Create a blank line below without staying in Insert mode |
 | Normal | `O` | Create a blank line above without staying in Insert mode |
-| Normal | `<leader><leader>` | Clear search highlighting |
+| Normal | `<leader><leader>` | Clear search highlights |
 | Visual | `>` / `<` | Indent while keeping the selection active |
 
 </section>

@@ -4,7 +4,7 @@ description: A reproducible macOS and Linux workstation built with Ansible and c
 ---
 
 <section class="docs-hero" markdown>
-  <p class="section-eyebrow">Personal workstation · documented in public</p>
+  <p class="section-eyebrow">Personal workstation · documented publicly</p>
   <h1>A workstation I can rebuild.<span class="hero-cursor" aria-hidden="true"></span></h1>
   <p class="hero-copy">This repository turns a fresh macOS or Debian-based Linux machine into my development environment. Ansible installs and configures the system; chezmoi puts the files in place.</p>
   <div class="hero-actions">
@@ -18,7 +18,7 @@ description: A reproducible macOS and Linux workstation built with Ansible and c
 <div class="fact-grid">
   <div>
     <span>Platforms</span>
-    <strong>macOS + Debian Linux</strong>
+    <strong>macOS + Debian-based Linux</strong>
   </div>
   <div>
     <span>Orchestration</span>
@@ -34,17 +34,16 @@ description: A reproducible macOS and Linux workstation built with Ansible and c
   </div>
 </div>
 
-The result is an opinionated terminal-first environment built around Fish,
-tmux, Alacritty, Neovim, mise, Git tooling, and a curated set of command-line
-utilities. On macOS it also installs desktop applications and applies personal
+The result is an opinionated terminal-first environment built around fish,
+tmux, Alacritty, Neovim, mise, Git tools, and a curated set of command-line
+utilities. On macOS, it also installs desktop applications and applies personal
 system defaults.
 
 !!! warning "This is a personal configuration"
 
     The playbook changes the login shell, applies dotfiles with `--force`, and
     modifies macOS preferences. Read the [setup guide](what-how-and-why.md)
-    before running it on a machine that already has configuration you care
-    about.
+    before running it on a machine with configuration you want to keep.
 
 ## How the pieces fit together
 
@@ -60,14 +59,14 @@ system defaults.
     <span>02</span>
     <div>
       <strong>Install prerequisites</strong>
-      <p>Linux receives its apt essentials; both platforms receive Homebrew and Ansible support.</p>
+      <p>On Linux, the script installs the required apt packages; on both platforms, it prepares Homebrew and Ansible.</p>
     </div>
   </li>
   <li>
     <span>03</span>
     <div>
       <strong>Configure the workstation</strong>
-      <p>Ansible runs focused roles for packages, fonts, Fish, mise, Neovim, Docker, tmux, and system defaults.</p>
+      <p>Ansible runs focused roles for packages, fonts, fish, mise, Neovim, Rancher Desktop, tmux, and system defaults.</p>
     </div>
   </li>
   <li>
@@ -94,14 +93,14 @@ system defaults.
   </a>
   <a href="/opencode-and-omo/">
     <span>03 · AI tooling</span>
-    <strong>Configure OpenCode and OmO</strong>
+    <strong>Configure OpenCode + OmO</strong>
     <p>Set up local secrets, corporate overlays, model routing, and contextual notifications.</p>
   </a>
 </div>
 
 ## Design principles
 
-- **Repeatable over clever.** A second run should converge on the same machine.
+- **Repeatable over clever.** Repeated runs should converge on the same state.
 - **Visible over magical.** Package lists, roles, and managed files stay in the repository.
 - **Portable where practical.** Shared behavior works on macOS and Linux; platform-specific changes stay explicit.
 - **Personal by design.** This is a working environment, not a universal starter kit.

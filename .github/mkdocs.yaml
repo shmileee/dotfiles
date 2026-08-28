@@ -35,7 +35,9 @@ markdown_extensions:
   - admonition
   - attr_list
   - md_in_html
-  - pymdownx.highlight
+  - pymdownx.highlight:
+      use_pygments: true
+      pygments_lang_class: true
   - pymdownx.superfences
   - pymdownx.keys
   - pymdownx.details
