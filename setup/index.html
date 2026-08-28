@@ -384,6 +384,45 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#routine-work-with-mise" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Routine work with mise
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Routine work with mise">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#import-local-dotfile-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Import local dotfile changes
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preview-the-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Preview the documentation
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#reapply-after-an-update" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -634,6 +673,45 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#routine-work-with-mise" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Routine work with mise
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Routine work with mise">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#import-local-dotfile-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Import local dotfile changes
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preview-the-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Preview the documentation
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#reapply-after-an-update" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -721,6 +799,7 @@
   <div><dt>Playbook</dt><dd>The ordered Ansible plan that describes the desired workstation state.</dd></div>
   <div><dt>Role</dt><dd>A focused part of the playbook, such as configuring fish, tmux, or Neovim.</dd></div>
   <div><dt>Check mode</dt><dd>An Ansible preview that reports many expected changes without applying them.</dd></div>
+  <div><dt>mise task</dt><dd>A named command for routine work after the initial setup has installed mise.</dd></div>
   <div><dt>Homebrew and apt</dt><dd>Package managers used to install software on macOS and Ubuntu.</dd></div>
   <div><dt>Docker image</dt><dd>A packaged Linux environment used to test the setup away from your machine.</dd></div>
 </dl>
@@ -964,11 +1043,87 @@ repository or branch setting.</p>
 </tbody>
 </table>
 </div>
+<h2 id="routine-work-with-mise">Routine work with mise<a class="headerlink" href="#routine-work-with-mise" title="Permanent link">&para;</a></h2>
+<p>The initial setup installs <code>mise</code> and the tools pinned by this repository.
+After that bootstrap, run routine workflows from the repository checkout with
+<code>mise run</code>. List the available tasks and their descriptions at any time:</p>
+<div class="language-bash highlight"><pre><span></span><code>mise<span class="w"> </span>tasks
+</code></pre></div>
+<div class="setup-reference">
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mise run reconcile</code></td>
+<td>Install the required Ansible collections and reconcile the machine.</td>
+</tr>
+<tr>
+<td><code>mise run reconcile:check</code></td>
+<td>Preview the reconciliation using Ansible check mode.</td>
+</tr>
+<tr>
+<td><code>mise run status</code></td>
+<td>Show differences between the chezmoi source and files in the home directory.</td>
+</tr>
+<tr>
+<td><code>mise run import</code></td>
+<td>Import all modified, non-template managed files into <code>config/</code>.</td>
+</tr>
+<tr>
+<td><code>mise run import ~/.config/nvim</code></td>
+<td>Import one managed file or directory.</td>
+</tr>
+<tr>
+<td><code>mise run docs</code></td>
+<td>Serve the documentation at <a href="http://localhost:8000">http://localhost:8000</a> and rebuild it on changes.</td>
+</tr>
+<tr>
+<td><code>mise run docs:build</code></td>
+<td>Run the strict documentation build used by CI.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Bootstrap before using tasks</p>
+<p><code>mise</code> is the task runner, but it is also installed by Ansible. On a new
+machine, run <code>./scripts/setup.sh --all</code> first. The mise tasks are the
+post-bootstrap interface, not a replacement for initial setup.</p>
+</div>
+<p>Task execution installs any missing tools declared in <code>mise.toml</code>
+automatically.</p>
+<h3 id="import-local-dotfile-changes">Import local dotfile changes<a class="headerlink" href="#import-local-dotfile-changes" title="Permanent link">&para;</a></h3>
+<p>When a managed file was edited directly in the home directory, inspect the
+differences before copying them back into the repository:</p>
+<div class="language-bash highlight"><pre><span></span><code>mise<span class="w"> </span>run<span class="w"> </span>status
+mise<span class="w"> </span>run<span class="w"> </span>import<span class="w"> </span>~/.config/nvim
+git<span class="w"> </span>diff<span class="w"> </span>--<span class="w"> </span>config
+</code></pre></div>
+<p>Omit the path to import every modified managed file. The task uses
+<code>chezmoi re-add</code>, which deliberately does not overwrite template source files.
+For a rendered file backed by <code>config/**/*.tmpl</code>, reconcile the local change
+with its template explicitly. Always review the resulting Git diff before
+committing.</p>
+<h3 id="preview-the-documentation">Preview the documentation<a class="headerlink" href="#preview-the-documentation" title="Permanent link">&para;</a></h3>
+<p>Start the local Zensical server with:</p>
+<div class="language-bash highlight"><pre><span></span><code>mise<span class="w"> </span>run<span class="w"> </span>docs
+</code></pre></div>
+<p>Open <a href="http://localhost:8000">http://localhost:8000</a>. The preview rebuilds when documentation,
+configuration, templates, CSS, or JavaScript change. Before committing a docs
+change, run the same strict build as CI:</p>
+<div class="language-bash highlight"><pre><span></span><code>mise<span class="w"> </span>run<span class="w"> </span>docs:build
+</code></pre></div>
 <h2 id="reapply-after-an-update">Reapply after an update<a class="headerlink" href="#reapply-after-an-update" title="Permanent link">&para;</a></h2>
-<p>Pull the latest changes, review them, and rerun the Ansible stage:</p>
+<p>After the initial setup has installed <code>mise</code>, pull the latest changes, review
+them, and rerun the Ansible stage:</p>
 <div class="language-bash highlight"><pre><span></span><code>git<span class="w"> </span>pull<span class="w"> </span>--ff-only
 git<span class="w"> </span>diff<span class="w"> </span>HEAD@<span class="o">{</span><span class="m">1</span><span class="o">}</span><span class="w"> </span>--<span class="w"> </span>scripts/common/ansible<span class="w"> </span>config
-./scripts/setup.sh<span class="w"> </span>--ansible
+mise<span class="w"> </span>run<span class="w"> </span>reconcile
 </code></pre></div>
 <p>The roles are designed to be rerun, and a repeated run should leave converged
 state unchanged. Setup may still refresh Homebrew metadata and update managed
@@ -1001,7 +1156,7 @@ mise<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>
 <span class="w">  </span>--syntax-check<span class="w"> </span>scripts/common/ansible/main.yaml
 </code></pre></div>
 <p>If the prerequisites are installed, preview the playbook too:</p>
-<div class="language-bash highlight"><pre><span></span><code>mise<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--<span class="w"> </span>./scripts/common/ansible.sh<span class="w"> </span>--run<span class="w"> </span>--check
+<div class="language-bash highlight"><pre><span></span><code>mise<span class="w"> </span>run<span class="w"> </span>reconcile:check
 </code></pre></div>
 <h2 id="why-ansible-and-chezmoi">Why Ansible and chezmoi?<a class="headerlink" href="#why-ansible-and-chezmoi" title="Permanent link">&para;</a></h2>
 <p>Ansible owns machine state: packages, applications, services, shell setup, and
@@ -1051,6 +1206,13 @@ machine or to the user's configuration.</p>
       
       
         <span class="md-tag">chezmoi</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">mise</span>
       
     
   </nav>
