@@ -20,6 +20,18 @@ description: Review, install, customize, and reapply the workstation configurati
   </a>
 </nav>
 
+<details class="concept-primer" data-mobile-toc-anchor markdown>
+<summary>New to workstation automation? Key terms</summary>
+<dl class="concept-primer__terms">
+  <div><dt>Bootstrap</dt><dd>The small first step that downloads the repository and starts the setup.</dd></div>
+  <div><dt>Playbook</dt><dd>The ordered Ansible plan that describes the desired workstation state.</dd></div>
+  <div><dt>Role</dt><dd>A focused part of the playbook, such as configuring fish, tmux, or Neovim.</dd></div>
+  <div><dt>Check mode</dt><dd>An Ansible preview that reports many expected changes without applying them.</dd></div>
+  <div><dt>Homebrew and apt</dt><dd>Package managers used to install software on macOS and Debian-based Linux.</dd></div>
+  <div><dt>Docker image</dt><dd>A packaged Linux environment used to test the setup away from your machine.</dd></div>
+</dl>
+</details>
+
 ## Before you begin
 
 The full setup can:

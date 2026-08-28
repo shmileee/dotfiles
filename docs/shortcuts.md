@@ -5,7 +5,7 @@ description: Keyboard shortcuts configured for macOS, Alacritty, tmux, and Neovi
 
 # Keyboard shortcuts
 
-<p class="page-lead">Choose the layer where the shortcut runs. Alacritty sends many macOS-style shortcuts directly to tmux; tmux commands use <kbd>Ctrl</kbd> + <kbd>A</kbd> as their prefix.</p>
+<p class="page-lead">Choose the layer where the shortcut runs. Alacritty, the terminal application, sends many macOS-style shortcuts directly to tmux; tmux commands use <kbd>Ctrl</kbd> + <kbd>A</kbd> as their prefix.</p>
 
 <form class="shortcut-filter" role="search" data-shortcut-filter>
   <label for="shortcut-query">Find a shortcut</label>
@@ -22,6 +22,18 @@ description: Keyboard shortcuts configured for macOS, Alacritty, tmux, and Neovi
   </div>
   <p class="shortcut-filter__status" aria-live="polite" data-shortcut-status></p>
 </form>
+
+<details class="concept-primer" data-mobile-toc-anchor markdown>
+<summary>New to terminal shortcuts? Key terms</summary>
+<dl class="concept-primer__terms">
+  <div><dt>tmux prefix</dt><dd>A key sequence pressed before most tmux commands; here it is Ctrl + A.</dd></div>
+  <div><dt>Pane</dt><dd>One terminal area inside a tmux window.</dd></div>
+  <div><dt>Window</dt><dd>A tmux workspace that can contain one or more panes.</dd></div>
+  <div><dt>Session</dt><dd>A persistent collection of tmux windows that can be detached and reopened.</dd></div>
+  <div><dt>Leader</dt><dd>A prefix key used by Neovim mappings; LazyVim normally uses the Space key.</dd></div>
+  <div><dt>Normal and Visual mode</dt><dd>Neovim modes for running commands and selecting text.</dd></div>
+</dl>
+</details>
 
 <p class="shortcut-filter-empty" data-shortcut-empty hidden>No shortcuts match this search.</p>
 
