@@ -2,9 +2,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/dev/assets/omo.schema.json",
   "[opencode]": {
-    "disabled_hooks": [
-      "session-notification"
-    ],
+    "disabled_hooks": ["session-notification"],
     "agents": {
       "sisyphus": {
         "model": "anthropic/claude-fable-5",
@@ -136,9 +134,7 @@
       "unspecified-low": {
         "model": "openai/gpt-5.6-luna",
         "reasoning": "xhigh",
-        "fallback_models": [
-          { "model": "openai/gpt-5.4-mini" }
-        ]
+        "fallback_models": [{ "model": "openai/gpt-5.4-mini" }]
       },
       "unspecified-high": {
         "model": "anthropic/claude-fable-5",

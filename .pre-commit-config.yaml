@@ -1,89 +1,113 @@
+---
 repos:
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v6.0.0
+  - repo: builtin
     hooks:
       - id: check-added-large-files
+        name: check added large files
         args: ["--maxkb=1024"]
       - id: check-case-conflict
-      - id: check-json
+        name: check case conflicts
       - id: check-merge-conflict
+        name: check merge conflicts
       - id: check-symlinks
-      - id: check-toml
+        name: check symlinks
       - id: end-of-file-fixer
+        name: fix end of files
       - id: trailing-whitespace
+        name: trim trailing whitespace
         args: [--markdown-linebreak-ext=md]
       - id: check-executables-have-shebangs
+        name: check executable shebangs
       - id: mixed-line-ending
+        name: fix mixed line endings
       - id: detect-private-key
+        name: detect private keys
 
   - repo: https://github.com/renovatebot/pre-commit-hooks
     rev: 44.50.3
     hooks:
       - id: renovate-config-validator
+        name: validate renovate configuration
         args: [--strict]
 
   - repo: local
     hooks:
       - id: gitleaks
-        name: gitleaks
+        name: scan secrets with gitleaks
         entry: gitleaks dir --redact --no-banner .
         language: system
         pass_filenames: false
+      - id: biome
+        name: lint and format web files with biome
+        entry: biome check --write --no-errors-on-unmatched
+        language: system
+        files: \.(css|js|json|jsonc)$
       - id: ruff-check
-        name: ruff check
-        entry: ruff check --fix --select=E4,E7,E9,F,B --ignore=E402,B905
+        name: lint python with ruff
+        entry: ruff check --fix
         language: system
         types: [python]
       - id: ruff-format
-        name: ruff format
+        name: format python with ruff
         entry: ruff format
         language: system
         types: [python]
       - id: stylua
-        name: stylua
+        name: format lua with stylua
         entry: stylua
         language: system
         types: [lua]
+      - id: taplo
+        name: format toml with taplo
+        entry: taplo format
+        language: system
+        types: [toml]
+      - id: rumdl
+        name: format markdown with rumdl
+        entry: rumdl fmt
+        language: system
+        types: [markdown]
       - id: chezmoi-templates
-        name: chezmoi templates
+        name: validate chezmoi templates
         entry: chezmoi execute-template --file
         language: system
         files: \.tmpl$
       - id: shfmt
-        name: shfmt
-        entry: shfmt --write --indent 2 --binary-next-line --case-indent --space-redirects
+        name: format shell with shfmt
+        entry: shfmt --write
         language: system
         types: [shell]
       - id: fish-indent
-        name: fish_indent
+        name: format fish with fish_indent
         entry: fish_indent --write
         language: system
         files: \.fish$
       - id: shellcheck
-        name: shellcheck
+        name: lint shell with shellcheck
         entry: shellcheck
         language: system
         types: [shell]
       - id: yamllint
-        name: yamllint
+        name: lint yaml with yamllint
         entry: yamllint
         language: system
         types: [yaml]
       - id: actionlint
-        name: actionlint
+        name: lint github actions with actionlint
         entry: actionlint
         language: system
         files: ^\.github/workflows/.*\.ya?ml$
         types: [yaml]
       - id: zizmor
-        name: zizmor
+        name: audit github actions with zizmor
         entry: zizmor --min-severity medium --min-confidence medium
         language: system
         files: ^\.github/(actions|workflows)/.*\.ya?ml$
         types: [yaml]
       - id: ansible-lint
-        name: ansible-lint
-        entry: env ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg ansible-lint scripts/common/ansible
+        name: lint ansible with ansible-lint
+        entry: env ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg ansible-lint
+          scripts/common/ansible
         language: system
         pass_filenames: false
         files: ^scripts/common/ansible/

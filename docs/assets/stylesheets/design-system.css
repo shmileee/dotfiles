@@ -153,12 +153,18 @@ body {
   line-height: normal;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  transition: background-color 150ms ease, color 150ms ease;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
 }
 
 a {
   color: var(--accent-primary);
-  text-decoration-color: color-mix(in srgb, var(--accent-primary) 40%, transparent);
+  text-decoration-color: color-mix(
+    in srgb,
+    var(--accent-primary) 40%,
+    transparent
+  );
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
 }

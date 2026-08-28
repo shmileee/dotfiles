@@ -1,0 +1,48 @@
+[global]
+enable = [
+  "MD003",
+  "MD004",
+  "MD007",
+  "MD009",
+  "MD013",
+  "MD022",
+  "MD029",
+  "MD030",
+  "MD046",
+  "MD047",
+]
+flavor = "mkdocs"
+line-length = 80
+
+[MD003]
+style = "atx"
+
+[MD004]
+style = "asterisk"
+
+[MD007]
+indent = 4
+
+[MD009]
+strict = true
+
+[MD013]
+code-blocks = false
+headings = false
+reflow = true
+tables = false
+
+[MD029]
+style = "one_or_ordered"
+
+[MD030]
+ul-single = 3
+ul-multi = 3
+ol-single = 2
+ol-multi = 2
+
+[MD046]
+style = "fenced"
+
+[per-file-ignores]
+"docs/setup.md" = ["MD046"]

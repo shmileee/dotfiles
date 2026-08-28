@@ -115,7 +115,9 @@ class DockError(Exception):
 
 
 class DockCommandError(DockError):
-    def __init__(self, argv: List[str], rc: int, stdout: str, stderr: str) -> None:
+    def __init__(
+        self, argv: List[str], rc: int, stdout: str, stderr: str
+    ) -> None:
         super().__init__("dockutil command failed")
         self.argv = argv
         self.rc = rc
@@ -140,7 +142,12 @@ def folder_options(plist_paths: List[str]) -> Dict[str, Dict[str, str]]:
         try:
             with Path(plist_path).open("rb") as plist_file:
                 plist = plistlib.load(plist_file)
-        except (OSError, plistlib.InvalidFileException, TypeError, ValueError) as error:
+        except (
+            OSError,
+            plistlib.InvalidFileException,
+            TypeError,
+            ValueError,
+        ) as error:
             raise DockStateError(
                 "could not read Dock plist {0!r}: {1}".format(plist_path, error)
             ) from error
@@ -155,9 +162,13 @@ def folder_options(plist_paths: List[str]) -> Dict[str, Dict[str, str]]:
             if not url:
                 continue
             options[normalize_location(url)] = {
-                "display": DISPLAY_VALUES.get(tile_data.get("displayas", 0), "unknown"),
+                "display": DISPLAY_VALUES.get(
+                    tile_data.get("displayas", 0), "unknown"
+                ),
                 "view": VIEW_VALUES.get(tile_data.get("viewas", 0), "unknown"),
-                "sort": SORT_VALUES.get(tile_data.get("arrangement", 1), "unknown"),
+                "sort": SORT_VALUES.get(
+                    tile_data.get("arrangement", 1), "unknown"
+                ),
             }
     return options
 
@@ -168,7 +179,9 @@ def current_items(module: AnsibleModule, dockutil: str) -> List[Dict[str, Any]]:
     except ValueError as error:
         raise DockStateError(str(error)) from error
 
-    presentation = folder_options([row["plist"] for row in rows if row["plist"]])
+    presentation = folder_options(
+        [row["plist"] for row in rows if row["plist"]]
+    )
     return [
         {
             "name": row["name"],
@@ -203,7 +216,9 @@ def desired_items(module: AnsibleModule) -> List[Dict[str, Any]]:
             )
         if options and urlsplit(path).scheme not in ("", "file"):
             module.fail_json(
-                msg="items[{0}] uses folder presentation for a URL".format(index)
+                msg="items[{0}] uses folder presentation for a URL".format(
+                    index
+                )
             )
         desired.append(
             {
@@ -263,7 +278,9 @@ def missing_filesystem_paths(items: List[Mapping[str, Any]]) -> List[str]:
     ]
 
 
-def fail_for_dock_error(module: AnsibleModule, error: DockError, **kwargs: Any) -> None:
+def fail_for_dock_error(
+    module: AnsibleModule, error: DockError, **kwargs: Any
+) -> None:
     failure = {"msg": str(error)}
     failure.update(kwargs)
     if isinstance(error, DockCommandError):
@@ -294,7 +311,10 @@ def main() -> None:
                         "default": "apps",
                     },
                     "display": {"type": "str", "choices": ["stack", "folder"]},
-                    "view": {"type": "str", "choices": ["auto", "fan", "grid", "list"]},
+                    "view": {
+                        "type": "str",
+                        "choices": ["auto", "fan", "grid", "list"],
+                    },
                     "sort": {
                         "type": "str",
                         "choices": [
@@ -333,7 +353,9 @@ def main() -> None:
     result = {
         "changed": changed,
         "items": before if module.check_mode else after,
-        "paths": [item["path"] for item in (current if module.check_mode else desired)],
+        "paths": [
+            item["path"] for item in (current if module.check_mode else desired)
+        ],
         "diff": {"before": before, "after": after},
     }
     if not changed or module.check_mode:

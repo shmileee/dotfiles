@@ -65,19 +65,20 @@ with Bun when it starts.
 
 ## First-run checklist
 
-1. Apply the dotfiles with the [setup guide](setup.md).
-2. Create the local secret files if you want to use the Home Assistant MCP server.
-3. Put only the secret value in each file—no quotes or variable names.
-4. Start a new fish shell so an optional corporate overlay is detected.
-5. Restart all running OpenCode processes after changing plugin declarations.
+1.  Apply the dotfiles with the [setup guide](setup.md).
+2.  Create the local secret files if you want to use the Home Assistant MCP
+    server.
+3.  Put only the secret value in each file—no quotes or variable names.
+4.  Start a new fish shell so an optional corporate overlay is detected.
+5.  Restart all running OpenCode processes after changing plugin declarations.
 
 ## Local secrets
 
 The managed OpenCode file references two files that are intentionally not
 tracked by Git:
 
-- <code class="path-token">~/.config/<wbr>opencode/<wbr>secrets/<wbr>home-assistant-mcp-url</code>
-- <code class="path-token">~/.config/<wbr>opencode/<wbr>secrets/<wbr>home-assistant-access-token</code>
+*   <code class="path-token">~/.config/<wbr>opencode/<wbr>secrets/<wbr>home-assistant-mcp-url</code>
+*   <code class="path-token">~/.config/<wbr>opencode/<wbr>secrets/<wbr>home-assistant-access-token</code>
 
 Create them with restrictive permissions:
 
@@ -146,9 +147,9 @@ dotfiles repository only declares and configures it.
 
 After changing the notifier declaration:
 
-1. Restart OpenCode so Bun can synchronize the package.
-2. Reload tmux with ++ctrl+a++ then ++ctrl+r++.
-3. Run the TPM installation flow if the companion plugin is not present.
+1.  Restart OpenCode so Bun can synchronize the package.
+2.  Reload tmux with ++ctrl+a++ then ++ctrl+r++.
+3.  Run the TPM installation flow if the companion plugin is not present.
 
 ## Deliberately unmanaged
 

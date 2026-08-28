@@ -86,7 +86,8 @@ def json_safe_plist(value: Any) -> Any:
         return value.encode("utf-8", "replace").decode("utf-8")
     if isinstance(value, dict):
         return {
-            json_safe_plist(key): json_safe_plist(item) for key, item in value.items()
+            json_safe_plist(key): json_safe_plist(item)
+            for key, item in value.items()
         }
     if isinstance(value, list):
         return [json_safe_plist(item) for item in value]
@@ -101,7 +102,13 @@ def normalize_location(value: str) -> str:
         if parsed.path.endswith("/") and path != "/":
             path += "/"
         return urlunsplit(
-            (parsed.scheme.lower(), parsed.netloc, path, parsed.query, parsed.fragment)
+            (
+                parsed.scheme.lower(),
+                parsed.netloc,
+                path,
+                parsed.query,
+                parsed.fragment,
+            )
         )
 
     path = unquote(parsed.path) if parsed.scheme == "file" else value
@@ -159,7 +166,8 @@ def dock_states_match(
         expected_options = expected.get("options", {})
         actual_options = actual.get("options", {})
         if any(
-            actual_options.get(key) != value for key, value in expected_options.items()
+            actual_options.get(key) != value
+            for key, value in expected_options.items()
         ):
             return False
     return True

@@ -87,10 +87,7 @@
     },
     {
       "description": "Allow for the slower release cadence of stable tooling",
-      "matchPackageNames": [
-        "koalaman/shellcheck",
-        "pre-commit/pre-commit-hooks"
-      ],
+      "matchPackageNames": ["koalaman/shellcheck"],
       "abandonmentThreshold": "2 years"
     }
   ]

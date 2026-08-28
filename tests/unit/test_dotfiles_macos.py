@@ -61,10 +61,12 @@ class PlistHelpersTest(unittest.TestCase):
 class DockHelpersTest(unittest.TestCase):
     def test_normalizes_paths_file_urls_and_network_urls(self):
         self.assertEqual(
-            normalize_location("/Applications/Test.app/"), "/Applications/Test.app"
+            normalize_location("/Applications/Test.app/"),
+            "/Applications/Test.app",
         )
         self.assertEqual(
-            normalize_location("file:///Users/me/My%20Folder/"), "/Users/me/My Folder"
+            normalize_location("file:///Users/me/My%20Folder/"),
+            "/Users/me/My Folder",
         )
         self.assertEqual(
             normalize_location("HTTPS://example.test/a%20folder/"),
@@ -102,7 +104,11 @@ class DockHelpersTest(unittest.TestCase):
             {
                 "path": "/Users/me/Downloads",
                 "section": "others",
-                "options": {"view": "auto", "display": "stack", "sort": "dateadded"},
+                "options": {
+                    "view": "auto",
+                    "display": "stack",
+                    "sort": "dateadded",
+                },
             },
         ]
         desired = [
