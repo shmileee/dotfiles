@@ -45,6 +45,8 @@ jobs:
           platforms: linux/arm64
           push: false
           tags: dotfiles:test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           secrets: |
             GITHUB_TOKEN=${{ github.token }}
 

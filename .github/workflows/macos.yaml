@@ -2,6 +2,18 @@
 name: macos
 
 on:
+  pull_request:
+    paths:
+      - "config/**"
+      - "scripts/**"
+      - ".ansible-lint"
+      - ".pre-commit-config.yaml"
+      - "mise.toml"
+      - ".yamllint.yaml"
+      - ".github/workflows/macos.yaml"
+      - "!**.md"
+      - "!.github/mkdocs.yaml"
+      - "!docs/**"
   push:
     paths:
       - "config/**"
@@ -53,7 +65,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Validate
-        run: mise exec -- prek run --all-files
+        run: |
+          mise install
+          mise exec -- prek run --all-files
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Verify a second run is idempotent
         run: |

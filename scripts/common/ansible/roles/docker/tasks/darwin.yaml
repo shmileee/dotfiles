@@ -4,6 +4,5 @@
   community.general.homebrew_cask:
     name: "rancher"
     state: latest
-    greedy: true
     accept_external_apps: true
   tags: homebrew

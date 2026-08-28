@@ -22,7 +22,7 @@ There is no repository-wide upgrade command. Use the owner of each dependency:
 - Run `brew upgrade` whenever a full Homebrew upgrade is desired.
 - Let Renovate propose changes to versions declared in this repository.
 - Use Lazy, Fisher, and TPM directly for intentional plugin updates, then review
-  and commit any manifest or lockfile changes.
+  and commit the resulting lockfile, manifest, or Ansible commit-pin changes.
 
 The checked-out chezmoi source is authoritative. Setup force-applies it, so add
 intentional edits to the chezmoi-managed source before rerunning Ansible.

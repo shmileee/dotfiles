@@ -7,17 +7,6 @@
     state: latest
   tags: homebrew
 
-- name: "chezmoi init"
-  ansible.builtin.command:
-    argv:
-      - chezmoi
-      - init
-      - "{{ dotfiles.repo }}"
-      - --branch
-      - "{{ dotfiles.branch }}"
-  args:
-    creates: "{{ ansible_facts['user_dir'] }}/.local/share/chezmoi"
-
 - name: "inspect chezmoi-managed files"
   ansible.builtin.command:
     argv:

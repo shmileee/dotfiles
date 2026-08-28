@@ -2,6 +2,8 @@
 
 - name: "install tools"
   ansible.builtin.command: mise install
+  args:
+    chdir: "{{ ansible_facts['user_dir'] }}"
   environment:
     GITHUB_TOKEN: "{{ lookup('ansible.builtin.env', 'GITHUB_TOKEN') }}"
   register: mise_install
