@@ -1722,7 +1722,7 @@ body:has(.context-help[open]) .context-help-trigger {
 .home-validation {
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr);
-  align-items: baseline;
+  align-items: center;
   gap: var(--space-5);
   margin: calc(-1 * var(--space-4)) 0 var(--space-12);
   border: 1px solid var(--border-default);
