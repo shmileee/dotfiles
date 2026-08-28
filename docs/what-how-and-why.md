@@ -148,11 +148,11 @@ Stage flags must be run from a repository checkout.
 
 | Command | Purpose |
 | --- | --- |
-| [`./scripts/setup.sh --deps`](https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh) | Install the Linux apt prerequisites. Linux only. |
-| [`./scripts/setup.sh --brew`](https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh) | Install Homebrew if it is missing. |
-| [`./scripts/setup.sh --ansible`](https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh) | Install Ansible collections and run every role. |
-| [`./scripts/setup.sh --all`](https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh) | Run the complete platform-specific sequence. |
-| [`./scripts/setup.sh`](https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh) | Same as `--all`. |
+| `./scripts/setup.sh --deps` | Install the Linux apt prerequisites. Linux only. |
+| `./scripts/setup.sh --brew` | Install Homebrew if it is missing. |
+| `./scripts/setup.sh --ansible` | Install Ansible collections and run every role. |
+| `./scripts/setup.sh --all` | Run the complete platform-specific sequence. |
+| `./scripts/setup.sh` | Same as `--all`. |
 
 </div>
 

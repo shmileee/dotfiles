@@ -105,16 +105,17 @@ are handled by the dedicated contextual-notifier plugin.
 
 ## Contextual notifications
 
-OpenCode declares the `opencode-contextual-notifier` package in the managed
+OpenCode declares the
+[`opencode-contextual-notifier`](https://github.com/shmileee/opencode-contextual-notifier)
+package in the managed
 [`opencode.json`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_opencode/opencode.json).
 Its tmux companion is declared through TPM in the managed
 [`tmux.conf`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf).
 
 Together they mark the originating tmux window when an OpenCode session needs
 attention and clear that state when the window is selected or focused. The
-[notifier package repository](https://github.com/shmileee/opencode-contextual-notifier)
-contains its implementation and tests; this dotfiles repository only declares
-and configures it.
+notifier package repository contains its implementation and tests; this
+dotfiles repository only declares and configures it.
 
 After changing the notifier declaration:
 
