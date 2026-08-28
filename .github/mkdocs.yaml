@@ -2,10 +2,10 @@ docs_dir: ../docs
 site_name: dotfiles
 site_description: Reproducible workstation setup and the reasoning behind it.
 site_url: https://dotfiles.oponomarov.com
-copyright: Copyright &copy; 2021 - 2026 Oleksandr Ponomarov
+copyright: Copyright &copy; 2021&ndash;2026 Oleksandr Ponomarov
 
 nav:
-  - Overview: index.md
+  - Home: index.md
   - Setup guide: setup.md
   - Shortcuts: shortcuts.md
   - OpenCode: opencode.md
@@ -61,8 +61,3 @@ extra_javascript:
 
 extra:
   generator: false
-  social:
-    - icon: fontawesome/brands/linkedin
-      link: https://www.linkedin.com/in/aleksandr-ponomarov
-    - icon: fontawesome/brands/docker
-      link: https://hub.docker.com/r/shmileee/dotfiles/tags

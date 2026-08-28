@@ -1056,6 +1056,7 @@ body:has(.context-help[open]) .context-help-trigger {
   background: var(--surface-secondary);
   color: var(--text-secondary);
   text-decoration: none;
+  transition: border-color 130ms ease-out, background-color 130ms ease-out;
 }
 
 .md-typeset .setup-paths a:hover {
@@ -1071,6 +1072,13 @@ body:has(.context-help[open]) .context-help-trigger {
 }
 
 .setup-paths span {
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.setup-paths p {
+  margin: 0;
+  color: var(--text-secondary);
   font-size: 0.875rem;
   line-height: 1.5;
 }
@@ -1266,6 +1274,11 @@ body:has(.context-help[open]) .context-help-trigger {
   color: var(--accent-soft);
   font: 500 0.75rem/1 "IBM Plex Mono", ui-monospace, monospace;
   cursor: pointer;
+  transition: color 130ms ease-out;
+}
+
+.shortcut-filter__search button:hover {
+  color: var(--text-primary);
 }
 
 .shortcut-filter__search button[hidden] {
@@ -1288,6 +1301,7 @@ body:has(.context-help[open]) .context-help-trigger {
   color: var(--text-secondary);
   font: 500 0.75rem/1 "IBM Plex Mono", ui-monospace, monospace;
   cursor: pointer;
+  transition: border-color 130ms ease-out, background-color 130ms ease-out, color 130ms ease-out;
 }
 
 .shortcut-filter__scopes button:hover {
@@ -1808,6 +1822,7 @@ body:has(.context-help[open]) .context-help-trigger {
   background: var(--surface-secondary);
   color: var(--text-secondary);
   text-decoration: none;
+  transition: border-color 130ms ease-out, background-color 130ms ease-out;
 }
 
 .docs-adjacent a:hover {
