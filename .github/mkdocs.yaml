@@ -43,6 +43,7 @@ markdown_extensions:
       alternate_style: true
   - toc:
       permalink: true
+      title: On this page
 
 plugins:
   - search:
