@@ -74,14 +74,6 @@
       "semanticCommitScope": "workstation"
     },
     {
-      "description": "Require approval for Go feature releases used by the workstation",
-      "matchManagers": ["mise"],
-      "matchFileNames": ["config/private_dot_config/mise/config.toml"],
-      "matchDepNames": ["go"],
-      "matchUpdateTypes": ["minor"],
-      "dependencyDashboardApproval": true
-    },
-    {
       "description": "Group the runtime and frontend images used by Docker builds",
       "matchManagers": ["dockerfile"],
       "matchFileNames": ["Dockerfile"],
