@@ -52,6 +52,57 @@
       link.setAttribute("aria-label", `Permanent link to “${title}”`);
     });
 
+    const syncDeepLinkBreadcrumb = () => {
+      document.querySelector("[data-deep-link-breadcrumb]")?.remove();
+      if (!window.location.hash) return;
+
+      let target;
+      try {
+        target = document.getElementById(decodeURIComponent(window.location.hash.slice(1)));
+      } catch {
+        return;
+      }
+      if (!target?.matches("h2, h3, h4")) return;
+
+      const headingTitle = target.getAttribute("aria-label") || target.textContent.replace("¶", "").trim();
+      const activePage = document.querySelector(".site-nav a.is-active");
+      const pageTitle = activePage?.textContent.replace("↗", "").trim()
+        || document.querySelector(".md-content h1")?.getAttribute("aria-label")
+        || "Current page";
+
+      const breadcrumb = document.createElement("nav");
+      breadcrumb.className = "deep-link-breadcrumb";
+      breadcrumb.dataset.deepLinkBreadcrumb = "";
+      breadcrumb.setAttribute("aria-label", "Breadcrumb");
+
+      const docsLink = document.createElement("a");
+      docsLink.href = document.querySelector(".docs-home")?.href || "/";
+      docsLink.textContent = "Docs";
+
+      const pageLink = document.createElement("a");
+      pageLink.href = `${window.location.pathname}${window.location.search}`;
+      pageLink.textContent = pageTitle;
+
+      const current = document.createElement("span");
+      current.setAttribute("aria-current", "location");
+      current.textContent = headingTitle;
+
+      const separator = () => {
+        const span = document.createElement("span");
+        span.className = "deep-link-breadcrumb__separator";
+        span.setAttribute("aria-hidden", "true");
+        span.textContent = "/";
+        return span;
+      };
+
+      breadcrumb.append(docsLink, separator(), pageLink, separator(), current);
+      target.before(breadcrumb);
+      requestAnimationFrame(() => breadcrumb.scrollIntoView({ block: "start" }));
+    };
+
+    window.addEventListener("hashchange", syncDeepLinkBreadcrumb, { signal });
+    syncDeepLinkBreadcrumb();
+
     const tocLinks = [...document.querySelectorAll(".md-sidebar--secondary .md-nav--secondary .md-nav__link")];
     if (tocLinks.length && !tocLinks.some((link) => link.classList.contains("md-nav__link--active"))) {
       tocLinks[0].classList.add("md-nav__link--active");
@@ -231,6 +282,84 @@
     };
     window.addEventListener("resize", scheduleShortcutRows, { signal });
     syncShortcutRows();
+
+    const shortcutFilter = document.querySelector("[data-shortcut-filter]");
+    const shortcutQuery = shortcutFilter?.querySelector("[data-shortcut-query]");
+    const shortcutClear = shortcutFilter?.querySelector("[data-shortcut-clear]");
+    const shortcutStatus = shortcutFilter?.querySelector("[data-shortcut-status]");
+    const shortcutEmpty = document.querySelector("[data-shortcut-empty]");
+    const shortcutSections = [...document.querySelectorAll("[data-shortcut-section]")];
+    const shortcutRows = shortcutSections.flatMap((section) => [...section.querySelectorAll("tbody tr")]);
+    let shortcutScope = "all";
+
+    const syncShortcutFilter = () => {
+      if (!shortcutFilter || !shortcutQuery) return;
+      const query = shortcutQuery.value.toLocaleLowerCase().replace(/\s+/g, " ").trim();
+      const queryTerms = query.split(/[\s+]+/).filter(Boolean);
+      let visibleCount = 0;
+
+      shortcutSections.forEach((section) => {
+        const scopeMatches = shortcutScope === "all" || section.dataset.shortcutSection === shortcutScope;
+        const rows = [...section.querySelectorAll("tbody tr")];
+        rows.forEach((row) => {
+          const searchText = row.textContent.toLocaleLowerCase().replace(/\s+/g, " ");
+          const queryMatches = queryTerms.every((term) => searchText.includes(term));
+          row.hidden = !scopeMatches || !queryMatches;
+          if (!row.hidden) visibleCount += 1;
+        });
+
+        section.querySelectorAll(".md-typeset__scrollwrap").forEach((tableWrap) => {
+          tableWrap.hidden = !tableWrap.querySelector("tbody tr:not([hidden])");
+        });
+
+        section.querySelectorAll("h3").forEach((heading) => {
+          const group = [];
+          let sibling = heading.nextElementSibling;
+          while (sibling && !sibling.matches("h2, h3")) {
+            group.push(sibling);
+            sibling = sibling.nextElementSibling;
+          }
+          const groupHasMatch = group.some((element) => element.querySelector?.("tbody tr:not([hidden])"));
+          heading.hidden = !groupHasMatch;
+          group.forEach((element) => {
+            if (element.matches(".md-typeset__scrollwrap")) element.hidden = !groupHasMatch;
+          });
+        });
+
+        section.hidden = !scopeMatches || !rows.some((row) => !row.hidden);
+      });
+
+      shortcutClear.hidden = !query;
+      shortcutEmpty.hidden = visibleCount !== 0;
+      shortcutStatus.textContent = `Showing ${visibleCount} of ${shortcutRows.length} shortcuts`;
+      syncShortcutRows();
+    };
+
+    if (shortcutFilter && shortcutQuery && shortcutClear && shortcutStatus && shortcutEmpty) {
+      shortcutFilter.classList.add("is-ready");
+      shortcutFilter.addEventListener("submit", (event) => event.preventDefault(), { signal });
+      shortcutQuery.addEventListener("input", syncShortcutFilter, { signal });
+      shortcutQuery.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape" || !shortcutQuery.value) return;
+        shortcutQuery.value = "";
+        syncShortcutFilter();
+      }, { signal });
+      shortcutClear.addEventListener("click", () => {
+        shortcutQuery.value = "";
+        shortcutQuery.focus();
+        syncShortcutFilter();
+      }, { signal });
+      shortcutFilter.querySelectorAll("[data-shortcut-scope]").forEach((button) => {
+        button.addEventListener("click", () => {
+          shortcutScope = button.dataset.shortcutScope;
+          shortcutFilter.querySelectorAll("[data-shortcut-scope]").forEach((candidate) => {
+            candidate.setAttribute("aria-pressed", String(candidate === button));
+          });
+          syncShortcutFilter();
+        }, { signal });
+      });
+      syncShortcutFilter();
+    }
 
     themeButton?.addEventListener(
       "click",

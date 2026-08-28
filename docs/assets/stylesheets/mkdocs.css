@@ -462,20 +462,19 @@ button.header-icon {
 }
 
 .md-typeset .highlight::before {
-  content: "";
-  display: block;
-  height: 2.25rem;
-  border-bottom: 1px solid var(--border-subtle);
-  background:
-    radial-gradient(circle at 1rem 50%, var(--code-muted) 0 0.14rem, transparent 0.16rem),
-    radial-gradient(circle at 1.65rem 50%, var(--code-muted) 0 0.14rem, transparent 0.16rem),
-    radial-gradient(circle at 2.3rem 50%, var(--code-muted) 0 0.14rem, transparent 0.16rem),
-    var(--code-toolbar);
-  opacity: 0.72;
+  display: none;
 }
 
-.md-typeset .highlighttable .highlight::before {
-  display: none;
+.md-typeset .highlight > .filename {
+  min-height: 2.5rem;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 0.625rem 3.25rem 0.625rem var(--space-4);
+  background: var(--code-toolbar);
+  color: var(--code-muted);
+  font: 500 0.75rem/1.35 "IBM Plex Mono", ui-monospace, monospace;
+  letter-spacing: 0.03em;
 }
 
 .md-typeset .highlight pre {
@@ -493,13 +492,51 @@ button.header-icon {
 }
 
 .md-typeset .highlight .md-clipboard {
-  top: -2.25rem;
+  top: -2.5rem;
   right: 0;
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 2.5rem;
+  height: 2.5rem;
   border-left: 1px solid var(--border-subtle);
   border-radius: 0;
   background: var(--code-toolbar);
+}
+
+.deep-link-breadcrumb {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: var(--space-12) 0 var(--space-2);
+  color: var(--text-tertiary);
+  font: 500 0.75rem/1.5 "IBM Plex Mono", ui-monospace, monospace;
+}
+
+.md-typeset .deep-link-breadcrumb a {
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+.md-typeset .deep-link-breadcrumb a:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
+}
+
+.deep-link-breadcrumb [aria-current="location"] {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--accent-soft);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.deep-link-breadcrumb__separator {
+  color: var(--border-strong);
+}
+
+.deep-link-breadcrumb + h2,
+.deep-link-breadcrumb + h3,
+.deep-link-breadcrumb + h4 {
+  margin-top: 0;
 }
 
 .md-typeset .admonition,
@@ -894,35 +931,137 @@ button.header-icon {
   line-height: 1.6;
 }
 
-.shortcut-jump {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--space-2);
+.shortcut-filter {
+  display: none;
   margin: calc(-1 * var(--space-6)) 0 var(--space-10);
 }
 
-.md-typeset .shortcut-jump a {
-  min-height: 3.5rem;
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
+.shortcut-filter.is-ready {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.shortcut-filter > label {
+  color: var(--text-primary);
+  font: 600 0.75rem/1.4 "IBM Plex Mono", ui-monospace, monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.shortcut-filter__search {
+  position: relative;
+}
+
+.shortcut-filter__search input {
+  width: 100%;
+  min-height: 3rem;
   border: 1px solid var(--border-default);
   border-radius: 0.5rem;
-  padding: var(--space-3);
+  padding: 0.625rem 4.5rem 0.625rem var(--space-4);
   background: var(--surface-secondary);
   color: var(--text-primary);
-  font: 500 0.75rem/1.35 "IBM Plex Mono", ui-monospace, monospace;
+  font: 400 0.875rem/1.5 "Public Sans", system-ui, sans-serif;
+}
+
+.shortcut-filter__search input::placeholder {
+  color: var(--text-tertiary);
+  opacity: 1;
+}
+
+.shortcut-filter__search input:focus-visible {
+  border-color: var(--accent-primary);
+}
+
+.shortcut-filter__search button {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  min-height: 2.5rem;
+  border: 0;
+  padding: 0 var(--space-3);
+  background: transparent;
+  color: var(--accent-soft);
+  font: 500 0.75rem/1 "IBM Plex Mono", ui-monospace, monospace;
+  cursor: pointer;
+}
+
+.shortcut-filter__search button[hidden] {
+  display: none;
+}
+
+.shortcut-filter__scopes {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.shortcut-filter__scopes button {
+  min-height: 2.5rem;
+  border: 1px solid var(--border-default);
+  border-radius: 999px;
+  padding: 0.375rem 0.875rem;
+  background: var(--surface-secondary);
+  color: var(--text-secondary);
+  font: 500 0.75rem/1 "IBM Plex Mono", ui-monospace, monospace;
+  cursor: pointer;
+}
+
+.shortcut-filter__scopes button:hover {
+  border-color: var(--accent-border);
+  color: var(--text-primary);
+}
+
+.shortcut-filter__scopes button[aria-pressed="true"] {
+  border-color: var(--accent-primary);
+  background: var(--accent-surface);
+  color: var(--accent-soft);
+}
+
+.shortcut-filter__status {
+  min-height: 1.25rem;
+  margin: 0 !important;
+  color: var(--text-tertiary);
+  font: 400 0.75rem/1.5 "IBM Plex Mono", ui-monospace, monospace;
+}
+
+.shortcut-filter-empty {
+  border: 1px dashed var(--border-default);
+  border-radius: 0.5rem;
+  padding: var(--space-8);
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.shortcut-filter-section[hidden],
+.shortcut-reference tr[hidden],
+.shortcut-reference .md-typeset__scrollwrap[hidden],
+.shortcut-reference h3[hidden],
+.shortcut-filter-empty[hidden] {
+  display: none;
+}
+
+.md-typeset .role-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-1);
   text-decoration: none;
 }
 
-.md-typeset .shortcut-jump a:hover {
+.md-typeset .role-link:hover code {
   border-color: var(--accent-primary);
   background: var(--accent-surface);
 }
 
-.shortcut-jump span {
-  color: var(--accent-primary);
-  font-size: 0.625rem;
+.role-link > span {
+  color: var(--text-tertiary);
+  font-size: 0.75rem;
+  transition: color 130ms ease-out, transform 130ms ease-out;
+}
+
+.role-link:hover > span {
+  color: var(--accent-soft);
+  transform: translate(0.08rem, -0.08rem);
 }
 
 .shortcut-reference .md-typeset__scrollwrap {
@@ -1492,8 +1631,8 @@ button.header-icon {
     gap: var(--space-2);
   }
 
-  .shortcut-jump {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .shortcut-filter__scopes button {
+    min-height: 2.75rem;
   }
 
   .shortcut-reference table thead {
