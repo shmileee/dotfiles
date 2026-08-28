@@ -456,6 +456,16 @@ button.header-icon {
   -webkit-box-decoration-break: clone;
 }
 
+.md-typeset h1 code,
+.md-typeset h2 code,
+.md-typeset h3 code,
+.md-typeset h4 code {
+  padding: 0.04em 0.24em;
+  font-size: 0.7em;
+  line-height: 1.2;
+  vertical-align: 0.06em;
+}
+
 .md-typeset pre > code {
   padding: 1.25rem 1.5rem;
   background: var(--surface-secondary);
@@ -633,6 +643,8 @@ button.header-icon {
   word-break: normal;
   overflow-wrap: normal;
   white-space: nowrap;
+  font-size: 1em;
+  line-height: 1.45;
 }
 
 .md-typeset__scrollwrap {
