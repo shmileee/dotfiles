@@ -24,7 +24,10 @@ description: Keyboard shortcuts configured for macOS, Alacritty, tmux, and Neovi
 </form>
 
 <details class="concept-primer" data-mobile-toc-anchor markdown>
-<summary>New to terminal shortcuts? Key terms</summary>
+<summary>
+  <span class="concept-primer__summary"><strong>Quick context</strong><small>Plain-language definitions</small></span>
+  <svg class="concept-primer__chevron" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m4 6 4 4 4-4" /></svg>
+</summary>
 <dl class="concept-primer__terms">
   <div><dt>tmux prefix</dt><dd>A key sequence pressed before most tmux commands; here it is Ctrl + A.</dd></div>
   <div><dt>Pane</dt><dd>One terminal area inside a tmux window.</dd></div>

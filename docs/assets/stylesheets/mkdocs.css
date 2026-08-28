@@ -835,43 +835,106 @@ button.header-icon {
 
 .md-typeset details.concept-primer {
   margin: calc(-1 * var(--space-4)) 0 var(--space-10);
-  overflow: hidden;
-  border-color: var(--accent-border);
+  overflow: visible;
+  border: 0;
+  border-block: 1px solid var(--border-subtle);
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
 }
 
 .md-typeset details.concept-primer > summary {
-  min-height: 3rem;
+  min-height: 3.25rem;
   display: flex;
   align-items: center;
-  padding: 0 var(--space-4) 0 2.5rem;
-  background: var(--accent-surface);
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  background: transparent;
   color: var(--text-primary);
   cursor: pointer;
-  font-size: 0.75rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-family: "Public Sans", system-ui, sans-serif;
+  list-style: none;
+}
+
+.md-typeset details.concept-primer > summary::-webkit-details-marker {
+  display: none;
+}
+
+.md-typeset details.concept-primer > summary::before,
+.md-typeset details.concept-primer > summary::after {
+  display: none;
+  content: none;
+}
+
+.concept-primer__summary {
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+
+.concept-primer__summary strong {
+  color: var(--text-primary);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.concept-primer__summary small {
+  overflow: hidden;
+  color: var(--text-tertiary);
+  font: 400 0.6875rem/1.4 "IBM Plex Mono", ui-monospace, monospace;
+  letter-spacing: 0.02em;
+  opacity: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.concept-primer__chevron {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: var(--text-tertiary);
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+  stroke-width: 1.5;
+  transition: transform 130ms ease-out, stroke 130ms ease-out;
+}
+
+.concept-primer > summary:hover .concept-primer__chevron {
+  stroke: var(--text-primary);
+}
+
+.concept-primer[open] .concept-primer__chevron {
+  transform: rotate(180deg);
 }
 
 .concept-primer__terms {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
   margin: 0;
+  border-top: 1px solid var(--border-subtle);
+  padding: 0 var(--space-4);
 }
 
 .concept-primer__terms > div {
   min-width: 0;
-  border-top: 1px solid var(--border-subtle);
-  padding: var(--space-4);
+  display: grid;
+  grid-template-columns: minmax(7.5rem, 0.32fr) minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--space-5);
+  padding: 0.875rem 0;
 }
 
-.concept-primer__terms > div:nth-child(even) {
-  border-left: 1px solid var(--border-subtle);
+.concept-primer__terms > div + div {
+  border-top: 1px solid var(--border-subtle);
 }
 
 .concept-primer__terms dt {
-  margin: 0 0 var(--space-1);
+  margin: 0;
   color: var(--text-primary);
-  font-weight: 600;
+  font: 600 0.8125rem/1.45 "IBM Plex Mono", ui-monospace, monospace;
 }
 
 .concept-primer__terms dd {
@@ -1778,11 +1841,12 @@ button.header-icon {
   }
 
   .concept-primer__terms {
-    grid-template-columns: minmax(0, 1fr);
+    padding-inline: var(--space-2);
   }
 
-  .concept-primer__terms > div:nth-child(even) {
-    border-left: 0;
+  .concept-primer__terms > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-1);
   }
 
   .boundary-list > div {

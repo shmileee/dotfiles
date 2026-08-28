@@ -8,7 +8,10 @@ description: Local secrets, model routing, corporate overlays, and contextual no
 <p class="page-lead">chezmoi, the dotfile manager, manages the shared OpenCode configuration, Oh My OpenAgent routing, fish integration, and tmux notification plumbing. Secrets and company-specific endpoints stay local.</p>
 
 <details class="concept-primer" data-mobile-toc-anchor markdown>
-<summary>New to OpenCode? Key terms</summary>
+<summary>
+  <span class="concept-primer__summary"><strong>Quick context</strong><small>Plain-language definitions</small></span>
+  <svg class="concept-primer__chevron" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m4 6 4 4 4-4" /></svg>
+</summary>
 <dl class="concept-primer__terms">
   <div><dt>OpenCode</dt><dd>An AI coding tool that can use models, plugins, formatters, and external services.</dd></div>
   <div><dt>OmO</dt><dd>Oh My OpenAgent, the layer that assigns agents and task categories to models.</dd></div>
