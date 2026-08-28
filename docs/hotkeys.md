@@ -7,14 +7,25 @@ description: Keyboard shortcuts configured for macOS, Alacritty, tmux, and Neovi
 
 <p class="page-lead">Choose the layer where the shortcut runs. Alacritty sends many macOS-style shortcuts directly to tmux; tmux commands use <kbd>Ctrl</kbd> + <kbd>A</kbd> as their prefix.</p>
 
-<nav class="shortcut-jump" aria-label="Shortcut groups">
-  <a href="#macos-system-shortcuts"><span>01</span>macOS</a>
-  <a href="#alacritty-and-tmux"><span>02</span>Alacritty</a>
-  <a href="#tmux-prefix-commands"><span>03</span>tmux prefix</a>
-  <a href="#neovim-additions"><span>04</span>Neovim</a>
-</nav>
+<form class="shortcut-filter" role="search" data-shortcut-filter>
+  <label for="shortcut-query">Find a shortcut</label>
+  <div class="shortcut-filter__search">
+    <input id="shortcut-query" type="search" inputmode="search" autocomplete="off" placeholder="Search keys or actions" data-shortcut-query>
+    <button type="button" data-shortcut-clear hidden>Clear</button>
+  </div>
+  <div class="shortcut-filter__scopes" role="group" aria-label="Filter shortcuts by layer">
+    <button type="button" aria-pressed="true" data-shortcut-scope="all">All</button>
+    <button type="button" aria-pressed="false" data-shortcut-scope="macos">macOS</button>
+    <button type="button" aria-pressed="false" data-shortcut-scope="alacritty">Alacritty</button>
+    <button type="button" aria-pressed="false" data-shortcut-scope="tmux">tmux</button>
+    <button type="button" aria-pressed="false" data-shortcut-scope="neovim">Neovim</button>
+  </div>
+  <p class="shortcut-filter__status" aria-live="polite" data-shortcut-status></p>
+</form>
 
-<div class="shortcut-reference" markdown>
+<p class="shortcut-filter-empty" data-shortcut-empty hidden>No shortcuts match this search.</p>
+
+<section class="shortcut-reference shortcut-filter-section" data-shortcut-section="macos" markdown>
 
 ## macOS system shortcuts
 
@@ -27,6 +38,10 @@ These mappings are applied by the `system_defaults` Ansible role.
 
 The default “select previous input source” shortcut is disabled to prevent it
 from competing with the configured next-source binding.
+
+</section>
+
+<section class="shortcut-reference shortcut-filter-section" data-shortcut-section="alacritty" markdown>
 
 ## Alacritty and tmux
 
@@ -51,6 +66,10 @@ These shortcuts work from Alacritty without entering the tmux prefix first.
 | ++cmd+1++ … ++cmd+9++ | Select tmux window 1–9 |
 | ++cmd+f++ | Enter copy mode and search forward |
 | ++cmd+0++ | Reset the Alacritty font size |
+
+</section>
+
+<section class="shortcut-reference shortcut-filter-section" data-shortcut-section="tmux" markdown>
 
 ## tmux prefix commands
 
@@ -100,6 +119,10 @@ Press ++ctrl+a++, release it, then press the command key.
 Copy mode uses vi keys and supports the mouse wheel, Page Up/Down, and
 Option-based line or half-page scrolling.
 
+</section>
+
+<section class="shortcut-reference shortcut-filter-section" data-shortcut-section="neovim" markdown>
+
 ## Neovim additions
 
 LazyVim provides most editor mappings. This repository adds only a small layer:
@@ -111,7 +134,7 @@ LazyVim provides most editor mappings. This repository adds only a small layer:
 | Normal | `<leader><leader>` | Clear search highlighting |
 | Visual | `>` / `<` | Indent while keeping the selection active |
 
-</div>
+</section>
 
 ## Source of truth
 

@@ -43,7 +43,7 @@ and the files under
     Install available system updates and Apple's command-line tools on a fresh
     machine:
 
-    ```bash
+    ```bash title="Update macOS and install developer tools — modifies this machine"
     sudo softwareupdate -i -a
     xcode-select --install
     ```
@@ -59,7 +59,7 @@ Other operating systems are rejected by the bootstrap script.
 
 Clone the repository so you can inspect exactly what will execute:
 
-```bash
+```bash title="Clone and review the repository"
 git clone https://github.com/shmileee/dotfiles.git
 cd dotfiles
 
@@ -69,7 +69,7 @@ less scripts/common/ansible/main.yaml
 
 When you are comfortable with the configuration, run the complete setup:
 
-```bash
+```bash title="Run the complete setup — modifies this machine"
 ./scripts/setup.sh --all
 ```
 
@@ -78,7 +78,7 @@ Ansible roles, or managed dotfiles are included.
 
 ## Fast path: bootstrap a new machine
 
-```bash
+```bash title="Bootstrap a new machine — modifies this machine"
 curl -fsSL oponomarov.com/d | sh -s -- --all
 ```
 
@@ -91,7 +91,7 @@ setup, and removes the temporary checkout when it exits.
     If you want the convenience of the bootstrap without piping directly into
     a shell:
 
-    ```bash
+    ```bash title="Download, review, then run — modifies this machine"
     curl -fsSL https://raw.githubusercontent.com/shmileee/dotfiles/master/scripts/setup.sh > setup.sh
     less setup.sh
     chmod +x setup.sh
@@ -150,7 +150,7 @@ Stage flags must be run from a repository checkout.
 If the prerequisites are already present, ask Ansible to preview supported
 changes:
 
-```bash
+```bash title="Preview supported Ansible changes"
 ./scripts/common/ansible.sh --all --check
 ```
 
@@ -185,15 +185,15 @@ directory, which makes a fork straightforward to test before publishing it.
 
 | Role | Responsibility |
 | --- | --- |
-| [`common`](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/common) | Shared Homebrew packages plus platform-specific packages and applications |
-| [`fonts`](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/fonts) | Developer fonts for macOS or Debian |
-| [`dotfiles`](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/dotfiles) | Install chezmoi and apply the current checkout |
-| [`fish`](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/fish) | Install Fish, make it the login shell, and synchronize Fisher plugins |
-| [`mise`](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/mise) | Install the tools declared in mise configuration |
-| [`neovim`](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/neovim) | Install LazyVim plugins in headless mode |
-| [`docker`](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/docker) | Install Docker outside the validation container |
-| [`tmux`](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/tmux) | Install tmux, TPM, and declared plugins |
-| [`system_defaults`](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/system_defaults) | Apply macOS preferences, Dock items, and keyboard settings |
+| [`common` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/common){ .role-link aria-label="common role on GitHub" } | Shared Homebrew packages plus platform-specific packages and applications |
+| [`fonts` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/fonts){ .role-link aria-label="fonts role on GitHub" } | Developer fonts for macOS or Debian |
+| [`dotfiles` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/dotfiles){ .role-link aria-label="dotfiles role on GitHub" } | Install chezmoi and apply the current checkout |
+| [`fish` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/fish){ .role-link aria-label="fish role on GitHub" } | Install Fish, make it the login shell, and synchronize Fisher plugins |
+| [`mise` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/mise){ .role-link aria-label="mise role on GitHub" } | Install the tools declared in mise configuration |
+| [`neovim` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/neovim){ .role-link aria-label="neovim role on GitHub" } | Install LazyVim plugins in headless mode |
+| [`docker` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/docker){ .role-link aria-label="docker role on GitHub" } | Install Docker outside the validation container |
+| [`tmux` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/tmux){ .role-link aria-label="tmux role on GitHub" } | Install tmux, TPM, and declared plugins |
+| [`system_defaults` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/system_defaults){ .role-link aria-label="system_defaults role on GitHub" } | Apply macOS preferences, Dock items, and keyboard settings |
 
 </div>
 
@@ -201,7 +201,7 @@ directory, which makes a fork straightforward to test before publishing it.
 
 Pull the latest changes, review them, and rerun the Ansible stage:
 
-```bash
+```bash title="Update and reapply the workstation configuration"
 git pull --ff-only
 git diff HEAD@{1} -- scripts/common/ansible config
 ./scripts/setup.sh --ansible
@@ -215,13 +215,13 @@ report their own updates.
 
 Run the published image:
 
-```bash
+```bash title="Run the published Linux validation image"
 docker run --rm -it shmileee/dotfiles
 ```
 
 Or build the current checkout:
 
-```bash
+```bash title="Build the Linux validation image"
 docker buildx build --platform linux/arm64 -t dotfiles --progress plain .
 ```
 

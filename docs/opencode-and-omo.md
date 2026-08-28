@@ -54,7 +54,7 @@ from Git:
 
 Create them with restrictive permissions:
 
-```bash
+```bash title="Create private secret files"
 install -d -m 700 "$HOME/.config/opencode/secrets"
 install -m 600 /dev/null "$HOME/.config/opencode/secrets/home-assistant-mcp-url"
 install -m 600 /dev/null "$HOME/.config/opencode/secrets/home-assistant-access-token"
@@ -73,13 +73,13 @@ secret contents.
 
 Put company-specific OpenCode configuration in:
 
-```text
+```text title="Unmanaged corporate configuration path"
 ~/.config/opencode/opencode.corp.json
 ```
 
 This file is unmanaged and should use mode `0600`:
 
-```bash
+```bash title="Create a private corporate overlay"
 install -m 600 /dev/null "$HOME/.config/opencode/opencode.corp.json"
 ```
 
@@ -134,7 +134,7 @@ After changing the notifier declaration:
 
 Confirm that both secret files exist, contain a value, and use mode `0600`:
 
-```bash
+```bash title="Verify secret file permissions"
 stat -f '%Sp %N' "$HOME/.config/opencode/secrets/"*  # macOS
 stat -c '%A %n' "$HOME/.config/opencode/secrets/"*  # Linux
 ```
@@ -143,7 +143,7 @@ stat -c '%A %n' "$HOME/.config/opencode/secrets/"*  # Linux
 
 Open a new Fish shell and confirm the variable points to the expected file:
 
-```fish
+```fish title="Inspect the active corporate configuration"
 echo $OPENCODE_CONFIG
 ```
 
