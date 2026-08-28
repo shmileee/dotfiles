@@ -59,7 +59,12 @@ rejected.
 
 ## Recommended: review, then run
 
-Clone the repository so you can inspect exactly what the setup will run:
+Clone the repository so you can inspect exactly what the setup will run. Pay
+particular attention to
+[`config.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml)
+and the
+[`main.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/main.yaml)
+playbook:
 
 ```bash
 git clone https://github.com/shmileee/dotfiles.git
@@ -84,7 +89,9 @@ Ansible roles, or managed dotfiles are included.
 curl -fsSL oponomarov.com/d | sh -s -- --all
 ```
 
-The short URL redirects to `scripts/setup.sh` on the `master` branch. The
+The short URL redirects to
+[`scripts/setup.sh`](https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh)
+on the `master` branch. The
 script downloads that branch into a unique temporary directory, runs the full
 setup, and removes the temporary checkout when it exits.
 
@@ -141,11 +148,11 @@ Stage flags must be run from a repository checkout.
 
 | Command | Purpose |
 | --- | --- |
-| `./scripts/setup.sh --deps` | Install the Linux apt prerequisites. Linux only. |
-| `./scripts/setup.sh --brew` | Install Homebrew if it is missing. |
-| `./scripts/setup.sh --ansible` | Install Ansible collections and run every role. |
-| `./scripts/setup.sh --all` | Run the complete platform-specific sequence. |
-| `./scripts/setup.sh` | Same as `--all`. |
+| [`./scripts/setup.sh --deps`](https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh) | Install the Linux apt prerequisites. Linux only. |
+| [`./scripts/setup.sh --brew`](https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh) | Install Homebrew if it is missing. |
+| [`./scripts/setup.sh --ansible`](https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh) | Install Ansible collections and run every role. |
+| [`./scripts/setup.sh --all`](https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh) | Run the complete platform-specific sequence. |
+| [`./scripts/setup.sh`](https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh) | Same as `--all`. |
 
 </div>
 
@@ -170,16 +177,19 @@ Make changes in four places:
 
 | Area | Source of truth | Typical changes |
 | --- | --- | --- |
-| Packages and applications | `scripts/common/ansible/config.yaml` | Homebrew packages, casks, Dock items, keyboard shortcuts |
-| System behavior | `scripts/common/ansible/roles/` | Installation logic and macOS defaults |
-| Home-directory files | `config/` | fish, Git, tmux, Neovim, Alacritty, OpenCode |
-| Tool versions | `config/private_dot_config/mise/config.toml` | Language runtimes and developer tools |
+| Packages and applications | [`scripts/common/ansible/config.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml) | Homebrew packages, casks, Dock items, keyboard shortcuts |
+| System behavior | [`scripts/common/ansible/roles/`](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles) | Installation logic and macOS defaults |
+| Home-directory files | [`config/`](https://github.com/shmileee/dotfiles/tree/master/config) | fish, Git, tmux, Neovim, Alacritty, OpenCode |
+| Tool versions | [`config/private_dot_config/mise/config.toml`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/mise/config.toml) | Language runtimes and developer tools |
 
 </div>
 
-The `dotfiles` section in `config.yaml` controls which repository and branch
-chezmoi initializes. The playbook then applies the current checkout's `config/`
-directory, which makes a fork straightforward to test before publishing it.
+The `dotfiles` section in
+[`config.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml)
+controls which repository and branch chezmoi initializes. The playbook then
+applies the current checkout's
+[`config/`](https://github.com/shmileee/dotfiles/tree/master/config) directory,
+which makes a fork straightforward to test before publishing it.
 
 ### Ansible roles
 
@@ -227,7 +237,7 @@ Or build the current checkout:
 docker buildx build --platform linux/arm64 -t dotfiles --progress plain .
 ```
 
-The image uses Ubuntu 24.04 and runs the full Ansible installation as the
+The image uses Ubuntu and runs the full Ansible installation as the
 non-root `linuxbrew` user. The `docker` role is intentionally skipped inside the
 container.
 

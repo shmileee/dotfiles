@@ -29,7 +29,9 @@ description: Keyboard shortcuts configured for macOS, Alacritty, tmux, and Neovi
 
 ## macOS system shortcuts
 
-These mappings are applied by the `system_defaults` Ansible role.
+These mappings are applied by the
+[`system_defaults`](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/system_defaults)
+Ansible role.
 
 | Shortcut | Action |
 | --- | --- |
@@ -110,8 +112,8 @@ Press ++ctrl+a++, release it, and then press the command key.
 
 | Command | Action |
 | --- | --- |
-| ++ctrl+a++ then ++ctrl+e++ | Edit `tmux.conf`, then reload it |
-| ++ctrl+a++ then ++ctrl+r++ | Reload `tmux.conf` |
+| ++ctrl+a++ then ++ctrl+e++ | Edit [`tmux.conf`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf), then reload it |
+| ++ctrl+a++ then ++ctrl+r++ | Reload [`tmux.conf`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf) |
 | ++ctrl+s++ | Enter copy mode without the prefix |
 | ++ctrl+a++ then `p` | Paste the latest tmux buffer |
 | ++ctrl+a++ then ++ctrl+p++ | Choose a tmux buffer |
