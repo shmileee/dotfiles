@@ -53,15 +53,28 @@
       retries: 3
       delay: 5
 
-    - name: "update fisher plugins"
+    - name: "inspect fisher plugins"
       # fish-async-prompt stays commit-pinned until prompt callbacks preserve
       # pipeline status reliably.
       ansible.builtin.command:
-        argv: ['{{ fish_path }}', -c, fisher update]
-      register: fisher_update
+        argv: ['{{ fish_path }}', -c, fisher list]
+      check_mode: false
+      register: fisher_plugins
       changed_when: >-
-        fisher_update.stdout
-        | regex_search('(?m)^(Installed|Updated|Removed) [1-9]')
-        is not none
+        fisher_plugins.stdout_lines | map('lower') | sort
+        != fisher_plugin_specs | map('lower') | sort
 
+    - name: "update fisher plugins"
+      ansible.builtin.command:
+        argv: ['{{ fish_path }}', -c, fisher update]
+      when: fisher_plugins is changed
+
+  vars:
+    fisher_plugin_specs: >-
+      {{
+        lookup(
+          'ansible.builtin.file',
+          dotfiles.checkout + '/config/private_dot_config/private_fish/private_fish_plugins'
+        ).splitlines()
+      }}
   tags: fish_config
