@@ -1,4 +1,5 @@
-docs_dir: ../docs
+docs_dir: docs
+site_dir: site
 site_name: dotfiles
 site_description: Reproducible workstation setup and the reasoning behind it.
 site_url: https://dotfiles.oponomarov.com
@@ -12,7 +13,7 @@ nav:
 
 theme:
   name: material
-  custom_dir: ../docs/overrides
+  custom_dir: docs/overrides
   palette:
     scheme: slate
   language: en

@@ -24,6 +24,6 @@ tags
 .proxy
 .venv
 
-# mkdocs
-.github/site
+# MkDocs build output
+/site/
 .omo/
