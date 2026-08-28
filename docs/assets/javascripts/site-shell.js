@@ -16,6 +16,22 @@
     }
   }
 
+  function normalizePersistentNavigationLinks() {
+    const links = document.querySelectorAll(
+      '[data-md-component="header"] a[href], .md-sidebar--primary a[href]',
+    );
+
+    links.forEach((link) => {
+      const href = link.getAttribute("href");
+      if (href === null || href.startsWith("#")) return;
+
+      const target = new URL(href, window.location.href);
+      if (target.origin !== window.location.origin) return;
+
+      link.setAttribute("href", `${target.pathname}${target.search}${target.hash}`);
+    });
+  }
+
   function setupPage() {
     pageController?.abort();
     pageController = new AbortController();
@@ -35,6 +51,7 @@
     const progress = document.querySelector("[data-reading-progress]");
 
     applyTheme(localStorage.getItem("om-theme") || "dark");
+    normalizePersistentNavigationLinks();
 
     const closeContextHelp = () => {
       if (!contextHelpDialog?.open) return;
