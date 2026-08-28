@@ -332,7 +332,7 @@ rather than fetching <code>master</code> again.</p>
 <li>Run <code>brew upgrade</code> whenever a full Homebrew upgrade is desired.</li>
 <li>Let Renovate propose changes to versions declared in this repository.</li>
 <li>Use Lazy, Fisher, and TPM directly for intentional plugin updates, then review
-  and commit any manifest or lockfile changes.</li>
+  and commit the resulting lockfile, manifest, or Ansible commit-pin changes.</li>
 </ul>
 <p>The checked-out chezmoi source is authoritative. Setup force-applies it, so add
 intentional edits to the chezmoi-managed source before rerunning Ansible.</p>
