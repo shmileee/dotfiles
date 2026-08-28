@@ -462,19 +462,20 @@ button.header-icon {
 }
 
 .md-typeset .highlight::before {
-  display: none;
+  content: "";
+  display: block;
+  height: 2.25rem;
+  border-bottom: 1px solid var(--border-subtle);
+  background:
+    radial-gradient(circle at 1rem 50%, var(--code-muted) 0 0.14rem, transparent 0.16rem),
+    radial-gradient(circle at 1.65rem 50%, var(--code-muted) 0 0.14rem, transparent 0.16rem),
+    radial-gradient(circle at 2.3rem 50%, var(--code-muted) 0 0.14rem, transparent 0.16rem),
+    var(--code-toolbar);
+  opacity: 0.72;
 }
 
-.md-typeset .highlight > .filename {
-  min-height: 2.5rem;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid var(--border-subtle);
-  padding: 0.625rem 3.25rem 0.625rem var(--space-4);
-  background: var(--code-toolbar);
-  color: var(--code-muted);
-  font: 500 0.75rem/1.35 "IBM Plex Mono", ui-monospace, monospace;
-  letter-spacing: 0.03em;
+.md-typeset .highlighttable .highlight::before {
+  display: none;
 }
 
 .md-typeset .highlight pre {
@@ -492,23 +493,33 @@ button.header-icon {
 }
 
 .md-typeset .highlight .md-clipboard {
-  top: -2.5rem;
+  top: -2.25rem;
   right: 0;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.25rem;
+  height: 2.25rem;
   border-left: 1px solid var(--border-subtle);
   border-radius: 0;
   background: var(--code-toolbar);
 }
 
 .deep-link-breadcrumb {
+  position: sticky;
+  top: 4rem;
+  z-index: 5;
+  width: fit-content;
+  max-width: 100%;
   min-width: 0;
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  margin: var(--space-12) 0 var(--space-2);
+  margin: 0 0 var(--space-6);
+  border: 1px solid var(--border-default);
+  border-radius: 999px;
+  padding: 0.4rem 0.75rem;
+  background: var(--surface-header);
   color: var(--text-tertiary);
   font: 500 0.75rem/1.5 "IBM Plex Mono", ui-monospace, monospace;
+  backdrop-filter: blur(0.75rem);
 }
 
 .md-typeset .deep-link-breadcrumb a {
@@ -531,12 +542,6 @@ button.header-icon {
 
 .deep-link-breadcrumb__separator {
   color: var(--border-strong);
-}
-
-.deep-link-breadcrumb + h2,
-.deep-link-breadcrumb + h3,
-.deep-link-breadcrumb + h4 {
-  margin-top: 0;
 }
 
 .md-typeset .admonition,
