@@ -770,6 +770,11 @@ button.header-icon {
   font-size: 0.75rem;
 }
 
+.md-nav--secondary .md-nav__item[hidden],
+.mobile-page-toc__nav .md-nav__item[hidden] {
+  display: none;
+}
+
 .md-search__form,
 .md-search__output {
   background: var(--surface-secondary);
