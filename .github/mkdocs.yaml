@@ -1,5 +1,7 @@
 docs_dir: ../docs
 site_name: Hitchhiker's Guide to the Dotfiles
+site_description: Reproducible workstation setup and the reasoning behind it.
+site_url: https://dotfiles.oponomarov.com
 repo_url: https://github.com/shmileee/dotfiles
 edit_uri: blob/master/docs
 copyright: Copyright &copy; 2021 - 2026 Oleksandr Ponomarov
@@ -12,25 +14,11 @@ nav:
 
 theme:
   name: material
+  custom_dir: ../docs/overrides
   palette:
-    - media: "(prefers-color-scheme)"
-      toggle:
-        icon: material/brightness-auto
-        name: Switch to light mode
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
-      toggle:
-        icon: material/brightness-7
-        name: Switch to dark mode
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
-      toggle:
-        icon: material/brightness-4
-        name: Switch to system preference
+    scheme: slate
   language: en
-  font:
-    text: Roboto
-    code: JetBrains Mono
+  font: false
   icon:
     repo: fontawesome/brands/github
   features:
@@ -44,10 +32,11 @@ theme:
     - navigation.prune
     - toc.follow
     - navigation.top
-    - header.autohide
 
 markdown_extensions:
   - admonition
+  - attr_list
+  - md_in_html
   - pymdownx.highlight
   - pymdownx.superfences
   - pymdownx.keys
@@ -64,6 +53,13 @@ plugins:
   - search:
       lang: en
   - mermaid2
+
+extra_css:
+  - assets/stylesheets/design-system.css
+  - assets/stylesheets/mkdocs.css
+
+extra_javascript:
+  - assets/javascripts/site-shell.js
 
 extra:
   generator: false
