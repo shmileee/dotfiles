@@ -7,6 +7,15 @@ description: Keyboard shortcuts configured for macOS, Alacritty, tmux, and Neovi
 
 <p class="page-lead">Start with the task you want to perform. Alacritty sends many macOS-style shortcuts directly to tmux; tmux commands use <kbd>Ctrl</kbd> + <kbd>A</kbd> as their prefix.</p>
 
+<nav class="shortcut-jump" aria-label="Shortcut groups">
+  <a href="#macos-system-shortcuts"><span>01</span>macOS</a>
+  <a href="#alacritty-and-tmux"><span>02</span>Direct</a>
+  <a href="#tmux-prefix-commands"><span>03</span>tmux prefix</a>
+  <a href="#neovim-additions"><span>04</span>Neovim</a>
+</nav>
+
+<div class="shortcut-reference" markdown>
+
 ## macOS system shortcuts
 
 These mappings are applied by the `system_defaults` Ansible role.
@@ -101,6 +110,8 @@ LazyVim provides most editor mappings. This repository adds only a small layer:
 | Normal | `O` | Create a blank line above without staying in Insert mode |
 | Normal | `<leader><leader>` | Clear search highlighting |
 | Visual | `>` / `<` | Indent while keeping the selection active |
+
+</div>
 
 ## Source of truth
 

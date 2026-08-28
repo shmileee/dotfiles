@@ -9,12 +9,28 @@ description: Local secrets, model routing, corporate overlays, and contextual no
 
 ## What is managed
 
-| Surface | Managed file | Responsibility |
-| --- | --- | --- |
-| OpenCode | `~/.config/opencode/opencode.json` | Plugins, formatters, language servers, and personal MCP configuration |
-| OmO | `~/.omo/omo.jsonc` | Agent categories, model choices, fallbacks, and disabled hooks |
-| Fish | `~/.config/fish/conf.d/opencode.fish` | Activate the optional corporate configuration |
-| tmux | `~/.config/tmux/tmux.conf` | Install the contextual-notifier companion plugin |
+<div class="surface-grid">
+  <article>
+    <span>OpenCode</span>
+    <code class="path-token">~/.config/<wbr>opencode/<wbr>opencode.json</code>
+    <p>Plugins, formatters, language servers, and personal MCP configuration.</p>
+  </article>
+  <article>
+    <span>OmO</span>
+    <code class="path-token">~/.omo/<wbr>omo.jsonc</code>
+    <p>Agent categories, model choices, fallbacks, and disabled hooks.</p>
+  </article>
+  <article>
+    <span>Fish</span>
+    <code class="path-token">~/.config/<wbr>fish/<wbr>conf.d/<wbr>opencode.fish</code>
+    <p>Activation of the optional corporate configuration.</p>
+  </article>
+  <article>
+    <span>tmux</span>
+    <code class="path-token">~/.config/<wbr>tmux/<wbr>tmux.conf</code>
+    <p>Installation of the contextual-notifier companion plugin.</p>
+  </article>
+</div>
 
 The OpenCode configuration currently declares the Claude authentication,
 Oh My OpenAgent, and contextual-notifier plugins. OpenCode installs declared
@@ -33,8 +49,8 @@ plugins with Bun when it starts.
 The managed OpenCode file references two files that are deliberately absent
 from Git:
 
-- `~/.config/opencode/secrets/home-assistant-mcp-url`
-- `~/.config/opencode/secrets/home-assistant-access-token`
+- <code class="path-token">~/.config/<wbr>opencode/<wbr>secrets/<wbr>home-assistant-mcp-url</code>
+- <code class="path-token">~/.config/<wbr>opencode/<wbr>secrets/<wbr>home-assistant-access-token</code>
 
 Create them with restrictive permissions:
 
@@ -104,13 +120,13 @@ After changing the notifier declaration:
 
 ## Deliberately unmanaged
 
-| Path or category | Why it stays local |
-| --- | --- |
-| `opencode.corp.json` | Contains company-specific configuration |
-| Files under `opencode/secrets/` | Contain credentials or private endpoints |
-| `tui.json` | Uses a separate server-side extension surface |
-| `opencode-notifier.json` | Is not referenced by the active notifier |
-| Caches, backups, lockfiles, and dependency directories | Are generated at runtime |
+<div class="boundary-list">
+  <div><code>opencode.corp.json</code><span>Company-specific configuration</span></div>
+  <div><code>opencode/secrets/</code><span>Credentials and private endpoints</span></div>
+  <div><code>tui.json</code><span>A separate server-side extension surface</span></div>
+  <div><code>opencode-notifier.json</code><span>Not referenced by the active notifier</span></div>
+  <div><strong>Runtime files</strong><span>Caches, backups, lockfiles, and dependency directories</span></div>
+</div>
 
 ## Troubleshooting
 

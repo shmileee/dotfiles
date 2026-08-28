@@ -412,7 +412,7 @@ body[data-md-color-scheme] {
 
 .md-typeset pre > code {
   padding: 1.25rem 1.5rem;
-  background: var(--code-surface);
+  background: var(--surface-secondary);
   color: var(--code-text);
   font-size: 0.8125rem;
   line-height: 1.75;
@@ -420,11 +420,33 @@ body[data-md-color-scheme] {
 
 .md-typeset .highlight,
 .md-typeset .highlighttable {
+  position: relative;
   margin: 0 0 var(--space-6);
   overflow: hidden;
-  border: 1px solid var(--code-border);
-  border-radius: 0.5rem;
-  background: var(--code-surface);
+  border: 1px solid var(--border-default);
+  border-radius: 0.625rem;
+  background: var(--surface-secondary);
+}
+
+.md-typeset .highlight::before {
+  content: "";
+  display: block;
+  height: 2.25rem;
+  border-bottom: 1px solid var(--border-subtle);
+  background:
+    radial-gradient(circle at 1rem 50%, var(--code-muted) 0 0.14rem, transparent 0.16rem),
+    radial-gradient(circle at 1.65rem 50%, var(--code-muted) 0 0.14rem, transparent 0.16rem),
+    radial-gradient(circle at 2.3rem 50%, var(--code-muted) 0 0.14rem, transparent 0.16rem),
+    var(--code-toolbar);
+  opacity: 0.72;
+}
+
+.md-typeset .highlighttable .highlight::before {
+  display: none;
+}
+
+.md-typeset .highlight pre {
+  margin: 0;
 }
 
 .md-typeset .highlighttable .highlight {
@@ -435,6 +457,16 @@ body[data-md-color-scheme] {
 
 .md-clipboard {
   color: var(--code-muted);
+}
+
+.md-typeset .highlight .md-clipboard {
+  top: -2.25rem;
+  right: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-left: 1px solid var(--border-subtle);
+  border-radius: 0;
+  background: var(--code-toolbar);
 }
 
 .md-typeset .admonition,
@@ -466,6 +498,13 @@ body[data-md-color-scheme] {
   background: var(--accent-surface);
   color: var(--text-primary);
   font-family: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+.md-typeset td code,
+.md-typeset th code {
+  word-break: normal;
+  overflow-wrap: normal;
+  white-space: nowrap;
 }
 
 .md-typeset__scrollwrap {
@@ -645,6 +684,200 @@ body[data-md-color-scheme] {
   color: var(--text-secondary);
   font-size: 0.875rem;
   line-height: 1.6;
+}
+
+.surface-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2);
+  margin: var(--space-6) 0 var(--space-8);
+}
+
+.surface-grid article {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 4rem minmax(17rem, 1.2fr) minmax(0, 1fr);
+  align-items: start;
+  gap: var(--space-4);
+  border: 1px solid var(--border-default);
+  border-radius: 0.5rem;
+  padding: var(--space-4);
+  background: var(--surface-secondary);
+}
+
+.surface-grid span {
+  display: block;
+  margin: 0;
+  color: var(--accent-primary);
+  font: 600 0.6875rem/1.4 "IBM Plex Mono", ui-monospace, monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.md-typeset .surface-grid .path-token,
+.md-typeset .path-token {
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+.surface-grid .path-token {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.7;
+}
+
+.surface-grid p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.boundary-list {
+  margin: var(--space-6) 0 var(--space-8);
+  border-block: 1px solid var(--border-default);
+}
+
+.boundary-list > div {
+  display: grid;
+  grid-template-columns: minmax(11rem, 0.8fr) minmax(0, 1.2fr);
+  align-items: baseline;
+  gap: var(--space-5);
+  padding: var(--space-4) 0;
+}
+
+.boundary-list > div + div {
+  border-top: 1px solid var(--border-subtle);
+}
+
+.boundary-list code,
+.boundary-list strong {
+  width: fit-content;
+  max-width: 100%;
+}
+
+.boundary-list span {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.shortcut-jump {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin: calc(-1 * var(--space-6)) 0 var(--space-10);
+}
+
+.md-typeset .shortcut-jump a {
+  min-height: 3.5rem;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  border: 1px solid var(--border-default);
+  border-radius: 0.5rem;
+  padding: var(--space-3);
+  background: var(--surface-secondary);
+  color: var(--text-primary);
+  font: 500 0.75rem/1.35 "IBM Plex Mono", ui-monospace, monospace;
+  text-decoration: none;
+}
+
+.md-typeset .shortcut-jump a:hover {
+  border-color: var(--accent-primary);
+  background: var(--accent-surface);
+}
+
+.shortcut-jump span {
+  color: var(--accent-primary);
+  font-size: 0.625rem;
+}
+
+.shortcut-reference .md-typeset__scrollwrap {
+  margin-block: var(--space-3) var(--space-8);
+}
+
+.shortcut-reference .md-typeset__table {
+  width: 100%;
+  padding: 0;
+}
+
+.md-typeset .shortcut-reference table:not([class]) {
+  width: 100%;
+  display: block;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  font-size: 0.875rem;
+}
+
+.shortcut-reference table thead,
+.shortcut-reference table tbody {
+  display: block;
+}
+
+.shortcut-reference table tr {
+  display: grid;
+  grid-template-columns: minmax(12rem, 0.85fr) minmax(0, 1.15fr);
+}
+
+.shortcut-reference table:has(th:nth-child(3)) tr {
+  grid-template-columns: 5rem minmax(9rem, 0.75fr) minmax(0, 1.25fr);
+}
+
+.shortcut-reference table thead tr {
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.shortcut-reference table tbody tr {
+  margin-top: var(--space-2);
+  border: 1px solid var(--border-default);
+  border-radius: 0.5rem;
+  background: var(--surface-secondary);
+  transition: border-color 130ms ease-out, background-color 130ms ease-out;
+}
+
+.shortcut-reference table tbody tr:hover {
+  border-color: var(--accent-border);
+  background: color-mix(in srgb, var(--surface-secondary) 88%, var(--accent-primary));
+}
+
+.md-typeset .shortcut-reference table th,
+.md-typeset .shortcut-reference table td {
+  min-width: 0;
+  border: 0;
+  padding: var(--space-3) var(--space-4);
+  vertical-align: middle;
+}
+
+.md-typeset .shortcut-reference table th {
+  background: transparent;
+  color: var(--text-tertiary);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.shortcut-reference table td:first-child,
+.shortcut-reference table:has(th:nth-child(3)) td:nth-child(2) {
+  white-space: nowrap;
+}
+
+.shortcut-reference table td:first-child {
+  background: var(--code-toolbar);
+  color: var(--text-primary);
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+.shortcut-reference table td + td {
+  border-left: 1px solid var(--border-subtle);
+}
+
+.shortcut-reference table .keys {
+  white-space: nowrap;
 }
 
 .md-typeset .tabbed-labels {
@@ -973,6 +1206,65 @@ body[data-md-color-scheme] {
   .doc-card-grid {
     grid-template-columns: minmax(0, 1fr);
   }
+
+  .surface-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .surface-grid article {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-2);
+  }
+
+  .surface-grid .path-token {
+    margin-bottom: var(--space-2);
+  }
+
+  .boundary-list > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-2);
+  }
+
+  .shortcut-jump {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .shortcut-reference table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .shortcut-reference table tr,
+  .shortcut-reference table:has(th:nth-child(3)) tr {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .md-typeset .shortcut-reference table td {
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .shortcut-reference table td + td {
+    border-top: 1px solid var(--border-subtle);
+    border-left: 0;
+  }
+
+  .shortcut-reference table:has(th:nth-child(3)) td:first-child {
+    padding-bottom: 0;
+    color: var(--text-tertiary);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .shortcut-reference table:has(th:nth-child(3)) td:nth-child(2) {
+    border-top: 0;
+    background: var(--code-toolbar);
+  }
 }
 
 @media (max-width: 480px) {
@@ -1002,5 +1294,10 @@ body[data-md-color-scheme] {
   .footer-inner {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .md-typeset pre > code {
+    padding: var(--space-4);
+    font-size: 0.75rem;
   }
 }
