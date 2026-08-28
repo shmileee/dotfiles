@@ -15,8 +15,6 @@ brew:
     - alacritty
     - alt-tab
     - aws-vault
-    - chatgpt
-    - google-chrome
     - hiddenbar
     - kdiff3
     - rectangle
@@ -57,8 +55,6 @@ brew:
     linux: []
 
 dotfiles:
-  repo: "https://github.com/shmileee/dotfiles"
-  branch: "master"
   checkout: "{{ playbook_dir }}/../../.."
 
 dockitems:
@@ -116,13 +112,13 @@ tmux_plugins:
     update: true
   - repo: https://github.com/shmileee/opencode-contextual-notifier
     name: opencode-contextual-notifier
-    version: HEAD
-    update: false
+    version: eebf6c146a14d860ece6242564ba8cddb4819a10
+    update: true
   - repo: https://github.com/tmux-plugins/tmux-yank
     name: tmux-yank
-    version: HEAD
-    update: false
+    version: acfd36e4fcba99f8310a7dfb432111c242fe7392
+    update: true
   - repo: https://github.com/tmux-revamped/tmux-kube-revamped
     name: tmux-kube-revamped
-    version: HEAD
-    update: false
+    version: 810bfb0b1f55bc2cef08a3ca745fa466d0e7c4c3
+    update: true
