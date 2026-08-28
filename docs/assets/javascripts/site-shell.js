@@ -96,8 +96,8 @@
       };
 
       breadcrumb.append(docsLink, separator(), pageLink, separator(), current);
-      target.before(breadcrumb);
-      requestAnimationFrame(() => breadcrumb.scrollIntoView({ block: "start" }));
+      document.querySelector(".md-content__inner")?.prepend(breadcrumb);
+      requestAnimationFrame(() => target.scrollIntoView({ block: "start" }));
     };
 
     window.addEventListener("hashchange", syncDeepLinkBreadcrumb, { signal });

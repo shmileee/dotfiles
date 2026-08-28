@@ -43,7 +43,7 @@ and the files under
     Install available system updates and Apple's command-line tools on a fresh
     machine:
 
-    ```bash title="Update macOS and install developer tools — modifies this machine"
+    ```bash
     sudo softwareupdate -i -a
     xcode-select --install
     ```
@@ -59,7 +59,7 @@ Other operating systems are rejected by the bootstrap script.
 
 Clone the repository so you can inspect exactly what will execute:
 
-```bash title="Clone and review the repository"
+```bash
 git clone https://github.com/shmileee/dotfiles.git
 cd dotfiles
 
@@ -69,7 +69,7 @@ less scripts/common/ansible/main.yaml
 
 When you are comfortable with the configuration, run the complete setup:
 
-```bash title="Run the complete setup — modifies this machine"
+```bash
 ./scripts/setup.sh --all
 ```
 
@@ -78,7 +78,7 @@ Ansible roles, or managed dotfiles are included.
 
 ## Fast path: bootstrap a new machine
 
-```bash title="Bootstrap a new machine — modifies this machine"
+```bash
 curl -fsSL oponomarov.com/d | sh -s -- --all
 ```
 
@@ -91,7 +91,7 @@ setup, and removes the temporary checkout when it exits.
     If you want the convenience of the bootstrap without piping directly into
     a shell:
 
-    ```bash title="Download, review, then run — modifies this machine"
+    ```bash
     curl -fsSL https://raw.githubusercontent.com/shmileee/dotfiles/master/scripts/setup.sh > setup.sh
     less setup.sh
     chmod +x setup.sh
@@ -150,7 +150,7 @@ Stage flags must be run from a repository checkout.
 If the prerequisites are already present, ask Ansible to preview supported
 changes:
 
-```bash title="Preview supported Ansible changes"
+```bash
 ./scripts/common/ansible.sh --all --check
 ```
 
@@ -201,7 +201,7 @@ directory, which makes a fork straightforward to test before publishing it.
 
 Pull the latest changes, review them, and rerun the Ansible stage:
 
-```bash title="Update and reapply the workstation configuration"
+```bash
 git pull --ff-only
 git diff HEAD@{1} -- scripts/common/ansible config
 ./scripts/setup.sh --ansible
@@ -215,13 +215,13 @@ report their own updates.
 
 Run the published image:
 
-```bash title="Run the published Linux validation image"
+```bash
 docker run --rm -it shmileee/dotfiles
 ```
 
 Or build the current checkout:
 
-```bash title="Build the Linux validation image"
+```bash
 docker buildx build --platform linux/arm64 -t dotfiles --progress plain .
 ```
 
