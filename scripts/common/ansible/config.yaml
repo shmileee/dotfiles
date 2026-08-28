@@ -92,14 +92,38 @@ keyboard_key_codes:
 
 darwin_hotkeys:
   # remap "show spotlight search` to `⌘ + g`
-  64:
-    parameters: [103, 5, 1048576]
+  "64":
     enabled: true
+    value:
+      parameters: [103, 5, 1048576]
+      type: standard
   # disable "select the previous source in input menu"
-  60:
-    parameters: [32, 49, 262144]
+  "60":
     enabled: false
+    value:
+      parameters: [32, 49, 262144]
+      type: standard
   # remap "select the next source in input menu" to `⌘ + space`
-  61:
-    parameters: [32, 49, 1048576]
+  "61":
     enabled: true
+    value:
+      parameters: [32, 49, 1048576]
+      type: standard
+
+tmux_plugins:
+  - repo: https://github.com/tmux-plugins/tpm
+    name: tpm
+    version: 7bdb7ca33c9cc6440a600202b50142f401b6fe21
+    update: true
+  - repo: https://github.com/shmileee/opencode-contextual-notifier
+    name: opencode-contextual-notifier
+    version: HEAD
+    update: false
+  - repo: https://github.com/tmux-plugins/tmux-yank
+    name: tmux-yank
+    version: HEAD
+    update: false
+  - repo: https://github.com/tmux-revamped/tmux-kube-revamped
+    name: tmux-kube-revamped
+    version: HEAD
+    update: false

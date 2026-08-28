@@ -27,7 +27,7 @@ repos:
         types: [yaml]
       - id: ansible-lint
         name: ansible-lint
-        entry: ansible-lint scripts/common/ansible
+        entry: env ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg ansible-lint scripts/common/ansible
         language: system
         pass_filenames: false
         files: ^scripts/common/ansible/

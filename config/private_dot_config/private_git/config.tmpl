@@ -28,7 +28,11 @@
 [includeIf "gitdir:~/ghq/workgit/**"]
   path = ~/.config/git/work
 [credential]
-  helper = store
+{{- if eq .chezmoi.os "darwin" }}
+  helper = osxkeychain
+{{- else }}
+  helper = cache --timeout=3600
+{{- end }}
 [pull]
   rebase = false
   default = current

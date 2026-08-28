@@ -9,3 +9,4 @@
 .config/opencode/test/tmux-waiting-marker.test.ts
 .config/opencode/tmux-waiting-marker.sh
 .config/opencode/tsconfig.json
+.config/fish/conf.d/functions.fish

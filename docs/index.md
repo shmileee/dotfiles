@@ -4,6 +4,54 @@ Install everything with single `curl` command:
 curl -fsSL oponomarov.com/d | sh -s -- --all
 ```
 
+The supported workstation target is Apple Silicon macOS. Ubuntu 24.04 ARM64 is
+continuously exercised as the container and integration target. Other
+Debian-family systems remain best effort.
+
+## Updating
+
+`./scripts/setup.sh --all` installs declared state and reapplies configuration.
+It is intentionally allowed to refresh Homebrew metadata and update managed
+formulae and greedy casks. After a long gap, a run can therefore introduce
+upstream changes. To review local dotfile changes before running it, clone the
+repository and invoke the checked-out script; Ansible applies that checkout
+rather than fetching `master` again.
+
+There is no repository-wide upgrade command. Use the owner of each dependency:
+
+- Run `brew upgrade` whenever a full Homebrew upgrade is desired.
+- Let Renovate propose changes to versions declared in this repository.
+- Use Lazy, Fisher, and TPM directly for intentional plugin updates, then review
+  and commit any manifest or lockfile changes.
+
+The checked-out chezmoi source is authoritative. Setup force-applies it, so add
+intentional edits to the chezmoi-managed source before rerunning Ansible.
+
+## Where configuration lives
+
+- OS packages, applications, the default shell, and macOS preferences are owned
+  by Ansible under `scripts/common/ansible/`.
+- Home-directory files and templates are owned by chezmoi under `config/`.
+- Developer runtimes and CLIs are declared in
+  `config/private_dot_config/mise/config.toml`.
+- Fish, tmux, and Neovim plugins are managed by Fisher, TPM, and Lazy
+  respectively. Neovim’s working plugin graph is recorded in `lazy-lock.json`.
+- Git credentials use the macOS keychain on macOS and Git’s in-memory credential
+  cache on Linux; this repository does not configure plaintext credential
+  storage.
+
+## Validate locally
+
+Run the same repository checks used by CI:
+
+```bash
+mise exec -- prek run --all-files
+ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
+  ansible-playbook --inventory '127.0.0.1,' \
+  --syntax-check scripts/common/ansible/main.yaml
+./scripts/common/ansible.sh --run --check
+```
+
 ??? Explanation
 
     The [`oponomarov.com/d`](https://oponomarov.com/d) is a short redirect URL
@@ -11,7 +59,7 @@ curl -fsSL oponomarov.com/d | sh -s -- --all
     [`shmileee/dotfiles@master:scripts/setup.sh`](https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh).
     The script handles the installation of Ansible prerequisites and executes the
     main Ansible playbook. Both the script and playbook are designed to work with
-    macOS and Debian-based Linux distributions.
+    Apple Silicon macOS and the Ubuntu 24.04 ARM64 integration environment.
 
     For a fresh macOS installation, run the following commands first:
 
@@ -38,9 +86,9 @@ curl -fsSL oponomarov.com/d | sh -s -- --all
           [`essentials`](https://github.com/shmileee/dotfiles/blob/master/scripts/linux/essentials.apt).
         - On macOS, dependencies are installed via Homebrew.
     - Installs Ansible. For Linux, this happens during the system dependencies step; for macOS, it is managed through Homebrew.
-    - Installs Homebrew if it is not already available (macOS only).
+    - Installs Homebrew if it is not already available.
     - Executes the [`ansible.sh`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible.sh) script, which:
-        - Installs the `community.general` and `ansible.posix` Ansible collections.
+        - Installs the versioned `community.general` and `ansible.posix` Ansible collections.
         - Checks for passwordless `sudo` access or prompts for a password if needed.
         - Runs the [`main.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/main.yaml) Ansible playbook.
 
@@ -62,9 +110,10 @@ flowchart TD
 #### Running Inside Docker
 
 Run `docker run -it shmileee/dotfiles` to start a Docker container that is
-automatically [built and
-pushed](https://github.com/shmileee/dotfiles/actions/workflows/docker.yaml)
-using GitHub Actions. Alternatively, you can build it yourself:
+automatically [built, smoke-tested, and
+published](https://github.com/shmileee/dotfiles/actions/workflows/docker.yaml)
+from `master` using GitHub Actions. Pull requests build and test without
+publishing. Alternatively, you can build it yourself:
 
 ```bash
 docker buildx build --platform linux/arm64 -t dotfiles --progress plain .

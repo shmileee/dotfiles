@@ -1,5 +1,6 @@
 ---
-- hosts: 127.0.0.1
+- name: Configure workstation
+  hosts: 127.0.0.1
   strategy: linear
   connection: local
 
@@ -8,6 +9,7 @@
 
   vars:
     ansible_python_interpreter: "{{ ansible_playbook_python }}"
+    dockerized: "{{ lookup('ansible.builtin.env', 'DOCKERIZED') == 'true' }}"
 
   roles:
     - role: common
@@ -30,7 +32,7 @@
 
     - role: docker
       tags: docker
-      when: lookup('env', 'DOCKERIZED') != 'true'
+      when: not dockerized
 
     - role: tmux
       tags: tmux

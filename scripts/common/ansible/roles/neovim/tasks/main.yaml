@@ -1,7 +1,21 @@
 ---
 
-- name: "install LazyVim and plugins"
-  ansible.builtin.command:
-    cmd: mise exec -- nvim --headless "+Lazy! install" +qa
-  register: neovim_plugins
-  changed_when: "'Installed' in neovim_plugins.stdout"
+- name: "restore LazyVim plugins"
+  lazy_plugins:
+    lock_file: "{{ dotfiles.checkout }}/config/private_dot_config/nvim/lazy-lock.json"
+    plugin_root: "{{ ansible_facts['user_dir'] }}/.local/share/nvim/lazy"
+    restore_argv:
+      - mise
+      - exec
+      - --
+      - nvim
+      - --headless
+      - "+Lazy! restore"
+      - +qa
+    verify_argv:
+      - mise
+      - exec
+      - --
+      - nvim
+      - --headless
+      - +qa

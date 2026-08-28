@@ -4,8 +4,10 @@ functionality. These shortcuts are defined in
 under the `darwin_hotkeys{}` map, which follows this structure:
 
 - `<system keycode>`:
-      - `parameters`: `<keyboard keys in ASCII>`
       - `enabled`: `<true | false>`
+      - `value`:
+          - `parameters`: `<keyboard keys in ASCII>`
+          - `type`: `standard`
 
 Here, `<system keycode>` refers to the `int` UID associated with a feature in
 _System Preferences → Keyboard → Shortcuts_. For example, the keycode `64`
@@ -22,7 +24,7 @@ The following key bindings are currently in-use:
 
 !!! note
 
-    The `community.general.osx_defaults` Ansible collection [does not yet
-    support](https://github.com/ansible-collections/community.general/pull/3420)
-    modifying system shortcuts. Therefore, `ansible.builtin.command` is used
-    instead, which achieves the desired result but lacks idempotency.
+    The generic `community.general.osx_defaults` module cannot safely reconcile
+    every nested preference used here. A repository-local Ansible module reads
+    the exported plist as structured data, merges only the configured shortcut
+    keys, and supports both idempotent runs and check mode.

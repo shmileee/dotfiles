@@ -1,27 +1,6 @@
 ---
 
-- name: "dockutil | list current items"
-  ansible.builtin.shell:
-    cmd: dockutil --list | cut -f1
-  register: current_dock
-  changed_when: false
-  check_mode: false
-
-- name: "dockutil | remove current items"
-  ansible.builtin.command: dockutil --remove all --no-restart
-  when: current_dock.stdout_lines != (dockitems | map(attribute='name') | list)
-
-- name: "dockutil | add configured items"
-  ansible.builtin.command:
-    argv: >-
-      {{
-        ['dockutil', '--add', item.path, '--position', 'end',
-         '--section', item.section | default('apps')]
-        + (item.options | default([]))
-        + ['--no-restart']
-      }}
-  loop: "{{ dockitems }}"
-  loop_control:
-    label: "{{ item.name }}"
-  when: current_dock.stdout_lines != (dockitems | map(attribute='name') | list)
+- name: "dockutil | reconcile configured items"
+  dock_items:
+    items: "{{ dockitems }}"
   notify: restart dock

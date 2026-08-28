@@ -2,7 +2,11 @@
 extends: relaxed
 
 rules:
-  comments: disable
+  comments:
+    min-spaces-from-content: 1
   line-length: disable
+  octal-values:
+    forbid-explicit-octal: true
+    forbid-implicit-octal: true
   truthy:
     allowed-values: ["true", "false", "on"]

@@ -14,9 +14,17 @@ on:
       - "!.github/mkdocs.yaml"
       - "!docs/**"
 
+permissions:
+  contents: read
+
+concurrency:
+  group: macos-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   macos:
     runs-on: macos-latest
+    timeout-minutes: 60
 
     steps:
       - name: Clean up installed software
@@ -36,7 +44,7 @@ jobs:
       #     sudo softwareupdate -i -a
 
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
 
       - name: Install using setup.sh
         run: ./scripts/setup.sh --all
@@ -45,3 +53,10 @@ jobs:
 
       - name: Validate
         run: mise exec -- prek run --all-files
+
+      - name: Verify a second run is idempotent
+        run: |
+          ./scripts/common/ansible.sh --run | tee /tmp/ansible-idempotence.log
+          grep -Eq 'changed=0 +unreachable=0 +failed=0' /tmp/ansible-idempotence.log
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
