@@ -5,14 +5,17 @@ description: Local secrets, model routing, corporate overlays, and contextual no
 
 # OpenCode + OmO
 
-<p class="page-lead">chezmoi, the dotfile manager, manages the shared OpenCode configuration, Oh My OpenAgent routing, fish integration, and tmux notification plumbing. Secrets and company-specific endpoints stay local.</p>
+<p class="page-lead" data-mobile-toc-anchor>chezmoi, the dotfile manager, manages the shared OpenCode configuration, Oh My OpenAgent routing, fish integration, and tmux notification plumbing. Secrets and company-specific endpoints stay local.</p>
 
-<details class="concept-primer" data-mobile-toc-anchor markdown>
-<summary>
-  <span class="concept-primer__summary"><strong>Quick context</strong><small>Plain-language definitions</small></span>
-  <svg class="concept-primer__chevron" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m4 6 4 4 4-4" /></svg>
-</summary>
-<dl class="concept-primer__terms">
+<div class="context-help-source" hidden>
+<button class="context-help-trigger" type="button" aria-label="Open quick context" aria-controls="context-help" aria-haspopup="dialog" title="Quick context" data-context-open data-context-ui><span aria-hidden="true">?</span></button>
+<dialog class="context-help" id="context-help" aria-labelledby="context-help-title" data-context-dialog data-context-ui>
+<div class="context-help__panel">
+<header class="context-help__header">
+  <div><p>Quick context</p><h2 id="context-help-title">Terms used on this page</h2></div>
+  <button type="button" aria-label="Close quick context" data-context-close><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m4 4 8 8m0-8-8 8" /></svg></button>
+</header>
+<dl class="context-help__terms">
   <div><dt>OpenCode</dt><dd>An AI coding tool that can use models, plugins, formatters, and external services.</dd></div>
   <div><dt>OmO</dt><dd>Oh My OpenAgent, the layer that assigns agents and task categories to models.</dd></div>
   <div><dt>MCP</dt><dd>Model Context Protocol, a standard for connecting an AI tool to external services.</dd></div>
@@ -20,7 +23,9 @@ description: Local secrets, model routing, corporate overlays, and contextual no
   <div><dt>Hook</dt><dd>Logic that runs automatically when a specific OpenCode event occurs.</dd></div>
   <div><dt>TPM</dt><dd>The tmux Plugin Manager, used to install and update tmux extensions.</dd></div>
 </dl>
-</details>
+</div>
+</dialog>
+</div>
 
 ## What is managed
 
