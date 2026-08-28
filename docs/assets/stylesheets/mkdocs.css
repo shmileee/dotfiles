@@ -862,6 +862,7 @@ button.header-icon {
 
 .md-content__inner:has(.docs-hero--home) {
   max-width: 60rem;
+  padding-top: clamp(var(--space-6), 3.5vw, var(--space-10));
 }
 
 .docs-hero--home::before {
