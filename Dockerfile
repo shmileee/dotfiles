@@ -6,6 +6,7 @@ ENV TIMEZONE="Europe/Warsaw"
 ENV DEBIAN_FRONTEND="noninteractive"
 ENV DOCKERIZED=true
 ENV ANSIBLE_DEPRECATION_WARNINGS=false
+ENV HOME="/home/linuxbrew"
 ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:${PATH}"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
