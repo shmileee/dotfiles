@@ -8,7 +8,8 @@ module: lazy_plugins
 short_description: Restore Neovim lazy.nvim plugins from a lock file
 description:
   - Compares installed plugin Git revisions with lazy-lock.json.
-  - Runs Lazy restore only when plugins are missing or at different revisions.
+  - Bootstraps missing plugin specifications before restoring locked revisions.
+  - Runs Lazy commands only when plugins are missing or at different revisions.
 options:
   lock_file:
     description: Path to lazy-lock.json.
@@ -128,7 +129,8 @@ def main() -> None:
         invoke(module, module.params["verify_argv"], "Neovim startup verification")
         module.exit_json(changed=False, drifted_plugins=[])
 
-    install = invoke(module, module.params["install_argv"], "Lazy install")
+    bootstrap = invoke(module, module.params["install_argv"], "Lazy bootstrap install")
+    install = invoke(module, module.params["install_argv"], "Lazy full install")
     try:
         shutil.copyfile(module.params["lock_file"], module.params["active_lock_file"])
     except OSError as error:
@@ -140,6 +142,8 @@ def main() -> None:
             msg="Plugins still differ after Lazy restore",
             changed=True,
             drifted_plugins=final,
+            bootstrap_stdout=bootstrap.stdout,
+            bootstrap_stderr=bootstrap.stderr,
             install_stdout=install.stdout,
             install_stderr=install.stderr,
             restore_stdout=restore.stdout,
