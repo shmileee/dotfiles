@@ -468,10 +468,10 @@ button.header-icon {
 
 .md-typeset pre > code {
   padding: 1.25rem 1.5rem;
-  background: var(--surface-secondary);
+  background: var(--code-surface);
   color: var(--code-text);
-  font-size: 0.8125rem;
-  line-height: 1.75;
+  font-size: 0.875rem;
+  line-height: 1.7;
 }
 
 /* Pygments emits these token classes through pymdownx.highlight. */
@@ -561,9 +561,10 @@ button.header-icon {
   position: relative;
   margin: 0 0 var(--space-6);
   overflow: hidden;
-  border: 1px solid var(--border-default);
+  border: 1px solid color-mix(in srgb, var(--accent-primary) 24%, var(--border-default));
   border-radius: 0.625rem;
-  background: var(--surface-secondary);
+  background: var(--code-surface);
+  box-shadow: inset 3px 0 0 var(--accent-border);
 }
 
 .md-typeset .highlight::before {
@@ -585,6 +586,21 @@ button.header-icon {
 
 .md-typeset .highlight pre {
   margin: 0;
+}
+
+.md-typeset .highlight.terminal-command pre > code {
+  position: relative;
+  padding-left: 3.25rem;
+}
+
+.md-typeset .highlight.terminal-command pre > code::before {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.5rem;
+  color: var(--code-function);
+  content: "$";
+  font-weight: 600;
+  user-select: none;
 }
 
 .md-typeset .highlighttable .highlight {
