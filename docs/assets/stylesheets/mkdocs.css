@@ -163,6 +163,21 @@ body[data-md-color-scheme] {
   font-size: 0.75rem;
 }
 
+.external-nav-link {
+  gap: 0.3rem;
+}
+
+.external-nav-icon {
+  width: 0.75rem;
+  height: 0.75rem;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: currentcolor;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+  stroke-width: 1.5;
+}
+
 .site-nav a:hover,
 .site-nav a.is-active,
 .theme-toggle:hover {
