@@ -401,12 +401,13 @@ body[data-md-color-scheme] {
 .md-typeset :not(pre) > code {
   border: 1px solid var(--accent-border);
   border-radius: 0.25rem;
-  padding: 0.12em 0.38em;
+  padding: 0.08em 0.32em;
   background: var(--accent-surface);
   color: var(--accent-soft);
   box-decoration-break: clone;
-  font-size: 0.88em;
+  font-size: 0.82em;
   font-weight: 500;
+  line-height: 1.45;
   -webkit-box-decoration-break: clone;
 }
 
@@ -688,20 +689,19 @@ body[data-md-color-scheme] {
 
 .surface-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--space-2);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
   margin: var(--space-6) 0 var(--space-8);
 }
 
 .surface-grid article {
   min-width: 0;
-  display: grid;
-  grid-template-columns: 4rem minmax(17rem, 1.2fr) minmax(0, 1fr);
-  align-items: start;
-  gap: var(--space-4);
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
   border: 1px solid var(--border-default);
   border-radius: 0.5rem;
-  padding: var(--space-4);
+  padding: var(--space-5);
   background: var(--surface-secondary);
 }
 
@@ -724,7 +724,7 @@ body[data-md-color-scheme] {
   display: block;
   width: fit-content;
   max-width: 100%;
-  margin: 0;
+  margin: var(--space-3) 0 var(--space-4);
   font-size: 0.75rem;
   line-height: 1.7;
 }
@@ -1080,6 +1080,10 @@ body[data-md-color-scheme] {
   text-align: right;
 }
 
+.docs-adjacent-next:first-child {
+  grid-column: 2;
+}
+
 .footer-inner {
   display: flex;
   justify-content: space-between;
@@ -1229,6 +1233,10 @@ body[data-md-color-scheme] {
     grid-template-columns: minmax(0, 1fr);
   }
 
+  .docs-adjacent-next:first-child {
+    grid-column: 1;
+  }
+
   .fact-grid {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -1239,15 +1247,6 @@ body[data-md-color-scheme] {
 
   .surface-grid {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .surface-grid article {
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-2);
-  }
-
-  .surface-grid .path-token {
-    margin-bottom: var(--space-2);
   }
 
   .boundary-list > div {
