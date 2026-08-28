@@ -855,6 +855,7 @@ button.header-icon {
   border: 1px solid var(--border-default);
   border-radius: 0.75rem;
   padding: var(--home-hero-padding);
+  padding-block: clamp(var(--space-8), 4.5vw, var(--space-12));
   background:
     radial-gradient(circle at 88% 10%, var(--accent-surface), transparent 38%),
     var(--surface-secondary);
