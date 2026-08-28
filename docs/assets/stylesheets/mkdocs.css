@@ -1619,9 +1619,10 @@ body:has(.context-help[open]) .context-help-trigger {
   position: relative;
   display: grid;
   grid-template-columns: 2.5rem minmax(0, 1fr);
+  align-items: center;
   gap: var(--space-5);
   margin: 0 !important;
-  padding: var(--space-6) !important;
+  padding: var(--space-4) var(--space-5) !important;
   background: transparent;
 }
 
@@ -1634,7 +1635,7 @@ body:has(.context-help[open]) .context-help-trigger {
 }
 
 .install-flow li:last-child {
-  padding-bottom: var(--space-6) !important;
+  padding-bottom: var(--space-4) !important;
 }
 
 .install-flow li:last-child::before {
@@ -1659,9 +1660,9 @@ body:has(.context-help[open]) .context-help-trigger {
   min-width: 0;
   display: grid;
   grid-template-columns: minmax(11rem, 0.7fr) minmax(0, 1.3fr);
-  align-items: start;
+  align-items: center;
   gap: var(--space-6);
-  padding-top: 0.125rem;
+  padding-top: 0;
 }
 
 .install-flow li strong {
@@ -1684,7 +1685,7 @@ body:has(.context-help[open]) .context-help-trigger {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0;
   margin: var(--space-6) 0 var(--space-8);
-  border-block: 1px solid var(--border-default);
+  border-bottom: 1px solid var(--border-default);
 }
 
 .principle-grid > div {
