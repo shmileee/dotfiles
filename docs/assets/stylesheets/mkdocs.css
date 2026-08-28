@@ -882,17 +882,6 @@ button.header-icon {
   display: none;
 }
 
-.docs-hero--home .section-eyebrow,
-.md-typeset .docs-hero--home h1,
-.docs-hero--home .hero-copy {
-  margin-inline: auto;
-  text-align: center;
-}
-
-.docs-hero--home .hero-actions {
-  justify-content: center;
-}
-
 .page-lead {
   max-width: 62ch;
   margin: calc(-1 * var(--space-3)) 0 var(--space-12);
@@ -1517,13 +1506,14 @@ body:has(.context-help[open]) .context-help-trigger {
 }
 
 .hero-signals div {
+  width: max-content;
+  max-width: 100%;
   min-width: 0;
+  display: grid;
+  justify-self: center;
+  justify-items: start;
   padding-inline: var(--space-4);
-  text-align: center;
-}
-
-.hero-signals div + div {
-  border-left: 1px solid var(--border-default);
+  text-align: left;
 }
 
 .hero-signals dt {
@@ -2008,13 +1998,12 @@ body:has(.context-help[open]) .context-help-trigger {
     padding-left: var(--space-4);
   }
 
-  .md-typeset .mobile-page-toc__nav a {
+  .md-typeset .mobile-page-toc__nav .md-nav__link {
     min-height: 2.75rem;
     display: flex;
     align-items: center;
     color: var(--text-secondary);
-    font-size: 0.875rem;
-    line-height: 1.35;
+    font: 400 0.875rem/1.35 "Public Sans", system-ui, sans-serif;
     text-decoration: none;
   }
 
@@ -2165,9 +2154,11 @@ body:has(.context-help[open]) .context-help-trigger {
   }
 
   .hero-signals div {
+    width: 100%;
     display: grid;
     grid-template-columns: 7rem minmax(0, 1fr);
     align-items: baseline;
+    justify-self: stretch;
     gap: var(--space-3);
     padding: var(--space-2) 0;
     text-align: left;
@@ -2175,7 +2166,6 @@ body:has(.context-help[open]) .context-help-trigger {
 
   .hero-signals div + div {
     border-top: 1px solid var(--border-subtle);
-    border-left: 0;
   }
 
   .principle-grid {
