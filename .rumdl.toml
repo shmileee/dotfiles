@@ -1,15 +1,4 @@
-[tool.ruff]
-line-length = 80
-
-[tool.ruff.lint]
-select = ["E4", "E7", "E9", "F", "B"]
-ignore = ["E402", "B905"]
-
-[tool.ruff.format]
-indent-style = "space"
-line-ending = "lf"
-
-[tool.rumdl]
+[global]
 enable = [
   "MD003",
   "MD004",
@@ -25,35 +14,35 @@ enable = [
 flavor = "mkdocs"
 line-length = 80
 
-[tool.rumdl.MD003]
+[MD003]
 style = "atx"
 
-[tool.rumdl.MD004]
+[MD004]
 style = "asterisk"
 
-[tool.rumdl.MD007]
+[MD007]
 indent = 4
 
-[tool.rumdl.MD009]
+[MD009]
 strict = true
 
-[tool.rumdl.MD013]
+[MD013]
 code-blocks = false
 headings = false
 reflow = true
 tables = false
 
-[tool.rumdl.MD029]
+[MD029]
 style = "one_or_ordered"
 
-[tool.rumdl.MD030]
+[MD030]
 ul-single = 3
 ul-multi = 3
 ol-single = 2
 ol-multi = 2
 
-[tool.rumdl.MD046]
+[MD046]
 style = "fenced"
 
-[tool.rumdl.per-file-ignores]
+[per-file-ignores]
 "docs/setup.md" = ["MD046"]
