@@ -1,20 +1,5 @@
 (() => {
-  const root = document.documentElement;
   let pageController;
-
-  function applyTheme(theme) {
-    const normalized = theme === "light" ? "light" : "dark";
-    root.dataset.theme = normalized;
-    root.style.colorScheme = normalized;
-    document.body?.setAttribute("data-md-color-scheme", normalized === "light" ? "default" : "slate");
-
-    const button = document.querySelector("[data-theme-toggle]");
-    if (button) {
-      const next = normalized === "dark" ? "light" : "dark";
-      button.textContent = next;
-      button.setAttribute("aria-label", `Switch to ${next} color scheme`);
-    }
-  }
 
   function normalizePersistentNavigationLinks() {
     const links = document.querySelectorAll(
@@ -42,16 +27,85 @@
     if (contextHelpTrigger && contextHelpDialog) {
       document.body.append(contextHelpTrigger, contextHelpDialog);
     }
-    const themeButton = document.querySelector("[data-theme-toggle]");
     const searchButton = document.querySelector("[data-search-toggle]");
     const drawerButton = document.querySelector("[data-drawer-toggle]");
     const drawerToggle = document.querySelector("#__drawer");
     const primarySidebar = document.querySelector(".md-sidebar--primary");
     const drawerTocToggle = primarySidebar?.querySelector("#__toc");
+    const drawerTocLabels = [...(primarySidebar?.querySelectorAll('label[for="__toc"]') || [])];
     const progress = document.querySelector("[data-reading-progress]");
 
-    applyTheme(localStorage.getItem("om-theme") || "dark");
     normalizePersistentNavigationLinks();
+
+    document.querySelector(".md-overlay")?.setAttribute("aria-hidden", "true");
+    document.querySelectorAll(".md-code__nav").forEach((nav, index) => {
+      nav.setAttribute("aria-label", `Code block ${index + 1} actions`);
+    });
+
+    const enhanceInjectedSearch = () => {
+      const searchHost = [...document.querySelectorAll("body > div")]
+        .find((element) => element.shadowRoot?.querySelector('input[role="combobox"]'));
+      const searchRoot = searchHost?.shadowRoot;
+      const searchInput = searchRoot?.querySelector('input[role="combobox"]');
+      if (!searchHost || !searchRoot || !searchInput) return false;
+
+      const searchToolbar = searchInput.parentElement?.parentElement;
+      const searchButtons = [...(searchToolbar?.querySelectorAll("button") || [])];
+      const searchResults = searchRoot.querySelector("ol");
+      const filterHeading = [...searchRoot.querySelectorAll("h3")]
+        .find((heading) => heading.textContent.trim() === "Filters");
+      const filterPanel = filterHeading?.parentElement?.parentElement;
+      let searchPanel = searchToolbar;
+      while (searchPanel && !(searchPanel.contains(searchResults) && searchPanel.contains(filterPanel))) {
+        searchPanel = searchPanel.parentElement;
+      }
+
+      searchHost.setAttribute("role", "search");
+      searchHost.setAttribute("aria-label", "Site search");
+      searchInput.setAttribute("aria-label", "Search documentation");
+      searchInput.setAttribute("aria-autocomplete", "list");
+      if (searchResults) {
+        searchResults.id = "site-search-results";
+        searchResults.setAttribute("role", "listbox");
+        searchInput.setAttribute("aria-controls", searchResults.id);
+      }
+      if (searchButtons[0]) searchButtons[0].setAttribute("aria-label", "Search documentation");
+      if (searchButtons[1] && filterPanel) {
+        filterPanel.id = "site-search-filters";
+        filterPanel.setAttribute("role", "region");
+        filterPanel.setAttribute("aria-label", "Search filters");
+        searchButtons[1].setAttribute("aria-label", "Toggle search filters");
+        searchButtons[1].setAttribute("aria-controls", filterPanel.id);
+      }
+
+      const syncInjectedSearch = () => {
+        const searchIsOpen = searchPanel && getComputedStyle(searchPanel).pointerEvents !== "none";
+        searchInput.setAttribute("aria-expanded", String(Boolean(searchIsOpen)));
+        const filtersAreOpen = filterPanel && getComputedStyle(filterPanel).pointerEvents !== "none"
+          && filterPanel.getBoundingClientRect().width > 0;
+        if (filterPanel) {
+          filterPanel.setAttribute("aria-hidden", String(!filtersAreOpen));
+          filterPanel.tabIndex = filtersAreOpen ? 0 : -1;
+        }
+        searchButtons[1]?.setAttribute("aria-expanded", String(Boolean(filtersAreOpen)));
+      };
+      const injectedSearchObserver = new MutationObserver(syncInjectedSearch);
+      if (searchPanel) injectedSearchObserver.observe(searchPanel, { attributes: true, attributeFilter: ["class"] });
+      if (filterPanel) injectedSearchObserver.observe(filterPanel, { attributes: true, attributeFilter: ["class"] });
+      signal.addEventListener("abort", () => injectedSearchObserver.disconnect(), { once: true });
+      syncInjectedSearch();
+      return true;
+    };
+    if (!enhanceInjectedSearch()) {
+      let searchEnhancementAttempts = 0;
+      const searchEnhancementTimer = window.setInterval(() => {
+        searchEnhancementAttempts += 1;
+        if (enhanceInjectedSearch() || searchEnhancementAttempts >= 100) {
+          window.clearInterval(searchEnhancementTimer);
+        }
+      }, 50);
+      signal.addEventListener("abort", () => window.clearInterval(searchEnhancementTimer), { once: true });
+    }
 
     const closeContextHelp = () => {
       if (!contextHelpDialog?.open) return;
@@ -146,7 +200,20 @@
       const drawerIsOpen = Boolean(drawerToggle?.checked);
       drawerButton?.setAttribute("aria-expanded", String(drawerIsOpen));
       drawerButton?.setAttribute("aria-label", drawerIsOpen ? "Close navigation" : "Open navigation");
+      drawerTocLabels.forEach((label) => {
+        label.setAttribute("aria-expanded", String(Boolean(drawerTocToggle?.checked)));
+      });
     };
+
+    drawerTocLabels.forEach((label) => {
+      label.setAttribute("role", "button");
+      label.tabIndex = 0;
+      label.addEventListener("keydown", (event) => {
+        if (event.key !== " ") return;
+        event.preventDefault();
+        label.click();
+      }, { signal });
+    });
 
     const setTabbable = (elements, enabled) => {
       elements.forEach((element) => {
@@ -209,7 +276,10 @@
       { signal },
     );
 
-    drawerTocToggle?.addEventListener("change", syncDrawerFocus, { signal });
+    drawerTocToggle?.addEventListener("change", () => {
+      syncControls();
+      syncDrawerFocus();
+    }, { signal });
 
     document.addEventListener(
       "keydown",
@@ -242,30 +312,6 @@
 
     syncControls();
     syncDrawerFocus();
-
-    const syncShortcutRows = () => {
-      const rows = document.querySelectorAll(".shortcut-reference table:not(:has(th:nth-child(3))) tbody tr");
-      rows.forEach((row) => row.classList.remove("shortcut-row--stacked"));
-      if (window.innerWidth > 480) return;
-      rows.forEach((row) => {
-        const shortcut = row.querySelector("td:first-child");
-        if (shortcut && shortcut.scrollWidth > shortcut.clientWidth + 1) {
-          row.classList.add("shortcut-row--stacked");
-        }
-      });
-    };
-
-    let shortcutResizeScheduled = false;
-    const scheduleShortcutRows = () => {
-      if (shortcutResizeScheduled) return;
-      shortcutResizeScheduled = true;
-      requestAnimationFrame(() => {
-        syncShortcutRows();
-        shortcutResizeScheduled = false;
-      });
-    };
-    window.addEventListener("resize", scheduleShortcutRows, { signal });
-    syncShortcutRows();
 
     const shortcutFilter = document.querySelector("[data-shortcut-filter]");
     const shortcutQuery = shortcutFilter?.querySelector("[data-shortcut-query]");
@@ -347,7 +393,6 @@
       shortcutEmpty.hidden = visibleCount !== 0;
       shortcutStatus.textContent = `Showing ${visibleCount} of ${shortcutRows.length} shortcuts`;
       syncShortcutToc();
-      syncShortcutRows();
       syncDrawerFocus();
     };
 
@@ -375,16 +420,6 @@
       });
       syncShortcutFilter();
     }
-
-    themeButton?.addEventListener(
-      "click",
-      () => {
-        const theme = root.dataset.theme === "dark" ? "light" : "dark";
-        localStorage.setItem("om-theme", theme);
-        applyTheme(theme);
-      },
-      { signal },
-    );
 
     if (!progress) return;
 

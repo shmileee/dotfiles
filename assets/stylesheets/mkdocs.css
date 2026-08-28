@@ -49,6 +49,12 @@ body[data-md-color-scheme] {
   color: var(--text-body);
   box-shadow: none;
   backdrop-filter: blur(12px);
+  transition: transform 250ms cubic-bezier(0.8, 0, 0.6, 1);
+}
+
+.site-header[hidden] {
+  display: block;
+  transform: translateY(-100%);
 }
 
 .reading-progress {
@@ -86,7 +92,6 @@ body[data-md-color-scheme] {
 .brand-link,
 .docs-home,
 .site-nav a,
-.theme-toggle,
 .header-icon,
 .docs-adjacent,
 .section-eyebrow,
@@ -165,8 +170,7 @@ body[data-md-color-scheme] {
   margin-left: auto;
 }
 
-.site-nav a,
-.theme-toggle {
+.site-nav a {
   min-height: 2.5rem;
   display: inline-flex;
   align-items: center;
@@ -199,8 +203,7 @@ body[data-md-color-scheme] {
 }
 
 .site-nav a:hover,
-.site-nav a.is-active,
-.theme-toggle:hover {
+.site-nav a.is-active {
   color: var(--text-primary);
 }
 
@@ -223,14 +226,33 @@ body[data-md-color-scheme] {
   gap: var(--space-2);
 }
 
-.theme-toggle {
-  min-height: 2.75rem;
-  min-width: 4.25rem;
-  border: 1px solid var(--border-default);
-  border-radius: 999px;
-  padding: 0.3125rem 0.75rem;
-  background: transparent;
-  cursor: pointer;
+.header-actions .md-header__option {
+  margin: 0;
+}
+
+.header-actions .md-header__option .md-header__button {
+  width: 2.75rem;
+  height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  border-radius: 50%;
+  padding: 0;
+  color: var(--text-secondary);
+}
+
+.header-actions .md-header__option .md-header__button:not([hidden]) {
+  display: inline-flex;
+}
+
+.header-actions .md-header__option .md-header__button:hover {
+  color: var(--text-primary);
+  opacity: 1;
+}
+
+.header-actions .md-header__option svg {
+  width: 1.15rem;
+  fill: currentcolor;
 }
 
 .header-icon {
@@ -381,7 +403,7 @@ button.header-icon {
   border-radius: 0.25rem;
   padding: 0.08em 0.32em;
   background: var(--accent-surface);
-  color: var(--accent-soft);
+  color: var(--inline-code-text);
   box-decoration-break: clone;
   font-size: 0.82em;
   font-weight: 500;
@@ -1272,12 +1294,16 @@ body:has(.context-help[open]) .context-help-trigger {
 }
 
 .shortcut-reference .md-typeset__scrollwrap {
-  margin: var(--space-3) 0 var(--space-8);
+  margin: var(--space-4) 0 var(--space-8);
 }
 
 .shortcut-reference .md-typeset__table {
   width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--border-default);
+  border-radius: 0.625rem;
   padding: 0;
+  background: var(--surface-secondary);
 }
 
 .md-typeset .shortcut-reference table:not([class]) {
@@ -1296,54 +1322,117 @@ body:has(.context-help[open]) .context-help-trigger {
 
 .shortcut-reference table tr {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(13.5rem, 0.8fr) minmax(0, 1.2fr);
 }
 
 .shortcut-reference table:has(th:nth-child(3)) tr {
-  grid-template-columns: 5rem minmax(9rem, 0.75fr) minmax(0, 1.25fr);
+  grid-template-columns: 6.5rem minmax(12rem, 0.8fr) minmax(0, 1.2fr);
 }
 
 .shortcut-reference table thead tr {
-  border-bottom: 1px solid var(--border-subtle);
+  background: var(--code-toolbar);
 }
 
 .shortcut-reference table tbody tr {
-  margin-top: var(--space-2);
-  border: 1px solid var(--border-default);
-  border-radius: 0.5rem;
+  min-height: 3.75rem;
+  border-top: 1px solid var(--border-subtle);
   background: var(--surface-secondary);
-  transition: border-color 130ms ease-out, background-color 130ms ease-out;
+  transition: background-color 130ms ease-out;
 }
 
 .shortcut-reference table tbody tr:hover {
-  border-color: var(--accent-border);
   background: color-mix(in srgb, var(--surface-secondary) 88%, var(--accent-primary));
+}
+
+.shortcut-reference table tbody td {
+  transition: background-color 130ms ease-out;
+}
+
+.shortcut-reference table tbody tr:hover td {
+  background-color: color-mix(in srgb, var(--surface-secondary) 90%, var(--accent-primary));
+}
+
+.shortcut-reference table:not(:has(th:nth-child(3))) tbody tr:hover td:first-child,
+.shortcut-reference table:has(th:nth-child(3)) tbody tr:hover td:nth-child(2) {
+  background-color: color-mix(in srgb, var(--code-toolbar) 82%, var(--accent-primary));
 }
 
 .md-typeset .shortcut-reference table th,
 .md-typeset .shortcut-reference table td {
   min-width: 0;
   border: 0;
-  padding: var(--space-3) var(--space-4);
+  padding: 0.875rem var(--space-4);
+  text-align: center;
   vertical-align: middle;
 }
 
 .md-typeset .shortcut-reference table th {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: transparent;
   color: var(--text-tertiary);
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
   font-size: 0.6875rem;
+  font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+}
+
+.md-typeset .shortcut-reference table td {
+  display: block;
+  align-content: center;
+}
+
+.md-typeset .shortcut-reference table:not([class]) td:not([align]) {
+  text-align: center;
+}
+
+.md-typeset .shortcut-reference table th + th {
+  border-left: 1px solid var(--border-subtle);
+}
+
+.md-typeset .shortcut-reference table:not([class]) td:last-child:not([align]) {
+  overflow-wrap: break-word;
+  line-height: 1.6;
+  text-align: left;
+  text-wrap: pretty;
+}
+
+.md-typeset .shortcut-reference table td:last-child a code {
+  border-color: var(--border-default);
+  background: var(--code-toolbar);
+  color: var(--accent-soft);
+}
+
+.md-typeset .shortcut-reference table td:last-child a:hover code {
+  border-color: var(--accent-border);
+  background: var(--accent-surface);
 }
 
 .shortcut-reference table:has(th:nth-child(3)) td:nth-child(2) {
   white-space: nowrap;
 }
 
-.shortcut-reference table td:first-child {
+.shortcut-reference table:has(th:nth-child(3)) th:first-child,
+.shortcut-reference table:has(th:nth-child(3)) td:first-child {
+  overflow-wrap: normal;
+  white-space: nowrap;
+  word-break: normal;
+}
+
+.shortcut-reference table:not(:has(th:nth-child(3))) td:first-child,
+.shortcut-reference table:has(th:nth-child(3)) td:nth-child(2) {
   background: var(--code-toolbar);
   color: var(--text-primary);
   font-family: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+.shortcut-reference table:has(th:nth-child(3)) td:first-child {
+  color: var(--text-tertiary);
+  font: 600 0.6875rem/1.4 "IBM Plex Mono", ui-monospace, monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .shortcut-reference table td + td {
@@ -1354,20 +1443,35 @@ body:has(.context-help[open]) .context-help-trigger {
   white-space: nowrap;
 }
 
+.shortcut-reference table .shortcut-then {
+  display: inline-block;
+  margin-inline: 0.45rem;
+  color: var(--text-tertiary);
+  font-size: 0.75rem;
+}
+
 .md-typeset .shortcut-reference table .keys kbd {
-  padding: 0.125rem 0.45rem;
+  min-width: 1.75rem;
+  border-radius: 0.3rem;
+  padding: 0.1875rem 0.5rem;
   font-size: 0.75rem;
   line-height: 1.5;
 }
 
 .md-typeset .shortcut-reference table td:first-child code,
 .md-typeset .shortcut-reference table:has(th:nth-child(3)) td:nth-child(2) code {
+  min-width: 1.75rem;
+  display: inline-block;
   border-color: var(--border-default);
-  padding: 0.125rem 0.4rem;
+  border-radius: 0.3rem;
+  padding: 0.1875rem 0.5rem;
   background: var(--surface-primary);
   color: var(--text-primary);
+  box-shadow: 0 0.1rem 0 var(--border-default);
   font-size: 0.75rem;
   line-height: 1.5;
+  text-align: center;
+  vertical-align: text-top;
 }
 
 .md-typeset .tabbed-labels {
@@ -1929,6 +2033,7 @@ body:has(.context-help[open]) .context-help-trigger {
   .mobile-page-toc__label small {
     color: var(--text-tertiary);
     font: 500 0.6875rem/1.4 "IBM Plex Mono", ui-monospace, monospace;
+    opacity: 1;
   }
 
   .md-typeset .mobile-page-toc > summary::before,
@@ -2095,12 +2200,6 @@ body:has(.context-help[open]) .context-help-trigger {
     display: inline;
   }
 
-  .theme-toggle {
-    min-height: 2.75rem;
-    min-width: 3.5rem;
-    padding-inline: var(--space-2);
-  }
-
   .header-icon {
     width: 2.75rem;
     height: 2.75rem;
@@ -2187,6 +2286,10 @@ body:has(.context-help[open]) .context-help-trigger {
     min-height: 2.75rem;
   }
 
+  .md-typeset .tabbed-labels {
+    width: calc(100% + 1.6rem);
+  }
+
   .shortcut-reference table thead {
     position: absolute;
     width: 1px;
@@ -2201,26 +2304,34 @@ body:has(.context-help[open]) .context-help-trigger {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .md-typeset .shortcut-reference table td {
-    padding: 0.625rem 0.875rem;
+  .shortcut-reference table:not(:has(th:nth-child(3))) tr {
+    grid-template-columns: minmax(0, 1fr);
   }
 
+  .shortcut-reference table tbody tr + tr {
+    border-top: 2px solid var(--border-default);
+  }
+
+  .md-typeset .shortcut-reference table td {
+    padding: 0.75rem var(--space-4);
+  }
+
+  .shortcut-reference table td + td,
   .shortcut-reference table:has(th:nth-child(3)) td + td {
     border-top: 1px solid var(--border-subtle);
     border-left: 0;
   }
 
+  .shortcut-reference table:not(:has(th:nth-child(3))) td:first-child {
+    min-height: 3.25rem;
+  }
+
   .shortcut-reference table:has(th:nth-child(3)) td:first-child {
-    padding-bottom: 0;
-    color: var(--text-tertiary);
-    font-size: 0.6875rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    padding-block: 0.5rem;
   }
 
   .shortcut-reference table:has(th:nth-child(3)) td:nth-child(2) {
-    border-top: 0;
-    background: var(--code-toolbar);
+    min-height: 3.25rem;
   }
 
   .setup-reference .md-typeset__scrollwrap,
@@ -2304,15 +2415,6 @@ body:has(.context-help[open]) .context-help-trigger {
     gap: var(--space-2);
   }
 
-  .shortcut-reference table:not(:has(th:nth-child(3))) tr.shortcut-row--stacked {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .shortcut-reference table:not(:has(th:nth-child(3))) tr.shortcut-row--stacked td + td {
-    border-top: 1px solid var(--border-subtle);
-    border-left: 0;
-  }
-
   .md-content__inner {
     padding-top: var(--space-12);
   }
@@ -2348,16 +2450,5 @@ body:has(.context-help[open]) .context-help-trigger {
 
   .header-actions > a[href*="github.com"] {
     display: none;
-  }
-}
-
-@media (max-width: 400px) {
-  .shortcut-reference table:not(:has(th:nth-child(3))) tr {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .shortcut-reference table:not(:has(th:nth-child(3))) td + td {
-    border-top: 1px solid var(--border-subtle);
-    border-left: 0;
   }
 }
