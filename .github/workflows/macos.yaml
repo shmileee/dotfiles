@@ -12,7 +12,6 @@ on:
       - ".yamllint.yaml"
       - ".github/workflows/macos.yaml"
       - "!**.md"
-      - "!.github/mkdocs.yaml"
       - "!docs/**"
   push:
     branches: [master]
@@ -25,7 +24,6 @@ on:
       - ".yamllint.yaml"
       - ".github/workflows/macos.yaml"
       - "!**.md"
-      - "!.github/mkdocs.yaml"
       - "!docs/**"
 
 permissions:
