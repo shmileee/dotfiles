@@ -856,6 +856,7 @@ button.header-icon {
   border-radius: 0.75rem;
   padding: var(--home-hero-padding);
   padding-block: clamp(var(--space-4), 2.5vw, var(--space-8));
+  padding-bottom: clamp(var(--space-2), 1.25vw, var(--space-4));
   background:
     radial-gradient(circle at 88% 10%, var(--accent-surface), transparent 38%),
     var(--surface-secondary);
@@ -2209,6 +2210,7 @@ body:has(.context-help[open]) .context-help-trigger {
 
     border-radius: 0.625rem;
     padding: var(--home-hero-padding);
+    padding-bottom: var(--space-4);
   }
 
   .principle-grid {
