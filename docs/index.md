@@ -121,18 +121,36 @@ ShellCheck checks correctness through pre-commit. Fish scripts use their native
 
 #### Installation Flow
 
-```mermaid
-flowchart TD
-    A["curl -fsSL oponomarov.com/d | sh -s -- --all"]
-    A --> B["git clone shmileee/dotfiles.git /tmp"]
-
-    B --> C["./install_dependencies.sh (apt install < essentials >)"]
-    B --> D["./install_brew.sh"]
-
-    B --> E["./ansible.sh"]
-    E --> F["install community.general, prompt for password if needed"]
-    E --> G["ansible-playbook ... main.yaml"]
-```
+<ol class="install-flow">
+  <li>
+    <span>01</span>
+    <div>
+      <strong>Bootstrap</strong>
+      <p>Run <code>curl -fsSL oponomarov.com/d | sh -s -- --all</code>.</p>
+    </div>
+  </li>
+  <li>
+    <span>02</span>
+    <div>
+      <strong>Stage the repository</strong>
+      <p>Clone <code>shmileee/dotfiles</code> into a temporary working directory.</p>
+    </div>
+  </li>
+  <li>
+    <span>03</span>
+    <div>
+      <strong>Prepare the system</strong>
+      <p>Install Debian essentials or Homebrew dependencies for macOS.</p>
+    </div>
+  </li>
+  <li>
+    <span>04</span>
+    <div>
+      <strong>Apply the workstation</strong>
+      <p>Install the required Ansible collections, obtain <code>sudo</code> access when needed, and run <code>main.yaml</code>.</p>
+    </div>
+  </li>
+</ol>
 
 #### Running Inside Docker
 

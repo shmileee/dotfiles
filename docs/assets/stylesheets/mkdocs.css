@@ -30,7 +30,7 @@ body[data-md-color-scheme] {
   position: sticky;
   top: 0;
   z-index: 50;
-  min-height: 3.625rem;
+  min-height: 3.5rem;
   border-bottom: 1px solid var(--border-subtle);
   background: var(--surface-header);
   color: var(--text-body);
@@ -64,7 +64,7 @@ body[data-md-color-scheme] {
 }
 
 .header-inner {
-  min-height: 3.625rem;
+  min-height: 3.5rem;
   display: flex;
   align-items: center;
   gap: var(--space-5);
@@ -103,7 +103,14 @@ body[data-md-color-scheme] {
   text-decoration: none;
 }
 
+.brand-short {
+  display: none;
+}
+
 .docs-home {
+  min-height: 2.5rem;
+  display: inline-flex;
+  align-items: center;
   border-left: 1px solid var(--border-default);
   padding-left: var(--space-5);
   color: var(--accent-soft);
@@ -177,6 +184,68 @@ body[data-md-color-scheme] {
 
 .header-menu {
   display: none;
+}
+
+.site-header > .md-search {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  width: auto;
+  height: auto;
+  display: none;
+  padding: clamp(4.5rem, 12vh, 8rem) var(--page-gutter) var(--space-8);
+  background: rgba(11, 18, 32, 0.72);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+:root[data-theme="light"] .site-header > .md-search {
+  background: rgba(17, 24, 39, 0.42);
+}
+
+#__search:checked ~ .site-header > .md-search {
+  display: block;
+}
+
+.site-header .md-search__overlay {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: transparent;
+  cursor: default;
+}
+
+.site-header .md-search__inner {
+  position: relative;
+  top: auto;
+  right: auto;
+  left: auto;
+  width: min(100%, 42rem);
+  height: auto;
+  margin: 0 auto;
+  transform: none;
+}
+
+.site-header .md-search__form {
+  height: 3.25rem;
+  border: 1px solid var(--border-default);
+  border-radius: 0.5rem 0.5rem 0 0;
+  background: var(--surface-secondary);
+  box-shadow: none;
+}
+
+.site-header .md-search__input {
+  height: 100%;
+  font-size: 0.875rem;
+}
+
+.site-header .md-search__output {
+  max-height: min(65vh, 36rem);
+  border: 1px solid var(--border-default);
+  border-top: 0;
+  border-radius: 0 0 0.5rem 0.5rem;
+  background: var(--surface-secondary);
+  box-shadow: none;
 }
 
 .md-container,
@@ -371,7 +440,7 @@ body[data-md-color-scheme] {
 }
 
 .md-nav__link {
-  min-height: 2.25rem;
+  min-height: 2.5rem;
   align-items: center;
   margin-top: 0;
 }
@@ -408,12 +477,20 @@ body[data-md-color-scheme] {
 }
 
 .md-top {
+  min-height: 2.5rem;
   border: 1px solid var(--border-default);
   border-radius: 0.375rem;
   background: var(--surface-secondary);
   color: var(--text-secondary);
   box-shadow: none;
   font-family: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+.md-clipboard {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: grid;
+  place-items: center;
 }
 
 .docs-hero {
@@ -432,10 +509,10 @@ body[data-md-color-scheme] {
 }
 
 .md-typeset .docs-hero h1 {
-  max-width: 14ch;
+  max-width: 18ch;
   margin-bottom: var(--space-10);
-  font-size: clamp(2.75rem, 7.5vw, 5.75rem);
-  line-height: 0.98;
+  font-size: clamp(2.75rem, 6vw, 4.5rem);
+  line-height: 1.02;
 }
 
 .hero-cursor {
@@ -461,6 +538,74 @@ body[data-md-color-scheme] {
   flex-wrap: wrap;
   gap: 1.125rem;
   margin-top: 1.75rem;
+}
+
+.install-flow {
+  max-width: 42rem;
+  margin: var(--space-6) 0 var(--space-10) !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+.install-flow li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: var(--space-5);
+  margin: 0 !important;
+  padding: 0 0 var(--space-8) !important;
+}
+
+.install-flow li::before {
+  content: "";
+  position: absolute;
+  top: 2.75rem;
+  bottom: 0.25rem;
+  left: 1.21875rem;
+  width: 1px;
+  background: var(--border-default);
+}
+
+.install-flow li:last-child {
+  padding-bottom: 0 !important;
+}
+
+.install-flow li:last-child::before {
+  display: none;
+}
+
+.install-flow li > span {
+  position: relative;
+  z-index: 1;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--accent-border);
+  border-radius: 0.375rem;
+  background: var(--surface-secondary);
+  color: var(--accent-soft);
+  font: 600 0.75rem/1 "IBM Plex Mono", ui-monospace, monospace;
+}
+
+.install-flow li > div {
+  min-width: 0;
+  padding-top: 0.125rem;
+}
+
+.install-flow li strong {
+  display: block;
+  margin-bottom: var(--space-2);
+  color: var(--text-primary);
+  font-family: "Bricolage Grotesque", "Public Sans", sans-serif;
+  font-size: 1rem;
+}
+
+.install-flow li p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.6;
 }
 
 .md-typeset .primary-link,
@@ -544,7 +689,7 @@ body[data-md-color-scheme] {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: var(--space-10);
-  padding-block: clamp(3rem, 7vw, 5rem);
+  padding-block: clamp(2.5rem, 6vw, 4rem);
 }
 
 .footer-brand {
@@ -629,15 +774,12 @@ body[data-md-color-scheme] {
 }
 
 @media (max-width: 600px) {
-  .brand-link {
-    max-width: 10rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  .brand-full {
+    display: none;
   }
 
-  .docs-home {
-    display: none;
+  .brand-short {
+    display: inline;
   }
 
   .theme-toggle {
@@ -648,15 +790,30 @@ body[data-md-color-scheme] {
   .docs-adjacent {
     grid-template-columns: minmax(0, 1fr);
   }
+
 }
 
 @media (max-width: 480px) {
-  .brand-link {
-    max-width: 7.75rem;
-  }
-
   .header-inner {
     gap: var(--space-2);
+  }
+
+  .docs-home {
+    border-left: 0;
+    padding-left: 0;
+  }
+
+  .md-content__inner {
+    padding-top: var(--space-12);
+  }
+
+  .docs-hero {
+    margin-bottom: var(--space-12);
+    padding-bottom: var(--space-12);
+  }
+
+  .md-typeset .docs-hero h1 {
+    margin-bottom: var(--space-8);
   }
 
   .hero-actions,

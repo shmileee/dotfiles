@@ -124,6 +124,7 @@
 }
 
 html {
+  font-size: 100%;
   scroll-behavior: smooth;
   scroll-padding-top: 6rem;
 }
