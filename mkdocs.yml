@@ -3,6 +3,9 @@ site_dir: site
 site_name: dotfiles
 site_description: Reproducible workstation setup and the reasoning behind it.
 site_url: https://dotfiles.oponomarov.com
+repo_url: https://github.com/shmileee/dotfiles
+repo_name: shmileee/dotfiles
+edit_uri: edit/master/docs/
 copyright: Copyright &copy; 2021&ndash;2026 Oleksandr Ponomarov
 
 nav:
@@ -17,16 +20,32 @@ theme:
   variant: classic
   custom_dir: docs-overrides
   palette:
-    scheme: slate
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: lucide/sun-moon
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: lucide/sun
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: lucide/moon
+        name: Switch to system preference
   language: en
   font: false
   favicon: assets/favicon.svg
   icon:
     repo: fontawesome/brands/github
   features:
+    - header.autohide
     - navigation.instant
     - search.highlight
     - navigation.expand
+    - content.action.view
+    - content.action.edit
     - content.code.copy
     - navigation.footer
     - navigation.instant.progress
