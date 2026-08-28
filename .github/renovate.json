@@ -2,11 +2,13 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:best-practices", ":enablePreCommit"],
   "timezone": "Europe/Warsaw",
-  "schedule": ["before 6am on Monday"],
+  "schedule": ["* 0-5 * * 1"],
+  "updateNotScheduled": false,
   "minimumReleaseAge": "3 days",
   "prConcurrentLimit": 4,
   "prHourlyLimit": 2,
   "rebaseWhen": "conflicted",
+  "groupSingleUpdates": true,
   "semanticCommits": "enabled",
   "major": {
     "dependencyDashboardApproval": true
@@ -20,7 +22,7 @@
   },
   "packageRules": [
     {
-      "description": "Group GitHub Actions by their CI/CD blast radius",
+      "description": "Group updates across the repository's GitHub Actions",
       "matchManagers": ["github-actions"],
       "groupName": "GitHub Actions",
       "groupSlug": "github-actions",
@@ -70,6 +72,14 @@
       "groupSlug": "workstation-toolchain",
       "semanticCommitType": "chore",
       "semanticCommitScope": "workstation"
+    },
+    {
+      "description": "Require approval for Go feature releases used by the workstation",
+      "matchManagers": ["mise"],
+      "matchFileNames": ["config/private_dot_config/mise/config.toml"],
+      "matchDepNames": ["go"],
+      "matchUpdateTypes": ["minor"],
+      "dependencyDashboardApproval": true
     },
     {
       "description": "Group the runtime and frontend images used by Docker builds",
