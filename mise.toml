@@ -4,6 +4,7 @@ legacy_version_file = false
 
 [tools]
 "aqua:rhysd/actionlint" = "1.7.12"
+"aqua:bats-core/bats-core" = "1.14.0"
 "aqua:twpayne/chezmoi" = "2.72.0"
 "aqua:zizmorcore/zizmor" = "1.29.0"
 biome = "2.5.11"
@@ -38,6 +39,10 @@ raw = true
 description = "Preview the Ansible reconciliation (check mode has limits)"
 run = "scripts/common/ansible.sh --all --check"
 raw = true
+
+[tasks."test:shell"]
+description = "Run shell behavior tests"
+run = "bats tests/shell"
 
 [tasks.import]
 description = "Import modified managed files from $HOME into config/"

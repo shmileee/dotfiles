@@ -52,6 +52,9 @@ jobs:
           mise exec -- scripts/common/ansible.sh --install
           mise exec -- prek run --all-files
 
+      - name: Test shell behavior
+        run: mise exec -- bats tests/shell
+
       - name: Validate Ansible syntax
         run: |
           mise exec -- env \

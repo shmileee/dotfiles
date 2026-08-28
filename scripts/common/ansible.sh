@@ -1,91 +1,109 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-set -euoE pipefail
+set -eu
 
-cwd="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-action=""
-check_mode=false
+script_dir=$(CDPATH='' cd -P "$(dirname "$0")" && pwd)
+action=''
+check_mode=0
 
-login_shell_is_fish() {
-  local current_shell desired_shell
-  case "$(uname -s)" in
-    Darwin)
-      desired_shell="$(brew --prefix)/bin/fish"
-      current_shell="$(
-        /usr/bin/dscl -plist . -read "/Users/$(id -un)" UserShell \
-          | /usr/bin/plutil -extract dsAttrTypeStandard:UserShell.0 raw -o - -
-      )"
-      ;;
-    Linux)
-      desired_shell="/home/linuxbrew/.linuxbrew/bin/fish"
-      current_shell="$(getent passwd "$(id -un)" | cut -d: -f7)"
-      ;;
-    *)
-      return 1
-      ;;
-  esac
+usage() {
+  cat << EOF
+Usage: $(basename "$0") (--install | --run | --all) [--check]
 
-  [[ "$current_shell" == "$desired_shell" ]]
+  --install   install required Ansible collections
+  --run       run the local playbook
+  --all       install collections, then run the playbook
+  --check     run the playbook in check mode
+EOF
 }
 
-needs_become_pass() {
-  ! login_shell_is_fish && ! sudo -n true 2> /dev/null
+die() {
+  printf '%s: %s\n' "$(basename "$0")" "$*" >&2
+  exit 1
+}
+
+login_shell_is_fish() {
+  ansible_user=$(id -un) || return 1
+  brew_prefix=$(brew --prefix) || return 1
+  desired_shell="${brew_prefix}/bin/fish"
+  user_record=$(
+    /usr/bin/dscl -plist . -read "/Users/${ansible_user}" UserShell
+  ) || return 1
+  current_shell=$(
+    printf '%s\n' "${user_record}" \
+      | /usr/bin/plutil \
+        -extract dsAttrTypeStandard:UserShell.0 raw -o - -
+  ) || return 1
+
+  [ "$current_shell" = "$desired_shell" ]
+}
+
+needs_become_password() {
+  user_id=$(id -u)
+  [ "${user_id}" -eq 0 ] && return 1
+  sudo -n true 2> /dev/null && return 1
+
+  operating_system=$(uname -s)
+  case ${operating_system} in
+    Linux) return 0 ;;
+    Darwin) ! login_shell_is_fish ;;
+    *) return 1 ;;
+  esac
 }
 
 install_collections() {
-  local collections_dir="${HOME}/.ansible/collections"
+  collections_dir="${HOME}/.ansible/collections"
 
-  echo "⚪ [ansible] reconciling collections..."
-  ANSIBLE_COLLECTIONS_PATH="$collections_dir" ansible-galaxy collection install \
+  printf '%s\n' '[ansible] Reconciling collections...'
+  ANSIBLE_COLLECTIONS_PATH="$collections_dir" \
+    ansible-galaxy collection install \
     --collections-path "$collections_dir" \
-    --requirements-file "${cwd}/ansible/requirements.yml"
+    --requirements-file "${script_dir}/ansible/requirements.yml"
 }
 
 run_playbook() {
-  echo "⚪ [ansible] running playbook..."
-  local command=(
-    ansible-playbook
-    --inventory "127.0.0.1,"
-    -e "ansible_user=$(whoami)"
-    "${cwd}/ansible/main.yaml"
-  )
+  printf '%s\n' '[ansible] Running playbook...'
+  playbook_user=$(id -un)
 
-  if [[ "$check_mode" == true ]]; then
-    command+=("--check")
-  fi
-  if needs_become_pass; then
-    command+=("--ask-become-pass")
-  fi
+  set -- \
+    ansible-playbook \
+    --inventory '127.0.0.1,' \
+    --extra-vars "ansible_user=${playbook_user}" \
+    "${script_dir}/ansible/main.yaml"
 
-  export ANSIBLE_CONFIG="${cwd}/ansible/ansible.cfg"
+  [ "$check_mode" -eq 0 ] || set -- "$@" --check
+  needs_become_password && set -- "$@" --ask-become-pass
 
-  if [[ -z "${CI:-}" && -z "${DOCKERIZED:-}" ]]; then
-    command+=("-v")
+  if [ -z "${CI:-}" ] && [ -z "${DOCKERIZED:-}" ]; then
+    set -- "$@" --verbose
   fi
 
-  echo "${command[*]}"
-  "${command[@]}"
-  echo "✅ [ansible] configured!"
+  export ANSIBLE_CONFIG="${script_dir}/ansible/ansible.cfg"
+
+  printf '[ansible] Executing:'
+  printf ' %s' "$@"
+  printf '\n'
+  "$@"
+
+  printf '%s\n' '[ansible] Configuration complete.'
 }
 
-while [[ $# -gt 0 ]]; do
-  arg=$1
-  case $arg in
-    --install)
-      action="install"
-      ;;
-    --run)
-      action="run"
-      ;;
-    --all)
-      action="all"
+while [ "$#" -gt 0 ]; do
+  case $1 in
+    --install | --run | --all)
+      [ -z "$action" ] || die 'specify exactly one action'
+      action=${1#--}
       ;;
     --check)
-      check_mode=true
+      check_mode=1
+      ;;
+    -h | --help)
+      usage
+      exit 0
       ;;
     *)
-      echo "Unknown argument: $arg" >&2
-      exit 1
+      usage >&2
+      die "unknown option: $1"
       ;;
   esac
   shift
@@ -93,6 +111,7 @@ done
 
 case $action in
   install)
+    [ "$check_mode" -eq 0 ] || die '--check requires --run or --all'
     install_collections
     ;;
   run)
@@ -103,7 +122,7 @@ case $action in
     run_playbook
     ;;
   *)
-    echo "Usage: $0 --install|--run|--all [--check]" >&2
-    exit 1
+    usage >&2
+    exit 2
     ;;
 esac

@@ -1,24 +1,30 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-set -euo pipefail
+set -eu
 
-if [[ $# -lt 2 ]]; then
-  echo "Usage: $0 <phase> <command> [arguments...]" >&2
+usage() {
+  printf 'Usage: %s PHASE COMMAND [ARGUMENT]...\n' "$(basename "$0")" >&2
+}
+
+if [ "$#" -lt 2 ]; then
+  usage
   exit 2
 fi
 
 phase=$1
 shift
-started_at=$SECONDS
+started_at=$(date +%s)
 
 printf 'PROFILE phase=%s status=started\n' "$phase"
 
-set +e
-"$@"
-status=$?
-set -e
+if "$@"; then
+  status=0
+else
+  status=$?
+fi
 
-printf 'PROFILE phase=%s status=%s elapsed_seconds=%d\n' \
-  "$phase" "$status" "$((SECONDS - started_at))"
+finished_at=$(date +%s)
+printf 'PROFILE phase=%s status=%d elapsed_seconds=%d\n' \
+  "$phase" "$status" "$((finished_at - started_at))"
 
 exit "$status"

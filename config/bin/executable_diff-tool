@@ -1,9 +1,29 @@
 #!/bin/sh
 
-local="$1"
-chezmoi="$2"
-base="$3"
+set -eu
 
-kdiff3 -m "$base" "$chezmoi" "$local" -o "$chezmoi"
+program=${0##*/}
 
-test -f "$chezmoi.orig" && rm -f "$chezmoi.orig"
+if [ "$#" -ne 3 ]; then
+  printf 'Usage: %s LOCAL CHEZMOI BASE\n' "$program" >&2
+  exit 2
+fi
+
+local_file=$1
+chezmoi_file=$2
+base_file=$3
+
+cleanup() {
+  rm -f -- "${chezmoi_file}.orig"
+}
+
+command -v kdiff3 > /dev/null 2>&1 || {
+  printf '%s: kdiff3 is required\n' "$program" >&2
+  exit 127
+}
+
+trap cleanup 0
+trap 'exit 129' HUP
+trap 'exit 130' INT
+trap 'exit 143' TERM
+kdiff3 -m "$base_file" "$chezmoi_file" "$local_file" -o "$chezmoi_file"

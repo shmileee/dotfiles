@@ -1,35 +1,68 @@
-#!/usr/bin/env bash
-#
-set -o pipefail
+#!/bin/sh
 
-list_asgs() {
-  aws autoscaling describe-auto-scaling-groups \
-    | jq -r '.AutoScalingGroups[].AutoScalingGroupName'
-}
+set -eu
 
-print_usage() {
-  cat <<- EOF
-usage: asg <command>
-command:
-    list:  List ASGs
-    refresh: Start instance refresh
+program=${0##*/}
+
+usage() {
+  cat << EOF
+Usage: ${program} COMMAND
+
+Commands:
+  list      list Auto Scaling groups
+  refresh   interactively select a group and start an instance refresh
 EOF
 }
 
-case "$1" in
-  list)
-    list_asgs
+die() {
+  printf '%s: %s\n' "$program" "$*" >&2
+  exit 1
+}
 
-    ;;
-  refresh)
-    list_asgs \
-      | fzf \
-      | xargs -I '{}' \
-        aws autoscaling start-instance-refresh \
-        --auto-scaling-group-name {} \
-        --preferences '{"InstanceWarmup": 0, "MinHealthyPercentage": 0}'
-    ;;
+require_command() {
+  command -v "$1" > /dev/null 2>&1 || die "$1 is required"
+}
+
+list_groups() {
+  require_command aws
+  require_command jq
+
+  groups_json=$(aws autoscaling describe-auto-scaling-groups --no-cli-pager)
+  printf '%s\n' "$groups_json" \
+    | jq -r '.AutoScalingGroups[].AutoScalingGroupName'
+}
+
+start_refresh() {
+  require_command fzf
+
+  groups=$(list_groups)
+  [ -n "$groups" ] || die 'no Auto Scaling groups found'
+
+  if selected_group=$(printf '%s\n' "$groups" | fzf); then
+    :
+  else
+    status=$?
+    exit "$status"
+  fi
+  [ -n "$selected_group" ] || die 'no Auto Scaling group selected'
+
+  aws autoscaling start-instance-refresh \
+    --auto-scaling-group-name "$selected_group" \
+    --preferences '{"InstanceWarmup":0,"MinHealthyPercentage":0}' \
+    --no-cli-pager
+}
+
+[ "$#" -eq 1 ] || {
+  usage >&2
+  exit 2
+}
+
+case $1 in
+  list) list_groups ;;
+  refresh) start_refresh ;;
+  -h | --help) usage ;;
   *)
-    print_usage
+    usage >&2
+    die "unknown command: $1"
     ;;
 esac

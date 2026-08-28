@@ -1,28 +1,20 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-set -euoE pipefail
+set -eu
 
-image="${1:?Usage: $0 IMAGE}"
+usage() {
+  printf 'Usage: %s IMAGE\n' "$(basename "$0")" >&2
+}
 
-docker run --rm --entrypoint /bin/bash "$image" -lc '
-  set -euo pipefail
-  cd /tmp/.dotfiles
+if [ "$#" -ne 1 ]; then
+  usage
+  exit 2
+fi
 
-  printf "%s\n" "SMOKE phase=runtime-identity"
-  test "$(whoami)" = linuxbrew
-  test "$HOME" = /home/linuxbrew
+command -v docker > /dev/null 2>&1 || {
+  printf '%s: docker is required\n' "$(basename "$0")" >&2
+  exit 127
+}
 
-  printf "%s\n" "SMOKE phase=executables"
-  for executable in brew chezmoi fish mise tmux; do
-    command -v "$executable" >/dev/null
-  done
-
-  printf "%s\n" "SMOKE phase=startup"
-  test -z "$(fish -c true)"
-  mise exec -- nvim --headless +qa
-
-  printf "%s\n" "SMOKE phase=idempotence"
-  scripts/common/ansible.sh --run |
-    tee /tmp/ansible-idempotence.log
-  grep -Eq "changed=0 +unreachable=0 +failed=0" /tmp/ansible-idempotence.log
-'
+docker run --rm --entrypoint /bin/sh "$1" \
+  /tmp/.dotfiles/scripts/docker/container-smoke.sh

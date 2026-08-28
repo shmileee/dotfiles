@@ -1,95 +1,124 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-set -euo pipefail
+set -eu
+set -f
 
-aws_profile=iris-operations
-aws_region=eu-west-1
-ecs_cluster=atlantis
-ecs_service=atlantis
-ecs_container=atlantis
+program=${0##*/}
+aws_profile=${ATLANTIS_AWS_PROFILE:-iris-operations}
+aws_region=${ATLANTIS_AWS_REGION:-eu-west-1}
+ecs_cluster=${ATLANTIS_ECS_CLUSTER:-atlantis}
+ecs_service=${ATLANTIS_ECS_SERVICE:-atlantis}
+ecs_container=${ATLANTIS_ECS_CONTAINER:-atlantis}
+remote_shell=${ATLANTIS_REMOTE_SHELL:-/bin/bash}
+disable_exec_on_exit=0
+
+die() {
+  printf '%s: %s\n' "$program" "$*" >&2
+  exit 1
+}
+
+require_command() {
+  command -v "$1" > /dev/null 2>&1 || die "$1 is required"
+}
 
 aws_ecs() {
-  aws --profile "${aws_profile}" --region "${aws_region}" ecs "$@"
+  aws \
+    --profile "$aws_profile" \
+    --region "$aws_region" \
+    --no-cli-pager \
+    ecs "$@"
 }
-
-# ---------------------------------------------------------------------------
-# Enable ECS Exec on the service and ensure it gets disabled on exit.
-# ---------------------------------------------------------------------------
 
 disable_exec() {
-  printf '\n\033[36m│\033[0m Disabling ECS Exec on %s...\n' "${ecs_service}" >&2
-  aws_ecs update-service \
-    --cluster "${ecs_cluster}" \
-    --service "${ecs_service}" \
-    --no-enable-execute-command \
-    --no-cli-pager > /dev/null 2>&1 || true
-  printf '\033[32m✔\033[0m ECS Exec disabled.\n' >&2
+  printf 'Disabling ECS Exec on service %s...\n' "$ecs_service" >&2
+  if aws_ecs update-service \
+    --cluster "$ecs_cluster" \
+    --service "$ecs_service" \
+    --no-enable-execute-command > /dev/null 2>&1; then
+    printf '%s\n' 'ECS Exec disabled.' >&2
+  else
+    printf '%s\n' 'Warning: could not disable ECS Exec.' >&2
+  fi
 }
 
-exec_enabled=$(
-  aws_ecs describe-services \
-    --cluster "${ecs_cluster}" \
-    --services "${ecs_service}" \
-    | jq -r '.services[0].enableExecuteCommand'
-)
+cleanup() {
+  status=$?
+  trap - 0 HUP INT TERM
+  [ "$disable_exec_on_exit" -eq 0 ] || disable_exec
+  exit "$status"
+}
 
-if [[ "${exec_enabled}" == "true" ]]; then
-  printf '\033[36m│\033[0m ECS Exec already enabled.\n' >&2
-else
-  printf '\033[36m│\033[0m Enabling ECS Exec on %s...\n' "${ecs_service}" >&2
-  aws_ecs update-service \
-    --cluster "${ecs_cluster}" \
-    --service "${ecs_service}" \
-    --enable-execute-command \
-    --no-cli-pager > /dev/null
-  printf '\033[32m✔\033[0m Enabled.\n' >&2
-  trap disable_exec EXIT
-fi
+require_command aws
+require_command jq
+trap cleanup 0
+trap 'exit 129' HUP
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
-# ---------------------------------------------------------------------------
-# Find the most recent running task with the atlantis container.
-# ---------------------------------------------------------------------------
+services_json=$(aws_ecs describe-services \
+  --cluster "$ecs_cluster" \
+  --services "$ecs_service")
+exec_enabled=$(printf '%s\n' "$services_json" \
+  | jq -r '
+    if .services[0] == null then
+      empty
+    else
+      .services[0].enableExecuteCommand
+    end
+  ')
 
-mapfile -t task_arns < <(
-  aws_ecs list-tasks \
-    --cluster "${ecs_cluster}" \
-    --desired-status RUNNING \
-    | jq -r '.taskArns[]?'
-)
+case $exec_enabled in
+  true)
+    printf '%s\n' 'ECS Exec is already enabled.' >&2
+    ;;
+  false)
+    printf 'Enabling ECS Exec on service %s...\n' "$ecs_service" >&2
+    aws_ecs update-service \
+      --cluster "$ecs_cluster" \
+      --service "$ecs_service" \
+      --enable-execute-command > /dev/null
+    disable_exec_on_exit=1
+    printf '%s\n' 'ECS Exec enabled.' >&2
+    ;;
+  *)
+    die "service not found: ${ecs_service}"
+    ;;
+esac
 
-if [[ ${#task_arns[@]} -eq 0 ]]; then
-  printf 'No running tasks found in cluster %s\n' "${ecs_cluster}" >&2
-  exit 1
-fi
+tasks_json=$(aws_ecs list-tasks \
+  --cluster "$ecs_cluster" \
+  --desired-status RUNNING)
+task_arns=$(printf '%s\n' "$tasks_json" | jq -r '.taskArns[]?')
+[ -n "$task_arns" ] || die "no running tasks found in cluster ${ecs_cluster}"
 
-ecs_task_id=$(
-  aws_ecs describe-tasks \
-    --cluster "${ecs_cluster}" \
-    --tasks "${task_arns[@]}" \
-    | jq -r '
-      .tasks
-      | map(select(any(.containers[]?; .name == "atlantis" and .lastStatus == "RUNNING")))
-      | sort_by(.createdAt)
-      | last
-      | .taskArn // empty
-    ' | sed 's|.*/||'
-)
+old_ifs=$IFS
+IFS='
+'
+# Task ARNs contain no whitespace; intentional splitting produces AWS arguments.
+# shellcheck disable=SC2086
+set -- $task_arns
+IFS=$old_ifs
 
-if [[ -z "${ecs_task_id}" ]]; then
-  printf 'No running %s container found in cluster %s\n' "${ecs_container}" "${ecs_cluster}" >&2
-  exit 1
-fi
+task_details_json=$(aws_ecs describe-tasks \
+  --cluster "$ecs_cluster" \
+  --tasks "$@")
+ecs_task_arn=$(printf '%s\n' "$task_details_json" \
+  | jq -r --arg container "$ecs_container" '
+    .tasks
+    | map(select(any(.containers[]?;
+        .name == $container and .lastStatus == "RUNNING")))
+    | sort_by(.createdAt)
+    | last
+    | .taskArn // empty
+  ')
+ecs_task_id=${ecs_task_arn##*/}
+[ -n "$ecs_task_id" ] \
+  || die "no running ${ecs_container} container found in cluster ${ecs_cluster}"
 
-# ---------------------------------------------------------------------------
-# Connect.
-# ---------------------------------------------------------------------------
-
-printf '\033[36m│\033[0m Connecting to task %s...\n\n' "${ecs_task_id}" >&2
-
-aws --profile "${aws_profile}" ecs execute-command \
-  --region "${aws_region}" \
-  --cluster "${ecs_cluster}" \
-  --task "${ecs_task_id}" \
-  --container "${ecs_container}" \
-  --command "/bin/bash" \
+printf 'Connecting to task %s...\n' "$ecs_task_id" >&2
+aws_ecs execute-command \
+  --cluster "$ecs_cluster" \
+  --task "$ecs_task_id" \
+  --container "$ecs_container" \
+  --command "$remote_shell" \
   --interactive

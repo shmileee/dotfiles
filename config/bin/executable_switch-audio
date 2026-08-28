@@ -1,48 +1,71 @@
-#!/usr/bin/env bash
-#
-# Requirements:
-#   - switchaudio-osx (brew install switchaudio-osx)
-#
-# Usage:
-#
-#   Switch between speakers / headphones:
-#   - audio headphones
-#   - audio speakers
-#
+#!/bin/sh
 
-if ! command -v "SwitchAudioSource" &> /dev/null; then
-  echo "SwitchAudioSource could not be found."
-  echo "Run:"
-  echo "  - brew install switchaudio-osx"
-  exit
-fi
+set -eu
+
+program=${0##*/}
+speaker_input=${SPEAKER_INPUT:-MacBook Pro Microphone}
+speaker_output=${SPEAKER_OUTPUT:-MacBook Pro Speakers}
+headset_input=${HEADSET_INPUT:-Jabra Evolve2 40 SE}
+headset_output=${HEADSET_OUTPUT:-Jabra Evolve2 40 SE}
+
+usage() {
+  cat << EOF
+Usage: ${program} [headphones | speakers | toggle]
+
+Switch between the configured speaker and headset audio devices. Device names
+can be overridden with SPEAKER_INPUT, SPEAKER_OUTPUT, HEADSET_INPUT, and
+HEADSET_OUTPUT.
+EOF
+}
+
+die() {
+  printf '%s: %s\n' "$program" "$*" >&2
+  exit 1
+}
+
+require_switch_audio() {
+  command -v SwitchAudioSource > /dev/null 2>&1 || {
+    printf '%s: SwitchAudioSource is required (brew install switchaudio-osx)\n' \
+      "$program" >&2
+    exit 127
+  }
+}
 
 set_speakers() {
-  SwitchAudioSource -t input -s "MacBook Pro Microphone"
-  SwitchAudioSource -t output -s "MacBook Pro Speakers"
+  require_switch_audio
+  SwitchAudioSource -t input -s "$speaker_input"
+  SwitchAudioSource -t output -s "$speaker_output"
 }
 
 set_headphones() {
-  SwitchAudioSource -t input -s "Jabra Evolve2 40 SE"
-  SwitchAudioSource -t output -s "Jabra Evolve2 40 SE"
+  require_switch_audio
+  SwitchAudioSource -t input -s "$headset_input"
+  SwitchAudioSource -t output -s "$headset_output"
 }
 
-toggle() {
-  if test "$(SwitchAudioSource -c)" == "MacBook Pro Speakers"; then
-    set_headphones
-  elif test "$(SwitchAudioSource -c)" == "Jabra Evolve2 40 SE"; then
-    set_speakers
-  fi
+toggle_audio() {
+  require_switch_audio
+  current_output=$(SwitchAudioSource -t output -c)
+
+  case $current_output in
+    "$speaker_output") set_headphones ;;
+    "$headset_output") set_speakers ;;
+    *) die "current output is not a configured device: ${current_output}" ;;
+  esac
 }
 
-case "$1" in
-  headphones)
-    set_headphones
-    ;;
-  speakers)
-    set_speakers
-    ;;
+if [ "$#" -gt 1 ]; then
+  usage >&2
+  exit 2
+fi
+
+case ${1:-toggle} in
+  headphones) set_headphones ;;
+  speakers) set_speakers ;;
+  toggle) toggle_audio ;;
+  -h | --help) usage ;;
   *)
-    toggle
+    usage >&2
+    die "unknown command: $1"
     ;;
 esac

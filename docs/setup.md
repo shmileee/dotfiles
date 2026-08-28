@@ -81,7 +81,9 @@ and the files under
 === "Ubuntu"
 
     Use an account with `sudo` access. The bootstrap installs the apt
-    prerequisites, adds the Ansible PPA, and then installs Homebrew.
+    prerequisites and Homebrew, then creates a pinned, isolated Ansible Core
+    environment under the user's data directory. It does not add a PPA or
+    install Ansible into the system Python environment.
 
 Apple Silicon macOS is the supported workstation target. Ubuntu 24.04 ARM64 is
 the continuously tested container and integration target. The setup may work
@@ -126,6 +128,12 @@ on the `master` branch. The
 script downloads that branch into a unique temporary directory, runs the full
 setup, and removes the temporary checkout when it exits.
 
+To bootstrap a reviewed tag or commit instead of `master`, set `DOTFILES_REF`:
+
+```bash
+curl -fsSL oponomarov.com/d | DOTFILES_REF=v1.2.3 sh -s -- --all
+```
+
 ??? "Download the script before running it"
 
     If you want the convenience of the bootstrap without piping directly into
@@ -152,14 +160,14 @@ setup, and removes the temporary checkout when it exits.
     <span>02</span>
     <div>
       <strong>Prepare Ubuntu</strong>
-      <p>On the tested Linux target, install the required apt packages and Ansible before the shared setup begins.</p>
+      <p>On the tested Linux target, install only the native packages required to bootstrap Homebrew.</p>
     </div>
   </li>
   <li>
     <span>03</span>
     <div>
       <strong>Prepare Homebrew</strong>
-      <p>Install Homebrew if necessary, add it to the current process, and disable analytics.</p>
+      <p>Install Homebrew if necessary and disable analytics. Install Ansible through Homebrew on macOS or a pinned isolated Python environment on Linux.</p>
     </div>
   </li>
   <li>
@@ -179,9 +187,9 @@ Stage flags must be run from a repository checkout.
 
 | Command | Purpose |
 | --- | --- |
-| `./scripts/setup.sh --deps` | Install apt prerequisites on Linux; tested on Ubuntu 24.04 ARM64. |
+| `./scripts/setup.sh --deps` | Install native bootstrap prerequisites on Linux; tested on Ubuntu 24.04 ARM64. |
 | `./scripts/setup.sh --brew` | Install Homebrew if it is missing. |
-| `./scripts/setup.sh --ansible` | Install Ansible collections and run every role. |
+| `./scripts/setup.sh --ansible` | Ensure Homebrew and Ansible are installed, install collections, and run every role. |
 | `./scripts/setup.sh --all` | Run the complete platform-specific sequence. |
 | `./scripts/setup.sh` | Same as `--all`. |
 
@@ -356,6 +364,7 @@ Run the same static checks and Ansible syntax validation used by CI:
 mise install
 mise exec -- scripts/common/ansible.sh --install
 mise exec -- prek run --all-files
+mise exec -- bats tests/shell
 mise exec -- env ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
   ansible-playbook --inventory '127.0.0.1,' \
   --syntax-check scripts/common/ansible/main.yaml

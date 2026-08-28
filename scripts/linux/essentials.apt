@@ -1,21 +1,12 @@
-# Bare Necessities
+# Homebrew requirements
 ca-certificates
 build-essential
+curl
 file
 git
-gpg
-locales
-make
 procps
+
+# Bootstrap runtime
+python3
+python3-venv
 sudo
-unzip
-
-# Editor
-vim
-
-# Download Manager
-curl
-wget
-
-# Ansible
-ansible

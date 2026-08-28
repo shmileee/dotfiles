@@ -1,118 +1,193 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-set -euoE pipefail
+set -eu
 
-source="https://github.com/shmileee/dotfiles"
-branch="master"
-tarball="$source/tarball/$branch"
-repository=""
-temporary_repository=""
+readonly repository_url="${DOTFILES_REPOSITORY_URL:-https://github.com/shmileee/dotfiles}"
+readonly repository_branch="${DOTFILES_REF:-master}"
+readonly repository_archive="${repository_url}/tarball/${repository_branch}"
 
-if [[ -n "${BASH_SOURCE[0]:-}" ]]; then
-  script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  if [[ -x "${script_dir}/common/ansible.sh" ]]; then
-    repository="$(cd "${script_dir}/.." && pwd)"
-  fi
-fi
+repository=''
+temporary_repository=''
 
-display_help() {
-  echo "Usage: ./setup.sh [arguments]..."
-  echo
-  echo "  --deps              install deps for linux"
-  echo "  --brew              install brew for linux/macos"
-  echo "  --ansible           execute ansible for linux/macos"
-  echo "  --all               setup everything"
-  echo "  -h, --help          display this help message"
-  echo
+usage() {
+  cat << 'EOF'
+Usage: setup.sh [OPTION]...
+
+Set up this dotfiles repository on macOS or Linux.
+
+Options:
+  --deps       install Linux system dependencies
+  --brew       install Homebrew
+  --ansible    install Ansible collections and run the playbook
+  --all        run the complete setup (default)
+  -h, --help   display this help and exit
+
+Environment:
+  DOTFILES_REPOSITORY_URL   repository to download when run outside a checkout
+  DOTFILES_REF              branch, tag, or commit to download (default: master)
+  ANSIBLE_CORE_VERSION      Ansible Core version used on Linux (default: 2.21.3)
+EOF
 }
 
-exit_help() {
-  display_help
-  echo "Error: $1"
+die() {
+  printf 'setup.sh: %s\n' "$*" >&2
   exit 1
 }
 
-macos() { test "$(uname -s)" == "Darwin" && return 0; }
-linux() { test "$(uname -s)" == "Linux" && return 0; }
-is_executable() { type "$1" > /dev/null 2>&1; }
+command_exists() {
+  command -v "$1" > /dev/null 2>&1
+}
+
+platform() {
+  uname -s
+}
+
+require_supported_platform() {
+  case $1 in
+    Darwin | Linux) ;;
+    *) die "unsupported operating system: $1" ;;
+  esac
+}
+
+cleanup() {
+  if [ -n "$temporary_repository" ] && [ -d "$temporary_repository" ]; then
+    rm -rf -- "$temporary_repository"
+  fi
+}
+
+find_local_repository() {
+  script_dir=$(CDPATH='' cd -P "$(dirname "$0")" && pwd)
+
+  if [ -x "${script_dir}/common/ansible.sh" ]; then
+    repository=$(CDPATH='' cd -P "${script_dir}/.." && pwd)
+  fi
+}
 
 ensure_brew_in_path() {
-  command -v brew &> /dev/null && return 0
+  command_exists brew && return 0
+
   for prefix in /opt/homebrew /usr/local /home/linuxbrew/.linuxbrew; do
-    if [[ -x "${prefix}/bin/brew" ]]; then
-      eval "$("${prefix}/bin/brew" shellenv)"
+    if [ -x "${prefix}/bin/brew" ]; then
+      brew_environment=$("${prefix}/bin/brew" shellenv) || return 1
+      eval "${brew_environment}" || return 1
       return 0
     fi
   done
+
   return 1
 }
 
-download_repository() {
-  temporary_repository="$(mktemp -d "${TMPDIR:-/tmp}/dotfiles.XXXXXX")"
-  repository="$temporary_repository"
-  trap '[[ -z "$temporary_repository" ]] || rm -rf -- "$temporary_repository"' EXIT
+activate_ansible() {
+  operating_system=$(platform)
+  case ${operating_system} in
+    Darwin)
+      ensure_brew_in_path || die 'Homebrew is installed but could not be found'
+      ;;
+    Linux)
+      data_home=${XDG_DATA_HOME:-${HOME}/.local/share}
+      PATH="${data_home}/dotfiles/ansible-core/bin:${PATH}"
+      export PATH
+      ;;
+    *) die "unsupported operating system: ${operating_system}" ;;
+  esac
 
-  if is_executable "curl"; then
-    curl -fsSL "$tarball" | tar -xz -C "$repository" --strip-components=1
-  elif is_executable "wget"; then
-    wget -qO- "$tarball" | tar -xz -C "$repository" --strip-components=1
-  elif is_executable "git"; then
-    git clone --depth 1 --branch "$branch" "$source" "$repository"
-  else
-    exit_help "No git, curl or wget available. Aborting."
-  fi
+  command_exists ansible-playbook || die 'Ansible installation could not be found'
 }
 
-setup_all() {
-  if ! macos && ! linux; then
-    exit_help "Only macOS and Linux are supported."
-  fi
-
-  [[ -n "$repository" ]] || download_repository
-  if linux; then
-    "${repository}/scripts/linux/install_dependencies.sh"
-  fi
+configure_with_ansible() {
   "${repository}/scripts/common/install_brew.sh"
-  ensure_brew_in_path
-  if macos; then
-    brew install ansible
-  fi
+  "${repository}/scripts/common/install_ansible.sh"
+  activate_ansible
   "${repository}/scripts/common/ansible.sh" --all
 }
 
-require_local_repository() {
-  [[ -n "$repository" ]] || exit_help "This option must be run from a repository checkout."
+download_repository() {
+  temporary_repository=$(mktemp -d "${TMPDIR:-/tmp}/dotfiles.XXXXXX") \
+    || die 'could not create a temporary directory'
+  repository=$temporary_repository
+  trap cleanup 0
+  trap 'exit 129' HUP
+  trap 'exit 130' INT
+  trap 'exit 143' TERM
+
+  if command_exists tar && { command_exists curl || command_exists wget; }; then
+    archive_file="${temporary_repository}/repository.tar.gz"
+
+    if command_exists curl; then
+      curl --retry 3 -fsSL "$repository_archive" -o "$archive_file"
+    else
+      wget -qO "$archive_file" "$repository_archive"
+    fi
+
+    [ -s "$archive_file" ] || die 'downloaded repository archive is empty'
+    tar -xzf "$archive_file" -C "$repository" --strip-components=1
+    rm -f -- "$archive_file"
+  elif command_exists git; then
+    git -C "$repository" init --quiet
+    git -C "$repository" remote add origin "$repository_url"
+    git -C "$repository" fetch --quiet --depth 1 origin "$repository_branch"
+    git -C "$repository" checkout --quiet --detach FETCH_HEAD
+  else
+    die 'tar and curl/wget, or git, are required to download the repository'
+  fi
+
+  [ -x "${repository}/scripts/common/ansible.sh" ] \
+    || die 'downloaded repository is incomplete'
 }
 
-[[ $# -gt 0 ]] || set -- --all
+require_local_repository() {
+  [ -n "$repository" ] \
+    || die 'this option must be run from a repository checkout'
+}
 
-# process arguments
-while [[ $# -gt 0 ]]; do
-  arg=$1
-  case $arg in
-    -h | --help)
-      display_help
-      exit 0
-      ;;
-    --deps)
-      require_local_repository
-      linux || exit_help "--deps is only supported on Linux."
-      "${repository}/scripts/linux/install_dependencies.sh"
-      ;;
-    --brew)
-      require_local_repository
-      "${repository}/scripts/common/install_brew.sh"
-      ;;
-    --ansible)
-      require_local_repository
-      "${repository}/scripts/common/ansible.sh" --all
-      ;;
-    --all)
-      setup_all
-      ;;
-    *)
-      exit_help "Unknown argument: $arg"
-      ;;
-  esac
-  shift
-done
+setup_all() {
+  operating_system=$(platform)
+  require_supported_platform "${operating_system}"
+
+  [ -n "$repository" ] || download_repository
+
+  if [ "$operating_system" = 'Linux' ]; then
+    "${repository}/scripts/linux/install_dependencies.sh"
+  fi
+
+  configure_with_ansible
+}
+
+find_local_repository
+[ "$#" -le 1 ] || {
+  usage >&2
+  die 'specify exactly one option'
+}
+
+action=${1:---all}
+case ${action} in
+  -h | --help)
+    usage
+    ;;
+  --deps)
+    require_local_repository
+    operating_system=$(platform)
+    [ "${operating_system}" = 'Linux' ] \
+      || die '--deps is only supported on Linux'
+    "${repository}/scripts/linux/install_dependencies.sh"
+    ;;
+  --brew)
+    require_local_repository
+    operating_system=$(platform)
+    require_supported_platform "${operating_system}"
+    "${repository}/scripts/common/install_brew.sh"
+    ;;
+  --ansible)
+    require_local_repository
+    operating_system=$(platform)
+    require_supported_platform "${operating_system}"
+    configure_with_ansible
+    ;;
+  --all)
+    setup_all
+    ;;
+  *)
+    usage >&2
+    die "unknown option: ${action}"
+    ;;
+esac

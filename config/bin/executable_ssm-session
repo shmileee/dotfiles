@@ -1,60 +1,90 @@
-#!/usr/bin/env bash
-#
-# Based on https://github.com/corrupt952/ssm-session
-#
-# Requirements:
-#   - fzf (brew install fzf)
-#
-# Usage:
-#
-#   List available instances:
-#    ssm-session list
-#
-#  Connect to instance (uses fzf to provide interactive list)
-#    ssm-session start
+#!/bin/sh
 
-set -o pipefail
+set -eu
+set -f
 
-ssm_instance_ids() {
-  aws ssm describe-instance-information --query "InstanceInformationList[].InstanceId" \
-    --output=text
-}
+program=${0##*/}
 
-list_instances() {
-  instance_ids=$(ssm_instance_ids)
+usage() {
+  cat << EOF
+Usage: ${program} COMMAND
 
-  aws ec2 describe-instances \
-    --instance-ids "${instance_ids}" \
-    --filter "Name=instance-state-name,Values=running" \
-    --query "Reservations[*].Instances[*].[InstanceId,Tags[?Key=='Name']|[0].Value]" \
-    --output text
-}
-
-print_usage() {
-  cat <<- EOF
-usage: ssm-session <command>
-command:
-    list:  List target sessions
-    start: Start session manager
+Commands:
+  list    list running SSM-managed instances
+  start   interactively select an instance and start a session
 EOF
 }
 
-case "$1" in
-  list)
-    list_instances
+die() {
+  printf '%s: %s\n' "$program" "$*" >&2
+  exit 1
+}
 
-    ;;
-  start)
-    # Ignore SIGINT(Ctrl-C) to prevent accidental exit from session
-    trap '' 2
+require_command() {
+  command -v "$1" > /dev/null 2>&1 || die "$1 is required"
+}
 
-    list_instances \
-      | fzf \
-      | cut -f 1 \
-      | xargs -o aws ssm start-session --target
+managed_instance_ids() {
+  require_command aws
 
-    ;;
+  aws ssm describe-instance-information \
+    --query 'InstanceInformationList[].InstanceId' \
+    --output text \
+    --no-cli-pager
+}
+
+list_instances() {
+  instance_ids=$(managed_instance_ids)
+  [ -n "$instance_ids" ] || return 0
+
+  old_ifs=$IFS
+  IFS=$(printf ' \t')
+  # EC2 instance IDs contain no shell metacharacters or whitespace.
+  # shellcheck disable=SC2086
+  set -- $instance_ids
+  IFS=$old_ifs
+
+  aws ec2 describe-instances \
+    --instance-ids "$@" \
+    --filters 'Name=instance-state-name,Values=running' \
+    --query "Reservations[*].Instances[*].[InstanceId,Tags[?Key=='Name']|[0].Value]" \
+    --output text \
+    --no-cli-pager
+}
+
+start_session() {
+  require_command fzf
+
+  instances=$(list_instances)
+  [ -n "$instances" ] || die 'no running SSM-managed instances found'
+
+  if selected_instance=$(printf '%s\n' "$instances" | fzf); then
+    :
+  else
+    status=$?
+    exit "$status"
+  fi
+  [ -n "$selected_instance" ] || die 'no instance selected'
+
+  target=$(printf '%s\n' "$selected_instance" | cut -f 1)
+  [ -n "$target" ] || die 'could not determine the selected instance ID'
+
+  # Ignore Ctrl-C locally so it is delivered to the remote session instead.
+  trap '' INT
+  aws ssm start-session --target "$target"
+}
+
+[ "$#" -eq 1 ] || {
+  usage >&2
+  exit 2
+}
+
+case $1 in
+  list) list_instances ;;
+  start) start_session ;;
+  -h | --help) usage ;;
   *)
-    print_usage
+    usage >&2
+    die "unknown command: $1"
     ;;
 esac
