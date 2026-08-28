@@ -6,9 +6,9 @@ copyright: Copyright &copy; 2021 - 2026 Oleksandr Ponomarov
 
 nav:
   - Overview: index.md
-  - Setup: what-how-and-why.md
-  - Shortcuts: hotkeys.md
-  - OpenCode + OmO: opencode-and-omo.md
+  - Setup guide: setup.md
+  - Shortcuts: shortcuts.md
+  - OpenCode: opencode.md
 
 theme:
   name: material
