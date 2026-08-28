@@ -9,7 +9,7 @@ description: Keyboard shortcuts configured for macOS, Alacritty, tmux, and Neovi
 
 <nav class="shortcut-jump" aria-label="Shortcut groups">
   <a href="#macos-system-shortcuts"><span>01</span>macOS</a>
-  <a href="#alacritty-and-tmux"><span>02</span>Direct</a>
+  <a href="#alacritty-and-tmux"><span>02</span>Alacritty</a>
   <a href="#tmux-prefix-commands"><span>03</span>tmux prefix</a>
   <a href="#neovim-additions"><span>04</span>Neovim</a>
 </nav>
