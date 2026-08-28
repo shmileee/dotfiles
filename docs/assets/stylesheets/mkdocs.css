@@ -115,6 +115,14 @@ body[data-md-color-scheme] {
   text-decoration: none;
 }
 
+.docs-home.is-active {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-decoration-color: var(--accent-primary);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.45rem;
+}
+
 .site-nav {
   min-width: 0;
   display: flex;
@@ -151,6 +159,12 @@ body[data-md-color-scheme] {
   text-underline-offset: 0.45rem;
 }
 
+.site-nav-separator {
+  color: var(--border-strong);
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.75rem;
+}
+
 .header-actions {
   display: flex;
   align-items: center;
@@ -175,6 +189,7 @@ body[data-md-color-scheme] {
   border-radius: 50%;
   color: var(--text-secondary);
   cursor: pointer;
+  text-decoration: none;
 }
 
 .header-icon:hover {
@@ -1194,18 +1209,6 @@ body[data-md-color-scheme] {
 }
 
 @media (max-width: 76.2344em) {
-  .header-menu {
-    display: inline-flex;
-  }
-
-  .site-nav {
-    display: none;
-  }
-
-  .header-actions {
-    margin-left: auto;
-  }
-
   .md-sidebar--primary .md-sidebar__scrollwrap {
     top: 3.5rem;
   }
@@ -1233,6 +1236,20 @@ body[data-md-color-scheme] {
 
   .md-sidebar--primary .md-nav--secondary .md-nav__link {
     min-height: 2.5rem;
+  }
+}
+
+@media (max-width: 63.9844em) {
+  .header-menu {
+    display: inline-flex;
+  }
+
+  .site-nav {
+    display: none;
+  }
+
+  .header-actions {
+    margin-left: auto;
   }
 }
 

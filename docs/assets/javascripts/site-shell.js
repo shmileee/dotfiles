@@ -31,7 +31,7 @@
     applyTheme(localStorage.getItem("om-theme") || "dark");
 
     const currentPath = window.location.pathname.replace(/index\.html$/, "").replace(/\/$/, "") || "/";
-    document.querySelectorAll(".site-nav a").forEach((link) => {
+    document.querySelectorAll(".site-nav a, .docs-home").forEach((link) => {
       const target = new URL(link.href, window.location.href);
       const targetPath = target.pathname.replace(/index\.html$/, "").replace(/\/$/, "") || "/";
       const active = target.origin === window.location.origin && targetPath === currentPath;
