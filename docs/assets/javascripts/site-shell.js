@@ -95,7 +95,7 @@
       details.dataset.mobilePageToc = "";
 
       const summary = document.createElement("summary");
-      summary.innerHTML = '<span>On this page</span><span class="mobile-page-toc__marker" aria-hidden="true"></span>';
+      summary.innerHTML = `<span class="mobile-page-toc__label"><strong>On this page</strong><small>${tocLinks.length} sections</small></span><span class="mobile-page-toc__marker" aria-hidden="true"></span>`;
 
       const nav = document.createElement("nav");
       nav.className = "mobile-page-toc__nav";
@@ -107,8 +107,23 @@
       details.append(summary, nav);
       mobileTocAnchor.after(details);
 
+      const mobileTocLinks = [...nav.querySelectorAll('.md-nav__link[href*="#"]')];
+      const syncMobileToc = () => {
+        const activeHref = tocLinks.find((link) => link.classList.contains("md-nav__link--active"))?.getAttribute("href");
+        mobileTocLinks.forEach((link) => {
+          link.classList.toggle("md-nav__link--active", link.getAttribute("href") === activeHref);
+        });
+      };
+      const tocObserver = new MutationObserver(syncMobileToc);
+      tocObserver.observe(sourceToc, { subtree: true, attributes: true, attributeFilter: ["class"] });
+      signal.addEventListener("abort", () => tocObserver.disconnect(), { once: true });
+      syncMobileToc();
+
       nav.addEventListener("click", (event) => {
-        if (event.target.closest("a")) details.open = false;
+        const link = event.target.closest("a");
+        if (!link) return;
+        mobileTocLinks.forEach((item) => item.classList.toggle("md-nav__link--active", item === link));
+        details.open = false;
       }, { signal });
     }
 
