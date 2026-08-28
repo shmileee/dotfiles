@@ -13,6 +13,7 @@ install_collections() {
 
 	echo "⚪ [ansible] reconciling collections..."
 	ANSIBLE_COLLECTIONS_PATH="$collections_dir" ansible-galaxy collection install \
+		--force \
 		--collections-path "$collections_dir" \
 		--requirements-file "${cwd}/ansible/requirements.yml"
 }
