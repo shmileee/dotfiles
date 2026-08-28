@@ -7,7 +7,7 @@ description: Keyboard shortcuts configured for macOS, Alacritty, fish, tmux, and
 
 <p class="page-lead">Choose the layer where the shortcut runs. Alacritty, the terminal application, sends many macOS-style shortcuts directly to tmux; fish adds command-line bindings; tmux commands use <kbd>Ctrl</kbd> + <kbd>A</kbd> as their prefix.</p>
 
-<form class="shortcut-filter" role="search" data-shortcut-filter data-mobile-toc-anchor>
+<div class="shortcut-filter" role="search" data-shortcut-filter data-mobile-toc-anchor>
   <label for="shortcut-query">Find a shortcut</label>
   <div class="shortcut-filter__search">
     <input id="shortcut-query" type="search" inputmode="search" autocomplete="off" placeholder="Search keys or actions" data-shortcut-query>
@@ -22,7 +22,7 @@ description: Keyboard shortcuts configured for macOS, Alacritty, fish, tmux, and
     <button type="button" aria-pressed="false" data-shortcut-scope="neovim">Neovim</button>
   </div>
   <p class="shortcut-filter__status" aria-live="polite" data-shortcut-status></p>
-</form>
+</div>
 
 <div class="context-help-source" hidden>
 <button class="context-help-trigger" type="button" aria-label="Open quick context" aria-controls="context-help" aria-haspopup="dialog" title="Quick context" data-context-open data-context-ui><span aria-hidden="true">?</span></button>

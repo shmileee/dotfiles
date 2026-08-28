@@ -321,6 +321,29 @@ button.header-icon {
   font-size: 0.875rem;
 }
 
+.site-header .search-submit {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.site-header .search-submit:focus-visible {
+  z-index: 1;
+  top: 0.5rem;
+  right: 3rem;
+  width: auto;
+  height: 2.25rem;
+  clip-path: none;
+  border: 1px solid var(--accent-primary);
+  border-radius: 0.375rem;
+  padding: 0 var(--space-3);
+  background: var(--surface-secondary);
+  color: var(--text-primary);
+}
+
 .site-header .md-search__output {
   position: relative;
   inset: auto;
