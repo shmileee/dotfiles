@@ -1,5 +1,5 @@
 ---
-title: Dotfiles
+title: Home
 description: A reproducible macOS and Linux workstation built with Ansible and chezmoi.
 hide:
   - toc
