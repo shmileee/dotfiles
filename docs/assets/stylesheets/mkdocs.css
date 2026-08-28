@@ -553,6 +553,65 @@ body[data-md-color-scheme] {
   color: var(--accent-soft);
 }
 
+.md-sidebar--secondary {
+  width: 13rem;
+}
+
+.md-nav--secondary {
+  font-family: "Public Sans", system-ui, sans-serif;
+}
+
+.md-nav--secondary .md-nav {
+  font-family: inherit;
+}
+
+.md-nav--secondary > .md-nav__title {
+  min-height: auto;
+  padding: 0 0 var(--space-3) var(--space-4);
+  color: var(--text-primary);
+  font: 600 0.6875rem/1.4 "IBM Plex Mono", ui-monospace, monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.md-nav--secondary > .md-nav__list {
+  border-left: 1px solid var(--border-default);
+}
+
+.md-nav--secondary .md-nav__link {
+  position: relative;
+  min-height: auto;
+  margin: 0;
+  padding: 0.4375rem 0 0.4375rem var(--space-4);
+  color: var(--text-tertiary);
+  font-size: 0.8125rem;
+  line-height: 1.35;
+}
+
+.md-nav--secondary .md-nav__link:hover {
+  color: var(--text-primary);
+}
+
+.md-nav--secondary .md-nav__link--active {
+  color: var(--accent-soft);
+  font-weight: 600;
+}
+
+.md-nav--secondary .md-nav__link--active::before {
+  position: absolute;
+  top: 0.35rem;
+  bottom: 0.35rem;
+  left: -1px;
+  width: 2px;
+  background: var(--accent-primary);
+  content: "";
+}
+
+.md-nav--secondary .md-nav .md-nav__link {
+  padding-left: var(--space-6);
+  font-size: 0.75rem;
+}
+
 .md-search__form,
 .md-search__output {
   background: var(--surface-secondary);
@@ -1130,7 +1189,7 @@ body[data-md-color-scheme] {
   .md-sidebar--secondary {
     z-index: 1;
     justify-self: end;
-    transform: translateX(var(--page-gutter));
+    transform: translateX(calc(var(--page-gutter) + var(--space-4)));
   }
 }
 
@@ -1157,6 +1216,23 @@ body[data-md-color-scheme] {
 
   .md-nav--primary > .md-nav__title {
     padding: var(--space-4) 0.8rem;
+  }
+
+  .md-sidebar--primary .md-nav--secondary > .md-nav__title {
+    height: 3.5rem;
+    min-height: 3.5rem;
+    display: flex;
+    align-items: center;
+    padding: 0 var(--space-4) 0 2.5rem;
+    background: var(--surface-secondary);
+  }
+
+  .md-sidebar--primary .md-nav--secondary > .md-nav__list {
+    border-left: 0;
+  }
+
+  .md-sidebar--primary .md-nav--secondary .md-nav__link {
+    min-height: 2.5rem;
   }
 }
 
