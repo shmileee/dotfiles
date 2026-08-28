@@ -10,3 +10,29 @@
       - --headless
       - +qa
     creates: "{{ ansible_facts['user_dir'] }}/.local/share/nvim/lazy/LazyVim"
+  register: lazyvim_bootstrap
+
+- name: "restore committed LazyVim lockfile after bootstrap"
+  ansible.builtin.command:
+    argv:
+      - chezmoi
+      - --source
+      - "{{ dotfiles.checkout }}/config"
+      - --working-tree
+      - "{{ dotfiles.checkout }}"
+      - apply
+      - --force
+      - "{{ ansible_facts['user_dir'] }}/.config/nvim/lazy-lock.json"
+  when: lazyvim_bootstrap is changed
+
+- name: "restore LazyVim plugins from committed lockfile"
+  ansible.builtin.command:
+    argv:
+      - mise
+      - exec
+      - --
+      - nvim
+      - --headless
+      - "+Lazy! restore"
+      - +qa
+  when: lazyvim_bootstrap is changed
