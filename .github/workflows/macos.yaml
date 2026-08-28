@@ -47,7 +47,7 @@ jobs:
       HOMEBREW_NO_INSTALL_CLEANUP: "1"
 
     steps:
-      - name: Clean up installed software
+      - name: Reset Homebrew
         run: |
           formulae="$(brew list --formula)"
           if [[ -n "$formulae" ]]; then
@@ -57,12 +57,8 @@ jobs:
             brew uninstall --formula --ignore-dependencies --force $formulae
           fi
 
-          casks="$(brew list --cask)"
-          if [[ -n "$casks" ]]; then
-            # shellcheck disable=SC2086
-            brew uninstall --cask --force $casks
-          fi
-
+          # Keep runner-provided GUI applications. The Dock configuration
+          # references apps that are intentionally not managed by brew.casks.
           brew cleanup --prune-prefix
           NONINTERACTIVE=1 /bin/bash -c \
             "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)"
