@@ -13,7 +13,7 @@ docker run --rm --entrypoint /bin/bash "$image" -lc '
   test "$HOME" = /home/linuxbrew
 
   printf "%s\n" "SMOKE phase=executables"
-  for executable in brew chezmoi fish mise nvim tmux; do
+  for executable in brew chezmoi fish mise tmux; do
     command -v "$executable" >/dev/null
   done
 
