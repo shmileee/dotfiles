@@ -1,6 +1,15 @@
 ---
 title: Shortcut reference
 description: Keyboard shortcuts configured for macOS, Alacritty, fish, tmux, and Neovim.
+tags:
+  - Shortcuts
+  - macOS
+  - Alacritty
+  - fish
+  - tmux
+  - Neovim
+hide:
+  - tags
 ---
 
 # Keyboard shortcuts
@@ -24,12 +33,12 @@ description: Keyboard shortcuts configured for macOS, Alacritty, fish, tmux, and
   <p class="shortcut-filter__status" aria-live="polite" data-shortcut-status></p>
 </div>
 
-<div class="context-help-source" hidden>
+<section class="context-help-source" hidden data-search-exclude>
 <button class="context-help-trigger" type="button" aria-label="Open quick context" aria-controls="context-help" aria-haspopup="dialog" title="Quick context" data-context-open data-context-ui><span aria-hidden="true">?</span></button>
 <dialog class="context-help" id="context-help" aria-labelledby="context-help-title" data-context-dialog data-context-ui>
 <div class="context-help__panel">
 <header class="context-help__header">
-  <div><p>Quick context</p><h2 id="context-help-title">Terms used on this page</h2></div>
+  <div><p>Quick context</p><h2 id="context-help-title" data-search-exclude>Terms used on this page</h2></div>
   <button type="button" aria-label="Close quick context" data-context-close><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m4 4 8 8m0-8-8 8" /></svg></button>
 </header>
 <dl class="context-help__terms">
@@ -42,7 +51,7 @@ description: Keyboard shortcuts configured for macOS, Alacritty, fish, tmux, and
 </dl>
 </div>
 </dialog>
-</div>
+</section>
 
 <p class="shortcut-filter-empty" data-shortcut-empty hidden>No shortcuts match this search.</p>
 

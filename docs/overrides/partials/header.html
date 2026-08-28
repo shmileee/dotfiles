@@ -1,14 +1,15 @@
 <header class="site-header" data-site-header data-md-component="header">
+  {% set homepage = nav.items | first %}
   <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
   <div class="header-inner">
     <span class="brand-link">
       <span class="brand-full">~/oleksandr-ponomarov</span>
       <span class="brand-short" aria-hidden="true">~/op</span>
     </span>
-    <a class="docs-home{% if nav.homepage.active %} is-active{% endif %}" href="{{ nav.homepage.url | url }}"{% if nav.homepage.active %} aria-current="page"{% endif %}>Home</a>
+    <a class="docs-home{% if homepage.active %} is-active{% endif %}" href="{{ homepage.url | url }}"{% if homepage.active %} aria-current="page"{% endif %}>Home</a>
 
     <nav class="site-nav" aria-label="Primary navigation">
-      {% for nav_item in nav %}
+      {% for nav_item in nav.items %}
         {% if not loop.first %}
           <a href="{{ nav_item.url | url }}"{% if nav_item.active %} class="is-active" aria-current="page"{% endif %}>{{ nav_item.title }}</a>
         {% endif %}
@@ -27,9 +28,9 @@
       <a class="header-icon md-icon" href="https://github.com/shmileee/dotfiles" aria-label="View the dotfiles repository on GitHub">
         {% include ".icons/fontawesome/brands/github.svg" %}
       </a>
-      <label class="header-icon md-icon" for="__search" role="button" tabindex="0" aria-controls="__search" aria-expanded="false" aria-label="Search documentation" data-search-toggle>
+      <button class="header-icon md-icon" type="button" aria-haspopup="dialog" aria-label="Search documentation" data-search-toggle>
         {% include ".icons/material/magnify.svg" %}
-      </label>
+      </button>
       <button class="header-icon header-menu md-icon" type="button" aria-controls="__drawer" aria-expanded="false" aria-label="Open navigation" data-drawer-toggle>
         {% include ".icons/material/menu.svg" %}
       </button>
