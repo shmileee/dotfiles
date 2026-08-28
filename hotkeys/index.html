@@ -12,6 +12,8 @@
         <link rel="prev" href="../what-how-and-why/">
       
       
+        <link rel="next" href="../opencode-and-omo/">
+      
       
       <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
@@ -357,6 +359,26 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../opencode-and-omo/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OpenCode and OMO
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -421,8 +443,12 @@ functionality. These shortcuts are defined in
 under the <code>darwin_hotkeys{}</code> map, which follows this structure:</p>
 <ul>
 <li><code>&lt;system keycode&gt;</code>:<ul>
-<li><code>parameters</code>: <code>&lt;keyboard keys in ASCII&gt;</code></li>
 <li><code>enabled</code>: <code>&lt;true | false&gt;</code></li>
+<li><code>value</code>:<ul>
+<li><code>parameters</code>: <code>&lt;keyboard keys in ASCII&gt;</code></li>
+<li><code>type</code>: <code>standard</code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -451,10 +477,10 @@ corresponds to the <em>"Show Spotlight search"</em> shortcut.</p>
 </table>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The <code>community.general.osx_defaults</code> Ansible collection <a href="https://github.com/ansible-collections/community.general/pull/3420">does not yet
-support</a>
-modifying system shortcuts. Therefore, <code>ansible.builtin.command</code> is used
-instead, which achieves the desired result but lacks idempotency.</p>
+<p>The generic <code>community.general.osx_defaults</code> module cannot safely reconcile
+every nested preference used here. A repository-local Ansible module reads
+the exported plist as structured data, merges only the configured shortcut
+keys, and supports both idempotent runs and check mode.</p>
 </div>
 
 
@@ -507,6 +533,22 @@ instead, which achieves the desired result but lacks idempotency.</p>
           </a>
         
         
+          
+          <a href="../opencode-and-omo/" class="md-footer__link md-footer__link--next" aria-label="Next: OpenCode and OMO">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                OpenCode and OMO
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
       </nav>
     
   
@@ -515,7 +557,7 @@ instead, which achieves the desired result but lacks idempotency.</p>
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2021 - 2025 Oleksandr Ponomarov
+      Copyright &copy; 2021 - 2026 Oleksandr Ponomarov
     </div>
   
   
