@@ -44,7 +44,7 @@ repos:
         files: \.(css|js|json|jsonc)$
       - id: ruff-check
         name: lint python with ruff
-        entry: ruff check --fix
+        entry: ruff check
         language: system
         types: [python]
       - id: ruff-format
