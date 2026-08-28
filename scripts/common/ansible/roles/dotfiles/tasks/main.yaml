@@ -19,15 +19,8 @@
     creates: "{{ ansible_facts['user_dir'] }}/.local/share/chezmoi"
 
 - name: "chezmoi apply current checkout"
-  command_reconcile:
-    probe_argv:
-      - chezmoi
-      - --source
-      - "{{ dotfiles.checkout }}/config"
-      - --working-tree
-      - "{{ dotfiles.checkout }}"
-      - status
-    apply_argv:
+  ansible.builtin.command:
+    argv:
       - chezmoi
       - --source
       - "{{ dotfiles.checkout }}/config"
@@ -36,4 +29,5 @@
       - apply
       - --force
       - --verbose
-    comparison: empty
+  register: chezmoi_apply
+  changed_when: chezmoi_apply.stdout | trim | length > 0
