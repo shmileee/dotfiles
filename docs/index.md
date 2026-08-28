@@ -1,169 +1,111 @@
 ---
 title: Dotfiles
-description: Reproducible macOS and Linux workstation setup by Oleksandr Ponomarov.
+description: A reproducible macOS and Linux workstation built with Ansible and chezmoi.
 ---
 
 <section class="docs-hero" markdown>
   <p class="section-eyebrow">Personal workstation · documented in public</p>
-  <h1>Hitchhiker's Guide to the Dotfiles<span class="hero-cursor" aria-hidden="true"></span></h1>
-  <p class="hero-copy">A reproducible workstation built with Ansible, Homebrew, and a deliberately small bootstrap path. The setup supports macOS and Debian-based Linux without hiding what it changes.</p>
+  <h1>A workstation I can rebuild.<span class="hero-cursor" aria-hidden="true"></span></h1>
+  <p class="hero-copy">This repository turns a fresh macOS or Debian-based Linux machine into my development environment. Ansible installs and configures the system; chezmoi puts the files in place.</p>
   <div class="hero-actions">
-    <a class="primary-link" href="#install-everything">Install everything →</a>
-    <a class="secondary-link" href="https://portfolio.oponomarov.com/">View the engineering portfolio ↗</a>
+    <a class="primary-link" href="/what-how-and-why/">Read the setup guide →</a>
+    <a class="secondary-link" href="https://github.com/shmileee/dotfiles">Browse the repository ↗</a>
   </div>
 </section>
 
-## Install everything
+## At a glance
 
-Start a complete installation with a single `curl` command:
+<div class="fact-grid">
+  <div>
+    <span>Platforms</span>
+    <strong>macOS + Debian Linux</strong>
+  </div>
+  <div>
+    <span>Orchestration</span>
+    <strong>Ansible</strong>
+  </div>
+  <div>
+    <span>Dotfile manager</span>
+    <strong>chezmoi</strong>
+  </div>
+  <div>
+    <span>Package layer</span>
+    <strong>Homebrew + apt</strong>
+  </div>
+</div>
 
-```bash
-curl -fsSL oponomarov.com/d | sh -s -- --all
-```
+The result is an opinionated terminal-first environment built around Fish,
+tmux, Alacritty, Neovim, mise, Git tooling, and a curated set of command-line
+utilities. On macOS it also installs desktop applications and applies personal
+system defaults.
 
-The supported workstation target is Apple Silicon macOS. Ubuntu 24.04 ARM64 is
-continuously exercised as the container and integration target. Other
-Debian-family systems remain best effort.
+!!! warning "This is a personal configuration"
 
-## Updating
+    The playbook changes the login shell, applies dotfiles with `--force`, and
+    modifies macOS preferences. Read the [setup guide](what-how-and-why.md)
+    before running it on a machine that already has configuration you care
+    about.
 
-`./scripts/setup.sh --all` installs declared state and reapplies configuration.
-It is intentionally allowed to refresh Homebrew metadata and update managed
-formulae and versioned casks. After a long gap, a run can therefore introduce
-upstream changes. To review local dotfile changes before running it, clone the
-repository and invoke the checked-out script; Ansible applies that checkout
-rather than fetching `master` again.
-
-There is no repository-wide upgrade command. Use the owner of each dependency:
-
-- Run `brew upgrade` whenever a full Homebrew upgrade is desired.
-- Let Renovate propose changes to versions declared in this repository.
-- Use Lazy, Fisher, and TPM directly for intentional plugin updates, then review
-  and commit the resulting lockfile, manifest, or Ansible commit-pin changes.
-
-The checked-out chezmoi source is authoritative. Setup force-applies it, so add
-intentional edits to the chezmoi-managed source before rerunning Ansible.
-
-## Where configuration lives
-
-- OS packages, applications, the default shell, and macOS preferences are owned
-  by Ansible under `scripts/common/ansible/`.
-- Home-directory files and templates are owned by chezmoi under `config/`.
-- Developer runtimes and CLIs are declared in
-  `config/private_dot_config/mise/config.toml`.
-- Fish, tmux, and Neovim plugins are managed by Fisher, TPM, and Lazy
-  respectively. Neovim’s working plugin graph is recorded in `lazy-lock.json`.
-- Git credentials use the macOS keychain on macOS and Git’s in-memory credential
-  cache on Linux; this repository does not configure plaintext credential
-  storage.
-
-## Validate locally
-
-Run the same repository checks used by CI:
-
-```bash
-mise install
-mise exec -- prek run --all-files
-mise exec -- env ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
-  ansible-playbook --inventory '127.0.0.1,' \
-  --syntax-check scripts/common/ansible/main.yaml
-mise exec -- ./scripts/common/ansible.sh --run --check
-```
-
-### Shell style
-
-Bash formatting follows the
-[Google Shell Style Guide](https://google.github.io/styleguide/shellguide.html):
-two-space indentation without tabs, indented `case` alternatives, and binary
-operators at the start of continued lines. `shfmt` applies that formatting and
-ShellCheck checks correctness through pre-commit. Fish scripts use their native
-`fish_indent` formatter.
-
-??? Explanation
-
-    The [`oponomarov.com/d`](https://oponomarov.com/d) is a short redirect URL
-    that points to the
-    [`shmileee/dotfiles@master:scripts/setup.sh`](https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh).
-    The script handles the installation of Ansible prerequisites and executes the
-    main Ansible playbook. Both the script and playbook are designed to work with
-    Apple Silicon macOS and the Ubuntu 24.04 ARM64 integration environment.
-
-    For a fresh macOS installation, run the following commands first:
-
-    ```bash
-    sudo softwareupdate -i -a
-    xcode-select --install
-    ```
-
-    To initiate the setup process, run the script. Alternatively, you can
-    download and review the script before running it:
-
-    ```bash
-    curl -fsSL https://raw.githubusercontent.com/shmileee/dotfiles/master/scripts/setup.sh > setup.sh
-    chmod +x setup.sh
-    ./setup.sh --all
-    ```
-
-    This script performs the following tasks:
-
-    - Downloads the repository `github.com/shmileee/dotfiles` into
-      `/tmp/.dotfiles` using `git`, `curl`, or `wget`.
-    - Installs the required system dependencies:
-        - On Linux, it installs the
-          [`essentials`](https://github.com/shmileee/dotfiles/blob/master/scripts/linux/essentials.apt).
-        - On macOS, dependencies are installed via Homebrew.
-    - Installs Ansible. For Linux, this happens during the system dependencies step; for macOS, it is managed through Homebrew.
-    - Installs Homebrew if it is not already available.
-    - Executes the [`ansible.sh`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible.sh) script, which:
-        - Installs the versioned `community.general` and `ansible.posix` Ansible collections.
-        - Checks for passwordless `sudo` access or prompts for a password if needed.
-        - Runs the [`main.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/main.yaml) Ansible playbook.
-
-#### Installation Flow
+## How the pieces fit together
 
 <ol class="install-flow">
   <li>
     <span>01</span>
     <div>
       <strong>Bootstrap</strong>
-      <p>Run <code>curl -fsSL oponomarov.com/d | sh -s -- --all</code>.</p>
+      <p><code>scripts/setup.sh</code> chooses the macOS or Linux path and prepares the machine.</p>
     </div>
   </li>
   <li>
     <span>02</span>
     <div>
-      <strong>Stage the repository</strong>
-      <p>Clone <code>shmileee/dotfiles</code> into a temporary working directory.</p>
+      <strong>Install prerequisites</strong>
+      <p>Linux receives its apt essentials; both platforms receive Homebrew and Ansible support.</p>
     </div>
   </li>
   <li>
     <span>03</span>
     <div>
-      <strong>Prepare the system</strong>
-      <p>Install Debian essentials or Homebrew dependencies for macOS.</p>
+      <strong>Configure the workstation</strong>
+      <p>Ansible runs focused roles for packages, fonts, Fish, mise, Neovim, Docker, tmux, and system defaults.</p>
     </div>
   </li>
   <li>
     <span>04</span>
     <div>
-      <strong>Apply the workstation</strong>
-      <p>Install the required Ansible collections, obtain <code>sudo</code> access when needed, and run <code>main.yaml</code>.</p>
+      <strong>Apply the dotfiles</strong>
+      <p>chezmoi renders the files in <code>config/</code> for the current operating system and architecture.</p>
     </div>
   </li>
 </ol>
 
-#### Running Inside Docker
+## Choose what you need
 
-Run `docker run -it shmileee/dotfiles` to start a Docker container that is
-automatically [built, smoke-tested, and
-published](https://github.com/shmileee/dotfiles/actions/workflows/docker.yaml)
-from `master` using GitHub Actions. Pull requests build and test without
-publishing. Alternatively, you can build it yourself:
+<div class="doc-card-grid">
+  <a href="/what-how-and-why/">
+    <span>01 · Start here</span>
+    <strong>Set up or customize a machine</strong>
+    <p>Review the changes, choose an installation path, and learn how to reapply the configuration.</p>
+  </a>
+  <a href="/hotkeys/">
+    <span>02 · Reference</span>
+    <strong>Find a keyboard shortcut</strong>
+    <p>Look up macOS, Alacritty, tmux, and Neovim bindings by task.</p>
+  </a>
+  <a href="/opencode-and-omo/">
+    <span>03 · AI tooling</span>
+    <strong>Configure OpenCode and OmO</strong>
+    <p>Set up local secrets, corporate overlays, model routing, and contextual notifications.</p>
+  </a>
+</div>
 
-```bash
-docker buildx build --platform linux/arm64 -t dotfiles --progress plain .
-```
+## Design principles
 
-## Credits
+- **Repeatable over clever.** A second run should converge on the same machine.
+- **Visible over magical.** Package lists, roles, and managed files stay in the repository.
+- **Portable where practical.** Shared behavior works on macOS and Linux; platform-specific changes stay explicit.
+- **Personal by design.** This is a working environment, not a universal starter kit.
 
-Many thanks to the [dotfiles community](https://dotfiles.github.io).
+The implementation is tested continuously on macOS and in an Ubuntu-based
+container. The container is useful for validating the Linux path, but it does
+not reproduce macOS applications or system preferences.

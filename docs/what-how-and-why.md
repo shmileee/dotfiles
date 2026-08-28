@@ -1,163 +1,217 @@
-### What?
-
-This repository includes:
-
-1. **The `setup.sh` script**: A single entry point for setting up and
-   configuring a new macOS or Debian-based Linux system.
-2. **Personalized `ansible` roles and playbooks**: Designed to install and
-   configure various development tools efficiently. These roles emphasize
-   idempotency and are compatible with both macOS and Debian-based distributions,
-   using Homebrew as the primary package manager.
-3. **Tools and dependency management**: The `setup.sh` script ensures that all
-   necessary tools and prerequisites are installed to enable seamless execution
-   of the `ansible-playbook` command.
-4. **Personalized dotfiles**: Managed with the `chezmoi` dotfiles manager,
-   providing a consistent and customized environment across systems.
-
-### How?
-
-Below is a non-exhaustive list of the tools used to achieve the desired setup:
-
-- **Dotfiles management**: [`chezmoi`](https://www.chezmoi.io).
-- **Editor**
-    - [`neovim`](https://neovim.io) as my primary command-line editor.
-    - [`lazyvim`](https://www.lazyvim.org/) as the main `neovim` distribution.
-- **Shell**
-    - [`fish`](https://fishshell.com) as my primary shell ([`~/.config/fish`](https://github.com/shmileee/dotfiles/tree/master/config/private_dot_config/private_fish)).
-    - [`fisher`](https://github.com/jorgebucaran/fisher) for plugin management
-      ([`fish_plugins`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_fish/private_fish_plugins)).
-- **Terminal**:
-    - [`alacritty`](https://alacritty.org) as my terminal emulator
-      ([`alacritty.toml`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_alacritty/alacritty.toml.tmpl)).
-    - [`tmux`](https://github.com/tmux/tmux) as a terminal multiplexer ([`tmux.conf`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf)).
-        - [`tpm`](https://github.com/tmux-plugins/tpm) for managing `tmux` plugins.
-- **Package management**:
-    - [`homebrew`](https://brew.sh) as my primary package manager ([casks + formulas](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml#L10)).
-    - [`mise`](https://blog.oponomarov.com/posts/mise-faster-smarter-tool-versioning) as a version manager for various system tools.
-
-These tools are orchestrated by `ansible`, but each layer retains one clear
-owner. The main machine configuration is
-handled by the [primary
-playbook](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/main.yaml),
-which sets up the system and dotfiles. You can customize the configuration in
-[`config.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml),
-where you’ll typically specify OS packages and other machine preferences. The
-[`dotfiles{}`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml#L86-L88)
-dictionary defines which repository and branch `chezmoi` will use to install
-your dotfiles from.
-[`mise/config.toml`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/mise/config.toml)
-defines the developer tools and runtimes managed with `mise`. Fisher, TPM, and
-Lazy own their respective plugin sets; Lazy’s resolved Neovim graph is committed
-as `lazy-lock.json`.
-
-!!! warning
-
-    If you’re reusing this playbook with your own dotfiles, make
-    sure to update these variables accordingly.
-
-??? "Supported `ansible` roles"
-
-    - `common`: Installs basic system dependencies on Debian-based distributions
-      using `apt`, or `brew` packages and casks on macOS.
-    - `fonts`: Installs fonts using `brew`.
-    - `dotfiles`: Installs `chezmoi` via `brew`, initializes the dotfiles
-      repository, and updates files.
-    - `fish`: Installs `fish` shell using `brew`, sets it as the default shell,
-      and configures `fisher` and its plugins.
-    - `neovim`: Restores the committed Lazy plugin graph and verifies that the
-      mise-managed Neovim starts headlessly.
-    - `mise`: Installs the `mise` version manager for granular control over specific
-      tools. Managed tools and versions are defined in the mise configuration.
-    - `docker`: Installs Docker using `brew`.
-    - `tmux`: Installs `tmux`, `tpm`, and the plugins specified in `tmux.conf`.
-    - `system_defaults`: Applies opinionated macOS system settings and custom
-      tweaks for applications like Rectangle or Alt-Tab. Use with caution, as these
-      settings can be disruptive and may evolve over time.
-
+---
+title: Setup guide
+description: Review, install, customize, and reapply the workstation configuration.
 ---
 
-### Why?
+# Set up a workstation
 
-My goal was to provide a fully automated development environment that’s both
-easy to set up and maintain.
+<p class="page-lead">Use the review-first path for an existing machine. The one-line installer is intended for a new machine or a configuration you already trust.</p>
 
-#### Why `ansible`?
+## Before you begin
 
-In my experience, `ansible` is one of the easiest automation tools to learn.
-Although it has its share of nuances, its YAML-based configuration is generally
-straightforward to understand, even for users with limited knowledge of
-`ansible`. It’s almost like reading plain English most of the time.
+The full setup can:
 
-Additionally, `ansible` is like a Swiss Army knife of orchestration tools. It
-can be adapted to a wide range of tasks, some of which might not be supported
-by other popular solutions like `NixOS Home Manager`. One of its greatest
-strengths is that tasks, when properly described, adhere to the principle of
-[idempotency](https://docs.ansible.com/ansible/latest/reference_appendices/glossary.html#term-Idempotency).
-This means you can rerun a playbook repeatedly without worrying about
-unintended removal or duplication of your files.
+- install apt packages, Homebrew packages, and macOS applications;
+- change your login shell to Fish;
+- initialize chezmoi and force-apply files from this repository;
+- install tmux and Neovim plugins;
+- install Docker Desktop on macOS; and
+- change macOS defaults, Dock contents, and keyboard shortcuts.
 
-In a world full of automation solutions, I simply happen to enjoy using
-`ansible` the most.
+Back up existing configuration before continuing. At minimum, inspect
+[`config.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml)
+and the files under
+[`config/`](https://github.com/shmileee/dotfiles/tree/master/config).
 
----
+### Platform requirements
 
-#### Why `chezmoi`?
+=== "macOS"
 
-`chezmoi` is a powerful tool for managing dotfiles. It’s currently one of the
-most popular solutions. Before `chezmoi`, I used `gnu stow`, which worked fine
-but lacked several features that `chezmoi` conveniently provides.
+    Install available system updates and Apple's command-line tools on a fresh
+    machine:
 
-Key benefits of `chezmoi` include:
+    ```bash
+    sudo softwareupdate -i -a
+    xcode-select --install
+    ```
 
-- **Flexible**: Dotfiles can be templates using `text/template` syntax. While
-  `ansible` has Jinja templates, `chezmoi` offers built-in variables for platform
-  detection, architecture, hostname, environment variables, and more. Testing
-  these templates in `chezmoi` is much simpler — just run `chezmoi execute-template
-< file.tmpl`.
-- **Portable**: `chezmoi` configurations rely solely on visible, regular files
-  and directories, ensuring portability across different version control systems
-  and operating systems.
-- **Transparent**: Verbose and dry-run modes let you preview changes before
-  they’re applied, giving you complete control over what happens in your home
-  directory.
-- **Practical**: `chezmoi` manages hidden files, directories, private files,
-  and executables — essentially all the typical elements of a dotfiles
-  repository.
-- **Fast and easy to use**: `chezmoi` runs in fractions of a second, and it
-  provides commands that simplify most common operations.
+=== "Debian-based Linux"
 
-By using `chezmoi`, I can adhere to the single-responsibility principle:
-managing dotfiles independently from other system configuration tasks.
+    Use a user with `sudo` access. The bootstrap installs the apt prerequisites,
+    adds the Ansible PPA, and then installs Linuxbrew.
 
----
+Other operating systems are rejected by the bootstrap script.
 
-#### Why `lazyvim`?
+## Recommended: review, then run
 
-I used `vim` for years until my configuration ballooned to over 500 lines,
-making it a challenge to maintain. My switch to `neovim` was inspired by talks
-from [ThePrimagen](https://github.com/ThePrimeagen) and [TJ
-DeVries](https://github.com/tjdevries), which also made me realize I didn’t
-fully grasp the Lua-based configuration system that `neovim` uses.
+Clone the repository so you can inspect exactly what will execute:
 
-It turned out that most of the common keymaps, plugins, and sensible defaults I
-was after were already configured by many in the `neovim` community. This is
-how I discovered `lazyvim`: it provides a community-driven framework for
-`neovim`, bundling common plugins and sensible defaults. This allowed me to
-avoid starting from scratch and reinventing the wheel. I only needed to add a
-few extra plugins, tweak some keybindings, and configure fewer than ten
-settings to feel completely at home.
+```bash
+git clone https://github.com/shmileee/dotfiles.git
+cd dotfiles
 
----
+less scripts/common/ansible/config.yaml
+less scripts/common/ansible/main.yaml
+```
 
-#### Why `fish`?
+When you are comfortable with the configuration, run the complete setup:
 
-The `fish` ecosystem excels as an interactive shell. While I still write my
-scripts in `bash` for portability, the out-of-the-box features in `fish`, such
-as autosuggestions and robust tab completions, are too convenient to pass up.
+```bash
+./scripts/setup.sh --all
+```
 
----
+The script uses the current checkout, so local changes to package lists,
+Ansible roles, or managed dotfiles are included.
 
-#### Why `mise`?
+## Fast path: bootstrap a new machine
 
-I've described this in a blog post
-[here](https://blog.oponomarov.com/posts/mise-faster-smarter-tool-versioning).
+```bash
+curl -fsSL oponomarov.com/d | sh -s -- --all
+```
+
+The short URL redirects to `scripts/setup.sh` on the `master` branch. The
+script downloads that branch into a unique temporary directory, runs the full
+setup, and removes the temporary checkout when it exits.
+
+??? "Download the script before running it"
+
+    If you want the convenience of the bootstrap without piping directly into
+    a shell:
+
+    ```bash
+    curl -fsSL https://raw.githubusercontent.com/shmileee/dotfiles/master/scripts/setup.sh > setup.sh
+    less setup.sh
+    chmod +x setup.sh
+    ./setup.sh --all
+    ```
+
+## What `--all` does
+
+<ol class="install-flow">
+  <li>
+    <span>01</span>
+    <div>
+      <strong>Validate the platform</strong>
+      <p>Continue only on macOS or Linux and locate the current checkout—or download one.</p>
+    </div>
+  </li>
+  <li>
+    <span>02</span>
+    <div>
+      <strong>Prepare Linux</strong>
+      <p>On Linux, install apt essentials and Ansible before the shared setup begins.</p>
+    </div>
+  </li>
+  <li>
+    <span>03</span>
+    <div>
+      <strong>Prepare Homebrew</strong>
+      <p>Install Homebrew when missing, add it to the current process, and disable analytics.</p>
+    </div>
+  </li>
+  <li>
+    <span>04</span>
+    <div>
+      <strong>Run Ansible</strong>
+      <p>Install the required collections, request a sudo password when needed, and run the local playbook.</p>
+    </div>
+  </li>
+</ol>
+
+## Run one stage
+
+Stage flags must be run from a repository checkout.
+
+| Command | Purpose |
+| --- | --- |
+| `./scripts/setup.sh --deps` | Install Linux apt prerequisites. Linux only. |
+| `./scripts/setup.sh --brew` | Install Homebrew if it is missing. |
+| `./scripts/setup.sh --ansible` | Install Ansible collections and run every role. |
+| `./scripts/setup.sh --all` | Run the complete platform-specific sequence. |
+| `./scripts/setup.sh` | Same as `--all`. |
+
+If the prerequisites are already present, ask Ansible to preview supported
+changes:
+
+```bash
+./scripts/common/ansible.sh --all --check
+```
+
+!!! note "Check mode has limits"
+
+    Ansible check mode is useful for file and package changes, but command-based
+    tasks cannot always predict their result. Treat it as a preview, not a full
+    simulation.
+
+## Customize the setup
+
+Make changes in three places:
+
+| Area | Source of truth | Typical changes |
+| --- | --- | --- |
+| Packages and applications | `scripts/common/ansible/config.yaml` | Homebrew packages, casks, Dock items, hotkeys |
+| System behavior | `scripts/common/ansible/roles/` | Installation logic and macOS defaults |
+| Home-directory files | `config/` | Fish, Git, tmux, Neovim, Alacritty, OpenCode |
+| Tool versions | `config/private_dot_config/mise/config.toml` | Language runtimes and developer tools |
+
+The `dotfiles` section in `config.yaml` controls which repository and branch
+chezmoi initializes. The playbook then applies the current checkout's `config/`
+directory, which makes a fork straightforward to test before publishing it.
+
+### Ansible roles
+
+| Role | Responsibility |
+| --- | --- |
+| `common` | Shared Homebrew packages plus platform-specific packages and applications |
+| `fonts` | Developer fonts for macOS or Debian |
+| `dotfiles` | Install chezmoi and apply the current checkout |
+| `fish` | Install Fish, make it the login shell, and synchronize Fisher plugins |
+| `mise` | Install the tools declared in mise configuration |
+| `neovim` | Install LazyVim plugins in headless mode |
+| `docker` | Install Docker outside the validation container |
+| `tmux` | Install tmux, TPM, and declared plugins |
+| `system_defaults` | Apply macOS preferences, Dock items, and keyboard settings |
+
+## Reapply after an update
+
+Pull the latest changes, review them, and rerun the Ansible stage:
+
+```bash
+git pull --ff-only
+git diff HEAD@{1} -- scripts/common/ansible config
+./scripts/setup.sh --ansible
+```
+
+The roles are written to be rerunnable. A repeated run should leave already
+converged state alone, although tools managed by external installers may still
+report their own updates.
+
+## Try the Linux path in Docker
+
+Run the published image:
+
+```bash
+docker run --rm -it shmileee/dotfiles
+```
+
+Or build the current checkout:
+
+```bash
+docker buildx build --platform linux/arm64 -t dotfiles --progress plain .
+```
+
+The image uses Ubuntu 24.04 and runs the full Ansible installation as a
+non-root `linuxbrew` user. The Docker role is intentionally skipped inside the
+container.
+
+## Why Ansible and chezmoi?
+
+Ansible owns machine state: packages, applications, services, shell setup, and
+operating-system preferences. Its roles make the order and platform conditions
+explicit, and repeated runs provide a practical convergence check.
+
+chezmoi owns files in the home directory. It renders templates using facts such
+as operating system and architecture, which keeps one source tree useful across
+macOS, Linux, and the validation container. Keeping these responsibilities
+separate makes it clear whether a change belongs to the machine or to the
+user's configuration.

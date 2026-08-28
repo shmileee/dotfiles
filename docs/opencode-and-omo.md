@@ -1,71 +1,137 @@
+---
+title: OpenCode and OmO
+description: Local secrets, model routing, corporate overlays, and contextual notifications.
+---
+
 # OpenCode and OmO
 
-Chezmoi manages the global OpenCode configuration, the released contextual
-notification package declaration, its tmux presentation, and the unified OmO
-routing configuration.
+<p class="page-lead">chezmoi manages the shared OpenCode configuration, Oh My OpenAgent routing, Fish integration, and tmux notification plumbing. Secrets and company-specific endpoints stay local.</p>
 
-Managed targets:
+## What is managed
 
-- `~/.config/opencode/opencode.json`
-- `~/.config/tmux/tmux.conf`
-- `~/.omo/omo.jsonc`
+| Surface | Managed file | Responsibility |
+| --- | --- | --- |
+| OpenCode | `~/.config/opencode/opencode.json` | Plugins, formatters, language servers, and personal MCP configuration |
+| OmO | `~/.omo/omo.jsonc` | Agent categories, model choices, fallbacks, and disabled hooks |
+| Fish | `~/.config/fish/conf.d/opencode.fish` | Activate the optional corporate configuration |
+| tmux | `~/.config/tmux/tmux.conf` | Install the contextual-notifier companion plugin |
 
-## Contextual notifications
+The OpenCode configuration currently declares the Claude authentication,
+Oh My OpenAgent, and contextual-notifier plugins. OpenCode installs declared
+plugins with Bun when it starts.
 
-`opencode.json` pins `opencode-contextual-notifier@0.1.2`. OpenCode installs
-the npm package with Bun on the next startup, so restart every running OpenCode
-process after changing the declaration.
+## First-run checklist
 
-The released package owns the OpenCode event handling, tmux marker helper, and
-TPM companion. The managed tmux configuration declares that companion; its
-entrypoint renders `@opencode_waiting` in the originating window and clears it
-when that window is selected or focused. OmO's `session-notification` hook
-remains disabled to prevent duplicate macOS notifications.
-
-The notifier implementation, its tests, and its TypeScript toolchain live in
-the package repository and are intentionally not copied into
-`~/.config/opencode`.
+1. Apply the dotfiles through the [setup guide](what-how-and-why.md).
+2. Create the local secret files if you want to use the Home Assistant MCP server.
+3. Put only the secret value in each file—no quotes or shell assignment.
+4. Start a new Fish shell so an optional corporate overlay is detected.
+5. Restart every running OpenCode process after changing plugin declarations.
 
 ## Local secrets
 
-OpenCode resolves sensitive values from files that are intentionally not
-managed by chezmoi or Git:
+The managed OpenCode file references two files that are deliberately absent
+from Git:
 
 - `~/.config/opencode/secrets/home-assistant-mcp-url`
 - `~/.config/opencode/secrets/home-assistant-access-token`
 
-Create the directory with mode `0700` and each file with mode `0600` before
-starting OpenCode on a new machine. Store only the value in each file, without
-quotes.
+Create them with restrictive permissions:
 
-```sh
+```bash
 install -d -m 700 "$HOME/.config/opencode/secrets"
 install -m 600 /dev/null "$HOME/.config/opencode/secrets/home-assistant-mcp-url"
 install -m 600 /dev/null "$HOME/.config/opencode/secrets/home-assistant-access-token"
 ```
 
-OpenCode performs the `{file:...}` substitutions when it loads
-`opencode.json`; chezmoi never reads or copies the secret values.
+Edit each file and store only its value. OpenCode resolves the `{file:...}`
+references when it loads the configuration; chezmoi never reads or copies the
+secret contents.
+
+!!! warning "The files start empty"
+
+    The `install` commands create secure placeholders. Populate them before
+    enabling or using the Home Assistant MCP integration.
 
 ## Corporate overlay
 
-Company-specific MCP configuration belongs in
-`~/.config/opencode/opencode.corp.json`. This file is intentionally unmanaged
-and should use mode `0600`.
+Put company-specific OpenCode configuration in:
 
-The fish configuration sets `OPENCODE_CONFIG` when the corporate file exists.
-OpenCode loads the normal global configuration first and deep-merges the
-corporate file afterward, so personal and company-specific MCP entries are both
-available without duplicating the personal configuration.
+```text
+~/.config/opencode/opencode.corp.json
+```
 
-Keep company endpoints, profiles, and credentials in that local overlay. It can
-use OpenCode's `{file:...}` syntax for credentials stored in separate local
-files.
+This file is unmanaged and should use mode `0600`:
 
-## Deliberately unmanaged files
+```bash
+install -m 600 /dev/null "$HOME/.config/opencode/opencode.corp.json"
+```
 
-- `tui.json` currently contains server-side OpenAgent plugin declarations;
-  OpenCode's TUI plugin list is a separate extension surface.
-- `opencode.corp.json` is a machine-local corporate overlay.
-- Runtime state, caches, backups, dependency directories, and lockfiles are
-  generated locally and remain unmanaged.
+When the file exists, the managed Fish snippet exports `OPENCODE_CONFIG`
+pointing to it. Keep company endpoints, profiles, and credentials there rather
+than adding them to the personal repository. The overlay can use the same
+`{file:...}` syntax for credentials stored in separate local files.
+
+Start a new Fish shell—or source the managed snippet—after creating or removing
+the overlay.
+
+## Model routing
+
+`~/.omo/omo.jsonc` is the routing source of truth. It assigns primary and
+fallback models to named agents and task categories, and enables model
+fallback when the first choice is unavailable.
+
+Model names change more often than the surrounding workflow, so consult the
+managed file for the current assignments rather than copying a list from this
+page. The `session-notification` hook is disabled there because notifications
+are handled by the dedicated contextual-notifier plugin.
+
+## Contextual notifications
+
+OpenCode pins `opencode-contextual-notifier@0.1.2`. Its tmux companion is
+declared through TPM in the managed `tmux.conf`.
+
+Together they mark the originating tmux window when an OpenCode session needs
+attention and clear that state when the window is selected or focused. The
+notifier's implementation and tests live in its own package repository; this
+dotfiles repository only declares and configures it.
+
+After changing the notifier declaration:
+
+1. restart OpenCode so Bun can synchronize the package;
+2. reload tmux with ++ctrl+a++ then ++ctrl+r++; and
+3. run the TPM installation flow if the companion plugin is not present yet.
+
+## Deliberately unmanaged
+
+| Path or category | Why it stays local |
+| --- | --- |
+| `opencode.corp.json` | Contains company-specific configuration |
+| Files under `opencode/secrets/` | Contain credentials or private endpoints |
+| `tui.json` | Uses a separate server-side extension surface |
+| `opencode-notifier.json` | Is not referenced by the active notifier |
+| Caches, backups, lockfiles, and dependency directories | Are generated at runtime |
+
+## Troubleshooting
+
+### An MCP server fails during startup
+
+Confirm that both secret files exist, contain a value, and use mode `0600`:
+
+```bash
+stat -f '%Sp %N' "$HOME/.config/opencode/secrets/"*  # macOS
+stat -c '%A %n' "$HOME/.config/opencode/secrets/"*  # Linux
+```
+
+### The corporate configuration is ignored
+
+Open a new Fish shell and confirm the variable points to the expected file:
+
+```fish
+echo $OPENCODE_CONFIG
+```
+
+### A notification or tmux marker is stale
+
+Focus the originating tmux window first. If the marker remains, restart
+OpenCode and reload tmux configuration with ++ctrl+a++ then ++ctrl+r++.

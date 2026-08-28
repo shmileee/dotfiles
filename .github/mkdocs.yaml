@@ -6,9 +6,9 @@ copyright: Copyright &copy; 2021 - 2026 Oleksandr Ponomarov
 
 nav:
   - Overview: index.md
-  - What, How & Why?: what-how-and-why.md
-  - Hotkeys: hotkeys.md
-  - OpenCode and OmO: opencode-and-omo.md
+  - Setup guide: what-how-and-why.md
+  - Shortcuts: hotkeys.md
+  - OpenCode & OmO: opencode-and-omo.md
 
 theme:
   name: material
@@ -39,6 +39,8 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.keys
   - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
   - toc:
       permalink: true
 
