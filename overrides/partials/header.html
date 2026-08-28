@@ -1,0 +1,39 @@
+<header class="site-header" data-site-header data-md-component="header">
+  <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+  <div class="header-inner">
+    <span class="brand-link" aria-label="Oleksandr Ponomarov">
+      <span class="brand-full">~/oleksandr-ponomarov</span>
+      <span class="brand-short" aria-hidden="true">~/op</span>
+    </span>
+    <a class="docs-home{% if nav.homepage.active %} is-active{% endif %}" href="{{ nav.homepage.url | url }}"{% if nav.homepage.active %} aria-current="page"{% endif %}>Home</a>
+
+    <nav class="site-nav" aria-label="Primary navigation">
+      {% for nav_item in nav %}
+        {% if not loop.first %}
+          <a href="{{ nav_item.url | url }}"{% if nav_item.active %} class="is-active" aria-current="page"{% endif %}>{{ nav_item.title }}</a>
+        {% endif %}
+      {% endfor %}
+      <span class="site-nav-separator" aria-hidden="true">·</span>
+      <a class="external-nav-link" href="https://portfolio.oponomarov.com/" aria-label="Portfolio (external site)">
+        <span>Portfolio</span>
+        <svg class="external-nav-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+          <path d="M5 3h8v8M13 3 3 13" />
+        </svg>
+      </a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="theme-toggle" type="button" aria-label="Switch to light color scheme" data-theme-toggle>light</button>
+      <a class="header-icon md-icon" href="https://github.com/shmileee/dotfiles" aria-label="View the dotfiles repository on GitHub">
+        {% include ".icons/fontawesome/brands/github.svg" %}
+      </a>
+      <label class="header-icon md-icon" for="__search" role="button" tabindex="0" aria-controls="__search" aria-expanded="false" aria-label="Search documentation" data-search-toggle>
+        {% include ".icons/material/magnify.svg" %}
+      </label>
+      <button class="header-icon header-menu md-icon" type="button" aria-controls="__drawer" aria-expanded="false" aria-label="Open navigation" data-drawer-toggle>
+        {% include ".icons/material/menu.svg" %}
+      </button>
+    </div>
+  </div>
+  {% include "partials/search.html" %}
+</header>
