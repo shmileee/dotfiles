@@ -127,42 +127,42 @@ Press ++ctrl+a++, release it, and then press the command key.
 
 | Command | Action |
 | --- | --- |
-| ++ctrl+a++ then `c` | Create a window in the current directory |
-| ++ctrl+a++ then `r` | Rename the current window |
-| ++ctrl+a++ then `R` | Rename the current session |
-| ++ctrl+a++ then `\|` | Split the pane horizontally |
-| ++ctrl+a++ then `_` | Split the pane vertically |
-| ++ctrl+a++ then `+` | Toggle pane zoom |
+| ++ctrl+a++ <span class="shortcut-then">then</span> `c` | Create a window in the current directory |
+| ++ctrl+a++ <span class="shortcut-then">then</span> `r` | Rename the current window |
+| ++ctrl+a++ <span class="shortcut-then">then</span> `R` | Rename the current session |
+| ++ctrl+a++ <span class="shortcut-then">then</span> `\|` | Split the pane horizontally |
+| ++ctrl+a++ <span class="shortcut-then">then</span> `_` | Split the pane vertically |
+| ++ctrl+a++ <span class="shortcut-then">then</span> `+` | Toggle pane zoom |
 
 ### Move around
 
 | Command | Action |
 | --- | --- |
-| ++ctrl+a++ then `h` / `j` / `k` / `l` | Move one pane left, down, up, or right |
-| ++ctrl+a++ then `[` / `]` | Select the previous / next pane |
-| ++ctrl+a++ then `{` / `}` | Select the previous / next window |
-| ++ctrl+a++ then ++tab++ | Return to the most recently used window |
+| ++ctrl+a++ <span class="shortcut-then">then</span> `h` / `j` / `k` / `l` | Move one pane left, down, up, or right |
+| ++ctrl+a++ <span class="shortcut-then">then</span> `[` / `]` | Select the previous / next pane |
+| ++ctrl+a++ <span class="shortcut-then">then</span> `{` / `}` | Select the previous / next window |
+| ++ctrl+a++ <span class="shortcut-then">then</span> ++tab++ | Return to the most recently used window |
 
 ### Close and detach
 
 | Command | Action |
 | --- | --- |
-| ++ctrl+a++ then `x` | Kill the current pane |
-| ++ctrl+a++ then `X` | Kill the current window |
-| ++ctrl+a++ then ++ctrl+x++ | Confirm and kill every other window |
-| ++ctrl+a++ then `Q` | Confirm and kill the session |
-| ++ctrl+a++ then `d` | Detach this client |
-| ++ctrl+a++ then `D` | Detach other clients when present |
+| ++ctrl+a++ <span class="shortcut-then">then</span> `x` | Kill the current pane |
+| ++ctrl+a++ <span class="shortcut-then">then</span> `X` | Kill the current window |
+| ++ctrl+a++ <span class="shortcut-then">then</span> ++ctrl+x++ | Confirm and kill every other window |
+| ++ctrl+a++ <span class="shortcut-then">then</span> `Q` | Confirm and kill the session |
+| ++ctrl+a++ <span class="shortcut-then">then</span> `d` | Detach this client |
+| ++ctrl+a++ <span class="shortcut-then">then</span> `D` | Detach other clients when present |
 
 ### Configuration and copy mode
 
 | Command | Action |
 | --- | --- |
-| ++ctrl+a++ then ++ctrl+e++ | Edit [`tmux.conf`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf), then reload it |
-| ++ctrl+a++ then ++ctrl+r++ | Reload [`tmux.conf`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf) |
+| ++ctrl+a++ <span class="shortcut-then">then</span> ++ctrl+e++ | Edit [`tmux.conf`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf), then reload it |
+| ++ctrl+a++ <span class="shortcut-then">then</span> ++ctrl+r++ | Reload [`tmux.conf`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf) |
 | ++ctrl+s++ | Enter copy mode without the prefix |
-| ++ctrl+a++ then `p` | Paste the latest tmux buffer |
-| ++ctrl+a++ then ++ctrl+p++ | Choose a tmux buffer |
+| ++ctrl+a++ <span class="shortcut-then">then</span> `p` | Paste the latest tmux buffer |
+| ++ctrl+a++ <span class="shortcut-then">then</span> ++ctrl+p++ | Choose a tmux buffer |
 
 Copy mode uses vi keys and supports the mouse wheel, Page Up and Page Down, and
 Option-based scrolling by line or half page.

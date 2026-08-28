@@ -27,11 +27,13 @@
         <path d="M5 3h8v8M13 3 3 13" />
       </svg>
     </a>
-    <a class="external-nav-link" href="https://github.com/shmileee/dotfiles" aria-label="GitHub repository (external site)">
-      <span>GitHub</span>
-      <svg class="external-nav-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-        <path d="M5 3h8v8M13 3 3 13" />
-      </svg>
-    </a>
+    {% if config.repo_url %}
+      <a class="external-nav-link" href="{{ config.repo_url }}" aria-label="{{ config.repo_name }} on GitHub (external site)">
+        <span>GitHub</span>
+        <svg class="external-nav-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+          <path d="M5 3h8v8M13 3 3 13" />
+        </svg>
+      </a>
+    {% endif %}
   </nav>
 </nav>

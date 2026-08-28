@@ -1,20 +1,5 @@
 (() => {
-  const root = document.documentElement;
   let pageController;
-
-  function applyTheme(theme) {
-    const normalized = theme === "light" ? "light" : "dark";
-    root.dataset.theme = normalized;
-    root.style.colorScheme = normalized;
-    document.body?.setAttribute("data-md-color-scheme", normalized === "light" ? "default" : "slate");
-
-    const button = document.querySelector("[data-theme-toggle]");
-    if (button) {
-      const next = normalized === "dark" ? "light" : "dark";
-      button.textContent = next;
-      button.setAttribute("aria-label", `Switch to ${next} color scheme`);
-    }
-  }
 
   function normalizePersistentNavigationLinks() {
     const links = document.querySelectorAll(
@@ -42,7 +27,6 @@
     if (contextHelpTrigger && contextHelpDialog) {
       document.body.append(contextHelpTrigger, contextHelpDialog);
     }
-    const themeButton = document.querySelector("[data-theme-toggle]");
     const searchButton = document.querySelector("[data-search-toggle]");
     const drawerButton = document.querySelector("[data-drawer-toggle]");
     const drawerToggle = document.querySelector("#__drawer");
@@ -50,7 +34,6 @@
     const drawerTocToggle = primarySidebar?.querySelector("#__toc");
     const progress = document.querySelector("[data-reading-progress]");
 
-    applyTheme(localStorage.getItem("om-theme") || "dark");
     normalizePersistentNavigationLinks();
 
     const closeContextHelp = () => {
@@ -243,30 +226,6 @@
     syncControls();
     syncDrawerFocus();
 
-    const syncShortcutRows = () => {
-      const rows = document.querySelectorAll(".shortcut-reference table:not(:has(th:nth-child(3))) tbody tr");
-      rows.forEach((row) => row.classList.remove("shortcut-row--stacked"));
-      if (window.innerWidth > 480) return;
-      rows.forEach((row) => {
-        const shortcut = row.querySelector("td:first-child");
-        if (shortcut && shortcut.scrollWidth > shortcut.clientWidth + 1) {
-          row.classList.add("shortcut-row--stacked");
-        }
-      });
-    };
-
-    let shortcutResizeScheduled = false;
-    const scheduleShortcutRows = () => {
-      if (shortcutResizeScheduled) return;
-      shortcutResizeScheduled = true;
-      requestAnimationFrame(() => {
-        syncShortcutRows();
-        shortcutResizeScheduled = false;
-      });
-    };
-    window.addEventListener("resize", scheduleShortcutRows, { signal });
-    syncShortcutRows();
-
     const shortcutFilter = document.querySelector("[data-shortcut-filter]");
     const shortcutQuery = shortcutFilter?.querySelector("[data-shortcut-query]");
     const shortcutClear = shortcutFilter?.querySelector("[data-shortcut-clear]");
@@ -347,7 +306,6 @@
       shortcutEmpty.hidden = visibleCount !== 0;
       shortcutStatus.textContent = `Showing ${visibleCount} of ${shortcutRows.length} shortcuts`;
       syncShortcutToc();
-      syncShortcutRows();
       syncDrawerFocus();
     };
 
@@ -375,16 +333,6 @@
       });
       syncShortcutFilter();
     }
-
-    themeButton?.addEventListener(
-      "click",
-      () => {
-        const theme = root.dataset.theme === "dark" ? "light" : "dark";
-        localStorage.setItem("om-theme", theme);
-        applyTheme(theme);
-      },
-      { signal },
-    );
 
     if (!progress) return;
 

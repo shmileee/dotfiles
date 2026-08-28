@@ -24,10 +24,17 @@
     </nav>
 
     <div class="header-actions">
-      <button class="theme-toggle" type="button" aria-label="Switch to light color scheme" data-theme-toggle>light</button>
-      <a class="header-icon md-icon" href="https://github.com/shmileee/dotfiles" aria-label="View the dotfiles repository on GitHub">
-        {% include ".icons/fontawesome/brands/github.svg" %}
-      </a>
+      {% if config.theme.palette %}
+        {% if not config.theme.palette is mapping %}
+          {% include "partials/palette.html" %}
+          {% include "partials/javascripts/palette.html" %}
+        {% endif %}
+      {% endif %}
+      {% if config.repo_url %}
+        <a class="header-icon md-icon" href="{{ config.repo_url }}" aria-label="View {{ config.repo_name }} on GitHub">
+          {% include ".icons/fontawesome/brands/github.svg" %}
+        </a>
+      {% endif %}
       <button class="header-icon md-icon" type="button" aria-haspopup="dialog" aria-label="Search documentation" data-search-toggle>
         {% include ".icons/material/magnify.svg" %}
       </button>

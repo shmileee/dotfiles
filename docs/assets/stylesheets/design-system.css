@@ -103,7 +103,7 @@
   --md-code-font: "IBM Plex Mono", ui-monospace, monospace;
 }
 
-:root[data-theme="light"] {
+body[data-md-color-scheme="default"] {
   color-scheme: light;
   --surface-primary: #f4f5f7;
   --surface-secondary: #ffffff;
