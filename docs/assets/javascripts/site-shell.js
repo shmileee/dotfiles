@@ -29,9 +29,6 @@
     const themeButton = document.querySelector("[data-theme-toggle]");
     const searchButton = document.querySelector("[data-search-toggle]");
     const drawerButton = document.querySelector("[data-drawer-toggle]");
-    const searchForm = document.querySelector(".md-search__form");
-    const searchClose = document.querySelector('.md-search .md-search__icon[for="__search"]');
-    const searchToggle = document.querySelector("#__search");
     const drawerToggle = document.querySelector("#__drawer");
     const primarySidebar = document.querySelector(".md-sidebar--primary");
     const drawerTocToggle = primarySidebar?.querySelector("#__toc");
@@ -128,22 +125,8 @@
       }, { signal });
     }
 
-    const activateOnKeyboard = (control) => {
-      control?.addEventListener(
-        "keydown",
-        (event) => {
-          if (event.key !== "Enter" && event.key !== " ") return;
-          event.preventDefault();
-          control.click();
-        },
-        { signal },
-      );
-    };
-
     const syncControls = () => {
-      const searchIsOpen = Boolean(searchToggle?.checked);
       const drawerIsOpen = Boolean(drawerToggle?.checked);
-      searchButton?.setAttribute("aria-expanded", String(searchIsOpen));
       drawerButton?.setAttribute("aria-expanded", String(drawerIsOpen));
       drawerButton?.setAttribute("aria-label", drawerIsOpen ? "Close navigation" : "Open navigation");
     };
@@ -180,23 +163,15 @@
       setTabbable(secondary, tocIsOpen);
     };
 
-    searchClose?.setAttribute("aria-label", "Close search");
-    searchClose?.setAttribute("role", "button");
-    searchClose?.setAttribute("tabindex", "0");
-    if (searchForm && !searchForm.querySelector("[data-search-submit]")) {
-      const searchSubmit = document.createElement("button");
-      searchSubmit.type = "submit";
-      searchSubmit.className = "search-submit";
-      searchSubmit.dataset.searchSubmit = "";
-      searchSubmit.textContent = "Open first result";
-      searchForm.append(searchSubmit);
-    }
-    searchForm?.addEventListener("submit", (event) => {
-      event.preventDefault();
-      document.querySelector(".md-search-result__link")?.click();
+    searchButton?.addEventListener("click", () => {
+      if (drawerToggle?.checked) {
+        drawerToggle.checked = false;
+        drawerToggle.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+      document.querySelector("[data-md-component='search']")?.dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
     }, { signal });
-    activateOnKeyboard(searchButton);
-    activateOnKeyboard(searchClose);
 
     drawerButton?.addEventListener(
       "click",
@@ -208,20 +183,9 @@
       { signal },
     );
 
-    searchToggle?.addEventListener(
-      "change",
-      () => {
-        if (searchToggle.checked && drawerToggle?.checked) drawerToggle.checked = false;
-        syncControls();
-        syncDrawerFocus();
-      },
-      { signal },
-    );
-
     drawerToggle?.addEventListener(
       "change",
       () => {
-        if (drawerToggle.checked && searchToggle?.checked) searchToggle.checked = false;
         syncControls();
         syncDrawerFocus();
       },
@@ -249,11 +213,7 @@
         }
 
         if (event.key !== "Escape") return;
-        if (searchToggle?.checked) {
-          searchToggle.checked = false;
-          syncControls();
-          searchButton?.focus();
-        } else if (drawerToggle?.checked) {
+        if (drawerToggle?.checked) {
           drawerToggle.checked = false;
           syncControls();
           syncDrawerFocus();

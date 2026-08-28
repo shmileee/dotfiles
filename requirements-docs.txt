@@ -1,5 +1,2 @@
-# Material 9.x requires MkDocs 1.x; do not upgrade to MkDocs 2 in place.
-mkdocs==1.6.1
-mkdocs-material-extensions==1.3.1
-mkdocs-material==9.7.7
-mkdocs-minify-plugin==0.8.0
+# Zensical replaces both MkDocs and Material for MkDocs.
+zensical==0.0.57
