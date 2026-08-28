@@ -15,6 +15,7 @@ on:
       - "!.github/mkdocs.yaml"
       - "!docs/**"
   push:
+    branches: [master]
     paths:
       - "config/**"
       - "scripts/**"
