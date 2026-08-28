@@ -149,7 +149,9 @@ def export_domain(module: AnsibleModule, defaults: str) -> Dict[str, Any]:
     try:
         domain = plistlib.loads(stdout)
     except (plistlib.InvalidFileException, TypeError, ValueError) as error:
-        module.fail_json(msg="Could not parse exported defaults domain: {0}".format(error))
+        module.fail_json(
+            msg="Could not parse exported defaults domain: {0}".format(error)
+        )
     if not isinstance(domain, dict):
         module.fail_json(msg="Exported defaults domain is not a dictionary")
     return domain
@@ -158,7 +160,9 @@ def export_domain(module: AnsibleModule, defaults: str) -> Dict[str, Any]:
 def write_arguments(value: Any, value_type: str) -> List[str]:
     if value_type == "dict":
         return ["-dict"] + [
-            part for key, item in value.items() for part in (str(key), plist_fragment(item))
+            part
+            for key, item in value.items()
+            for part in (str(key), plist_fragment(item))
         ]
     if value_type == "array":
         return ["-array"] + [plist_fragment(item) for item in value]
@@ -193,7 +197,11 @@ def main() -> None:
                 "required": True,
             },
             "current_host": {"type": "bool", "default": False},
-            "dict_mode": {"type": "str", "choices": ["replace", "merge"], "default": "replace"},
+            "dict_mode": {
+                "type": "str",
+                "choices": ["replace", "merge"],
+                "default": "replace",
+            },
         },
         supports_check_mode=True,
     )
@@ -202,7 +210,9 @@ def main() -> None:
         module.fail_json(msg="dict_mode=merge requires value_type=dict")
 
     try:
-        desired_input = normalize_plist_value(module.params["value"], module.params["value_type"])
+        desired_input = normalize_plist_value(
+            module.params["value"], module.params["value_type"]
+        )
     except ValueError as error:
         module.fail_json(msg="Invalid value: {0}".format(error))
 
@@ -211,7 +221,8 @@ def main() -> None:
     current = domain.get(module.params["key"], MISSING)
     desired = (
         merged_mapping(current, desired_input)
-        if module.params["value_type"] == "dict" and module.params["dict_mode"] == "merge"
+        if module.params["value_type"] == "dict"
+        and module.params["dict_mode"] == "merge"
         else desired_input
     )
     changed = current is MISSING or current != desired

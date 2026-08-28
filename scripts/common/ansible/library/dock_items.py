@@ -101,7 +101,13 @@ from ansible.module_utils.dotfiles_macos import (
 
 DISPLAY_VALUES = {0: "stack", 1: "folder"}
 VIEW_VALUES = {0: "auto", 1: "fan", 2: "grid", 3: "list"}
-SORT_VALUES = {1: "name", 2: "dateadded", 3: "datemodified", 4: "datecreated", 5: "kind"}
+SORT_VALUES = {
+    1: "name",
+    2: "dateadded",
+    3: "datemodified",
+    4: "datecreated",
+    5: "kind",
+}
 
 
 class DockError(Exception):
@@ -139,7 +145,9 @@ def folder_options(plist_paths: List[str]) -> Dict[str, Dict[str, str]]:
                 "could not read Dock plist {0!r}: {1}".format(plist_path, error)
             ) from error
         if not isinstance(plist, dict):
-            raise DockStateError("Dock plist {0!r} is not a dictionary".format(plist_path))
+            raise DockStateError(
+                "Dock plist {0!r} is not a dictionary".format(plist_path)
+            )
 
         for tile in plist.get("persistent-others", []):
             tile_data = tile.get("tile-data", {})
@@ -178,17 +186,25 @@ def desired_items(module: AnsibleModule) -> List[Dict[str, Any]]:
     for index, item in enumerate(module.params["items"]):
         path = normalize_location(item["path"])
         options = {
-            key: item[key] for key in ("display", "view", "sort") if item.get(key) is not None
+            key: item[key]
+            for key in ("display", "view", "sort")
+            if item.get(key) is not None
         }
         if path in seen:
-            module.fail_json(msg="items[{0}] duplicates Dock path {1!r}".format(index, path))
+            module.fail_json(
+                msg="items[{0}] duplicates Dock path {1!r}".format(index, path)
+            )
         seen.add(path)
         if options and item["section"] != "others":
             module.fail_json(
-                msg="items[{0}] uses folder presentation outside section=others".format(index)
+                msg="items[{0}] uses folder presentation outside section=others".format(
+                    index
+                )
             )
         if options and urlsplit(path).scheme not in ("", "file"):
-            module.fail_json(msg="items[{0}] uses folder presentation for a URL".format(index))
+            module.fail_json(
+                msg="items[{0}] uses folder presentation for a URL".format(index)
+            )
         desired.append(
             {
                 "name": item.get("name"),
@@ -209,7 +225,9 @@ def add_arguments(dockutil: str, item: Mapping[str, Any]) -> List[str]:
     return argv
 
 
-def rebuild(module: AnsibleModule, dockutil: str, items: List[Mapping[str, Any]]) -> None:
+def rebuild(
+    module: AnsibleModule, dockutil: str, items: List[Mapping[str, Any]]
+) -> None:
     run_dockutil(module, [dockutil, "--remove", "all", "--no-restart"])
     for item in items:
         run_dockutil(module, add_arguments(dockutil, item))
@@ -270,12 +288,22 @@ def main() -> None:
                 "options": {
                     "path": {"type": "str", "required": True},
                     "name": {"type": "str"},
-                    "section": {"type": "str", "choices": ["apps", "others"], "default": "apps"},
+                    "section": {
+                        "type": "str",
+                        "choices": ["apps", "others"],
+                        "default": "apps",
+                    },
                     "display": {"type": "str", "choices": ["stack", "folder"]},
                     "view": {"type": "str", "choices": ["auto", "fan", "grid", "list"]},
                     "sort": {
                         "type": "str",
-                        "choices": ["name", "dateadded", "datemodified", "datecreated", "kind"],
+                        "choices": [
+                            "name",
+                            "dateadded",
+                            "datemodified",
+                            "datecreated",
+                            "kind",
+                        ],
                     },
                 },
             }

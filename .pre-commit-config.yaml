@@ -1,15 +1,18 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: check-added-large-files
         args: ["--maxkb=1024"]
+      - id: check-case-conflict
+      - id: check-json
       - id: check-merge-conflict
+      - id: check-symlinks
+      - id: check-toml
       - id: end-of-file-fixer
       - id: trailing-whitespace
         args: [--markdown-linebreak-ext=md]
       - id: check-executables-have-shebangs
-      - id: check-case-conflict
       - id: mixed-line-ending
       - id: detect-private-key
 
@@ -21,6 +24,31 @@ repos:
 
   - repo: local
     hooks:
+      - id: gitleaks
+        name: gitleaks
+        entry: gitleaks dir --redact --no-banner .
+        language: system
+        pass_filenames: false
+      - id: ruff-check
+        name: ruff check
+        entry: ruff check --fix --select=E4,E7,E9,F,B --ignore=E402,B905
+        language: system
+        types: [python]
+      - id: ruff-format
+        name: ruff format
+        entry: ruff format
+        language: system
+        types: [python]
+      - id: stylua
+        name: stylua
+        entry: stylua
+        language: system
+        types: [lua]
+      - id: chezmoi-templates
+        name: chezmoi templates
+        entry: chezmoi execute-template --file
+        language: system
+        files: \.tmpl$
       - id: shfmt
         name: shfmt
         entry: shfmt --write --indent 2 --binary-next-line --case-indent --space-redirects
