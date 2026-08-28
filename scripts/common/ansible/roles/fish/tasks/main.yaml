@@ -60,6 +60,7 @@
         argv: ['{{ fish_path }}', -c, fisher list]
       check_mode: false
       register: fisher_plugins
+      failed_when: fisher_plugins.rc not in [0, 1]
       changed_when: >-
         fisher_plugins.stdout_lines | map('lower') | sort
         != fisher_plugin_specs | map('lower') | sort
