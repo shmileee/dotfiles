@@ -52,57 +52,6 @@
       link.setAttribute("aria-label", `Permanent link to “${title}”`);
     });
 
-    const syncDeepLinkBreadcrumb = () => {
-      document.querySelector("[data-deep-link-breadcrumb]")?.remove();
-      if (!window.location.hash) return;
-
-      let target;
-      try {
-        target = document.getElementById(decodeURIComponent(window.location.hash.slice(1)));
-      } catch {
-        return;
-      }
-      if (!target?.matches("h2, h3, h4")) return;
-
-      const headingTitle = target.getAttribute("aria-label") || target.textContent.replace("¶", "").trim();
-      const activePage = document.querySelector(".site-nav a.is-active");
-      const pageTitle = activePage?.textContent.replace("↗", "").trim()
-        || document.querySelector(".md-content h1")?.getAttribute("aria-label")
-        || "Current page";
-
-      const breadcrumb = document.createElement("nav");
-      breadcrumb.className = "deep-link-breadcrumb";
-      breadcrumb.dataset.deepLinkBreadcrumb = "";
-      breadcrumb.setAttribute("aria-label", "Breadcrumb");
-
-      const docsLink = document.createElement("a");
-      docsLink.href = document.querySelector(".docs-home")?.href || "/";
-      docsLink.textContent = "Docs";
-
-      const pageLink = document.createElement("a");
-      pageLink.href = `${window.location.pathname}${window.location.search}`;
-      pageLink.textContent = pageTitle;
-
-      const current = document.createElement("span");
-      current.setAttribute("aria-current", "location");
-      current.textContent = headingTitle;
-
-      const separator = () => {
-        const span = document.createElement("span");
-        span.className = "deep-link-breadcrumb__separator";
-        span.setAttribute("aria-hidden", "true");
-        span.textContent = "/";
-        return span;
-      };
-
-      breadcrumb.append(docsLink, separator(), pageLink, separator(), current);
-      document.querySelector(".md-content__inner")?.prepend(breadcrumb);
-      requestAnimationFrame(() => target.scrollIntoView({ block: "start" }));
-    };
-
-    window.addEventListener("hashchange", syncDeepLinkBreadcrumb, { signal });
-    syncDeepLinkBreadcrumb();
-
     const tocLinks = [...document.querySelectorAll(".md-sidebar--secondary .md-nav--secondary .md-nav__link")];
     if (tocLinks.length && !tocLinks.some((link) => link.classList.contains("md-nav__link--active"))) {
       tocLinks[0].classList.add("md-nav__link--active");

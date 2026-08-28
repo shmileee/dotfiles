@@ -1,11 +1,11 @@
 ---
-title: OpenCode and OmO
+title: OpenCode + OmO
 description: Local secrets, model routing, corporate overlays, and contextual notifications.
 ---
 
-# OpenCode and OmO
+# OpenCode + OmO
 
-<p class="page-lead">chezmoi manages the shared OpenCode configuration, Oh My OpenAgent routing, Fish integration, and tmux notification plumbing. Secrets and company-specific endpoints stay local.</p>
+<p class="page-lead">chezmoi manages the shared OpenCode configuration, Oh My OpenAgent routing, fish integration, and tmux notification plumbing. Secrets and company-specific endpoints stay local.</p>
 
 ## What is managed
 
@@ -21,33 +21,33 @@ description: Local secrets, model routing, corporate overlays, and contextual no
     <p>Agent categories, model choices, fallbacks, and disabled hooks.</p>
   </article>
   <article>
-    <span>Fish</span>
+    <span>fish</span>
     <code class="path-token">~/.config/<wbr>fish/<wbr>conf.d/<wbr>opencode.fish</code>
-    <p>Activation of the optional corporate configuration.</p>
+    <p>Activates the optional corporate configuration.</p>
   </article>
   <article>
     <span>tmux</span>
     <code class="path-token">~/.config/<wbr>tmux/<wbr>tmux.conf</code>
-    <p>Installation of the contextual-notifier companion plugin.</p>
+    <p>Installs the contextual-notifier companion plugin.</p>
   </article>
 </div>
 
-The OpenCode configuration currently declares the Claude authentication,
-Oh My OpenAgent, and contextual-notifier plugins. OpenCode installs declared
-plugins with Bun when it starts.
+The OpenCode configuration currently declares the `opencode-claude-auth`, Oh
+My OpenAgent, and contextual-notifier plugins. OpenCode installs these plugins
+with Bun when it starts.
 
 ## First-run checklist
 
-1. Apply the dotfiles through the [setup guide](what-how-and-why.md).
+1. Apply the dotfiles with the [setup guide](what-how-and-why.md).
 2. Create the local secret files if you want to use the Home Assistant MCP server.
-3. Put only the secret value in each file—no quotes or shell assignment.
-4. Start a new Fish shell so an optional corporate overlay is detected.
-5. Restart every running OpenCode process after changing plugin declarations.
+3. Put only the secret value in each file—no quotes or variable names.
+4. Start a new fish shell so an optional corporate overlay is detected.
+5. Restart all running OpenCode processes after changing plugin declarations.
 
 ## Local secrets
 
-The managed OpenCode file references two files that are deliberately absent
-from Git:
+The managed OpenCode file references two files that are intentionally not
+tracked by Git:
 
 - <code class="path-token">~/.config/<wbr>opencode/<wbr>secrets/<wbr>home-assistant-mcp-url</code>
 - <code class="path-token">~/.config/<wbr>opencode/<wbr>secrets/<wbr>home-assistant-access-token</code>
@@ -83,19 +83,19 @@ This file is unmanaged and should use mode `0600`:
 install -m 600 /dev/null "$HOME/.config/opencode/opencode.corp.json"
 ```
 
-When the file exists, the managed Fish snippet exports `OPENCODE_CONFIG`
-pointing to it. Keep company endpoints, profiles, and credentials there rather
+When the file exists, the managed fish snippet sets `OPENCODE_CONFIG` to its
+path. Keep company endpoints, profiles, and credentials there rather
 than adding them to the personal repository. The overlay can use the same
 `{file:...}` syntax for credentials stored in separate local files.
 
-Start a new Fish shell—or source the managed snippet—after creating or removing
+Start a new fish shell—or source the managed snippet—after creating or removing
 the overlay.
 
 ## Model routing
 
 `~/.omo/omo.jsonc` is the routing source of truth. It assigns primary and
-fallback models to named agents and task categories, and enables model
-fallback when the first choice is unavailable.
+fallback models to named agents and task categories, using a fallback when the
+first choice is unavailable.
 
 Model names change more often than the surrounding workflow, so consult the
 managed file for the current assignments rather than copying a list from this
@@ -114,9 +114,9 @@ dotfiles repository only declares and configures it.
 
 After changing the notifier declaration:
 
-1. restart OpenCode so Bun can synchronize the package;
-2. reload tmux with ++ctrl+a++ then ++ctrl+r++; and
-3. run the TPM installation flow if the companion plugin is not present yet.
+1. Restart OpenCode so Bun can synchronize the package.
+2. Reload tmux with ++ctrl+a++ then ++ctrl+r++.
+3. Run the TPM installation flow if the companion plugin is not present.
 
 ## Deliberately unmanaged
 
@@ -130,7 +130,7 @@ After changing the notifier declaration:
 
 ## Troubleshooting
 
-### An MCP server fails during startup
+### An MCP server fails to start
 
 Confirm that both secret files exist, contain a value, and use mode `0600`:
 
@@ -141,7 +141,7 @@ stat -c '%A %n' "$HOME/.config/opencode/secrets/"*  # Linux
 
 ### The corporate configuration is ignored
 
-Open a new Fish shell and confirm the variable points to the expected file:
+Open a new fish shell and confirm that the variable points to the expected file:
 
 ```fish
 echo $OPENCODE_CONFIG

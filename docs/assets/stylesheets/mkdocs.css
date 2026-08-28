@@ -15,6 +15,19 @@ body[data-md-color-scheme] {
   --md-typeset-a-color: var(--accent-primary);
   --md-code-fg-color: var(--code-text);
   --md-code-bg-color: var(--code-surface);
+  --md-code-hl-color: var(--accent-surface);
+  --md-code-hl-number-color: var(--code-number);
+  --md-code-hl-special-color: var(--code-variable);
+  --md-code-hl-function-color: var(--code-function);
+  --md-code-hl-constant-color: var(--code-number);
+  --md-code-hl-keyword-color: var(--code-keyword);
+  --md-code-hl-string-color: var(--code-value);
+  --md-code-hl-name-color: var(--code-text);
+  --md-code-hl-operator-color: var(--code-operator);
+  --md-code-hl-punctuation-color: var(--code-muted);
+  --md-code-hl-comment-color: var(--code-comment);
+  --md-code-hl-generic-color: var(--code-function);
+  --md-code-hl-variable-color: var(--code-variable);
   --md-footer-fg-color: var(--text-body);
   --md-footer-fg-color--light: var(--text-secondary);
   --md-footer-bg-color: var(--surface-primary);
@@ -451,6 +464,88 @@ button.header-icon {
   line-height: 1.75;
 }
 
+/* Pygments emits these token classes through pymdownx.highlight. */
+.highlight .c,
+.highlight .ch,
+.highlight .cm,
+.highlight .c1,
+.highlight .cs {
+  color: var(--code-comment);
+  font-style: italic;
+}
+
+.highlight .k,
+.highlight .kc,
+.highlight .kd,
+.highlight .kn,
+.highlight .kp,
+.highlight .kr,
+.highlight .kt {
+  color: var(--code-keyword);
+}
+
+.highlight .s,
+.highlight .sa,
+.highlight .sb,
+.highlight .sc,
+.highlight .dl,
+.highlight .sd,
+.highlight .s1,
+.highlight .s2,
+.highlight .se,
+.highlight .sh,
+.highlight .si,
+.highlight .sr,
+.highlight .ss,
+.highlight .sx {
+  color: var(--code-value);
+}
+
+.highlight .m,
+.highlight .mb,
+.highlight .mf,
+.highlight .mh,
+.highlight .mi,
+.highlight .mo,
+.highlight .il {
+  color: var(--code-number);
+}
+
+.highlight .na,
+.highlight .nb,
+.highlight .nc,
+.highlight .nd,
+.highlight .ne,
+.highlight .nf,
+.highlight .nl,
+.highlight .nn,
+.highlight .nt {
+  color: var(--code-function);
+}
+
+.highlight .bp,
+.highlight .fm,
+.highlight .vc,
+.highlight .vg,
+.highlight .vi,
+.highlight .vm,
+.highlight .nv {
+  color: var(--code-variable);
+}
+
+.highlight .o,
+.highlight .ow {
+  color: var(--code-operator);
+}
+
+.highlight .gd {
+  color: var(--code-deleted);
+}
+
+.highlight .gi {
+  color: var(--code-value);
+}
+
 .md-typeset .highlight,
 .md-typeset .highlighttable {
   position: relative;
@@ -500,48 +595,6 @@ button.header-icon {
   border-left: 1px solid var(--border-subtle);
   border-radius: 0;
   background: var(--code-toolbar);
-}
-
-.deep-link-breadcrumb {
-  position: sticky;
-  top: 4rem;
-  z-index: 5;
-  width: fit-content;
-  max-width: 100%;
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  margin: 0 0 var(--space-6);
-  border: 1px solid var(--border-default);
-  border-radius: 999px;
-  padding: 0.4rem 0.75rem;
-  background: var(--surface-header);
-  color: var(--text-tertiary);
-  font: 500 0.75rem/1.5 "IBM Plex Mono", ui-monospace, monospace;
-  backdrop-filter: blur(0.75rem);
-}
-
-.md-typeset .deep-link-breadcrumb a {
-  color: var(--text-secondary);
-  text-decoration: none;
-}
-
-.md-typeset .deep-link-breadcrumb a:hover {
-  color: var(--text-primary);
-  text-decoration: underline;
-}
-
-.deep-link-breadcrumb [aria-current="location"] {
-  min-width: 0;
-  overflow: hidden;
-  color: var(--accent-soft);
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.deep-link-breadcrumb__separator {
-  color: var(--border-strong);
 }
 
 .md-typeset .admonition,
