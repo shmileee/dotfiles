@@ -1720,11 +1720,30 @@ body:has(.context-help[open]) .context-help-trigger {
 }
 
 .home-validation {
-  max-width: 68ch;
-  border-left: 2px solid var(--accent-border);
-  padding-left: var(--space-5);
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--space-5);
+  margin: calc(-1 * var(--space-4)) 0 var(--space-12);
+  border: 1px solid var(--border-default);
+  border-left: 3px solid var(--accent-border);
+  border-radius: 0.375rem;
+  padding: var(--space-4) var(--space-5);
+  background: var(--surface-secondary);
+}
+
+.home-validation strong {
+  color: var(--accent-soft);
+  font: 600 0.6875rem/1.4 "IBM Plex Mono", ui-monospace, monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.home-validation p {
+  margin: 0;
   color: var(--text-secondary);
   font-size: 0.875rem;
+  line-height: 1.6;
 }
 
 .md-typeset .primary-link,
@@ -2227,6 +2246,11 @@ body:has(.context-help[open]) .context-help-trigger {
   .principle-grid > div:nth-child(even) {
     padding-right: 0;
     padding-left: 0;
+  }
+
+  .home-validation {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-2);
   }
 
   .boundary-list > div {
