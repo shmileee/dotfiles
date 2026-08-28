@@ -59,7 +59,8 @@
 
     const sourceToc = document.querySelector(".md-sidebar--secondary .md-nav--secondary > .md-nav__list");
     const pageLead = document.querySelector(".md-content__inner .page-lead");
-    if (sourceToc && pageLead && tocLinks.length >= 6) {
+    const mobileTocAnchor = document.querySelector("[data-mobile-toc-anchor]") || pageLead;
+    if (sourceToc && mobileTocAnchor && tocLinks.length >= 6) {
       const details = document.createElement("details");
       details.className = "mobile-page-toc";
       details.dataset.mobilePageToc = "";
@@ -75,7 +76,7 @@
       list.removeAttribute("data-md-scrollfix");
       nav.append(list);
       details.append(summary, nav);
-      pageLead.after(details);
+      mobileTocAnchor.after(details);
 
       nav.addEventListener("click", (event) => {
         if (event.target.closest("a")) details.open = false;

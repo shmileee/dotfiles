@@ -5,7 +5,19 @@ description: Local secrets, model routing, corporate overlays, and contextual no
 
 # OpenCode + OmO
 
-<p class="page-lead">chezmoi manages the shared OpenCode configuration, Oh My OpenAgent routing, fish integration, and tmux notification plumbing. Secrets and company-specific endpoints stay local.</p>
+<p class="page-lead">chezmoi, the dotfile manager, manages the shared OpenCode configuration, Oh My OpenAgent routing, fish integration, and tmux notification plumbing. Secrets and company-specific endpoints stay local.</p>
+
+<details class="concept-primer" data-mobile-toc-anchor markdown>
+<summary>New to OpenCode? Key terms</summary>
+<dl class="concept-primer__terms">
+  <div><dt>OpenCode</dt><dd>An AI coding tool that can use models, plugins, formatters, and external services.</dd></div>
+  <div><dt>OmO</dt><dd>Oh My OpenAgent, the layer that assigns agents and task categories to models.</dd></div>
+  <div><dt>MCP</dt><dd>Model Context Protocol, a standard for connecting an AI tool to external services.</dd></div>
+  <div><dt>Model routing</dt><dd>Rules that choose a primary model and fallbacks for each kind of task.</dd></div>
+  <div><dt>Hook</dt><dd>Logic that runs automatically when a specific OpenCode event occurs.</dd></div>
+  <div><dt>TPM</dt><dd>The tmux Plugin Manager, used to install and update tmux extensions.</dd></div>
+</dl>
+</details>
 
 ## What is managed
 

@@ -6,12 +6,23 @@ description: A reproducible macOS and Linux workstation built with Ansible and c
 <section class="docs-hero" markdown>
   <p class="section-eyebrow">Personal workstation · documented publicly</p>
   <h1>A workstation I can rebuild.<span class="hero-cursor" aria-hidden="true"></span></h1>
-  <p class="hero-copy">This repository turns a fresh macOS or Debian-based Linux machine into my development environment. Ansible installs and configures the system; chezmoi puts the files in place.</p>
+  <p class="hero-copy">This repository turns a fresh macOS or Debian-based Linux machine into my development environment. Ansible, the automation engine, configures the system; chezmoi, the dotfile manager, puts the files in place.</p>
   <div class="hero-actions">
     <a class="primary-link" href="/setup/">Read the setup guide →</a>
     <a class="secondary-link" href="https://github.com/shmileee/dotfiles">Browse the repository ↗</a>
   </div>
 </section>
+
+<details class="concept-primer" markdown>
+<summary>New to dotfiles? Start here</summary>
+<dl class="concept-primer__terms">
+  <div><dt>Dotfiles</dt><dd>Configuration files that store how command-line tools and applications behave.</dd></div>
+  <div><dt>Ansible</dt><dd>Automation that installs software and applies machine settings in a repeatable order.</dd></div>
+  <div><dt>chezmoi</dt><dd>A tool that safely renders and places configuration files in your home directory.</dd></div>
+  <div><dt>Role</dt><dd>A focused group of Ansible tasks responsible for one tool or system area.</dd></div>
+  <div><dt>Homebrew</dt><dd>A package manager used here to install command-line tools and macOS applications.</dd></div>
+</dl>
+</details>
 
 ## At a glance
 

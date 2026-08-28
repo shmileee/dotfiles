@@ -117,7 +117,7 @@ body[data-md-color-scheme] {
 }
 
 .docs-home {
-  min-height: 2.5rem;
+  min-height: 2.75rem;
   display: inline-flex;
   align-items: center;
   border-left: 1px solid var(--border-default);
@@ -204,6 +204,7 @@ body[data-md-color-scheme] {
 }
 
 .theme-toggle {
+  min-height: 2.75rem;
   min-width: 4.25rem;
   border: 1px solid var(--border-default);
   border-radius: 999px;
@@ -213,8 +214,8 @@ body[data-md-color-scheme] {
 }
 
 .header-icon {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.75rem;
+  height: 2.75rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -830,6 +831,54 @@ button.header-icon {
   color: var(--text-secondary);
   font-size: clamp(1.0625rem, 1.6vw, 1.1875rem);
   line-height: 1.7;
+}
+
+.md-typeset details.concept-primer {
+  margin: calc(-1 * var(--space-4)) 0 var(--space-10);
+  overflow: hidden;
+  border-color: var(--accent-border);
+}
+
+.md-typeset details.concept-primer > summary {
+  min-height: 3rem;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-4) 0 2.5rem;
+  background: var(--accent-surface);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.concept-primer__terms {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+}
+
+.concept-primer__terms > div {
+  min-width: 0;
+  border-top: 1px solid var(--border-subtle);
+  padding: var(--space-4);
+}
+
+.concept-primer__terms > div:nth-child(even) {
+  border-left: 1px solid var(--border-subtle);
+}
+
+.concept-primer__terms dt {
+  margin: 0 0 var(--space-1);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.concept-primer__terms dd {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.55;
 }
 
 .setup-paths {
@@ -1728,6 +1777,14 @@ button.header-icon {
     grid-template-columns: minmax(0, 1fr);
   }
 
+  .concept-primer__terms {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .concept-primer__terms > div:nth-child(even) {
+    border-left: 0;
+  }
+
   .boundary-list > div {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--space-2);
@@ -1888,16 +1945,27 @@ button.header-icon {
 
   .md-typeset pre > code {
     padding: var(--space-4);
-    font-size: 0.75rem;
+    font-size: 0.875rem;
   }
 }
 
-@media (max-width: 340px) {
+@media (max-width: 420px) {
   .header-actions {
     gap: var(--space-1);
   }
 
   .header-actions > a[href*="github.com"] {
     display: none;
+  }
+}
+
+@media (max-width: 400px) {
+  .shortcut-reference table:not(:has(th:nth-child(3))) tr {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .shortcut-reference table:not(:has(th:nth-child(3))) td + td {
+    border-top: 1px solid var(--border-subtle);
+    border-left: 0;
   }
 }
