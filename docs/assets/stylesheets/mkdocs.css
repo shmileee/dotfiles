@@ -1141,6 +1141,36 @@ body[data-md-color-scheme] {
   }
 }
 
+@media (min-width: 76.25em) {
+  .md-main__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .md-sidebar--primary {
+    display: none;
+  }
+
+  .md-content,
+  .md-sidebar--secondary {
+    grid-area: 1 / 1;
+  }
+
+  [dir] .md-main__inner .md-sidebar--secondary:not([hidden]) ~ .md-content > .md-content__inner {
+    position: relative;
+    left: 50%;
+    margin-right: 0;
+    margin-left: 0;
+    transform: translateX(-50%);
+  }
+
+  .md-sidebar--secondary {
+    z-index: 1;
+    justify-self: end;
+    transform: translateX(var(--page-gutter));
+  }
+}
+
 @media (max-width: 76.2344em) {
   .header-menu {
     display: inline-flex;
