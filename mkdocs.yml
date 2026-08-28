@@ -51,6 +51,17 @@ markdown_extensions:
 plugins:
   - search:
       lang: en
+  - minify:
+      minify_html: true
+      minify_css: true
+      minify_js: true
+      cache_safe: true
+      css_files:
+        - assets/stylesheets/design-system.css
+        - assets/stylesheets/mkdocs.css
+      js_files:
+        - assets/javascripts/syntax-highlight.js
+        - assets/javascripts/site-shell.js
 
 extra_css:
   - assets/stylesheets/design-system.css

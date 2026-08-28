@@ -20,6 +20,11 @@ on:
 permissions:
   contents: read
 
+env:
+  # The site is intentionally pinned to MkDocs 1.x; Material 9 is not
+  # compatible with the unreleased MkDocs 2 rewrite.
+  NO_MKDOCS_2_WARNING: "true"
+
 concurrency:
   group: docs-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true

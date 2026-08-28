@@ -29,6 +29,7 @@
     const themeButton = document.querySelector("[data-theme-toggle]");
     const searchButton = document.querySelector("[data-search-toggle]");
     const drawerButton = document.querySelector("[data-drawer-toggle]");
+    const searchForm = document.querySelector(".md-search__form");
     const searchClose = document.querySelector('.md-search .md-search__icon[for="__search"]');
     const searchToggle = document.querySelector("#__search");
     const drawerToggle = document.querySelector("#__drawer");
@@ -182,6 +183,18 @@
     searchClose?.setAttribute("aria-label", "Close search");
     searchClose?.setAttribute("role", "button");
     searchClose?.setAttribute("tabindex", "0");
+    if (searchForm && !searchForm.querySelector("[data-search-submit]")) {
+      const searchSubmit = document.createElement("button");
+      searchSubmit.type = "submit";
+      searchSubmit.className = "search-submit";
+      searchSubmit.dataset.searchSubmit = "";
+      searchSubmit.textContent = "Open first result";
+      searchForm.append(searchSubmit);
+    }
+    searchForm?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      document.querySelector(".md-search-result__link")?.click();
+    }, { signal });
     activateOnKeyboard(searchButton);
     activateOnKeyboard(searchClose);
 
@@ -363,7 +376,6 @@
 
     if (shortcutFilter && shortcutQuery && shortcutClear && shortcutStatus && shortcutEmpty) {
       shortcutFilter.classList.add("is-ready");
-      shortcutFilter.addEventListener("submit", (event) => event.preventDefault(), { signal });
       shortcutQuery.addEventListener("input", syncShortcutFilter, { signal });
       shortcutQuery.addEventListener("keydown", (event) => {
         if (event.key !== "Escape" || !shortcutQuery.value) return;
