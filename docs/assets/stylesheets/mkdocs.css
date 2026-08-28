@@ -867,7 +867,7 @@ body[data-md-color-scheme] {
 }
 
 .shortcut-reference .md-typeset__scrollwrap {
-  margin-block: var(--space-3) var(--space-8);
+  margin: var(--space-3) 0 var(--space-8);
 }
 
 .shortcut-reference .md-typeset__table {
@@ -891,7 +891,7 @@ body[data-md-color-scheme] {
 
 .shortcut-reference table tr {
   display: grid;
-  grid-template-columns: minmax(12rem, 0.85fr) minmax(0, 1.15fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .shortcut-reference table:has(th:nth-child(3)) tr {
@@ -931,7 +931,6 @@ body[data-md-color-scheme] {
   text-transform: uppercase;
 }
 
-.shortcut-reference table td:first-child,
 .shortcut-reference table:has(th:nth-child(3)) td:nth-child(2) {
   white-space: nowrap;
 }
@@ -948,6 +947,22 @@ body[data-md-color-scheme] {
 
 .shortcut-reference table .keys {
   white-space: nowrap;
+}
+
+.md-typeset .shortcut-reference table .keys kbd {
+  padding: 0.125rem 0.45rem;
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.md-typeset .shortcut-reference table td:first-child code,
+.md-typeset .shortcut-reference table:has(th:nth-child(3)) td:nth-child(2) code {
+  border-color: var(--border-default);
+  padding: 0.125rem 0.4rem;
+  background: var(--surface-primary);
+  color: var(--text-primary);
+  font-size: 0.75rem;
+  line-height: 1.5;
 }
 
 .md-typeset .tabbed-labels {
@@ -1320,16 +1335,15 @@ body[data-md-color-scheme] {
     white-space: nowrap;
   }
 
-  .shortcut-reference table tr,
   .shortcut-reference table:has(th:nth-child(3)) tr {
     grid-template-columns: minmax(0, 1fr);
   }
 
   .md-typeset .shortcut-reference table td {
-    padding: var(--space-3) var(--space-4);
+    padding: 0.625rem 0.875rem;
   }
 
-  .shortcut-reference table td + td {
+  .shortcut-reference table:has(th:nth-child(3)) td + td {
     border-top: 1px solid var(--border-subtle);
     border-left: 0;
   }
@@ -1356,6 +1370,15 @@ body[data-md-color-scheme] {
   .docs-home {
     border-left: 0;
     padding-left: 0;
+  }
+
+  .shortcut-reference table:not(:has(th:nth-child(3))) tr {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .shortcut-reference table:not(:has(th:nth-child(3))) td + td {
+    border-top: 1px solid var(--border-subtle);
+    border-left: 0;
   }
 
   .md-content__inner {
