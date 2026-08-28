@@ -10,11 +10,12 @@ permissions:
   contents: read
 
 concurrency:
-  group: validate-${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   static:
+    name: Validate repository
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     env:
@@ -23,6 +24,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
 
       - name: Set up mise
         uses: jdx/mise-action@5228313ee0372e111a38da051671ca30fc5a96db # v3
@@ -30,19 +33,19 @@ jobs:
       - name: Install Fish
         run: sudo apt-get update && sudo apt-get install --yes --no-install-recommends fish
 
-      - name: Validate Fish syntax
-        run: find config -type f -name '*.fish' -print0 | xargs -0 fish --no-execute
-
-      - name: Render and validate Fish templates
+      - name: Validate Fish syntax and templates
         run: |
-          mise exec -- bash -c '
-            chezmoi execute-template \
-              < config/private_dot_config/private_fish/private_config.fish.tmpl \
-              | fish --no-execute
-            chezmoi execute-template \
-              < config/private_dot_config/private_fish/conf.d/alias.fish.tmpl \
-              | fish --no-execute
-          '
+          find config -type f -name '*.fish' -exec fish --no-execute {} +
+
+          while IFS= read -r -d '' template; do
+            mise exec -- chezmoi execute-template < "$template" | fish --no-execute
+          done < <(find config -type f -name '*.fish.tmpl' -print0)
+
+      - name: Restore Ansible collections
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ~/.ansible/collections
+          key: ${{ runner.os }}-ansible-${{ hashFiles('mise.toml', 'scripts/common/ansible/requirements.yml') }}
 
       - name: Run repository checks
         run: |

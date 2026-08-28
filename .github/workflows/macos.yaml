@@ -6,74 +6,87 @@ on:
     paths:
       - "config/**"
       - "scripts/**"
+      - ".chezmoiroot"
       - ".ansible-lint"
       - ".pre-commit-config.yaml"
       - "mise.toml"
       - ".yamllint.yaml"
       - ".github/workflows/macos.yaml"
-      - "!**.md"
       - "!docs/**"
+      - "!**/*.md"
   push:
     branches: [master]
     paths:
       - "config/**"
       - "scripts/**"
+      - ".chezmoiroot"
       - ".ansible-lint"
       - ".pre-commit-config.yaml"
       - "mise.toml"
       - ".yamllint.yaml"
       - ".github/workflows/macos.yaml"
-      - "!**.md"
       - "!docs/**"
+      - "!**/*.md"
 
 permissions:
   contents: read
 
 concurrency:
-  group: macos-${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   macos:
+    name: Provision and verify macOS
     runs-on: macos-latest
     timeout-minutes: 60
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+      HOMEBREW_NO_ANALYTICS: "1"
+      HOMEBREW_NO_AUTO_UPDATE: "1"
+      HOMEBREW_NO_INSTALL_CLEANUP: "1"
 
     steps:
       - name: Clean up installed software
         run: |
-          while IFS= read -r formula; do
-            brew uninstall --ignore-dependencies --force "$formula"
-          done < <(brew list --formula)
-          while IFS= read -r cask; do
-            brew uninstall --cask --force "$cask"
-          done < <(brew list --cask)
-          brew cleanup --prune-prefix
-          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall.sh)"
+          formulae="$(brew list --formula)"
+          if [[ -n "$formulae" ]]; then
+            # Formula names cannot contain whitespace; uninstalling them in one
+            # transaction avoids starting Homebrew once per preinstalled tool.
+            # shellcheck disable=SC2086
+            brew uninstall --formula --ignore-dependencies --force $formulae
+          fi
 
-      # - name: Download and install available system updates
-      #   if: startsWith(matrix.os, 'macos')
-      #   run: |
-      #     sudo softwareupdate -i -a
+          casks="$(brew list --cask)"
+          if [[ -n "$casks" ]]; then
+            # shellcheck disable=SC2086
+            brew uninstall --cask --force $casks
+          fi
+
+          brew cleanup --prune-prefix
+          NONINTERACTIVE=1 /bin/bash -c \
+            "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)"
 
       - name: Checkout
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - name: Restore Ansible collections
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ~/.ansible/collections
+          key: ${{ runner.os }}-ansible-${{ hashFiles('mise.toml', 'scripts/common/ansible/requirements.yml') }}
 
       - name: Install using setup.sh
         run: ./scripts/setup.sh --all
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Validate
         run: |
           mise install
-          mise exec -- scripts/common/ansible.sh --install
           mise exec -- prek run --all-files
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Verify a second run is idempotent
         run: |
           ./scripts/common/ansible.sh --run | tee /tmp/ansible-idempotence.log
           grep -Eq 'changed=0 +unreachable=0 +failed=0' /tmp/ansible-idempotence.log
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -35,6 +35,18 @@ repos:
         entry: yamllint
         language: system
         types: [yaml]
+      - id: actionlint
+        name: actionlint
+        entry: actionlint
+        language: system
+        files: ^\.github/workflows/.*\.ya?ml$
+        types: [yaml]
+      - id: zizmor
+        name: zizmor
+        entry: zizmor --min-severity medium --min-confidence medium
+        language: system
+        files: ^\.github/(actions|workflows)/.*\.ya?ml$
+        types: [yaml]
       - id: ansible-lint
         name: ansible-lint
         entry: env ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg ansible-lint scripts/common/ansible

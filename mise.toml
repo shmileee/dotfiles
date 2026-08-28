@@ -3,7 +3,9 @@ experimental = true
 legacy_version_file = false
 
 [tools]
+"aqua:rhysd/actionlint" = "1.7.12"
 "aqua:twpayne/chezmoi" = "2.72.0"
+"aqua:zizmorcore/zizmor" = "1.29.0"
 "pipx:ansible-core" = "2.21.3"
 "pipx:ansible-lint" = "26.8.0"
 "pipx:yamllint" = "1.38.0"
