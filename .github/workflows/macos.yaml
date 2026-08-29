@@ -56,10 +56,12 @@ jobs:
 
   macos:
     name: Provision through the checked-out setup and verify macOS
-    if: github.event_name == 'push'
     runs-on: macos-latest
     timeout-minutes: 60
     env:
+      DOTFILES_PERSISTENT_EXPECTED_COMMIT: ${{ github.sha }}
+      DOTFILES_PERSISTENT_REF: ${{ github.sha }}
+      DOTFILES_PERSISTENT_REFSPEC: +${{ github.ref }}:refs/remotes/origin/ci
       GITHUB_TOKEN: ${{ github.token }}
       HOMEBREW_NO_ANALYTICS: "1"
       HOMEBREW_NO_AUTO_UPDATE: "1"

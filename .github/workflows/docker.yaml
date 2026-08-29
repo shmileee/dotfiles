@@ -77,9 +77,12 @@ jobs:
 
   build-test-publish:
     name: Build, test, and publish image
-    if: github.event_name == 'push'
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 45
+    env:
+      DOTFILES_PERSISTENT_EXPECTED_COMMIT: ${{ github.sha }}
+      DOTFILES_PERSISTENT_REF: ${{ github.sha }}
+      DOTFILES_PERSISTENT_REFSPEC: +${{ github.ref }}:refs/remotes/origin/ci
 
     steps:
       - name: Checkout
@@ -101,6 +104,10 @@ jobs:
           platforms: linux/arm64
           push: false
           tags: dotfiles:test
+          build-args: |
+            DOTFILES_PERSISTENT_EXPECTED_COMMIT=${{ env.DOTFILES_PERSISTENT_EXPECTED_COMMIT }}
+            DOTFILES_PERSISTENT_REF=${{ env.DOTFILES_PERSISTENT_REF }}
+            DOTFILES_PERSISTENT_REFSPEC=${{ env.DOTFILES_PERSISTENT_REFSPEC }}
           cache-from: type=gha,scope=${{ github.workflow }}
           cache-to: type=gha,mode=max,scope=${{ github.workflow }}
           secrets: |
@@ -110,12 +117,14 @@ jobs:
         run: scripts/docker/smoke.sh dotfiles:test
 
       - name: Login to DockerHub
+        if: github.event_name == 'push'
         uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
         with:
           username: shmileee
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Publish tested image
+        if: github.event_name == 'push'
         env:
           IMAGE: shmileee/dotfiles
           SHA_TAG: ${{ github.sha }}
