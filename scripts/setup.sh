@@ -276,7 +276,7 @@ download_uv() {
   if [ ! -x "$uv_executable" ]; then
     fail "the uv archive did not contain the expected $uv_artifact executable."
   fi
-  if uv_report=$($uv_executable --version 2>&1); then
+  if uv_report=$("$uv_executable" --version 2>&1); then
     :
   else
     uv_status=$?
@@ -333,10 +333,15 @@ prepare_ansible() {
 
   phase 'Locked controller versions'
   printf 'requested repository ref: %s\n' "$repository_ref"
-  run_bootstrap_runtime python "$source_root/scripts/validate_bootstrap_runtime.py" \
+  if run_bootstrap_runtime python "$source_root/scripts/validate_bootstrap_runtime.py" \
     --uv-executable "$uv_executable" \
     --collections-path "$ANSIBLE_COLLECTIONS_PATH" \
-    --checkout "$persistent_checkout"
+    --checkout "$persistent_checkout"; then
+    :
+  else
+    runtime_status=$?
+    fail 'the locked controller identity does not match the repository manifests; validation diagnostics are shown above.' "$runtime_status"
+  fi
 }
 
 run_ansible() {

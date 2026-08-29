@@ -73,28 +73,28 @@ applies dotfiles with `--force`, and modifies macOS preferences.
     <span>01</span>
     <div>
       <strong>Bootstrap</strong>
-      <p><a class="repo-path" href="https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh"><code>scripts/setup.sh</code></a> detects the platform and prepares the supported installation path.</p>
+      <p>The POSIX <a class="repo-path" href="https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh"><code>scripts/setup.sh</code></a> validates the platform and starts a disposable, repository-locked Ansible controller.</p>
     </div>
   </li>
   <li>
     <span>02</span>
     <div>
-      <strong>Install prerequisites</strong>
-      <p>On Ubuntu, the script installs the required apt packages; on both targets, it prepares Homebrew and Ansible.</p>
+      <strong>Establish workstation state</strong>
+      <p>Ansible installs Ubuntu prerequisites, creates the persistent repository checkout, and installs Homebrew on both supported targets.</p>
     </div>
   </li>
   <li>
     <span>03</span>
     <div>
       <strong>Configure the workstation</strong>
-      <p>Ansible runs focused roles for packages, fonts, fish, mise, Neovim, Rancher Desktop, tmux, and system defaults.</p>
+      <p>Focused roles install packages and applications, apply dotfiles, and configure fish, mise, Neovim, Rancher Desktop, tmux, and system defaults.</p>
     </div>
   </li>
   <li>
     <span>04</span>
     <div>
-      <strong>Apply the dotfiles</strong>
-      <p>chezmoi renders the files in <a class="repo-path" href="https://github.com/shmileee/dotfiles/tree/master/config"><code>config/</code></a> for the current operating system and architecture.</p>
+      <strong>Hand off to reconciliation</strong>
+      <p>The final role validates the persistent locked runtime and records completion; later workstation management uses <code>mise run reconcile</code>.</p>
     </div>
   </li>
 </ol>

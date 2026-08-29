@@ -50,6 +50,11 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Verify the public bootstrap redirect
+        run: |
+          target="$(curl -kfsSIL -o /dev/null --write-out '%{url_effective}' https://oponomarov.com/d)"
+          test "$target" = https://raw.githubusercontent.com/shmileee/dotfiles/master/scripts/setup.sh
+
       - name: Set up mise
         uses: jdx/mise-action@5228313ee0372e111a38da051671ca30fc5a96db # v3
 

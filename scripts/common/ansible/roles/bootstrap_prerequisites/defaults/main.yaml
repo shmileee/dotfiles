@@ -7,8 +7,10 @@ bootstrap_native_packages:
   - curl
   - file
   - git
+  - gpg
   - libssl-dev
   - less
+  - locales
   - llvm
   - make
   - procps
@@ -16,3 +18,4 @@ bootstrap_native_packages:
   - python-is-python3
   - unzip
   - vim
+  - wget
