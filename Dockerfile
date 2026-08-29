@@ -25,8 +25,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     echo "linuxbrew ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/linuxbrew && \
     chmod 0440 /etc/sudoers.d/linuxbrew && \
     ln -snf "/usr/share/zoneinfo/${TIMEZONE}" /etc/localtime && \
-    echo "${TIMEZONE}" > /etc/timezone && \
-    ! command -v git
+    echo "${TIMEZONE}" > /etc/timezone
 
 USER linuxbrew
 COPY --chown=linuxbrew:linuxbrew . /bootstrap-source
