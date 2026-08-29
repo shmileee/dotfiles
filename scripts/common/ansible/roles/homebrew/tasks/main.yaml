@@ -1,0 +1,60 @@
+---
+
+- name: "homebrew | inspect the installation"
+  ansible.builtin.stat:
+    path: "{{ homebrew_executable }}"
+  register: homebrew_binary
+
+- name: "homebrew | install non-interactively"
+  when:
+    - not homebrew_binary.stat.exists
+    - not ansible_check_mode
+  block:
+    - name: "homebrew | allocate a temporary installer"
+      ansible.builtin.tempfile:
+        state: file
+        suffix: homebrew-install.sh
+      register: homebrew_installer
+
+    - name: "homebrew | download the official installer"
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
+        dest: "{{ homebrew_installer.path }}"
+        mode: "0700"
+
+    - name: "homebrew | run the official installer"
+      ansible.builtin.command:
+        argv:
+          - /bin/bash
+          - "{{ homebrew_installer.path }}"
+        creates: "{{ homebrew_executable }}"
+      environment:
+        CI: "1"
+        NONINTERACTIVE: "1"
+        HOMEBREW_NO_ANALYTICS: "1"
+        HOMEBREW_NO_ENV_HINTS: "1"
+  always:
+    - name: "homebrew | remove the temporary installer"
+      ansible.builtin.file:
+        path: "{{ homebrew_installer.path | default('') }}"
+        state: absent
+      when:
+        - homebrew_installer is defined
+        - homebrew_installer.path is defined
+
+- name: "homebrew | verify the installation"
+  ansible.builtin.command:
+    argv:
+      - "{{ homebrew_executable }}"
+      - --version
+  changed_when: false
+  when: not ansible_check_mode
+
+- name: "homebrew | disable analytics"
+  ansible.builtin.command:
+    argv:
+      - "{{ homebrew_executable }}"
+      - analytics
+      - "off"
+  changed_when: false
+  when: not ansible_check_mode

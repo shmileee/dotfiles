@@ -9,3 +9,28 @@
     MISE_HTTP_TIMEOUT: 120s
   register: mise_install
   changed_when: "'all tools are installed' not in (mise_install.stdout + mise_install.stderr)"
+
+- name: "mise | trust the persistent repository configuration"
+  ansible.builtin.command:
+    argv:
+      - mise
+      - trust
+      - --yes
+      - mise.toml
+  args:
+    chdir: "{{ persistent_checkout }}"
+  changed_when: false
+
+- name: "mise | install the repository-pinned uv runtime"
+  ansible.builtin.command:
+    argv:
+      - mise
+      - install
+      - uv
+  args:
+    chdir: "{{ persistent_checkout }}"
+  environment:
+    GITHUB_TOKEN: "{{ lookup('ansible.builtin.env', 'GITHUB_TOKEN') }}"
+    MISE_HTTP_TIMEOUT: 120s
+  register: mise_uv_install
+  changed_when: "'installed' in (mise_uv_install.stdout + mise_uv_install.stderr) | lower"

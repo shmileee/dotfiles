@@ -44,19 +44,25 @@ jobs:
       - name: Restore Ansible collections
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
-          path: ~/.ansible/collections
-          key: ${{ runner.os }}-ansible-${{ hashFiles('mise.toml', 'scripts/common/ansible/requirements.yml') }}
+          path: bootstrap/.ansible/collections
+          key: ${{ runner.os }}-ansible-${{ hashFiles('bootstrap/uv.lock', 'scripts/common/ansible/requirements.yml') }}
 
       - name: Run repository checks
         run: |
-          mise exec -- scripts/common/ansible.sh --install
+          mise exec -- uv sync --project bootstrap --locked --managed-python
+          mise exec -- env ANSIBLE_COLLECTIONS_PATH=bootstrap/.ansible/collections \
+            uv run --project bootstrap --locked --managed-python \
+            ansible-galaxy collection install \
+            --collections-path bootstrap/.ansible/collections \
+            --requirements-file scripts/common/ansible/requirements.yml
           mise exec -- prek run --all-files
 
       - name: Validate Ansible syntax
         run: |
           mise exec -- env \
             ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
-            ansible-playbook \
+            ANSIBLE_COLLECTIONS_PATH=bootstrap/.ansible/collections \
+            uv run --project bootstrap --locked --managed-python ansible-playbook \
             --inventory "127.0.0.1," \
             --syntax-check scripts/common/ansible/main.yaml
 

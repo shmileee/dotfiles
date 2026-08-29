@@ -23,6 +23,7 @@ tags
 .gitconfig.proxy
 .proxy
 .venv
+/bootstrap/.ansible/
 
 # MkDocs build output
 /site/

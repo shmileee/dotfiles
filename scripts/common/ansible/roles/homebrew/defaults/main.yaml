@@ -1,0 +1,9 @@
+---
+
+homebrew_prefix: >-
+  {{
+    '/home/linuxbrew/.linuxbrew'
+    if ansible_facts['system'] == 'Linux'
+    else '/opt/homebrew'
+  }}
+homebrew_executable: "{{ homebrew_prefix }}/bin/brew"

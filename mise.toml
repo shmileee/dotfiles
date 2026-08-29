@@ -4,11 +4,11 @@ legacy_version_file = false
 
 [tools]
 "aqua:rhysd/actionlint" = "1.7.12"
+"aqua:bats-core/bats-core" = "1.14.0"
 "aqua:twpayne/chezmoi" = "2.72.0"
 "aqua:zizmorcore/zizmor" = "1.29.0"
 biome = "2.5.11"
 gitleaks = "8.30.1"
-"pipx:ansible-core" = "2.21.3"
 "pipx:ansible-lint" = "26.8.0"
 "pipx:yamllint" = "1.38.0"
 prek = "0.4.14"
@@ -33,14 +33,30 @@ uv run --python 3.14 python scripts/version_docs_assets.py
 """
 
 [tasks.reconcile]
-description = "Install Ansible collections and reconcile this machine"
-run = "scripts/common/ansible.sh --all"
+description = "Reconcile this machine with the shared locked Ansible runtime"
+run = "scripts/common/reconcile.sh"
 raw = true
 
 [tasks."reconcile:check"]
 description = "Preview the Ansible reconciliation (check mode has limits)"
-run = "scripts/common/ansible.sh --all --check"
+run = "scripts/common/reconcile.sh --check"
 raw = true
+
+[tasks."bootstrap:format"]
+description = "Format bootstrap, reconciliation, and test shell code"
+run = "shfmt -w scripts/setup.sh scripts/common/reconcile.sh tests/bootstrap/*.sh tests/bootstrap/test-helper.bash tests/bootstrap/bootstrap.bats"
+
+[tasks."bootstrap:lint"]
+description = "Lint bootstrap, reconciliation, and test shell code"
+run = "shellcheck -s sh scripts/setup.sh scripts/common/reconcile.sh tests/bootstrap/*.sh && shellcheck -s bash tests/bootstrap/test-helper.bash"
+
+[tasks."test:bats"]
+description = "Run black-box bootstrap behavior tests"
+run = "bats tests/bootstrap"
+
+[tasks."test:docker"]
+description = "Run the Ubuntu bootstrap and Ansible integration tests in Docker"
+run = "docker build --file tests/integration/Dockerfile --tag dotfiles-bootstrap-tests ."
 
 [tasks.import]
 description = "Import modified managed files from $HOME into config/"

@@ -1,5 +1,5 @@
 ---
-- name: Configure workstation
+- name: "configure workstation"
   hosts: 127.0.0.1
   strategy: linear
   connection: local
@@ -10,8 +10,25 @@
   vars:
     ansible_python_interpreter: "{{ ansible_playbook_python }}"
     dockerized: "{{ lookup('ansible.builtin.env', 'DOCKERIZED') == 'true' }}"
-
+    persistent_checkout: >-
+      {{
+        lookup('ansible.builtin.env', 'DOTFILES_PERSISTENT_CHECKOUT')
+        | default(ansible_facts['user_dir'] + '/ghq/personalgit/shmileee/dotfiles', true)
+      }}
+  environment:
+    PATH: >-
+      {{
+        '/opt/homebrew/bin:/opt/homebrew/sbin:'
+        + '/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:'
+        + lookup('ansible.builtin.env', 'PATH')
+      }}
   roles:
+    - role: bootstrap_prerequisites
+      tags: bootstrap_prerequisites
+
+    - role: homebrew
+      tags: homebrew
+
     - role: common
       tags: common
 
@@ -39,3 +56,6 @@
 
     - role: system_defaults
       tags: system_defaults
+
+    - role: handoff
+      tags: handoff
