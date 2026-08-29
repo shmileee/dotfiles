@@ -3,4 +3,3 @@
 - name: "dockutil | reconcile configured items"
   dock_items:
     items: "{{ dockitems }}"
-  notify: restart dock

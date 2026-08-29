@@ -10,6 +10,7 @@ sys.path.insert(0, str(ANSIBLE_DIR / "module_utils"))
 
 from dotfiles_macos import (  # noqa: E402
     dock_option_arguments,
+    dock_rebuild_commands,
     dock_states_match,
     json_safe_plist,
     merged_mapping,
@@ -128,6 +129,45 @@ class DockHelpersTest(unittest.TestCase):
                 {"sort": "dateadded", "display": "stack", "view": "auto"}
             ),
             ["--view", "auto", "--display", "stack", "--sort", "dateadded"],
+        )
+
+    def test_restarts_dock_only_after_the_final_batched_mutation(self):
+        items = [
+            {"path": "/Applications/A.app", "section": "apps", "options": {}},
+            {
+                "path": "/Users/me/Downloads",
+                "section": "others",
+                "options": {"display": "stack"},
+            },
+        ]
+        self.assertEqual(
+            dock_rebuild_commands("dockutil", items),
+            [
+                ["dockutil", "--remove", "all", "--no-restart"],
+                [
+                    "dockutil",
+                    "--add",
+                    "/Applications/A.app",
+                    "--position",
+                    "end",
+                    "--no-restart",
+                ],
+                [
+                    "dockutil",
+                    "--add",
+                    "/Users/me/Downloads",
+                    "--position",
+                    "end",
+                    "--section",
+                    "others",
+                    "--display",
+                    "stack",
+                ],
+            ],
+        )
+        self.assertEqual(
+            dock_rebuild_commands("dockutil", []),
+            [["dockutil", "--remove", "all"]],
         )
 
 

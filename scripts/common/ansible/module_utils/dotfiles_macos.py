@@ -181,3 +181,26 @@ def dock_option_arguments(options: Mapping[str, str]) -> List[str]:
         if value is not None:
             arguments.extend(["--{0}".format(name), value])
     return arguments
+
+
+def dock_rebuild_commands(
+    dockutil: str, items: Iterable[Mapping[str, Any]]
+) -> List[List[str]]:
+    """Batch Dock mutations and let only the final command restart Dock."""
+    item_list = list(items)
+    remove_arguments = [dockutil, "--remove", "all"]
+    if item_list:
+        remove_arguments.append("--no-restart")
+    commands = [remove_arguments]
+
+    last_index = len(item_list) - 1
+    for index, item in enumerate(item_list):
+        arguments = [dockutil, "--add", item["path"], "--position", "end"]
+        if item["section"] != "apps":
+            arguments.extend(["--section", item["section"]])
+        arguments.extend(dock_option_arguments(item.get("options", {})))
+        if index != last_index:
+            arguments.append("--no-restart")
+        commands.append(arguments)
+
+    return commands
