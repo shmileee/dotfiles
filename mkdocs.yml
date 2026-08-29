@@ -76,11 +76,11 @@ plugins:
 
 extra_css:
   - assets/stylesheets/design-system.css
-  - assets/stylesheets/mkdocs.css?v=9cb3bb4
+  - assets/stylesheets/mkdocs.css
 
 extra_javascript:
   - assets/javascripts/syntax-highlight.js
-  - assets/javascripts/site-shell.js?v=9cb3bb4
+  - assets/javascripts/site-shell.js
 
 extra:
   generator: false
