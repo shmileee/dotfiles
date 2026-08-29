@@ -121,7 +121,7 @@ from this checkout and preserves all durable Ansible changes if a task fails.
 ## Fast path: bootstrap a new machine
 
 ```bash
-curl -kfsSL https://oponomarov.com/d | sh
+curl -fsSL https://oponomarov.com/d | sh
 ```
 
 The short URL redirects to
@@ -131,14 +131,16 @@ temporary workspace, downloads the pinned uv controller, and hands all
 workstation changes to Ansible. The controller workspace is deleted on every
 ordinary exit; uv's normal download cache is retained.
 
-The minimal Ubuntu base does not initially have a CA bundle. Certificate
-verification is disabled only when that bundle is absent, for curl's
-pre-controller downloads and the pre-Ansible Galaxy collection install. uv
-verifies the locked Python environment with its own trusted roots. Ansible then
-installs and updates `ca-certificates`; the persistent Git clone and every later
-download use normal certificate verification. macOS and Ubuntu systems with an
-existing CA bundle never disable verification. No persistent insecure setting
-is written.
+The command above keeps certificate verification enabled. A minimal Ubuntu
+base without a CA bundle cannot validate even this first HTTPS request; only on
+that base, fetch the loader with `curl -kfsSL https://oponomarov.com/d | sh`.
+The loader detects the missing bundle and limits disabled verification to its
+remaining pre-controller curl downloads and the pre-Ansible Galaxy collection
+install. uv verifies the locked Python environment with its own trusted roots.
+Ansible then installs and updates `ca-certificates`; the persistent Git clone
+and every later download use normal certificate verification. macOS and Ubuntu
+systems with an existing CA bundle never disable verification. No persistent
+insecure setting is written.
 
 ??? "Download the script before running it"
 
@@ -146,7 +148,7 @@ is written.
     a shell:
 
     ```bash
-    curl -kfsSL https://raw.githubusercontent.com/shmileee/dotfiles/master/scripts/setup.sh > setup.sh
+    curl -fsSL https://raw.githubusercontent.com/shmileee/dotfiles/master/scripts/setup.sh > setup.sh
     less setup.sh
     chmod +x setup.sh
     ./setup.sh
@@ -180,7 +182,7 @@ is written.
     <span>04</span>
     <div>
       <strong>Hand off to mise</strong>
-      <p>Validate the persistent checkout's same locked uv project, then atomically record completion for future reconciliation.</p>
+      <p>Synchronize the persistent checkout's locked uv project and pinned Ansible collections, validate the runtime, then atomically record completion for future reconciliation.</p>
     </div>
   </li>
 </ol>
@@ -251,7 +253,7 @@ removed.
 | [`docker` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/docker){ .role-link aria-label="docker role on GitHub" } | Install Rancher Desktop on macOS |
 | [`tmux` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/tmux){ .role-link aria-label="tmux role on GitHub" } | Install tmux, TPM, and declared plugins |
 | [`system_defaults` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/system_defaults){ .role-link aria-label="system_defaults role on GitHub" } | Apply macOS preferences, Dock items, and keyboard settings |
-| `handoff` | Validate mise-managed uv against the shared lock and atomically write the completion receipt |
+| `handoff` | Prepare and validate the persistent mise-managed runtime and pinned collections, then atomically write the completion receipt |
 
 </div>
 
@@ -294,7 +296,9 @@ mise tasks
 Task execution installs any missing tools declared in `mise.toml`
 automatically. Before each reconciliation, the runtime validator prints the
 persistent checkout commit and every version selected by the shared lock and
-collection requirements.
+collection requirements. The disposable controller's uv environment is removed
+from commands that install workstation tools, so managed tool interpreters and
+virtual environments remain valid after setup deletes its temporary workspace.
 
 ### Import local dotfile changes
 
@@ -383,6 +387,19 @@ The image runs setup as the non-root `linuxbrew` user. Its smoke test verifies
 the completion receipt, installed tools, persistent checkout, and a second
 mise-managed idempotence pass. The `docker` role is intentionally skipped
 inside the container.
+
+### Pull request validation
+
+Pull requests that change workstation or bootstrap code run the complete macOS
+and Docker workflows. Both provision the pull request merge commit and assert
+the persistent checkout SHA, so they test the proposed result instead of the
+mutable `master` branch. The macOS job starts from a clean Homebrew formula and
+mise-tool state, runs the checked-out setup, validates the repository, and
+requires a second reconciliation with `changed=0`. The Docker job builds the
+integration fixture and release image, then runs startup, durable-tool, and
+idempotence smoke checks. Bats runs directly on both workflow runners through
+`mise run test:bats`; it is not embedded in either image. Docker Hub login and
+publication remain limited to pushes to `master`.
 
 ## Validate changes locally
 
