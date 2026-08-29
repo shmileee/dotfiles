@@ -12,7 +12,7 @@
     - not ansible_check_mode
     - ansible_facts['system'] == 'Darwin'
 
-- name: "homebrew | install on ubuntu"
+- name: "homebrew | install on linux"
   ansible.builtin.include_tasks: linux.yaml
   when:
     - not homebrew_binary.stat.exists

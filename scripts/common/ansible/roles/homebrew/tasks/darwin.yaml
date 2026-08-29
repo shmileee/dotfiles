@@ -13,6 +13,7 @@
         url: "{{ homebrew_macos_installer_url }}"
         dest: "{{ homebrew_macos_installer.path }}"
         mode: "0600"
+        force: true
 
     - name: "homebrew | run the official macos package"
       become: true
