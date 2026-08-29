@@ -75,6 +75,11 @@ jobs:
 
       - name: Reset Homebrew formulae
         run: |
+          # The runner image can contain mise environments backed by Homebrew
+          # interpreters removed below. Discard only those ephemeral installs
+          # so bootstrap must create one coherent toolchain from scratch.
+          rm -rf "$HOME/.local/share/mise/installs" "$HOME/.local/share/mise/shims"
+
           formulae="$(brew list --formula)"
           if [[ -n "$formulae" ]]; then
             # Formula names cannot contain whitespace; uninstalling them in one
