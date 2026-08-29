@@ -21,6 +21,11 @@ teardown() {
   [ "$status" -eq 0 ]
 }
 
+@test "printed repository configuration is internally consistent" {
+  [ "$expected_repository_url" = "https://github.com/$expected_repository_slug.git" ]
+  [ "$expected_persistent_checkout" = "$test_home/ghq/personalgit/$expected_repository_slug" ]
+}
+
 @test "root is rejected before platform probes or mutation" {
   TEST_ID_UID=0
 
@@ -45,11 +50,11 @@ teardown() {
   [[ $output == *"HOME must be a non-empty absolute path"* ]]
 }
 
-@test "Ubuntu 24.04 ARM64 completes through the locked uv path" {
+@test "Ubuntu ARM64 completes through the locked uv path" {
   run_bootstrap
 
   [ "$status" -eq 0 ]
-  assert_log_contains "curl insecure=true https://github.com/shmileee/dotfiles/archive/refs/heads/master.tar.gz"
+  assert_log_contains "curl insecure=true $expected_repository_archive"
   assert_log_contains "curl insecure=true https://github.com/astral-sh/uv/releases/download/$expected_uv_version/uv-aarch64-unknown-linux-gnu.tar.gz"
   assert_log_contains " sync --project "
   assert_log_contains "--locked --managed-python"
@@ -82,7 +87,7 @@ teardown() {
   refute_log_contains "--ignore-certs"
 }
 
-@test "unsupported operating systems releases and architectures stop before sudo or downloads" {
+@test "unsupported operating systems distributions and architectures stop before sudo or downloads" {
   TEST_OS=FreeBSD
   run_bootstrap
   [ "$status" -eq 1 ]
@@ -92,21 +97,32 @@ teardown() {
 
   : > "$command_log"
   TEST_OS=Linux
-  write_os_release ubuntu 22.04
+  write_os_release debian current
   run_bootstrap
   [ "$status" -eq 1 ]
-  [[ $output == *"only Ubuntu 24.04 ARM64 is supported"* ]]
+  [[ $output == *"Ubuntu ARM64 is required"* ]]
   refute_log_contains "sudo"
   refute_log_contains "curl"
 
   : > "$command_log"
-  write_os_release ubuntu 24.04
+  write_os_release ubuntu future
   TEST_ARCH=x86_64
   run_bootstrap
   [ "$status" -eq 1 ]
   [[ $output == *"ARM64 aarch64 is required"* ]]
   refute_log_contains "sudo"
   refute_log_contains "curl"
+}
+
+@test "Ubuntu releases are accepted without a version allowlist" {
+  write_os_release ubuntu older
+  run_bootstrap
+  [ "$status" -eq 0 ]
+
+  : > "$command_log"
+  write_os_release ubuntu newer
+  run_bootstrap
+  [ "$status" -eq 0 ]
 }
 
 @test "missing Command Line Tools stop macOS before source staging" {
@@ -133,7 +149,7 @@ teardown() {
 }
 
 @test "an occupied streamed target without a receipt exits before all probes" {
-  mkdir -p "$test_home/ghq/personalgit/shmileee/dotfiles"
+  mkdir -p "$expected_persistent_checkout"
 
   run_bootstrap
 
@@ -147,7 +163,7 @@ teardown() {
 }
 
 @test "an occupied streamed target with a receipt recommends reconcile and recovery" {
-  receipt=$test_home/ghq/personalgit/shmileee/dotfiles/.git/dotfiles-bootstrap-complete
+  receipt=$expected_persistent_checkout/.git/dotfiles-bootstrap-complete
   mkdir -p "$(dirname "$receipt")"
   touch "$receipt"
 
@@ -162,7 +178,7 @@ teardown() {
 }
 
 @test "the checked-out setup command recovers an incomplete persistent clone" {
-  target=$test_home/ghq/personalgit/shmileee/dotfiles
+  target=$expected_persistent_checkout
   mkdir -p "$target/scripts/common/ansible" "$target/bootstrap"
   cp "$project_root/scripts/setup.sh" "$target/scripts/setup.sh"
   touch "$target/bootstrap/uv.lock"
@@ -270,7 +286,7 @@ teardown() {
   run_bootstrap
   [ "$status" -eq 47 ]
   [[ $output == *"locked controller identity does not match"* ]]
-  [[ $output == *"curl -kfsSL https://oponomarov.com/d | sh"* ]]
+  [[ $output == *"curl -kfsSL $expected_bootstrap_url | sh"* ]]
   [ -z "$(find "$test_tmp" -mindepth 1 -print -quit)" ]
 }
 

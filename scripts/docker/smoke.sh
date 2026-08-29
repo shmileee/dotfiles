@@ -6,13 +6,19 @@ image="${1:?Usage: $0 IMAGE}"
 
 docker run --rm --entrypoint /bin/bash "$image" -lc '
   set -euo pipefail
-  cd "$HOME/ghq/personalgit/shmileee/dotfiles"
+  receipt="$(find "$HOME/ghq/personalgit" -type f -path "*/.git/dotfiles-bootstrap-complete" -print -quit)"
+  test -n "$receipt"
+  repository="${receipt%/.git/dotfiles-bootstrap-complete}"
+  cd "$repository"
 
   printf "%s\n" "SMOKE phase=runtime-identity"
   test "$(whoami)" = linuxbrew
   test "$HOME" = /home/linuxbrew
   test -f .git/dotfiles-bootstrap-complete
-  test "$(git remote get-url origin)" = https://github.com/shmileee/dotfiles.git
+  case "$(git remote get-url origin)" in
+    https://github.com/*/*.git) ;;
+    *) exit 1 ;;
+  esac
   test -z "$(git config --local --get http.sslVerify || true)"
   test -z "$(git config --local --get remote.origin.promisor || true)"
 

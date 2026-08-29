@@ -1,5 +1,14 @@
 ---
 
+- name: "bootstrap prerequisites | validate persistent repository settings"
+  ansible.builtin.assert:
+    that:
+      - persistent_checkout is match('^/')
+      - persistent_repository_url | length > 0
+    fail_msg: >-
+      setup or reconcile must provide an absolute persistent checkout and its
+      repository URL before workstation changes begin.
+
 - name: "bootstrap prerequisites | create the persistent checkout parent"
   ansible.builtin.file:
     path: "{{ persistent_checkout | dirname }}"
@@ -37,7 +46,9 @@
           - origin
       register: checkout_origin
       changed_when: false
-      failed_when: checkout_origin.rc != 0 or checkout_origin.stdout != 'https://github.com/shmileee/dotfiles.git'
+      failed_when: >-
+        checkout_origin.rc != 0
+        or checkout_origin.stdout != persistent_repository_url
 
     - name: "bootstrap prerequisites | inspect the remote partial-clone marker"
       ansible.builtin.command:
@@ -90,9 +101,9 @@
 
 - name: "bootstrap prerequisites | clone the full persistent repository"
   ansible.builtin.git:
-    repo: https://github.com/shmileee/dotfiles.git
+    repo: "{{ persistent_repository_url }}"
     dest: "{{ persistent_checkout }}"
-    version: "{{ persistent_repository_ref }}"
+    version: "{{ persistent_repository_ref | default(omit, true) }}"
     refspec: >-
       {{ persistent_repository_refspec | default(omit, true) }}
     update: false

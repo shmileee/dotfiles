@@ -15,10 +15,10 @@ hide:
 <section class="docs-hero docs-hero--home" markdown>
   <p class="section-eyebrow">Personal workstation · documented publicly</p>
   <h1>A workstation I can rebuild.<span class="hero-cursor" aria-hidden="true"></span></h1>
-  <p class="hero-copy">This repository rebuilds my Apple Silicon macOS workstation and continuously tests the shared setup in Ubuntu 24.04 ARM64. Ansible, the automation engine, configures the system; chezmoi, the dotfile manager, puts the files in place.</p>
+  <p class="hero-copy">This repository rebuilds my Apple Silicon macOS workstation and continuously tests the shared setup on the current Ubuntu ARM64 container base. Ansible, the automation engine, configures the system; chezmoi, the dotfile manager, puts the files in place.</p>
   <div class="hero-actions">
     <a class="primary-link" href="/setup/">Read the setup guide →</a>
-    <a class="secondary-link" href="https://github.com/shmileee/dotfiles">Browse the repository ↗</a>
+    <a class="secondary-link" href="/setup/#reuse-this-repository-as-your-own">Adapt a fork →</a>
   </div>
   <dl class="hero-signals">
     <div><dt>Targets</dt><dd>macOS + Ubuntu</dd></div>
@@ -73,7 +73,7 @@ applies dotfiles with `--force`, and modifies macOS preferences.
     <span>01</span>
     <div>
       <strong>Bootstrap</strong>
-      <p>The POSIX <a class="repo-path" href="https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh"><code>scripts/setup.sh</code></a> validates the platform and starts a disposable, repository-locked Ansible controller.</p>
+      <p>The POSIX <code>scripts/setup.sh</code> validates the platform and starts a disposable, repository-locked Ansible controller.</p>
     </div>
   </li>
   <li>
@@ -101,7 +101,7 @@ applies dotfiles with `--force`, and modifies macOS preferences.
 
 <aside class="home-validation">
   <strong>Continuously tested</strong>
-  <p>The setup is tested on Apple Silicon macOS and in an Ubuntu 24.04 ARM64 container. The container exercises the shared Linux path; macOS applications and system preferences are validated on macOS.</p>
+  <p>The setup is tested on Apple Silicon macOS and in the current Ubuntu ARM64 container. The container exercises the shared Linux path without pinning an Ubuntu release allowlist; macOS applications and system preferences are validated on macOS.</p>
 </aside>
 
 ## Choose what you need

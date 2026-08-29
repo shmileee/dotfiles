@@ -2,8 +2,13 @@
 
 set -eu
 
+# Forks only need to change these two repository identity settings. Every
+# checkout path and repository URL used by bootstrap is derived from them.
+repository_slug=shmileee/dotfiles
 repository_ref=master
-repository_archive_url=https://github.com/shmileee/dotfiles/archive/refs/heads/master.tar.gz
+bootstrap_url=https://oponomarov.com/d
+repository_url=https://github.com/$repository_slug.git
+repository_archive_url=https://github.com/$repository_slug/archive/refs/heads/$repository_ref.tar.gz
 # renovate: datasource=github-releases depName=astral-sh/uv
 uv_version=0.12.6
 
@@ -26,7 +31,7 @@ recovery_advice() {
     printf '  cd "%s" && ./scripts/setup.sh\n' "$persistent_checkout" >&2
   else
     printf 'After correcting the problem, run:\n' >&2
-    printf '  curl -kfsSL https://oponomarov.com/d | sh\n' >&2
+    printf '  curl -kfsSL %s | sh\n' "$bootstrap_url" >&2
   fi
 }
 
@@ -56,11 +61,25 @@ cleanup() {
 
 usage() {
   cat << 'EOF'
-Usage: ./scripts/setup.sh
+Usage: ./scripts/setup.sh [--print-config]
 
 Bootstrap a supported workstation, or recover an incomplete bootstrap from
 the persistent checkout. Normal ongoing management uses `mise run reconcile`.
+
+--print-config  Print the derived repository identity without making changes.
 EOF
+}
+
+print_config() {
+  case ${HOME-} in
+    /*) config_checkout=$HOME/ghq/personalgit/$repository_slug ;;
+    *) config_checkout='<invalid HOME>' ;;
+  esac
+  printf 'repository_slug=%s\n' "$repository_slug"
+  printf 'repository_ref=%s\n' "$repository_ref"
+  printf 'bootstrap_url=%s\n' "$bootstrap_url"
+  printf 'repository_url=%s\n' "$repository_url"
+  printf 'persistent_checkout=%s\n' "$config_checkout"
 }
 
 validate_arguments() {
@@ -68,6 +87,10 @@ validate_arguments() {
     0) ;;
     1)
       case $1 in
+        --print-config)
+          print_config
+          exit 0
+          ;;
         -h | --help)
           usage
           exit 0
@@ -101,7 +124,7 @@ validate_identity() {
     fail 'HOME must be an existing, writable user directory and must not be /.'
   fi
 
-  persistent_checkout=$HOME/ghq/personalgit/shmileee/dotfiles
+  persistent_checkout=$HOME/ghq/personalgit/$repository_slug
 }
 
 find_local_sources() {
@@ -143,17 +166,15 @@ require_command() {
   fi
 }
 
-read_linux_release() {
+read_linux_distribution() {
   os_release_file=${DOTFILES_OS_RELEASE_FILE:-/etc/os-release}
   if [ ! -r "$os_release_file" ]; then
     fail "cannot read $os_release_file to identify the Linux distribution."
   fi
 
   linux_id=$(sed -n 's/^ID=["'\'']\{0,1\}\([^"'\'']*\)["'\'']\{0,1\}$/\1/p' "$os_release_file" | sed -n '1p')
-  linux_version=$(sed -n 's/^VERSION_ID=["'\'']\{0,1\}\([^"'\'']*\)["'\'']\{0,1\}$/\1/p' "$os_release_file" | sed -n '1p')
-
-  if [ "$linux_id" != ubuntu ] || [ "$linux_version" != 24.04 ]; then
-    fail "unsupported Linux target: only Ubuntu 24.04 ARM64 is supported (found ${linux_id:-unknown} ${linux_version:-unknown})."
+  if [ "$linux_id" != ubuntu ]; then
+    fail "unsupported Linux distribution: Ubuntu ARM64 is required (found ${linux_id:-unknown})."
   fi
 }
 
@@ -177,7 +198,7 @@ detect_platform() {
       uv_artifact=aarch64-apple-darwin
       ;;
     Linux)
-      read_linux_release
+      read_linux_distribution
       if [ "$architecture" != aarch64 ] && [ "$architecture" != arm64 ]; then
         fail "unsupported Ubuntu architecture $architecture; ARM64 aarch64 is required."
       fi
@@ -185,7 +206,7 @@ detect_platform() {
       uv_artifact=aarch64-unknown-linux-gnu
       ;;
     *)
-      fail "unsupported operating system $operating_system; use Apple Silicon macOS or Ubuntu 24.04 ARM64."
+      fail "unsupported operating system $operating_system; use Apple Silicon macOS or Ubuntu ARM64."
       ;;
   esac
 
@@ -292,8 +313,11 @@ download_uv() {
   ANSIBLE_COLLECTIONS_PATH=$workspace/collections
   DOTFILES_BOOTSTRAP_WORKSPACE=$workspace
   DOTFILES_PERSISTENT_CHECKOUT=$persistent_checkout
+  DOTFILES_PERSISTENT_REPOSITORY_URL=$repository_url
+  DOTFILES_PERSISTENT_REF=${DOTFILES_PERSISTENT_REF:-$repository_ref}
   export UV_PYTHON_INSTALL_DIR UV_PROJECT_ENVIRONMENT ANSIBLE_COLLECTIONS_PATH
   export DOTFILES_BOOTSTRAP_WORKSPACE DOTFILES_PERSISTENT_CHECKOUT
+  export DOTFILES_PERSISTENT_REPOSITORY_URL DOTFILES_PERSISTENT_REF
   mkdir -p "$ANSIBLE_COLLECTIONS_PATH"
 }
 

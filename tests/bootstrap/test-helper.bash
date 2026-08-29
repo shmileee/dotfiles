@@ -1,3 +1,6 @@
+# Bats fixtures intentionally expose these values as globals to the test file.
+# shellcheck disable=SC2034
+
 setup_bootstrap_test() {
   project_root=$(cd "$BATS_TEST_DIRNAME/../.." && pwd)
   test_root=$(mktemp -d "${TMPDIR:-/tmp}/bootstrap-test.XXXXXX")
@@ -15,8 +18,15 @@ setup_bootstrap_test() {
   mkdir -p "$test_home" "$test_tmp" "$fake_bin" "$base_bin"
   cp "$project_root/scripts/setup.sh" "$setup_copy"
   chmod +x "$setup_copy"
+  bootstrap_config=$(HOME="$test_home" "$dash_path" "$setup_copy" --print-config)
+  expected_repository_slug=$(printf '%s\n' "$bootstrap_config" | sed -n 's/^repository_slug=//p')
+  expected_repository_ref=$(printf '%s\n' "$bootstrap_config" | sed -n 's/^repository_ref=//p')
+  expected_bootstrap_url=$(printf '%s\n' "$bootstrap_config" | sed -n 's/^bootstrap_url=//p')
+  expected_repository_url=$(printf '%s\n' "$bootstrap_config" | sed -n 's/^repository_url=//p')
+  expected_persistent_checkout=$(printf '%s\n' "$bootstrap_config" | sed -n 's/^persistent_checkout=//p')
+  expected_repository_archive=https://github.com/$expected_repository_slug/archive/refs/heads/$expected_repository_ref.tar.gz
   : > "$command_log"
-  write_os_release ubuntu 24.04
+  write_os_release ubuntu current
 
   for command_name in cat chmod cmp cp dirname mkdir rm sed stat touch; do
     ln -s "$(command -v "$command_name")" "$base_bin/$command_name"
@@ -47,6 +57,16 @@ EOF
   make_mock sudo << 'EOF'
 printf 'sudo %s\n' "$*" >>"$MOCK_LOG"
 exit "${TEST_SUDO_STATUS:-0}"
+EOF
+
+  make_mock git << 'EOF'
+printf 'git %s\n' "$*" >>"$MOCK_LOG"
+case " $* " in
+  *" remote get-url origin ")
+    printf '%s\n' "${TEST_REPOSITORY_URL:-https://example.invalid/owner/repository.git}"
+    ;;
+  *) exit 64 ;;
+esac
 EOF
 
   make_mock curl << 'EOF'
