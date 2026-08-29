@@ -1,0 +1,6 @@
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "ignore downloaded Ansible collections"
+paths = ['''^bootstrap/\.ansible/''']

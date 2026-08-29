@@ -5,7 +5,9 @@ on:
   pull_request:
     paths:
       - "config/**"
+      - "bootstrap/**"
       - "scripts/**"
+      - "tests/bootstrap/**"
       - ".chezmoiroot"
       - "mise.toml"
       - ".github/workflows/macos.yaml"
@@ -15,7 +17,9 @@ on:
     branches: [master]
     paths:
       - "config/**"
+      - "bootstrap/**"
       - "scripts/**"
+      - "tests/bootstrap/**"
       - ".chezmoiroot"
       - "mise.toml"
       - ".github/workflows/macos.yaml"
@@ -30,8 +34,29 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  bootstrap-behavior:
+    name: Test POSIX bootstrap on macOS
+    runs-on: macos-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - name: Set up mise
+        uses: jdx/mise-action@5228313ee0372e111a38da051671ca30fc5a96db # v3
+
+      - name: Install Dash
+        run: brew install dash
+
+      - name: Test the loader under Dash and macOS /bin/sh
+        run: mise run test:bats
+
   macos:
-    name: Provision and verify macOS
+    name: Provision through the checked-out setup and verify macOS
+    if: github.event_name == 'push'
     runs-on: macos-latest
     timeout-minutes: 60
     env:
@@ -41,6 +66,11 @@ jobs:
       HOMEBREW_NO_INSTALL_CLEANUP: "1"
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
       - name: Reset Homebrew formulae
         run: |
           formulae="$(brew list --formula)"
@@ -55,27 +85,17 @@ jobs:
           # Ansible installs any configured applications that are missing.
           brew cleanup --prune-prefix
 
-      - name: Checkout
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
-        with:
-          persist-credentials: false
-
-      - name: Restore Ansible collections
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
-        with:
-          path: ~/.ansible/collections
-          key: ${{ runner.os }}-ansible-${{ hashFiles('mise.toml', 'scripts/common/ansible/requirements.yml') }}
-
-      - name: Install using setup.sh
-        run: ./scripts/setup.sh --all
+      - name: Install through the checked-out POSIX setup
+        run: ./scripts/setup.sh
 
       - name: Validate
         run: |
+          cd "$HOME/ghq/personalgit/shmileee/dotfiles"
           mise install
-          mise exec -- scripts/common/ansible.sh --install
           mise exec -- prek run --all-files
 
       - name: Verify a second run is idempotent
         run: |
-          ./scripts/common/ansible.sh --run | tee /tmp/ansible-idempotence.log
+          cd "$HOME/ghq/personalgit/shmileee/dotfiles"
+          mise run reconcile | tee /tmp/ansible-idempotence.log
           grep -Eq 'changed=0 +unreachable=0 +failed=0' /tmp/ansible-idempotence.log

@@ -80,13 +80,14 @@ and the files under
 
 === "Ubuntu"
 
-    Use an account with `sudo` access. The bootstrap installs the apt
-    prerequisites, adds the Ansible PPA, and then installs Homebrew.
+    Use Ubuntu 24.04 ARM64 with a non-root account authorized to use the
+    installed `sudo` command. The base installation must provide a POSIX shell,
+    `curl`, `tar`, and standard shell utilities. Ansible installs Git, native
+    apt prerequisites, and Homebrew.
 
 Apple Silicon macOS is the supported workstation target. Ubuntu 24.04 ARM64 is
-the continuously tested container and integration target. The setup may work
-on other Debian-family systems, but those systems are best effort. Other
-operating systems are rejected.
+the continuously tested container and integration target. Every other target
+is rejected before source staging or privileged work.
 
 ## Recommended: review, then run
 
@@ -98,8 +99,10 @@ and the
 playbook:
 
 ```bash
-git clone https://github.com/shmileee/dotfiles.git
-cd dotfiles
+mkdir -p "$HOME/ghq/personalgit/shmileee"
+git clone https://github.com/shmileee/dotfiles.git \
+  "$HOME/ghq/personalgit/shmileee/dotfiles"
+cd "$HOME/ghq/personalgit/shmileee/dotfiles"
 
 less scripts/common/ansible/config.yaml
 less scripts/common/ansible/main.yaml
@@ -108,23 +111,34 @@ less scripts/common/ansible/main.yaml
 When you are comfortable with the configuration, run the complete setup:
 
 ```bash
-./scripts/setup.sh --all
+./scripts/setup.sh
 ```
 
-The script uses the current checkout, so local changes to package lists,
-Ansible roles, or managed dotfiles are included.
+The local command is also the recovery path after a bootstrap that created the
+checkout but did not finish. It builds a disposable locked Ansible controller
+from this checkout and preserves all durable Ansible changes if a task fails.
 
 ## Fast path: bootstrap a new machine
 
 ```bash
-curl -fsSL oponomarov.com/d | sh -s -- --all
+curl -kfsSL https://oponomarov.com/d | sh
 ```
 
 The short URL redirects to
 [`scripts/setup.sh`](https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh)
-on the `master` branch. The
-script downloads that branch into a unique temporary directory, runs the full
-setup, and removes the temporary checkout when it exits.
+on the mutable `master` branch. The POSIX loader stages that branch in a private
+temporary workspace, downloads the pinned uv controller, and hands all
+workstation changes to Ansible. The controller workspace is deleted on every
+ordinary exit; uv's normal download cache is retained.
+
+The minimal Ubuntu base does not initially have a CA bundle. Certificate
+verification is disabled only when that bundle is absent, for curl's
+pre-controller downloads and the pre-Ansible Galaxy collection install. uv
+verifies the locked Python environment with its own trusted roots. Ansible then
+installs and updates `ca-certificates`; the persistent Git clone and every later
+download use normal certificate verification. macOS and Ubuntu systems with an
+existing CA bundle never disable verification. No persistent insecure setting
+is written.
 
 ??? "Download the script before running it"
 
@@ -132,67 +146,64 @@ setup, and removes the temporary checkout when it exits.
     a shell:
 
     ```bash
-    curl -fsSL https://raw.githubusercontent.com/shmileee/dotfiles/master/scripts/setup.sh > setup.sh
+    curl -kfsSL https://raw.githubusercontent.com/shmileee/dotfiles/master/scripts/setup.sh > setup.sh
     less setup.sh
     chmod +x setup.sh
-    ./setup.sh --all
+    ./setup.sh
     ```
 
-## What `--all` does
+## What setup does
 
 <ol class="install-flow">
   <li>
     <span>01</span>
     <div>
       <strong>Validate the platform</strong>
-      <p>Continue only on macOS or Linux, then locate the current checkout or download one.</p>
+      <p>Reject root, an invalid home, occupied fresh-install targets, and every unsupported OS or architecture before privileged work.</p>
     </div>
   </li>
   <li>
     <span>02</span>
     <div>
-      <strong>Prepare Ubuntu</strong>
-      <p>On the tested Linux target, install the required apt packages and Ansible before the shared setup begins.</p>
+      <strong>Build the controller</strong>
+      <p>Stage master with curl, validate pinned uv, and synchronize the locked managed Python and Ansible project.</p>
     </div>
   </li>
   <li>
     <span>03</span>
     <div>
-      <strong>Prepare Homebrew</strong>
-      <p>Install Homebrew if necessary, add it to the current process, and disable analytics.</p>
+      <strong>Provision with Ansible</strong>
+      <p>Install Ubuntu native prerequisites and Git, create the full persistent clone, then install Homebrew and all workstation state.</p>
     </div>
   </li>
   <li>
     <span>04</span>
     <div>
-      <strong>Run Ansible</strong>
-      <p>Install the required collections, prompt for a sudo password if needed, and run the local playbook.</p>
+      <strong>Hand off to mise</strong>
+      <p>Validate the persistent checkout's same locked uv project, then atomically record completion for future reconciliation.</p>
     </div>
   </li>
 </ol>
 
-## Run one stage
+## Recover or reconcile
 
-Stage flags must be run from a repository checkout.
+The setup has no stage flags and no second bootstrap entry point.
 
 <div class="setup-reference" markdown>
 
 | Command | Purpose |
 | --- | --- |
-| `./scripts/setup.sh --deps` | Install apt prerequisites on Linux; tested on Ubuntu 24.04 ARM64. |
-| `./scripts/setup.sh --brew` | Install Homebrew if it is missing. |
-| `./scripts/setup.sh --ansible` | Install Ansible collections and run every role. |
-| `./scripts/setup.sh --all` | Run the complete platform-specific sequence. |
-| `./scripts/setup.sh` | Same as `--all`. |
+| `./scripts/setup.sh` | Bootstrap a workstation or recover a valid incomplete persistent clone. |
+| `mise run reconcile` | Run normal ongoing reconciliation from a completed checkout. |
+| `mise run reconcile:check` | Preview supported changes after bootstrap. |
 
 </div>
 
-If the prerequisites are already installed, use Ansible to preview supported
-changes:
-
-```bash
-./scripts/common/ansible.sh --all --check
-```
+If `/d` finds the fixed checkout, it exits without fetching, resetting,
+deleting, or executing anything there. Without the completion receipt it asks
+you to inspect the occupant and use `./scripts/setup.sh` only for a valid
+incomplete clone. With a receipt it recommends `mise run reconcile`, with the
+local setup command as the fallback if mise is damaged.
 
 !!! note "Check mode has limits"
 
@@ -217,10 +228,11 @@ Make changes in four places:
 
 The `dotfiles.checkout` value in
 [`config.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml)
-points chezmoi at the current repository checkout. The role force-applies that
-checkout's [`config/`](https://github.com/shmileee/dotfiles/tree/master/config)
-directory, so a fork or local changes can be tested without changing a separate
-repository or branch setting.
+points chezmoi at `$HOME/ghq/personalgit/shmileee/dotfiles`. The role
+force-applies that persistent checkout's
+[`config/`](https://github.com/shmileee/dotfiles/tree/master/config) directory,
+so the source remains available after the temporary bootstrap controller is
+removed.
 
 ### Ansible roles
 
@@ -228,6 +240,8 @@ repository or branch setting.
 
 | Role | Responsibility |
 | --- | --- |
+| `bootstrap_prerequisites` | Assert the platform, install Ubuntu native prerequisites, and validate or create the persistent full clone |
+| `homebrew` | Install the current official Homebrew release non-interactively on both supported targets |
 | [`common` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/common){ .role-link aria-label="common role on GitHub" } | Install shared command-line tools and platform-specific packages and applications |
 | [`fonts` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/fonts){ .role-link aria-label="fonts role on GitHub" } | Install developer fonts on macOS or the Ubuntu integration environment |
 | [`dotfiles` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/dotfiles){ .role-link aria-label="dotfiles role on GitHub" } | Install chezmoi and apply the current checkout |
@@ -237,6 +251,7 @@ repository or branch setting.
 | [`docker` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/docker){ .role-link aria-label="docker role on GitHub" } | Install Rancher Desktop on macOS |
 | [`tmux` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/tmux){ .role-link aria-label="tmux role on GitHub" } | Install tmux, TPM, and declared plugins |
 | [`system_defaults` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/system_defaults){ .role-link aria-label="system_defaults role on GitHub" } | Apply macOS preferences, Dock items, and keyboard settings |
+| `handoff` | Validate mise-managed uv against the shared lock and atomically write the completion receipt |
 
 </div>
 
@@ -267,7 +282,7 @@ mise tasks
 !!! important "Bootstrap before using tasks"
 
     `mise` is the task runner, but it is also installed by Ansible. On a new
-    machine, run `./scripts/setup.sh --all` first. The mise tasks are the
+    machine, run `./scripts/setup.sh` first. The mise tasks are the
     post-bootstrap interface, not a replacement for initial setup.
 
 Task execution installs any missing tools declared in `mise.toml`
@@ -337,16 +352,29 @@ Run the published image:
 docker run --rm -it shmileee/dotfiles
 ```
 
-Or build the current checkout:
+Test the current checkout in Docker:
+
+```bash
+mise run test:docker
+```
+
+The integration fixture at `tests/integration/Dockerfile` starts a Git-less
+Ubuntu 24.04 ARM64 stage, builds the locked Ansible controller, lets Ansible
+install the native prerequisites, and verifies that the resulting persistent
+clone is full and uses verified HTTPS. Bats runs directly on the host through
+`mise run test:bats`, not inside the image.
+
+The release `Dockerfile` copies the current checkout and executes its
+`scripts/setup.sh` directly:
 
 ```bash
 docker buildx build --platform linux/arm64 -t dotfiles --progress plain .
 ```
 
-The image uses Ubuntu 24.04 ARM64 and runs the full Ansible installation as the
-non-root `linuxbrew` user. Its smoke test verifies the installed tools and a
-second, idempotent provisioning pass. The `docker` role is intentionally
-skipped inside the container.
+The image runs setup as the non-root `linuxbrew` user. Its smoke test verifies
+the completion receipt, installed tools, persistent checkout, and a second
+mise-managed idempotence pass. The `docker` role is intentionally skipped
+inside the container.
 
 ## Validate changes locally
 
@@ -354,9 +382,12 @@ Run the same static checks and Ansible syntax validation used by CI:
 
 ```bash
 mise install
-mise exec -- scripts/common/ansible.sh --install
+mise run test:docker
+mise run test:bats
+mise run bootstrap:lint
 mise exec -- prek run --all-files
-mise exec -- env ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
+mise exec -- uv run --project bootstrap --locked --managed-python \
+  env ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
   ansible-playbook --inventory '127.0.0.1,' \
   --syntax-check scripts/common/ansible/main.yaml
 ```

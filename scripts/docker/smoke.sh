@@ -6,11 +6,15 @@ image="${1:?Usage: $0 IMAGE}"
 
 docker run --rm --entrypoint /bin/bash "$image" -lc '
   set -euo pipefail
-  cd /tmp/.dotfiles
+  cd "$HOME/ghq/personalgit/shmileee/dotfiles"
 
   printf "%s\n" "SMOKE phase=runtime-identity"
   test "$(whoami)" = linuxbrew
   test "$HOME" = /home/linuxbrew
+  test -f .git/dotfiles-bootstrap-complete
+  test "$(git remote get-url origin)" = https://github.com/shmileee/dotfiles.git
+  test -z "$(git config --local --get http.sslVerify || true)"
+  test -z "$(git config --local --get remote.origin.promisor || true)"
 
   printf "%s\n" "SMOKE phase=executables"
   for executable in brew chezmoi fish mise tmux; do
@@ -22,7 +26,7 @@ docker run --rm --entrypoint /bin/bash "$image" -lc '
   mise exec -- nvim --headless +qa
 
   printf "%s\n" "SMOKE phase=idempotence"
-  scripts/common/ansible.sh --run |
+  mise run reconcile |
     tee /tmp/ansible-idempotence.log
   grep -Eq "changed=0 +unreachable=0 +failed=0" /tmp/ansible-idempotence.log
 '

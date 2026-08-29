@@ -1,12 +1,3 @@
-packages:
-  - build-essential
-  - libssl-dev
-  - llvm
-  - python3-pip
-  - python-is-python3
-  - vim
-  - less
-
 brew:
   taps:
     - carlocab/personal
@@ -58,7 +49,7 @@ brew:
     linux: []
 
 dotfiles:
-  checkout: "{{ playbook_dir }}/../../.."
+  checkout: "{{ persistent_checkout }}"
 
 dockitems:
   - name: Google Chrome

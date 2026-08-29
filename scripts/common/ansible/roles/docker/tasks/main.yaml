@@ -1,4 +1,4 @@
 ---
-- name: Install Docker on macOS
+- name: "docker | install on macos"
   ansible.builtin.import_tasks: darwin.yaml
   when: ansible_facts["os_family"] == "Darwin"

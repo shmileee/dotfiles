@@ -1,0 +1,54 @@
+---
+
+- name: "handoff | validate the persistent locked reconciliation runtime"
+  when: not ansible_check_mode
+  block:
+    - name: "handoff | synchronize the persistent locked environment"
+      ansible.builtin.command:
+        argv:
+          - /usr/bin/env
+          - -u
+          - UV_PYTHON_INSTALL_DIR
+          - -u
+          - UV_PROJECT_ENVIRONMENT
+          - mise
+          - exec
+          - --
+          - uv
+          - sync
+          - --project
+          - bootstrap
+          - --locked
+          - --managed-python
+      args:
+        chdir: "{{ persistent_checkout }}"
+      changed_when: false
+
+    - name: "handoff | validate ansible-playbook without recursion"
+      ansible.builtin.command:
+        argv:
+          - /usr/bin/env
+          - -u
+          - UV_PYTHON_INSTALL_DIR
+          - -u
+          - UV_PROJECT_ENVIRONMENT
+          - mise
+          - exec
+          - --
+          - uv
+          - run
+          - --project
+          - bootstrap
+          - --locked
+          - --managed-python
+          - ansible-playbook
+          - --version
+      args:
+        chdir: "{{ persistent_checkout }}"
+      changed_when: false
+
+    - name: "handoff | write the completion receipt"
+      ansible.builtin.copy:
+        content: "locked runtime validated\n"
+        dest: "{{ persistent_checkout }}/.git/dotfiles-bootstrap-complete"
+        mode: "0600"

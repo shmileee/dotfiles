@@ -1,17 +1,11 @@
 ---
 
-- name: Install operating-system packages
-  ansible.builtin.import_tasks: packages.yaml
-  when: ansible_facts["system"] == "Linux"
-
-- name: "merge common and platform specific packages"
+- name: "common | merge homebrew packages"
   ansible.builtin.set_fact:
     brew_pkgs_merged: "{{ brew.packages.common + brew.packages[ansible_facts['system'] | lower] }}"
 
-- name: Install Homebrew packages
+- name: "common | install homebrew packages"
   ansible.builtin.import_tasks: brew.yaml
   vars:
-    pkgs: '{{ brew_pkgs_merged }}'
+    pkgs: "{{ brew_pkgs_merged }}"
   tags: homebrew
-  when:
-    - ansible_facts["system"] in ["Linux", "Darwin"]

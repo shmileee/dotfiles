@@ -1,0 +1,18 @@
+---
+
+bootstrap_native_packages:
+  - bash
+  - build-essential
+  - ca-certificates
+  - curl
+  - file
+  - git
+  - libssl-dev
+  - less
+  - llvm
+  - make
+  - procps
+  - python3-pip
+  - python-is-python3
+  - unzip
+  - vim

@@ -5,7 +5,10 @@ on:
   pull_request:
     paths:
       - "config/**"
+      - "bootstrap/**"
       - "scripts/**"
+      - "tests/bootstrap/**"
+      - "tests/integration/**"
       - ".dockerignore"
       - "Dockerfile"
       - "mise.toml"
@@ -16,7 +19,10 @@ on:
     branches: [master]
     paths:
       - "config/**"
+      - "bootstrap/**"
       - "scripts/**"
+      - "tests/bootstrap/**"
+      - "tests/integration/**"
       - ".dockerignore"
       - "Dockerfile"
       - "mise.toml"
@@ -33,8 +39,40 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  bootstrap-behavior:
+    name: Test bootstrap behavior on the runner
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - name: Set up mise
+        uses: jdx/mise-action@5228313ee0372e111a38da051671ca30fc5a96db # v3
+
+      - name: Run Bats behavior tests
+        run: mise run test:bats
+
+  docker-integration:
+    name: Test Ansible bootstrap integration in Docker
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - name: Build the integration image
+        run: docker build --file tests/integration/Dockerfile --tag dotfiles-bootstrap-tests .
+
   build-test-publish:
     name: Build, test, and publish image
+    if: github.event_name == 'push'
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 45
 
@@ -67,14 +105,12 @@ jobs:
         run: scripts/docker/smoke.sh dotfiles:test
 
       - name: Login to DockerHub
-        if: github.event_name == 'push'
         uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
         with:
           username: shmileee
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Publish tested image
-        if: github.event_name == 'push'
         env:
           IMAGE: shmileee/dotfiles
           SHA_TAG: ${{ github.sha }}
