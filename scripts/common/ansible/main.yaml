@@ -6,31 +6,10 @@
 
   vars_files:
     - config.yaml
+    - vars/runtime.yaml
 
-  vars:
-    ansible_python_interpreter: "{{ ansible_playbook_python }}"
-    dockerized: "{{ lookup('ansible.builtin.env', 'DOCKERIZED') == 'true' }}"
-    persistent_checkout: >-
-      {{
-        lookup('ansible.builtin.env', 'DOTFILES_PERSISTENT_CHECKOUT')
-        | default(ansible_facts['user_dir'] + '/ghq/personalgit/shmileee/dotfiles', true)
-      }}
-    persistent_repository_ref: >-
-      {{
-        lookup('ansible.builtin.env', 'DOTFILES_PERSISTENT_REF')
-        | default('master', true)
-      }}
-    persistent_repository_refspec: >-
-      {{ lookup('ansible.builtin.env', 'DOTFILES_PERSISTENT_REFSPEC') }}
-    persistent_repository_expected_commit: >-
-      {{ lookup('ansible.builtin.env', 'DOTFILES_PERSISTENT_EXPECTED_COMMIT') }}
   environment:
-    PATH: >-
-      {{
-        '/opt/homebrew/bin:/opt/homebrew/sbin:'
-        + '/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:'
-        + lookup('ansible.builtin.env', 'PATH')
-      }}
+    PATH: "{{ workstation_path }}"
   roles:
     - role: bootstrap_prerequisites
       tags: bootstrap_prerequisites
