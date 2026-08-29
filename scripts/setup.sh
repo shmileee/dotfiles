@@ -299,7 +299,7 @@ download_uv() {
 
 run_bootstrap_runtime() {
   "$uv_executable" run --project "$source_root/bootstrap" --locked --managed-python \
-    "$@"
+    env -u UV_PYTHON_INSTALL_DIR -u UV_PROJECT_ENVIRONMENT "$@"
 }
 
 install_bootstrap_collections() {

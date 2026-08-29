@@ -55,6 +55,7 @@ teardown() {
   assert_log_contains "--locked --managed-python"
   assert_log_contains "ansible-galaxy collection install --ignore-certs"
   assert_log_contains "validate_bootstrap_runtime.py --uv-executable"
+  assert_log_contains "env -u UV_PYTHON_INSTALL_DIR -u UV_PROJECT_ENVIRONMENT ansible-playbook"
   assert_log_contains "ansible-playbook --inventory 127.0.0.1,"
 }
 
@@ -336,5 +337,6 @@ teardown() {
   cmp -s "$requirements" "$runtime_state/requirements.yml"
   assert_log_contains "ansible-galaxy collection install"
   assert_log_contains "validate_bootstrap_runtime.py"
+  assert_log_contains "env -u UV_PROJECT_ENVIRONMENT ansible-playbook"
   assert_log_contains "ansible-playbook"
 }

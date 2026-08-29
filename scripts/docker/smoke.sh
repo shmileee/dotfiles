@@ -20,6 +20,8 @@ docker run --rm --entrypoint /bin/bash "$image" -lc '
   for executable in brew chezmoi fish mise tmux; do
     command -v "$executable" >/dev/null
   done
+  mise exec -- ansible-lint --version >/dev/null
+  mise exec -- yamllint --version >/dev/null
 
   printf "%s\n" "SMOKE phase=startup"
   test -z "$(fish -c true)"
