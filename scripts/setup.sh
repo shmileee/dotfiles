@@ -217,7 +217,6 @@ create_workspace() {
     fail "temporary directory $temporary_parent must exist and be writable."
   fi
 
-  umask 077
   attempt=1
   while [ "$attempt" -le 100 ]; do
     workspace_candidate=$temporary_parent/dotfiles-bootstrap.$$.$attempt
