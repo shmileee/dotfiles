@@ -50,6 +50,10 @@ run = "shfmt -w scripts/setup.sh scripts/common/reconcile.sh tests/bootstrap/*.s
 description = "Lint bootstrap, reconciliation, and test shell code"
 run = "shellcheck -s sh scripts/setup.sh scripts/common/reconcile.sh tests/bootstrap/*.sh && shellcheck -s bash tests/bootstrap/test-helper.bash"
 
+[tasks."ansible:prepare"]
+description = "Install the locked Ansible runtime and pinned collections"
+run = "env ANSIBLE_COLLECTIONS_PATH=bootstrap/.ansible/collections uv run --project bootstrap --locked --managed-python ansible-galaxy collection install --collections-path bootstrap/.ansible/collections --requirements-file scripts/common/ansible/requirements.yml"
+
 [tasks."test:bats"]
 description = "Run black-box bootstrap behavior tests"
 run = "bats tests/bootstrap"

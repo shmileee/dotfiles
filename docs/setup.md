@@ -382,6 +382,7 @@ Run the same static checks and Ansible syntax validation used by CI:
 
 ```bash
 mise install
+mise run ansible:prepare
 mise run test:docker
 mise run test:bats
 mise run bootstrap:lint

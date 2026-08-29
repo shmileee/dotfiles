@@ -106,7 +106,8 @@ repos:
         types: [yaml]
       - id: ansible-lint
         name: lint ansible with ansible-lint
-        entry: env ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg ansible-lint
+        entry: env ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg
+          ANSIBLE_COLLECTIONS_PATH=bootstrap/.ansible/collections ansible-lint
           scripts/common/ansible
         language: system
         pass_filenames: false
