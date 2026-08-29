@@ -62,7 +62,9 @@ The full setup can:
 *   change macOS defaults, Dock contents, and keyboard shortcuts.
 
 Back up your existing configuration before continuing. At minimum, inspect
-`scripts/common/ansible/config.yaml` and the files under `config/`.
+[`config.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml)
+and the files under
+[`config/`](https://github.com/shmileee/dotfiles/tree/master/config).
 
 ### Platform requirements
 
@@ -92,8 +94,11 @@ or privileged work.
 ## Recommended: review, then run
 
 Clone the repository so you can inspect exactly what the setup will run. Pay
-particular attention to `scripts/common/ansible/config.yaml` and the
-`scripts/common/ansible/main.yaml` playbook:
+particular attention to
+[`config.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml)
+and the
+[`main.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/main.yaml)
+playbook:
 
 ```bash
 repository_url=https://github.com/OWNER/REPOSITORY.git
@@ -122,9 +127,10 @@ from this checkout and preserves all durable Ansible changes if a task fails.
 curl -fsSL https://oponomarov.com/d | sh
 ```
 
-The short URL redirects to `scripts/setup.sh` on the configured mutable branch.
-The POSIX loader stages that branch in a private
-temporary workspace, downloads the pinned uv controller, and hands all
+The short URL redirects to
+[`scripts/setup.sh`](https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh)
+on the configured mutable branch. The POSIX loader stages that branch in a
+private temporary workspace, downloads the pinned uv controller, and hands all
 workstation changes to Ansible. The controller workspace is deleted on every
 ordinary exit; uv's normal download cache is retained.
 
@@ -145,7 +151,7 @@ insecure setting is written.
     a shell:
 
     ```bash
-    curl -fsSL https://oponomarov.com/d > setup.sh
+    curl -fsSL https://raw.githubusercontent.com/shmileee/dotfiles/master/scripts/setup.sh > setup.sh
     less setup.sh
     chmod +x setup.sh
     ./setup.sh
@@ -218,17 +224,20 @@ Make changes in four places:
 
 | Area | Source of truth | Typical changes |
 | --- | --- | --- |
-| Packages and applications | `scripts/common/ansible/config.yaml` | Homebrew packages, casks, Dock items, keyboard shortcuts |
-| System behavior | `scripts/common/ansible/roles/` | Installation logic and macOS defaults |
-| Home-directory files | `config/` | fish, Git, tmux, Neovim, Alacritty, OpenCode |
-| Tool versions | `config/private_dot_config/mise/config.toml` | Language runtimes and developer tools |
+| Packages and applications | [`scripts/common/ansible/config.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml) | Homebrew packages, casks, Dock items, keyboard shortcuts |
+| System behavior | [`scripts/common/ansible/roles/`](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles) | Installation logic and macOS defaults |
+| Home-directory files | [`config/`](https://github.com/shmileee/dotfiles/tree/master/config) | fish, Git, tmux, Neovim, Alacritty, OpenCode |
+| Tool versions | [`config/private_dot_config/mise/config.toml`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/mise/config.toml) | Language runtimes and developer tools |
 
 </div>
 
-The `dotfiles.checkout` value in `scripts/common/ansible/config.yaml` points
-chezmoi at the persistent path derived from the configured repository slug.
-The role force-applies that checkout's `config/` directory, so the source
-remains available after the temporary bootstrap controller is removed.
+The `dotfiles.checkout` value in
+[`config.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml)
+points chezmoi at the persistent path derived from the configured repository
+slug. The role force-applies that checkout's
+[`config/`](https://github.com/shmileee/dotfiles/tree/master/config) directory,
+so the source remains available after the temporary bootstrap controller is
+removed.
 
 ### Reuse this repository as your own
 
@@ -252,8 +261,13 @@ review and replace these intentionally personal publication and user settings:
 *   the public redirect itself, so it points to your slug and branch;
 *   the Docker Hub identity in `.github/workflows/docker.yaml` if it differs
     from the GitHub repository owner and slug used by its defaults;
+*   the `UBUNTU_ARM_RUNNER` GitHub Actions repository variable, which must name
+    a currently available native ARM Ubuntu runner (GitHub does not provide a
+    versionless ARM Ubuntu label);
 *   the documentation domain in `mkdocs.yml`, `docs/robots.txt`,
     `.github/workflows/docs.yaml`, and `README.md`;
+*   the repository file links throughout `README.md` and `docs/`, plus
+    `repo_url`, `repo_name`, and `edit_uri` in `mkdocs.yml`;
 *   Git author and namespace values under
     `config/private_dot_config/private_git/`; and
 *   every package, application, secret template, shell preference, and macOS
@@ -267,15 +281,15 @@ review and replace these intentionally personal publication and user settings:
 | --- | --- |
 | `bootstrap_prerequisites` | Assert the platform, install Ubuntu native prerequisites, and validate or create the persistent full clone |
 | `homebrew` | Install the current official macOS package or Linux script non-interactively through Ansible |
-| `common` | Install shared command-line tools and platform-specific packages and applications |
-| `fonts` | Install developer fonts on macOS or the Ubuntu integration environment |
-| `dotfiles` | Install chezmoi and apply the current checkout |
-| `fish` | Install fish, make it the login shell, and synchronize Fisher plugins |
-| `mise` | Install the tools declared in the mise configuration |
-| `neovim` | Install LazyVim and its plugins in headless mode |
-| `docker` | Install Rancher Desktop on macOS |
-| `tmux` | Install tmux, TPM, and declared plugins |
-| `system_defaults` | Apply macOS preferences, Dock items, and keyboard settings |
+| [`common` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/common){ .role-link aria-label="common role on GitHub" } | Install shared command-line tools and platform-specific packages and applications |
+| [`fonts` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/fonts){ .role-link aria-label="fonts role on GitHub" } | Install developer fonts on macOS or the Ubuntu integration environment |
+| [`dotfiles` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/dotfiles){ .role-link aria-label="dotfiles role on GitHub" } | Install chezmoi and apply the current checkout |
+| [`fish` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/fish){ .role-link aria-label="fish role on GitHub" } | Install fish, make it the login shell, and synchronize Fisher plugins |
+| [`mise` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/mise){ .role-link aria-label="mise role on GitHub" } | Install the tools declared in the mise configuration |
+| [`neovim` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/neovim){ .role-link aria-label="neovim role on GitHub" } | Install LazyVim and its plugins in headless mode |
+| [`docker` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/docker){ .role-link aria-label="docker role on GitHub" } | Install Rancher Desktop on macOS |
+| [`tmux` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/tmux){ .role-link aria-label="tmux role on GitHub" } | Install tmux, TPM, and declared plugins |
+| [`system_defaults` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/system_defaults){ .role-link aria-label="system_defaults role on GitHub" } | Apply macOS preferences, Dock items, and keyboard settings |
 | `handoff` | Prepare and validate the persistent mise-managed runtime and pinned collections, then atomically write the completion receipt |
 
 </div>
@@ -384,7 +398,7 @@ force-applied during setup.
 Run the published image:
 
 ```bash
-docker run --rm -it DOCKERHUB_USER/IMAGE
+docker run --rm -it shmileee/dotfiles
 ```
 
 Test the current checkout in Docker:
