@@ -128,6 +128,7 @@ RUN handoff_target=/tmp/handoff-checkout && \
       --tags handoff \
       scripts/common/ansible/main.yaml | tee /tmp/handoff-idempotence.log && \
     grep -Eq 'changed=0 +unreachable=0 +failed=0' /tmp/handoff-idempotence.log && \
-    test "$(wc -l < /tmp/mise.log)" -eq 4 && \
+    test "$(wc -l < /tmp/mise.log)" -eq 6 && \
     grep -F 'exec -- uv' /tmp/mise.log >/dev/null && \
+    grep -F 'ansible-galaxy collection install' /tmp/mise.log >/dev/null && \
     grep -F 'ansible-playbook --version' /tmp/mise.log >/dev/null

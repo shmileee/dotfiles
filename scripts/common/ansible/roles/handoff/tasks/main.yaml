@@ -24,6 +24,36 @@
         chdir: "{{ persistent_checkout }}"
       changed_when: false
 
+    - name: "handoff | install the persistent pinned collections"
+      ansible.builtin.command:
+        argv:
+          - /usr/bin/env
+          - -u
+          - UV_PYTHON_INSTALL_DIR
+          - -u
+          - UV_PROJECT_ENVIRONMENT
+          - ANSIBLE_COLLECTIONS_PATH=bootstrap/.ansible/collections
+          - mise
+          - exec
+          - --
+          - uv
+          - run
+          - --project
+          - bootstrap
+          - --locked
+          - --managed-python
+          - ansible-galaxy
+          - collection
+          - install
+          - --collections-path
+          - bootstrap/.ansible/collections
+          - --requirements-file
+          - scripts/common/ansible/requirements.yml
+      args:
+        chdir: "{{ persistent_checkout }}"
+      register: persistent_collections
+      changed_when: "'was installed successfully' in persistent_collections.stdout"
+
     - name: "handoff | validate ansible-playbook without recursion"
       ansible.builtin.command:
         argv:
