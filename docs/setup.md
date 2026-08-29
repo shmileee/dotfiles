@@ -395,8 +395,10 @@ mise run test:docker
 mise run test:bats
 mise run bootstrap:lint
 mise exec -- prek run --all-files
-mise exec -- uv run --project bootstrap --locked --managed-python \
-  env ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
+mise exec -- env \
+  ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
+  ANSIBLE_COLLECTIONS_PATH=bootstrap/.ansible/collections \
+  uv run --project bootstrap --locked --managed-python \
   ansible-playbook --inventory '127.0.0.1,' \
   --syntax-check scripts/common/ansible/main.yaml
 ```

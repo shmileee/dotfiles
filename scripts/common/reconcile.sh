@@ -5,7 +5,11 @@ set -eu
 script_directory=$(CDPATH='' cd -P "$(dirname "$0")" && pwd)
 repository_root=$(CDPATH='' cd -P "$script_directory/../.." && pwd)
 project=$repository_root/bootstrap
-collections=$project/.ansible/collections
+runtime_state=$project/.ansible
+collections=$runtime_state/collections
+collection_requirements=$script_directory/ansible/requirements.yml
+collection_snapshot=$runtime_state/requirements.yml
+collection_manifest_changed=false
 check_mode=false
 
 usage() {
@@ -48,6 +52,21 @@ DOTFILES_PERSISTENT_CHECKOUT=$repository_root
 ANSIBLE_CONFIG=$script_directory/ansible/ansible.cfg
 export UV_PROJECT_ENVIRONMENT ANSIBLE_COLLECTIONS_PATH
 export DOTFILES_PERSISTENT_CHECKOUT ANSIBLE_CONFIG
+
+if [ -L "$runtime_state" ] || [ -L "$collections" ] || [ -L "$collection_snapshot" ]; then
+  printf 'Refusing to replace reconciliation state through a symbolic link beneath %s.\n' "$runtime_state" >&2
+  exit 1
+fi
+mkdir -p "$runtime_state"
+
+# Galaxy installs requested versions but does not prune collections removed from
+# the requirements file. Rebuild this repository-owned path only when its exact
+# manifest changes so runtime validation cannot be blocked by obsolete content.
+if [ ! -d "$collections" ] || [ ! -f "$collection_snapshot" ] \
+  || ! cmp -s "$collection_requirements" "$collection_snapshot"; then
+  collection_manifest_changed=true
+  rm -rf "$collections"
+fi
 mkdir -p "$collections"
 
 run_in_runtime() {
@@ -60,13 +79,16 @@ uv sync --project "$project" --locked --managed-python
 printf '[dotfiles] Installing exactly pinned Ansible collections\n'
 run_in_runtime ansible-galaxy collection install \
   --collections-path "$collections" \
-  --requirements-file "$script_directory/ansible/requirements.yml"
+  --requirements-file "$collection_requirements"
 
 printf '[dotfiles] Validating locked runtime identity\n'
 run_in_runtime python "$repository_root/scripts/validate_bootstrap_runtime.py" \
   --uv-executable "$(command -v uv)" \
   --collections-path "$collections" \
   --checkout "$repository_root"
+if [ "$collection_manifest_changed" = true ]; then
+  cp "$collection_requirements" "$collection_snapshot"
+fi
 
 set -- ansible-playbook --inventory '127.0.0.1,' \
   -e "ansible_user=$(id -un)" "$script_directory/ansible/main.yaml"

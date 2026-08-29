@@ -192,6 +192,19 @@ teardown() {
   [ -f "$test_home/.cache/uv/keep" ]
 }
 
+@test "bootstrap supports a private temporary path containing spaces" {
+  temporary_path_with_spaces="$test_root/private temporary directory"
+  TEST_TMP_OVERRIDE=$temporary_path_with_spaces
+  mkdir -p "$temporary_path_with_spaces"
+
+  run_bootstrap
+
+  [ "$status" -eq 0 ]
+  workspace_path=$(sed -n 's/^workspace=//p' "$command_log" | sed -n '1p')
+  [[ $workspace_path == "$temporary_path_with_spaces"/* ]]
+  [ ! -e "$workspace_path" ]
+}
+
 @test "curl and archive failures preserve status and clean the workspace" {
   TEST_SOURCE_CURL_STATUS=22
   run_bootstrap
@@ -233,6 +246,33 @@ teardown() {
   [ -z "$(find "$test_tmp" -mindepth 1 -print -quit)" ]
 }
 
+@test "uv artifact and runtime identity failures preserve diagnostics and status" {
+  TEST_UV_CURL_STATUS=44
+  run_bootstrap
+  [ "$status" -eq 44 ]
+  [[ $output == *"could not download pinned uv"* ]]
+
+  TEST_UV_CURL_STATUS=0
+  TEST_UV_TAR_STATUS=45
+  run_bootstrap
+  [ "$status" -eq 45 ]
+  [[ $output == *"could not extract the pinned uv archive"* ]]
+
+  TEST_UV_TAR_STATUS=0
+  TEST_UV_VERSION_STATUS=46
+  run_bootstrap
+  [ "$status" -eq 46 ]
+  [[ $output == *"downloaded uv executable could not report its version"* ]]
+
+  TEST_UV_VERSION_STATUS=0
+  TEST_RUNTIME_VALIDATION_STATUS=47
+  run_bootstrap
+  [ "$status" -eq 47 ]
+  [[ $output == *"locked controller identity does not match"* ]]
+  [[ $output == *"curl -kfsSL https://oponomarov.com/d | sh"* ]]
+  [ -z "$(find "$test_tmp" -mindepth 1 -print -quit)" ]
+}
+
 @test "passwordless sudo omits the become prompt flag" {
   TEST_SUDO_STATUS=0
 
@@ -267,4 +307,34 @@ teardown() {
 
   [ "$status" -eq 2 ]
   [[ $output == *"does not accept stage arguments"* ]]
+}
+
+@test "reconciliation prunes collections removed from the pinned manifest" {
+  reconcile_root=$test_root/reconcile-repository
+  reconcile_script=$reconcile_root/scripts/common/reconcile.sh
+  requirements=$reconcile_root/scripts/common/ansible/requirements.yml
+  runtime_state=$reconcile_root/bootstrap/.ansible
+  mkdir -p "$(dirname "$reconcile_script")/ansible" "$runtime_state/collections"
+  cp "$project_root/scripts/common/reconcile.sh" "$reconcile_script"
+  cp "$project_root/tests/bootstrap/fake-uv.sh" "$fake_bin/uv"
+  chmod +x "$reconcile_script" "$fake_bin/uv"
+  touch "$reconcile_root/scripts/common/ansible/main.yaml"
+  touch "$reconcile_root/scripts/validate_bootstrap_runtime.py"
+  printf '%s\n' 'collections: [current]' > "$requirements"
+  printf '%s\n' 'collections: [obsolete]' > "$runtime_state/requirements.yml"
+  touch "$runtime_state/collections/obsolete"
+
+  run env \
+    HOME="$test_home" \
+    PATH="$fake_bin:$base_bin" \
+    MOCK_LOG="$command_log" \
+    TEST_UV_REPORTED_VERSION="$expected_uv_version" \
+    "$dash_path" "$reconcile_script"
+
+  [ "$status" -eq 0 ]
+  [ ! -e "$runtime_state/collections/obsolete" ]
+  cmp -s "$requirements" "$runtime_state/requirements.yml"
+  assert_log_contains "ansible-galaxy collection install"
+  assert_log_contains "validate_bootstrap_runtime.py"
+  assert_log_contains "ansible-playbook"
 }
