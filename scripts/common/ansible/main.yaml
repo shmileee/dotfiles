@@ -27,7 +27,9 @@
       tags: bootstrap_prerequisites
 
     - role: homebrew
-      tags: homebrew
+      tags:
+        - homebrew
+        - homebrew_install
 
     - role: common
       tags: common
