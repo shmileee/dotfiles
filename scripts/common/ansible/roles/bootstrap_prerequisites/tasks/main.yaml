@@ -122,7 +122,9 @@
   ansible.builtin.git:
     repo: https://github.com/shmileee/dotfiles.git
     dest: "{{ persistent_checkout }}"
-    version: master
+    version: "{{ persistent_repository_ref }}"
+    refspec: >-
+      {{ persistent_repository_refspec | default(omit, true) }}
     update: false
   when: not persistent_checkout_path.stat.exists
 
@@ -136,6 +138,15 @@
       - HEAD
   register: persistent_commit
   changed_when: false
+
+- name: "bootstrap prerequisites | verify the requested checkout commit"
+  ansible.builtin.assert:
+    that:
+      - persistent_commit.stdout == persistent_repository_expected_commit
+    fail_msg: >-
+      The persistent checkout is at {{ persistent_commit.stdout }}, not the
+      explicitly requested {{ persistent_repository_expected_commit }} commit.
+  when: persistent_repository_expected_commit | length > 0
 
 - name: "bootstrap prerequisites | report the persistent checkout commit"
   ansible.builtin.debug:

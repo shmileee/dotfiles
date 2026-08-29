@@ -2,6 +2,10 @@
 
 FROM ubuntu:24.04
 
+ARG DOTFILES_PERSISTENT_REF=master
+ARG DOTFILES_PERSISTENT_REFSPEC=
+ARG DOTFILES_PERSISTENT_EXPECTED_COMMIT=
+
 ENV TIMEZONE="Europe/Warsaw"
 ENV DEBIAN_FRONTEND="noninteractive"
 ENV DOCKERIZED=true
@@ -35,9 +39,13 @@ RUN --mount=type=secret,id=GITHUB_TOKEN,uid=1000,gid=1000 \
     export GITHUB_TOKEN HOMEBREW_GITHUB_API_TOKEN="$GITHUB_TOKEN" && \
     export HOMEBREW_NO_AUTO_UPDATE=1 GIT_CONFIG_COUNT=1 && \
     export GIT_CONFIG_KEY_0=http.version GIT_CONFIG_VALUE_0=HTTP/1.1 && \
-    ./scripts/setup.sh && \
-    cd / && \
-    rm -rf /bootstrap-source
+    export DOTFILES_PERSISTENT_REF DOTFILES_PERSISTENT_REFSPEC && \
+    export DOTFILES_PERSISTENT_EXPECTED_COMMIT && \
+    ./scripts/setup.sh
+
+USER root
+RUN rm -rf /bootstrap-source
+USER linuxbrew
 
 WORKDIR /home/linuxbrew/ghq/personalgit/shmileee/dotfiles
 
