@@ -49,12 +49,7 @@ jobs:
 
       - name: Run repository checks
         run: |
-          mise exec -- uv sync --project bootstrap --locked --managed-python
-          mise exec -- env ANSIBLE_COLLECTIONS_PATH=bootstrap/.ansible/collections \
-            uv run --project bootstrap --locked --managed-python \
-            ansible-galaxy collection install \
-            --collections-path bootstrap/.ansible/collections \
-            --requirements-file scripts/common/ansible/requirements.yml
+          mise run ansible:prepare
           mise exec -- prek run --all-files
 
       - name: Validate Ansible syntax
