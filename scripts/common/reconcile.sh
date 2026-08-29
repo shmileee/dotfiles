@@ -70,7 +70,8 @@ fi
 mkdir -p "$collections"
 
 run_in_runtime() {
-  uv run --project "$project" --locked --managed-python "$@"
+  uv run --project "$project" --locked --managed-python \
+    env -u UV_PROJECT_ENVIRONMENT "$@"
 }
 
 printf '[dotfiles] Synchronizing locked reconciliation runtime\n'
