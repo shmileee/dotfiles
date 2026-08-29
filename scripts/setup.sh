@@ -147,7 +147,7 @@ guard_streamed_target() {
     return 0
   fi
 
-  printf '[dotfiles] /d is only for a fresh workstation; %s already exists.\n' "$persistent_checkout" >&2
+  printf '[dotfiles] The hosted fresh-workstation bootstrap cannot continue because %s already exists.\n' "$persistent_checkout" >&2
   if [ -f "$persistent_checkout/.git/dotfiles-bootstrap-complete" ]; then
     printf '[dotfiles] Ansible previously completed the runtime handoff. The receipt is advisory; run:\n' >&2
     printf '  cd "%s" && mise run reconcile\n' "$persistent_checkout" >&2

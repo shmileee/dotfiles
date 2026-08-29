@@ -80,16 +80,13 @@ and the files under
 
 === "Ubuntu"
 
-    Use Ubuntu ARM64 with a non-root account authorized to use the
-    installed `sudo` command. The base installation must provide a POSIX shell,
-    `curl`, `tar`, and standard shell utilities. Ansible installs Git, native
-    apt prerequisites, and Homebrew.
+    Use Ubuntu with a non-root account authorized to use the installed `sudo`
+    command. The base installation must provide a POSIX shell, `curl`, `tar`,
+    and standard shell utilities. Ansible installs Git, native apt
+    prerequisites, and Homebrew.
 
-Apple Silicon macOS and Ubuntu ARM64 are the supported targets. Ubuntu release
-numbers are deliberately not allowlisted; the current `ubuntu:latest` base is
-continuously tested in the container integration job. Other Linux
-distributions and non-ARM64 architectures are rejected before source staging
-or privileged work.
+Apple Silicon macOS and Ubuntu are the supported targets. Setup validates the
+operating system before downloading sources or requesting elevated privileges.
 
 ## Recommended: review, then run
 
@@ -127,7 +124,8 @@ from this checkout and preserves all durable Ansible changes if a task fails.
 curl -fsSL https://oponomarov.com/d | sh
 ```
 
-The short URL redirects to
+`https://oponomarov.com/d` is the author's convenience redirect for installing
+this repository on a fresh, trusted workstation. It redirects to
 [`scripts/setup.sh`](https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh)
 on the configured mutable branch. The POSIX loader stages that branch in a
 private temporary workspace, downloads the pinned uv controller, and hands all
@@ -164,35 +162,33 @@ insecure setting is written.
     <span>01</span>
     <div>
       <strong>Validate the platform</strong>
-      <p>Reject root, an invalid home, occupied fresh-install targets, and every unsupported OS or architecture before privileged work.</p>
+      <p>Reject root, an invalid home, occupied fresh-install targets, and unsupported platforms before privileged work.</p>
     </div>
   </li>
   <li>
     <span>02</span>
     <div>
       <strong>Build the controller</strong>
-      <p>Stage master with curl, validate pinned uv, and synchronize the locked managed Python and Ansible project.</p>
+      <p>Stage the configured repository branch, validate pinned uv, and synchronize the locked Python and Ansible project.</p>
     </div>
   </li>
   <li>
     <span>03</span>
     <div>
       <strong>Provision with Ansible</strong>
-      <p>Install Ubuntu native prerequisites and Git, create the full persistent clone, then install Homebrew and all workstation state.</p>
+      <p>Install Ubuntu prerequisites and Git, create the persistent checkout, then install Homebrew and the configured workstation state.</p>
     </div>
   </li>
   <li>
     <span>04</span>
     <div>
       <strong>Hand off to mise</strong>
-      <p>Synchronize the persistent checkout's locked uv project and pinned Ansible collections, validate the runtime, then atomically record completion for future reconciliation.</p>
+      <p>Prepare the persistent checkout for future updates with <code>mise run reconcile</code>.</p>
     </div>
   </li>
 </ol>
 
 ## Recover or reconcile
-
-The setup has no stage flags and no second bootstrap entry point.
 
 <div class="setup-reference" markdown>
 
@@ -204,11 +200,11 @@ The setup has no stage flags and no second bootstrap entry point.
 
 </div>
 
-If `/d` finds the fixed checkout, it exits without fetching, resetting,
-deleting, or executing anything there. Without the completion receipt it asks
-you to inspect the occupant and use `./scripts/setup.sh` only for a valid
-incomplete clone. With a receipt it recommends `mise run reconcile`, with the
-local setup command as the fallback if mise is damaged.
+The hosted one-line installer is for a new workstation. It stops if the derived
+checkout path already exists and leaves that path untouched. For a valid
+incomplete checkout, run `./scripts/setup.sh` from that checkout. After a
+successful setup, use `mise run reconcile`; rerun the local setup script only if
+the installed mise environment needs to be recovered.
 
 !!! note "Check mode has limits"
 
@@ -249,21 +245,18 @@ top of `scripts/setup.sh`. Before using a fork, update:
 *   `bootstrap_url` to your own redirect, or to the raw setup script URL.
 
 Setup derives the archive URL, HTTPS clone URL, and
-`$HOME/ghq/personalgit/OWNER/REPOSITORY` path from those settings. It passes the
-derived values to Ansible. `mise run reconcile` later derives the path and URL
-from the checkout where it runs, so neither the playbook nor its roles repeat
-the repository owner or local absolute path. Run `./scripts/setup.sh
---print-config` to inspect the effective values without changing the machine.
+`$HOME/ghq/personalgit/OWNER/REPOSITORY` path from those settings. Run
+`./scripts/setup.sh --print-config` to inspect the effective values without
+changing the machine.
 
 Repository identity is only one part of adopting personal dotfiles. Also
-review and replace these intentionally personal publication and user settings:
+review and replace these personal publication and user settings:
 
 *   the public redirect itself, so it points to your slug and branch;
 *   the Docker Hub identity in `.github/workflows/docker.yaml` if it differs
     from the GitHub repository owner and slug used by its defaults;
-*   the `UBUNTU_ARM_RUNNER` GitHub Actions repository variable, which must name
-    a currently available native ARM Ubuntu runner (GitHub does not provide a
-    versionless ARM Ubuntu label);
+*   the `UBUNTU_ARM_RUNNER` GitHub Actions repository variable used by the
+    Docker workflow;
 *   the documentation domain in `mkdocs.yml`, `docs/robots.txt`,
     `.github/workflows/docs.yaml`, and `README.md`;
 *   the repository file links throughout `README.md` and `docs/`, plus
@@ -279,10 +272,10 @@ review and replace these intentionally personal publication and user settings:
 
 | Role | Responsibility |
 | --- | --- |
-| `bootstrap_prerequisites` | Assert the platform, install Ubuntu native prerequisites, and validate or create the persistent full clone |
-| `homebrew` | Install the current official macOS package or Linux script non-interactively through Ansible |
+| [`bootstrap_prerequisites` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/bootstrap_prerequisites){ .role-link aria-label="bootstrap_prerequisites role on GitHub" } | Validate the platform, install Ubuntu prerequisites, and create or verify the persistent checkout |
+| [`homebrew` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/homebrew){ .role-link aria-label="homebrew role on GitHub" } | Install Homebrew on macOS and Ubuntu |
 | [`common` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/common){ .role-link aria-label="common role on GitHub" } | Install shared command-line tools and platform-specific packages and applications |
-| [`fonts` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/fonts){ .role-link aria-label="fonts role on GitHub" } | Install developer fonts on macOS or the Ubuntu integration environment |
+| [`fonts` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/fonts){ .role-link aria-label="fonts role on GitHub" } | Install developer fonts on macOS and Ubuntu |
 | [`dotfiles` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/dotfiles){ .role-link aria-label="dotfiles role on GitHub" } | Install chezmoi and apply the current checkout |
 | [`fish` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/fish){ .role-link aria-label="fish role on GitHub" } | Install fish, make it the login shell, and synchronize Fisher plugins |
 | [`mise` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/mise){ .role-link aria-label="mise role on GitHub" } | Install the tools declared in the mise configuration |
@@ -290,7 +283,7 @@ review and replace these intentionally personal publication and user settings:
 | [`docker` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/docker){ .role-link aria-label="docker role on GitHub" } | Install Rancher Desktop on macOS |
 | [`tmux` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/tmux){ .role-link aria-label="tmux role on GitHub" } | Install tmux, TPM, and declared plugins |
 | [`system_defaults` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/system_defaults){ .role-link aria-label="system_defaults role on GitHub" } | Apply macOS preferences, Dock items, and keyboard settings |
-| `handoff` | Prepare and validate the persistent mise-managed runtime and pinned collections, then atomically write the completion receipt |
+| [`handoff` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/handoff){ .role-link aria-label="handoff role on GitHub" } | Prepare the persistent runtime used by `mise run reconcile` |
 
 </div>
 
@@ -320,7 +313,7 @@ mise tasks
 | `mise run import` | Import all modified, non-template managed files into `config/`. |
 | `mise run import ~/.config/nvim` | Import one managed file or directory. |
 | `mise run docs` | Serve the documentation at <http://localhost:8000> and rebuild it on changes. |
-| `mise run docs:build` | Run the strict documentation build used by CI. |
+| `mise run docs:build` | Build the documentation with strict validation. |
 
 </div>
 
@@ -333,9 +326,7 @@ mise tasks
 Task execution installs any missing tools declared in `mise.toml`
 automatically. Before each reconciliation, the runtime validator prints the
 persistent checkout commit and every version selected by the shared lock and
-collection requirements. The disposable controller's uv environment is removed
-from commands that install workstation tools, so managed tool interpreters and
-virtual environments remain valid after setup deletes its temporary workspace.
+collection requirements.
 
 ### Import local dotfile changes
 
@@ -349,7 +340,7 @@ git diff -- config
 ```
 
 Omit the path to import every modified managed file. The task uses
-`chezmoi re-add`, which deliberately does not overwrite template source files.
+`chezmoi re-add`, which does not overwrite template source files.
 For a rendered file backed by `config/**/*.tmpl`, reconcile the local change
 with its template explicitly. Always review the resulting Git diff before
 committing.
@@ -364,7 +355,7 @@ mise run docs
 
 Open <http://localhost:8000>. The preview rebuilds when documentation,
 configuration, templates, CSS, or JavaScript change. Before committing a docs
-change, run the same strict build as CI:
+change, run the strict build:
 
 ```bash
 mise run docs:build
@@ -407,40 +398,20 @@ Test the current checkout in Docker:
 mise run test:docker
 ```
 
-The integration fixture at `tests/integration/Dockerfile` starts a Git-less
-current Ubuntu ARM64 stage, builds the locked Ansible controller, lets Ansible
-install the native prerequisites, and verifies that the resulting persistent
-clone is full and uses verified HTTPS. Bats runs directly on the host through
-`mise run test:bats`, not inside the image.
+`mise run test:docker` builds the integration fixture from the current checkout
+and verifies that setup completes on Ubuntu.
 
-The release `Dockerfile` copies the current checkout and executes its
-`scripts/setup.sh` directly:
+Build an image from the current checkout:
 
 ```bash
-docker buildx build --platform linux/arm64 -t dotfiles --progress plain .
+docker build -t dotfiles --progress plain .
 ```
 
-The image runs setup as the non-root `linuxbrew` user. Its smoke test verifies
-the completion receipt, installed tools, persistent checkout, and a second
-mise-managed idempotence pass. The `docker` role is intentionally skipped
-inside the container.
-
-### Pull request validation
-
-Pull requests that change workstation or bootstrap code run the complete macOS
-and Docker workflows. Both provision the pull request merge commit and assert
-the persistent checkout SHA, so they test the proposed result instead of the
-mutable `master` branch. The macOS job starts from a clean Homebrew formula and
-mise-tool state, runs the checked-out setup, validates the repository, and
-requires a second reconciliation with `changed=0`. The Docker job builds the
-integration fixture and release image, then runs startup, durable-tool, and
-idempotence smoke checks. Bats runs directly on both workflow runners through
-`mise run test:bats`; it is not embedded in either image. Docker Hub login and
-publication remain limited to pushes to `master`.
+The image starts fish as the non-root `linuxbrew` user.
 
 ## Validate changes locally
 
-Run the same static checks and Ansible syntax validation used by CI:
+Run the repository's static checks and Ansible syntax validation:
 
 ```bash
 mise install
