@@ -1,0 +1,33 @@
+---
+
+- name: "homebrew | install the official macos package"
+  block:
+    - name: "homebrew | allocate a temporary macos package"
+      ansible.builtin.tempfile:
+        state: file
+        suffix: .pkg
+      register: homebrew_macos_installer
+
+    - name: "homebrew | download the current official macos package"
+      ansible.builtin.get_url:
+        url: "{{ homebrew_macos_installer_url }}"
+        dest: "{{ homebrew_macos_installer.path }}"
+        mode: "0600"
+
+    - name: "homebrew | run the official macos package"
+      become: true
+      ansible.builtin.command:
+        argv:
+          - /usr/sbin/installer
+          - -pkg
+          - "{{ homebrew_macos_installer.path }}"
+          - -target
+          - /
+  always:
+    - name: "homebrew | remove the temporary macos package"
+      ansible.builtin.file:
+        path: "{{ homebrew_macos_installer.path | default('') }}"
+        state: absent
+      when:
+        - homebrew_macos_installer is defined
+        - homebrew_macos_installer.path is defined
