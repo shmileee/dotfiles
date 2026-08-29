@@ -185,7 +185,7 @@ LazyVim provides most editor mappings. This repository adds only a small set:
 | --- | --- | --- |
 | <span class="shortcut-mode shortcut-mode--start">Normal</span> | `o` | Create a blank line below without staying in Insert mode |
 | <span class="shortcut-mode">Normal</span> | `O` | Create a blank line above without staying in Insert mode |
-| <span class="shortcut-mode">Normal</span> | <code>&lt;leader&gt;<wbr>&lt;leader&gt;</code> | Clear search highlights |
+| <span class="shortcut-mode">Normal</span> | `<leader><leader>` | Clear search highlights |
 | <span class="shortcut-mode shortcut-mode--start">Visual</span> | `>` / `<` | Indent while keeping the selection active |
 
 </section>

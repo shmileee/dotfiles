@@ -2609,7 +2609,7 @@ body:has(.mobile-page-toc[open]) .context-help-trigger {
     table:has(th:nth-child(3))
     tbody {
     display: grid;
-    grid-template-columns: 7.5rem minmax(0, 1fr);
+    grid-template-columns: minmax(7.5rem, max-content) minmax(0, 1fr);
   }
 
   .shortcut-reference[data-shortcut-section="neovim"]
