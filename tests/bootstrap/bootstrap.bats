@@ -154,7 +154,7 @@ teardown() {
   run_bootstrap
 
   [ "$status" -eq 1 ]
-  [[ $output == *"/d is only for a fresh workstation"* ]]
+  [[ $output == *"hosted fresh-workstation bootstrap cannot continue"* ]]
   [[ $output == *"./scripts/setup.sh"* ]]
   refute_log_contains "uname"
   refute_log_contains "sudo"

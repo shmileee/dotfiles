@@ -1,6 +1,6 @@
 ---
 title: Home
-description: A reproducible Apple Silicon macOS workstation and Ubuntu ARM64 integration environment built with Ansible and chezmoi.
+description: A reproducible Apple Silicon macOS workstation and Ubuntu integration environment built with Ansible and chezmoi.
 tags:
   - Overview
   - macOS
@@ -15,7 +15,7 @@ hide:
 <section class="docs-hero docs-hero--home" markdown>
   <p class="section-eyebrow">Personal workstation · documented publicly</p>
   <h1>A workstation I can rebuild.<span class="hero-cursor" aria-hidden="true"></span></h1>
-  <p class="hero-copy">This repository rebuilds my Apple Silicon macOS workstation and continuously tests the shared setup on the current Ubuntu ARM64 container base. Ansible, the automation engine, configures the system; chezmoi, the dotfile manager, puts the files in place.</p>
+  <p class="hero-copy">This repository rebuilds my workstation on Apple Silicon macOS and Ubuntu. Ansible, the automation engine, configures the system; chezmoi, the dotfile manager, puts the files in place.</p>
   <div class="hero-actions">
     <a class="primary-link" href="/setup/">Read the setup guide →</a>
     <a class="secondary-link" href="https://github.com/shmileee/dotfiles">Browse the repository ↗</a>
@@ -94,14 +94,14 @@ applies dotfiles with `--force`, and modifies macOS preferences.
     <span>04</span>
     <div>
       <strong>Hand off to reconciliation</strong>
-      <p>The final role prepares and validates the persistent locked runtime and pinned collections before recording completion; later workstation management uses <code>mise run reconcile</code>.</p>
+      <p>The final role prepares the persistent runtime used by <code>mise run reconcile</code> for future updates.</p>
     </div>
   </li>
 </ol>
 
 <aside class="home-validation">
-  <strong>Continuously tested</strong>
-  <p>The setup is tested on Apple Silicon macOS and in the current Ubuntu ARM64 container. The container exercises the shared Linux path without pinning an Ubuntu release allowlist; macOS applications and system preferences are validated on macOS.</p>
+  <strong>Supported platforms</strong>
+  <p>Apple Silicon macOS and Ubuntu.</p>
 </aside>
 
 ## Choose what you need
@@ -129,6 +129,6 @@ applies dotfiles with `--force`, and modifies macOS preferences.
 <dl class="principle-grid">
   <div><dt>Repeatable over clever</dt><dd>Repeated runs should converge on the same state.</dd></div>
   <div><dt>Visible over magical</dt><dd>Package lists, roles, and managed files stay in the repository.</dd></div>
-  <div><dt>Portable where practical</dt><dd>Shared behavior works on macOS and the Ubuntu integration environment; platform-specific changes stay explicit.</dd></div>
+  <div><dt>Portable where practical</dt><dd>Shared behavior works on macOS and Ubuntu; platform-specific changes stay explicit.</dd></div>
   <div><dt>Personal by design</dt><dd>This is a working environment, not a universal starter kit.</dd></div>
 </dl>
