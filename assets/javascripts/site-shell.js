@@ -110,7 +110,7 @@
         const filtersAreOpen =
           filterPanel &&
           getComputedStyle(filterPanel).pointerEvents !== 'none' &&
-          filterPanel.getBoundingClientRect().width > 0;
+          filterPanel.getBoundingClientRect().width > 1;
         if (filterPanel) {
           filterPanel.setAttribute('aria-hidden', String(!filtersAreOpen));
           filterPanel.tabIndex = filtersAreOpen ? 0 : -1;
@@ -121,16 +121,24 @@
         );
       };
       const injectedSearchObserver = new MutationObserver(syncInjectedSearch);
-      if (searchPanel)
+      if (searchPanel) {
         injectedSearchObserver.observe(searchPanel, {
           attributes: true,
           attributeFilter: ['class'],
         });
-      if (filterPanel)
+        searchPanel.addEventListener('transitionend', syncInjectedSearch, {
+          signal,
+        });
+      }
+      if (filterPanel) {
         injectedSearchObserver.observe(filterPanel, {
           attributes: true,
           attributeFilter: ['class'],
         });
+        filterPanel.addEventListener('transitionend', syncInjectedSearch, {
+          signal,
+        });
+      }
       signal.addEventListener(
         'abort',
         () => injectedSearchObserver.disconnect(),

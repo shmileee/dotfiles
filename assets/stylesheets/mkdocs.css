@@ -741,6 +741,15 @@ button.header-icon {
   font-size: 0.75rem;
 }
 
+/* Zensical mounts search in a fixed, direct child of body. Anchor that
+   otherwise shrink-to-fit host without making the closed overlay interactive. */
+body > [role="search"][aria-label="Site search"] {
+  right: 0;
+  left: 0;
+  z-index: 55 !important;
+  pointer-events: none;
+}
+
 .md-nav--secondary .md-nav__item[hidden],
 .mobile-page-toc__nav .md-nav__item[hidden] {
   display: none;
@@ -887,6 +896,11 @@ button.header-icon {
 }
 
 body:has(.context-help[open]) .context-help-trigger {
+  opacity: 0;
+  pointer-events: none;
+}
+
+body:has(.mobile-page-toc[open]) .context-help-trigger {
   opacity: 0;
   pointer-events: none;
 }
@@ -2084,7 +2098,8 @@ body:has(.context-help[open]) .context-help-trigger {
     display: grid;
     margin-top: var(--space-3);
     border-top: 1px solid var(--border-subtle);
-    padding: var(--space-3) 0.8rem var(--space-6);
+    padding: var(--space-3) 0.8rem
+      calc(var(--space-6) + env(safe-area-inset-bottom));
   }
 
   .mobile-nav-destinations a {
@@ -2110,12 +2125,12 @@ body:has(.context-help[open]) .context-help-trigger {
   }
 
   .md-typeset .mobile-page-toc > summary {
-    min-height: 3.75rem;
+    min-height: 3.25rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: var(--space-4);
-    padding: var(--space-2) var(--space-3) var(--space-2) var(--space-4);
+    padding: var(--space-2) var(--space-3);
     color: var(--text-primary);
     cursor: pointer;
     list-style: none;
@@ -2153,9 +2168,9 @@ body:has(.context-help[open]) .context-help-trigger {
   .mobile-page-toc__label small {
     color: var(--text-tertiary);
     font:
-      500 0.6875rem / 1.4 "IBM Plex Mono",
-      ui-monospace,
-      monospace;
+      500 0.75rem / 1.4 "Public Sans",
+      system-ui,
+      sans-serif;
     opacity: 1;
   }
 
@@ -2166,9 +2181,9 @@ body:has(.context-help[open]) .context-help-trigger {
   }
 
   .mobile-page-toc__marker {
-    width: 2rem;
-    height: 2rem;
-    flex: 0 0 2rem;
+    width: 1.75rem;
+    height: 1.75rem;
+    flex: 0 0 1.75rem;
     display: grid;
     place-items: center;
     border: 1px solid var(--border-default);
@@ -2191,29 +2206,38 @@ body:has(.context-help[open]) .context-help-trigger {
   }
 
   .mobile-page-toc__nav {
-    max-height: min(55vh, 28rem);
+    max-height: min(40dvh, 20rem);
     overflow-y: auto;
+    overscroll-behavior: contain;
     border-top: 1px solid var(--border-subtle);
-    padding: var(--space-3) var(--space-4) var(--space-4);
+    padding: var(--space-2);
     scrollbar-color: var(--border-strong) transparent;
   }
 
-  .mobile-page-toc__nav ul {
+  .md-typeset .mobile-page-toc__nav ul {
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
-  .mobile-page-toc__nav ul ul {
+  .md-typeset .mobile-page-toc__nav ul ul {
     margin-left: var(--space-2);
     border-left: 1px solid var(--border-subtle);
-    padding-left: var(--space-4);
+    padding-left: var(--space-2);
+  }
+
+  .md-typeset .mobile-page-toc__nav .md-nav__item {
+    margin: 0;
   }
 
   .md-typeset .mobile-page-toc__nav .md-nav__link {
     min-height: 2.75rem;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
+    margin: 0;
+    padding: var(--space-2) var(--space-3);
+    border-radius: 0.375rem;
     color: var(--text-secondary);
     font:
       400 0.875rem / 1.35 "Public Sans",
@@ -2222,8 +2246,14 @@ body:has(.context-help[open]) .context-help-trigger {
     text-decoration: none;
   }
 
+  .md-typeset .mobile-page-toc__nav ul ul .md-nav__link {
+    color: var(--text-tertiary);
+    font-size: 0.8125rem;
+  }
+
   .md-typeset .mobile-page-toc__nav a:hover,
   .md-typeset .mobile-page-toc__nav .md-nav__link--active {
+    background: var(--accent-surface);
     color: var(--text-primary);
   }
 
@@ -2348,6 +2378,14 @@ body:has(.context-help[open]) .context-help-trigger {
     grid-column: 1;
   }
 
+  .footer-inner {
+    padding-bottom: calc(
+      var(--space-8) +
+      2.75rem +
+      env(safe-area-inset-bottom)
+    );
+  }
+
   .doc-card-grid {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -2357,7 +2395,7 @@ body:has(.context-help[open]) .context-help-trigger {
   }
 
   .context-help {
-    width: calc(100vw - var(--space-6));
+    width: calc(100% - var(--space-6));
     max-height: calc(100dvh - var(--space-6) - env(safe-area-inset-bottom));
   }
 
@@ -2425,38 +2463,96 @@ body:has(.context-help[open]) .context-help-trigger {
     white-space: nowrap;
   }
 
-  .shortcut-reference table:has(th:nth-child(3)) tr {
-    grid-template-columns: minmax(0, 1fr);
+  .shortcut-reference table:not(:has(th:nth-child(3))) tbody tr {
+    grid-template-columns: minmax(8rem, 0.9fr) minmax(0, 1.1fr);
+    align-items: stretch;
   }
 
-  .shortcut-reference table:not(:has(th:nth-child(3))) tr {
-    grid-template-columns: minmax(0, 1fr);
+  .shortcut-reference table:has(th:nth-child(3)) tbody tr {
+    grid-template-columns: max-content minmax(0, 1fr);
+    align-items: stretch;
   }
 
   .shortcut-reference table tbody tr + tr {
-    border-top: 2px solid var(--border-default);
+    border-top: 1px solid var(--border-default);
   }
 
   .md-typeset .shortcut-reference table td {
     padding: 0.75rem var(--space-4);
   }
 
-  .shortcut-reference table td + td,
-  .shortcut-reference table:has(th:nth-child(3)) td + td {
-    border-top: 1px solid var(--border-subtle);
-    border-left: 0;
+  .shortcut-reference table:not(:has(th:nth-child(3))) td + td {
+    border-top: 0;
+    border-left: 1px solid var(--border-subtle);
   }
 
   .shortcut-reference table:not(:has(th:nth-child(3))) td:first-child {
-    min-height: 3.25rem;
+    min-height: 3.75rem;
   }
 
   .shortcut-reference table:has(th:nth-child(3)) td:first-child {
-    padding-block: 0.5rem;
+    align-self: center;
+    margin: var(--space-3) 0 var(--space-3) var(--space-3);
+    border: 1px solid var(--border-default);
+    border-radius: 999px;
+    padding: var(--space-1) var(--space-2);
+    background: var(--accent-surface);
   }
 
   .shortcut-reference table:has(th:nth-child(3)) td:nth-child(2) {
     min-height: 3.25rem;
+    border-top: 0;
+    border-left: 0;
+  }
+
+  .shortcut-reference table:has(th:nth-child(3)) td:last-child {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--border-subtle);
+    border-left: 0;
+  }
+
+  .shortcut-reference table .keys {
+    white-space: normal;
+  }
+
+  .shortcut-reference table .shortcut-then {
+    margin-inline: var(--space-1);
+  }
+
+  .shortcut-reference[data-shortcut-section="tmux"]
+    table:not(:has(th:nth-child(3)))
+    tbody
+    tr {
+    grid-template-columns: minmax(0, 1fr);
+    padding: var(--space-3);
+  }
+
+  .md-typeset
+    .shortcut-reference[data-shortcut-section="tmux"]
+    table:not([class])
+    td:not([align]) {
+    min-height: 0;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    text-align: left;
+  }
+
+  .md-typeset
+    .shortcut-reference[data-shortcut-section="tmux"]
+    table:not([class])
+    td:last-child:not([align]) {
+    margin-top: var(--space-2);
+  }
+
+  .md-typeset .shortcut-reference[data-shortcut-section="tmux"] table .keys kbd,
+  .md-typeset
+    .shortcut-reference[data-shortcut-section="tmux"]
+    table
+    td:first-child
+    code {
+    min-width: 1.625rem;
+    padding-inline: 0.375rem;
   }
 
   .setup-reference .md-typeset__scrollwrap,
@@ -2553,11 +2649,19 @@ body:has(.context-help[open]) .context-help-trigger {
   }
 
   .docs-hero--home {
+    --home-hero-padding: var(--space-5);
+
     margin-bottom: var(--space-12);
   }
 
   .md-typeset .docs-hero h1 {
     margin-bottom: var(--space-8);
+    font-size: clamp(2.25rem, 10vw, 2.5rem);
+    line-height: 1.06;
+  }
+
+  .section-eyebrow {
+    letter-spacing: 0.12em;
   }
 
   .hero-actions {
@@ -2571,7 +2675,7 @@ body:has(.context-help[open]) .context-help-trigger {
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 360px) {
   .header-actions {
     gap: var(--space-1);
   }
