@@ -6,5 +6,6 @@
     chdir: "{{ ansible_facts['user_dir'] }}"
   environment:
     GITHUB_TOKEN: "{{ lookup('ansible.builtin.env', 'GITHUB_TOKEN') }}"
+    MISE_HTTP_TIMEOUT: 120s
   register: mise_install
   changed_when: "'all tools are installed' not in (mise_install.stdout + mise_install.stderr)"
