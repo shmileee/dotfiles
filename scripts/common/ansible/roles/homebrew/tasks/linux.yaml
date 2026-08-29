@@ -22,6 +22,7 @@
         url: "{{ homebrew_linux_installer_url }}"
         dest: "{{ homebrew_linux_installer.path }}"
         mode: "0700"
+        force: true
 
     - name: "homebrew | run the official linux installer"
       ansible.builtin.command:
