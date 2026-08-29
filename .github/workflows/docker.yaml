@@ -45,7 +45,7 @@ concurrency:
 jobs:
   bootstrap-behavior:
     name: Test bootstrap behavior on the runner
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.UBUNTU_ARM_RUNNER }}
     timeout-minutes: 15
 
     steps:
@@ -70,7 +70,7 @@ jobs:
 
   docker-integration:
     name: Test Ansible bootstrap integration in Docker
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.UBUNTU_ARM_RUNNER }}
     timeout-minutes: 20
 
     steps:
@@ -79,24 +79,12 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Set up ARM emulation
-        uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3.7.0
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@6524bf65af31da8d45b59e8c27de4bd072b392f5 # v3.8.0
-
       - name: Build the integration image
-        run: |
-          docker buildx build \
-            --file tests/integration/Dockerfile \
-            --load \
-            --platform linux/arm64 \
-            --tag dotfiles-bootstrap-tests \
-            .
+        run: docker build --file tests/integration/Dockerfile --tag dotfiles-bootstrap-tests .
 
   build-test-publish:
     name: Build, test, and publish image
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.UBUNTU_ARM_RUNNER }}
     timeout-minutes: 45
     env:
       DOTFILES_PERSISTENT_EXPECTED_COMMIT: ${{ github.sha }}
@@ -108,9 +96,6 @@ jobs:
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
-
-      - name: Set up ARM emulation
-        uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3.7.0
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@6524bf65af31da8d45b59e8c27de4bd072b392f5 # v3.8.0

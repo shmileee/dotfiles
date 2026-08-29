@@ -18,7 +18,7 @@ hide:
   <p class="hero-copy">This repository rebuilds my Apple Silicon macOS workstation and continuously tests the shared setup on the current Ubuntu ARM64 container base. Ansible, the automation engine, configures the system; chezmoi, the dotfile manager, puts the files in place.</p>
   <div class="hero-actions">
     <a class="primary-link" href="/setup/">Read the setup guide →</a>
-    <a class="secondary-link" href="/setup/#reuse-this-repository-as-your-own">Adapt a fork →</a>
+    <a class="secondary-link" href="https://github.com/shmileee/dotfiles">Browse the repository ↗</a>
   </div>
   <dl class="hero-signals">
     <div><dt>Targets</dt><dd>macOS + Ubuntu</dd></div>
@@ -73,7 +73,7 @@ applies dotfiles with `--force`, and modifies macOS preferences.
     <span>01</span>
     <div>
       <strong>Bootstrap</strong>
-      <p>The POSIX <code>scripts/setup.sh</code> validates the platform and starts a disposable, repository-locked Ansible controller.</p>
+      <p>The POSIX <a class="repo-path" href="https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh"><code>scripts/setup.sh</code></a> validates the platform and starts a disposable, repository-locked Ansible controller.</p>
     </div>
   </li>
   <li>
