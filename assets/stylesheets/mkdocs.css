@@ -1557,6 +1557,10 @@ body:has(.mobile-page-toc[open]) .context-help-trigger {
   font-size: 0.75rem;
 }
 
+.shortcut-prefix-summary {
+  display: none;
+}
+
 .md-typeset .shortcut-reference table .keys kbd {
   min-width: 1.75rem;
   border-radius: 0.3rem;
@@ -2521,28 +2525,166 @@ body:has(.mobile-page-toc[open]) .context-help-trigger {
 
   .shortcut-reference[data-shortcut-section="tmux"]
     table:not(:has(th:nth-child(3)))
+    tbody {
+    display: grid;
+    grid-template-columns: minmax(5.5rem, max-content) minmax(0, 1fr);
+  }
+
+  .shortcut-reference[data-shortcut-section="tmux"]
+    table:not(:has(th:nth-child(3)))
     tbody
     tr {
-    grid-template-columns: minmax(0, 1fr);
-    padding: var(--space-3);
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    padding: 0;
   }
 
   .md-typeset
     .shortcut-reference[data-shortcut-section="tmux"]
     table:not([class])
     td:not([align]) {
-    min-height: 0;
+    min-height: 3.5rem;
     border: 0;
-    padding: 0;
-    background: transparent;
+    padding: 0.625rem var(--space-3);
     text-align: left;
   }
 
   .md-typeset
     .shortcut-reference[data-shortcut-section="tmux"]
     table:not([class])
+    td:first-child:not([align]) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--code-toolbar);
+  }
+
+  .md-typeset
+    .shortcut-reference[data-shortcut-section="tmux"]
+    table:not([class])
     td:last-child:not([align]) {
-    margin-top: var(--space-2);
+    margin-top: 0;
+    border-left: 1px solid var(--border-subtle);
+  }
+
+  .shortcut-reference[data-shortcut-section="tmux"]
+    table
+    td:first-child
+    .keys:has(+ .shortcut-then),
+  .shortcut-reference[data-shortcut-section="tmux"]
+    table
+    td:first-child
+    .shortcut-then {
+    display: none;
+  }
+
+  .shortcut-prefix-summary {
+    display: flex;
+    min-height: 3rem;
+    align-items: center;
+    gap: var(--space-2);
+    margin: var(--space-5) 0 var(--space-6);
+    border-left: 0.1875rem solid var(--accent-primary);
+    border-radius: 0.5rem;
+    padding: var(--space-2) var(--space-3);
+    background: var(--accent-surface);
+  }
+
+  .shortcut-prefix-summary__label {
+    color: var(--accent-soft);
+    font:
+      600 0.75rem / 1.4 "IBM Plex Mono",
+      ui-monospace,
+      monospace;
+    text-transform: uppercase;
+  }
+
+  .shortcut-prefix-summary__release {
+    margin-left: auto;
+    color: var(--text-tertiary);
+    font-size: 0.75rem;
+  }
+
+  .shortcut-reference[data-shortcut-section="neovim"]
+    table:has(th:nth-child(3))
+    tbody {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+  }
+
+  .shortcut-reference[data-shortcut-section="neovim"]
+    table:has(th:nth-child(3))
+    tbody
+    tr {
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+  }
+
+  .shortcut-reference[data-shortcut-section="neovim"]
+    table:has(th:nth-child(3))
+    td:first-child {
+    display: none;
+  }
+
+  .shortcut-reference[data-shortcut-section="neovim"]
+    table:has(th:nth-child(3))
+    tr:has(.shortcut-mode--start)
+    td:first-child,
+  .shortcut-reference[data-shortcut-section="neovim"]
+    table:has(th:nth-child(3))
+    tr.is-shortcut-mode-start
+    td:first-child {
+    display: flex;
+    grid-column: 1 / -1;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
+    border: 0;
+    border-bottom: 1px solid var(--border-subtle);
+    border-radius: 0;
+    padding: 0.625rem var(--space-3);
+    background: transparent;
+    color: var(--accent-soft);
+  }
+
+  .shortcut-reference[data-shortcut-section="neovim"]
+    table:has(th:nth-child(3))
+    tr.is-shortcut-mode-start
+    td:first-child::after {
+    content: attr(data-shortcut-mode-count);
+    color: var(--text-tertiary);
+    font:
+      400 0.75rem / 1.4 "IBM Plex Mono",
+      ui-monospace,
+      monospace;
+    letter-spacing: normal;
+    text-transform: none;
+  }
+
+  .shortcut-reference[data-shortcut-section="neovim"]
+    tr:has(.shortcut-mode--start)
+    .shortcut-mode::after,
+  .shortcut-reference[data-shortcut-section="neovim"]
+    tr.is-shortcut-mode-start
+    .shortcut-mode::after {
+    content: " mode";
+  }
+
+  .shortcut-reference[data-shortcut-section="neovim"]
+    table:has(th:nth-child(3))
+    td:nth-child(2) {
+    min-height: 3.5rem;
+    border: 0;
+    padding: 0.625rem var(--space-3);
+  }
+
+  .shortcut-reference[data-shortcut-section="neovim"]
+    table:has(th:nth-child(3))
+    td:last-child {
+    grid-column: auto;
+    border-top: 0;
+    border-left: 1px solid var(--border-subtle);
+    padding: 0.625rem var(--space-3);
   }
 
   .md-typeset .shortcut-reference[data-shortcut-section="tmux"] table .keys kbd,

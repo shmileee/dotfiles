@@ -540,6 +540,32 @@
           if (!row.hidden) visibleCount += 1;
         });
 
+        rows.forEach((row) => {
+          row.classList.remove('is-shortcut-mode-start');
+          row.cells[0]?.removeAttribute('data-shortcut-mode-count');
+        });
+
+        if (section.dataset.shortcutSection === 'neovim') {
+          const visibleModes = new Map();
+          rows
+            .filter((row) => !row.hidden)
+            .forEach((row) => {
+              const mode = row.querySelector('.shortcut-mode')?.textContent;
+              if (!mode) return;
+              const modeRows = visibleModes.get(mode) ?? [];
+              modeRows.push(row);
+              visibleModes.set(mode, modeRows);
+            });
+
+          visibleModes.forEach((modeRows) => {
+            const modeCell = modeRows[0].cells[0];
+            modeRows[0].classList.add('is-shortcut-mode-start');
+            modeCell.dataset.shortcutModeCount = `${modeRows.length} shortcut${
+              modeRows.length === 1 ? '' : 's'
+            }`;
+          });
+        }
+
         section
           .querySelectorAll('.md-typeset__scrollwrap')
           .forEach((tableWrap) => {
