@@ -1,7 +1,6 @@
 #!/usr/bin/env bats
 
-# Bats provides status/output/lines, the helper initializes test paths, and
-# single-quoted mock bodies are intentionally expanded by the generated shell.
+# Bats provides status/output/lines, and the helper initializes test paths.
 # shellcheck disable=SC2016,SC2154
 
 load test_helper.bash
@@ -14,23 +13,10 @@ teardown() {
   teardown_test_environment
 }
 
-function setup_displays_help_under_dash { #@test
-  run dash "${project_root}/scripts/setup.sh" --help
+install_common_bootstrap_mocks() {
+  local operating_system=$1
 
-  [ "${status}" -eq 0 ]
-  [[ ${output} == *'Usage: setup.sh'* ]]
-  [[ ${output} == *'DOTFILES_REF'* ]]
-}
-
-function setup_rejects_multiple_actions { #@test
-  run dash "${project_root}/scripts/setup.sh" --brew --ansible
-
-  [ "${status}" -eq 1 ]
-  [[ ${output} == *'specify exactly one option'* ]]
-}
-
-function linux_bootstrap_uses_native_prerequisites_and_isolated_ansible { #@test
-  make_mock uname 'printf "%s\n" Linux'
+  make_mock uname "printf '%s\\n' ${operating_system}"
   make_mock id '
     case ${1:-} in
       -u) printf "%s\n" 1000 ;;
@@ -39,108 +25,185 @@ function linux_bootstrap_uses_native_prerequisites_and_isolated_ansible { #@test
     esac
   '
   make_mock sudo '
-    if [ "${1:-}" = -n ]; then
-      exit 0
+    [ "${1:-}" = -n ] && [ "${2:-}" = true ]
+  '
+  make_mock apt-get 'exit 0'
+  make_mock curl '
+    output=""
+    while [ "$#" -gt 0 ]; do
+      case $1 in
+        -o) output=$2; shift 2 ;;
+        *) shift ;;
+      esac
+    done
+    cat > "$output" <<'"'"'INSTALLER'"'"'
+#!/bin/sh
+cat > "${UV_UNMANAGED_INSTALL}/uv" <<'"'"'UV'"'"'
+#!/bin/sh
+if [ "${1:-}" = --version ]; then
+  printf "uv %s\n" "${TEST_UV_VERSION}"
+  exit 0
+fi
+printf "uv %s\n" "$*" >> "${MOCK_LOG}"
+UV
+chmod +x "${UV_UNMANAGED_INSTALL}/uv"
+INSTALLER
+  '
+}
+
+function setup_displays_help_under_dash { #@test
+  run dash "${project_root}/scripts/setup.sh" --help
+
+  [ "${status}" -eq 0 ]
+  [[ ${output} == *'Usage: setup.sh'* ]]
+  [[ ${output} == *'DOTFILES_CHECKOUT'* ]]
+}
+
+function setup_rejects_public_stage_options { #@test
+  run dash "${project_root}/scripts/setup.sh" --all
+
+  [ "${status}" -eq 1 ]
+  [[ ${output} == *'always configures the workstation'* ]]
+}
+
+function linux_and_macos_use_the_same_uv_ansible_path { #@test
+  local operating_system
+
+  for operating_system in Linux Darwin; do
+    : > "${mock_log}"
+    rm -rf -- "${test_root:?}/home"
+    mkdir -p "${test_root}/home"
+    install_common_bootstrap_mocks "${operating_system}"
+
+    run env HOME="${test_root}/home" \
+      TEST_UV_VERSION='99.88.77' \
+      UV_BOOTSTRAP_VERSION='99.88.77' \
+      dash "${project_root}/scripts/setup.sh"
+
+    [ "${status}" -eq 0 ]
+    assert_log_contains 'uv sync --locked --project'
+    assert_log_contains 'uv run --locked --project'
+    assert_log_contains 'ansible-galaxy collection install'
+    assert_log_contains 'ansible-playbook --inventory 127.0.0.1,'
+    refute_log_contains 'brew install ansible'
+    refute_log_contains 'python3 -m venv'
+  done
+}
+
+function matching_bootstrap_uv_is_reused { #@test
+  make_mock uname 'printf "%s\n" Darwin'
+  make_mock id 'printf "%s\n" 0'
+  make_mock curl 'exit 99'
+  mkdir -p "${test_root}/home/.local/share/dotfiles/bootstrap/bin"
+  make_mock uv-runtime '
+    if [ "${1:-}" = --version ]; then
+      printf "%s\n" "uv 99.88.77"
+    else
+      printf "uv %s\n" "$*" >> "${MOCK_LOG}"
     fi
-    printf "sudo %s\n" "$*" >>"${MOCK_LOG}"
-    "$@"
   '
-  make_mock apt-get 'printf "apt-get %s\n" "$*" >>"${MOCK_LOG}"'
-  make_mock brew '
-    printf "brew %s\n" "$*" >>"${MOCK_LOG}"
-  '
-  make_mock ansible-galaxy \
-    'printf "ansible-galaxy %s\n" "$*" >>"${MOCK_LOG}"'
-  make_mock ansible-playbook \
-    '
-      if [ "${1:-}" = --version ]; then
-        printf "ansible [core %s]\n" "${TEST_ANSIBLE_VERSION}"
-      else
-        printf "ansible-playbook %s\n" "$*" >>"${MOCK_LOG}"
-      fi
-    '
-  make_mock venv-python \
-    'printf "python %s\n" "$*" >>"${MOCK_LOG}"'
-  make_mock python3 '
-    [ "$1" = -m ] && [ "$2" = venv ]
-    environment=$3
-    mkdir -p "${environment}/bin"
-    ln -s "${mock_bin}/venv-python" "${environment}/bin/python"
-    ln -s "${mock_bin}/ansible-galaxy" "${environment}/bin/ansible-galaxy"
-    ln -s "${mock_bin}/ansible-playbook" "${environment}/bin/ansible-playbook"
-    printf "python3 %s\n" "$*" >>"${MOCK_LOG}"
-  '
-  mkdir -p "${test_root}/home"
-
-  run env CI=1 HOME="${test_root}/home" \
-    ANSIBLE_CORE_VERSION="${TEST_ANSIBLE_VERSION}" \
-    dash "${project_root}/scripts/setup.sh" --all
-
-  [ "${status}" -eq 0 ]
-  assert_log_contains 'Acquire::Retries=3 -o DPkg::Lock::Timeout=60 update'
-  assert_log_contains '--yes --no-install-recommends install'
-  refute_log_contains 'software-properties-common'
-  refute_log_contains 'ppa:ansible/ansible'
-  assert_log_contains 'python3 -m venv'
-  assert_log_contains "ansible-core==${TEST_ANSIBLE_VERSION}"
-  refute_log_contains 'brew install ansible'
-  assert_log_contains 'ansible-galaxy collection install'
-  assert_log_contains 'ansible-playbook --inventory 127.0.0.1,'
-}
-
-function matching_linux_ansible_environment_is_reused { #@test
-  make_mock uname 'printf "%s\n" Linux'
-  make_mock current-ansible '
-    case ${1:-} in
-      --version) printf "ansible [core %s]\n" "${TEST_ANSIBLE_VERSION}" ;;
-      *) exit 64 ;;
-    esac
-  '
-  make_mock python3 'exit 99'
-  environment="${test_root}/home/.local/share/dotfiles/ansible-core/bin"
-  mkdir -p "${environment}"
-  ln -s "${mock_bin}/current-ansible" "${environment}/ansible-playbook"
+  cp "${mock_bin}/uv-runtime" \
+    "${test_root}/home/.local/share/dotfiles/bootstrap/bin/uv"
 
   run env HOME="${test_root}/home" \
-    ANSIBLE_CORE_VERSION="${TEST_ANSIBLE_VERSION}" \
-    dash "${project_root}/scripts/common/install_ansible.sh"
+    UV_BOOTSTRAP_VERSION='99.88.77' \
+    dash "${project_root}/scripts/setup.sh"
 
   [ "${status}" -eq 0 ]
-  [[ ${output} == *"Core ${TEST_ANSIBLE_VERSION} already installed."* ]]
+  refute_log_contains 'curl'
+  assert_log_contains 'uv sync --locked --project'
 }
 
-function ansible_version_match_is_exact { #@test
+function remote_bootstrap_creates_a_durable_checkout { #@test
+  cp "${project_root}/scripts/setup.sh" "${test_root}/setup.sh"
+  mkdir -p "${test_root}/caller/scripts/common"
+  printf '#!/bin/sh\nexit 97\n' \
+    > "${test_root}/caller/scripts/common/ansible.sh"
+  chmod +x "${test_root}/caller/scripts/common/ansible.sh"
   make_mock uname 'printf "%s\n" Linux'
-  make_mock current-ansible '
-    case ${1:-} in
-      --version) printf "ansible [core %s0]\n" "${TEST_ANSIBLE_VERSION}" ;;
-      *) exit 64 ;;
+  make_mock id 'printf "%s\n" 0'
+  make_mock apt-get 'exit 0'
+  make_mock curl '
+    output=""
+    url=""
+    while [ "$#" -gt 0 ]; do
+      case $1 in
+        -o) output=$2; shift 2 ;;
+        http*) url=$1; shift ;;
+        *) shift ;;
+      esac
+    done
+    printf "curl %s\n" "$url" >> "${MOCK_LOG}"
+    case $url in
+      *astral.sh*)
+        cat > "$output" <<'"'"'INSTALLER'"'"'
+#!/bin/sh
+cat > "${UV_UNMANAGED_INSTALL}/uv" <<'"'"'UV'"'"'
+#!/bin/sh
+[ "${1:-}" != --version ] || { printf "uv 99.88.77\n"; exit; }
+printf "uv %s\n" "$*" >> "${MOCK_LOG}"
+UV
+chmod +x "${UV_UNMANAGED_INSTALL}/uv"
+INSTALLER
+        ;;
+      *) printf "%s\n" archive > "$output" ;;
     esac
   '
-  make_mock installed-ansible '
-    case ${1:-} in
-      --version) printf "ansible [core %s]\n" "${TEST_ANSIBLE_VERSION}" ;;
-      *) exit 64 ;;
-    esac
+  make_mock tar '
+    while [ "$#" -gt 0 ]; do
+      case $1 in
+        -C) destination=$2; shift 2 ;;
+        *) shift ;;
+      esac
+    done
+    mkdir -p "${destination}/scripts/common"
+    cat > "${destination}/scripts/common/ansible.sh" <<'"'"'ANSIBLE'"'"'
+#!/bin/sh
+printf "ansible %s\n" "$*" >> "${MOCK_LOG}"
+ANSIBLE
+    chmod +x "${destination}/scripts/common/ansible.sh"
   '
-  make_mock venv-python 'exit 0'
-  make_mock python3 '
-    environment=$3
-    printf "python3 %s\n" "$*" >>"${MOCK_LOG}"
-    mkdir -p "${environment}/bin"
-    ln -sf "${mock_bin}/venv-python" "${environment}/bin/python"
-    ln -sf "${mock_bin}/installed-ansible" "${environment}/bin/ansible-playbook"
+  make_mock git '
+    directory=""
+    if [ "${1:-}" = -C ]; then
+      directory=$2
+      shift 2
+    fi
+    printf "git %s\n" "$*" >> "${MOCK_LOG}"
+    [ "${1:-}" != init ] || mkdir -p "${directory}/.git"
   '
-  environment="${test_root}/home/.local/share/dotfiles/ansible-core/bin"
-  mkdir -p "${environment}"
-  ln -s "${mock_bin}/current-ansible" "${environment}/ansible-playbook"
 
+  checkout="${test_root}/home/dotfiles"
   run env HOME="${test_root}/home" \
-    ANSIBLE_CORE_VERSION="${TEST_ANSIBLE_VERSION}" \
-    dash "${project_root}/scripts/common/install_ansible.sh"
+    CALLER="${test_root}/caller" \
+    DOTFILES_CHECKOUT="${checkout}" \
+    DOTFILES_REF='test-ref' \
+    DOTFILES_REPOSITORY_URL='https://example.test/dotfiles' \
+    SCRIPT="${test_root}/setup.sh" \
+    UV_BOOTSTRAP_VERSION='99.88.77' \
+    dash -c 'cd "$CALLER" && dash < "$SCRIPT"'
 
   [ "${status}" -eq 0 ]
-  assert_log_contains 'python3 -m venv'
+  [ -d "${checkout}/.git" ]
+  assert_log_contains \
+    'curl https://example.test/dotfiles/archive/test-ref.tar.gz'
+  assert_log_contains 'ansible --all'
+  assert_log_contains \
+    'git fetch --quiet --depth 1 origin +refs/heads/test-ref:refs/remotes/origin/test-ref'
+}
+
+function standalone_bootstrap_propagates_download_failure { #@test
+  cp "${project_root}/scripts/setup.sh" "${test_root}/setup.sh"
+  make_mock uname 'printf "%s\n" Linux'
+  make_mock id 'printf "%s\n" 0'
+  make_mock apt-get 'exit 0'
+  make_mock curl 'exit 22'
+
+  run env HOME="${test_root}/home" \
+    DOTFILES_CHECKOUT="${test_root}/home/dotfiles" \
+    dash "${test_root}/setup.sh"
+
+  [ "${status}" -eq 22 ]
 }
 
 function linux_playbook_requests_password_even_when_fish_is_login_shell { #@test
@@ -153,17 +216,18 @@ function linux_playbook_requests_password_even_when_fish_is_login_shell { #@test
     esac
   '
   make_mock sudo 'exit 1'
-  make_mock ansible-playbook \
-    'printf "ansible-playbook %s\n" "$*" >>"${MOCK_LOG}"'
+  make_mock uv 'printf "uv %s\n" "$*" >> "${MOCK_LOG}"'
 
-  run env CI=1 dash "${project_root}/scripts/common/ansible.sh" --run
+  run env CI=1 HOME="${test_root}/home" \
+    dash "${project_root}/scripts/common/ansible.sh" --run
 
   [ "${status}" -eq 0 ]
+  assert_log_contains 'ansible-playbook --inventory 127.0.0.1,'
   assert_log_contains '--ask-become-pass'
 }
 
 function installed_homebrew_only_disables_analytics { #@test
-  make_mock brew 'printf "brew %s\n" "$*" >>"${MOCK_LOG}"'
+  make_mock brew 'printf "brew %s\n" "$*" >> "${MOCK_LOG}"'
   make_mock curl 'exit 99'
   make_mock bash 'exit 98'
 
@@ -172,16 +236,6 @@ function installed_homebrew_only_disables_analytics { #@test
   [ "${status}" -eq 0 ]
   [[ ${output} == *'Already installed.'* ]]
   assert_log_contains 'brew analytics off'
-}
-
-function standalone_bootstrap_propagates_download_failure { #@test
-  cp "${project_root}/scripts/setup.sh" "${test_root}/setup.sh"
-  make_mock uname 'printf "%s\n" Linux'
-  make_mock curl 'exit 22'
-
-  run env DOTFILES_REF=test-ref dash "${test_root}/setup.sh" --all
-
-  [ "${status}" -eq 22 ]
 }
 
 function profile_reports_and_preserves_command_status { #@test
@@ -193,7 +247,7 @@ function profile_reports_and_preserves_command_status { #@test
 }
 
 function docker_smoke_uses_the_standalone_posix_payload { #@test
-  make_mock docker 'printf "docker %s\n" "$*" >>"${MOCK_LOG}"'
+  make_mock docker 'printf "docker %s\n" "$*" >> "${MOCK_LOG}"'
 
   run dash "${project_root}/scripts/docker/smoke.sh" dotfiles:test
 

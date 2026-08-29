@@ -3,8 +3,14 @@
 set -eu
 
 script_dir=$(CDPATH='' cd -P "$(dirname "$0")" && pwd)
+project_dir="${script_dir}/ansible"
+data_home=${XDG_DATA_HOME:-${HOME}/.local/share}
+environment="${data_home}/dotfiles/ansible-runtime"
 action=''
 check_mode=0
+
+PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/local/sbin:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:${PATH}"
+export PATH
 
 usage() {
   cat << EOF
@@ -20,6 +26,29 @@ EOF
 die() {
   printf '%s: %s\n' "$(basename "$0")" "$*" >&2
   exit 1
+}
+
+find_uv() {
+  bootstrap_uv="${data_home}/dotfiles/bootstrap/bin/uv"
+  if [ -x "$bootstrap_uv" ]; then
+    printf '%s\n' "$bootstrap_uv"
+    return 0
+  fi
+
+  command -v uv > /dev/null 2>&1 \
+    || die 'uv is required; run scripts/setup.sh first'
+  command -v uv
+}
+
+uv_run() {
+  UV_PROJECT_ENVIRONMENT="$environment" \
+    "$uv" run --locked --project "$project_dir" "$@"
+}
+
+prepare_environment() {
+  printf '%s\n' '[ansible] Reconciling the locked runtime...'
+  UV_PROJECT_ENVIRONMENT="$environment" \
+    "$uv" sync --locked --project "$project_dir"
 }
 
 login_shell_is_fish() {
@@ -53,10 +82,10 @@ needs_become_password() {
 
 install_collections() {
   collections_dir="${HOME}/.ansible/collections"
+  export ANSIBLE_COLLECTIONS_PATH="$collections_dir"
 
   printf '%s\n' '[ansible] Reconciling collections...'
-  ANSIBLE_COLLECTIONS_PATH="$collections_dir" \
-    ansible-galaxy collection install \
+  uv_run ansible-galaxy collection install \
     --collections-path "$collections_dir" \
     --requirements-file "${script_dir}/ansible/requirements.yml"
 }
@@ -66,7 +95,7 @@ run_playbook() {
   playbook_user=$(id -un)
 
   set -- \
-    ansible-playbook \
+    uv_run ansible-playbook \
     --inventory '127.0.0.1,' \
     --extra-vars "ansible_user=${playbook_user}" \
     "${script_dir}/ansible/main.yaml"
@@ -108,6 +137,14 @@ while [ "$#" -gt 0 ]; do
   esac
   shift
 done
+
+[ -n "$action" ] || {
+  usage >&2
+  exit 2
+}
+
+uv=$(find_uv)
+prepare_environment
 
 case $action in
   install)

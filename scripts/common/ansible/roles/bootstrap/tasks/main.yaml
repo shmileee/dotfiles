@@ -1,0 +1,22 @@
+---
+
+- name: Install Debian bootstrap requirements
+  become: true
+  ansible.builtin.apt:
+    name: "{{ bootstrap_debian_packages }}"
+    state: present
+    install_recommends: false
+    update_cache: true
+    cache_valid_time: 3600
+    lock_timeout: 60
+    update_cache_retries: 3
+  when: ansible_facts["os_family"] == "Debian"
+
+- name: Install Homebrew
+  ansible.builtin.command:
+    argv:
+      - "{{ playbook_dir }}/../install_brew.sh"
+  environment:
+    NONINTERACTIVE: "1"
+  register: homebrew_install
+  changed_when: "'[homebrew] Installation complete.' in homebrew_install.stdout"

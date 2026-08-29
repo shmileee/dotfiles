@@ -68,22 +68,16 @@ and the files under
 
 ### Platform requirements
 
-=== "macOS"
+Both platforms require the tools used by the one-line command itself:
 
-    Install available system updates and the Xcode Command Line Tools on a
-    fresh machine:
+*   a POSIX shell;
+*   `curl` with working HTTPS certificates;
+*   `tar`; and
+*   an administrator account with root or `sudo` access.
 
-    ```bash
-    sudo softwareupdate -i -a
-    xcode-select --install
-    ```
-
-=== "Ubuntu"
-
-    Use an account with `sudo` access. The bootstrap installs the apt
-    prerequisites and Homebrew, then creates a pinned, isolated Ansible Core
-    environment under the user's data directory. It does not add a PPA or
-    install Ansible into the system Python environment.
+Nothing else must be installed manually. On macOS, the Homebrew installer
+installs the Xcode Command Line Tools when they are missing. On Debian, Ansible
+installs the native compiler and Homebrew prerequisites with apt.
 
 Apple Silicon macOS is the supported workstation target. Ubuntu 24.04 ARM64 is
 the continuously tested container and integration target. The setup may work
@@ -110,7 +104,7 @@ less scripts/common/ansible/main.yaml
 When you are comfortable with the configuration, run the complete setup:
 
 ```bash
-./scripts/setup.sh --all
+./scripts/setup.sh
 ```
 
 The script uses the current checkout, so local changes to package lists,
@@ -119,19 +113,19 @@ Ansible roles, or managed dotfiles are included.
 ## Fast path: bootstrap a new machine
 
 ```bash
-curl -fsSL oponomarov.com/d | sh -s -- --all
+curl -fsSL oponomarov.com/d | sh
 ```
 
 The short URL redirects to
 [`scripts/setup.sh`](https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh)
-on the `master` branch. The
-script downloads that branch into a unique temporary directory, runs the full
-setup, and removes the temporary checkout when it exits.
+on the `master` branch. The script downloads that branch into
+`~/.local/share/dotfiles/repository`, configures the workstation from it, and
+turns it into a durable Git checkout after Git becomes available.
 
 To bootstrap a reviewed tag or commit instead of `master`, set `DOTFILES_REF`:
 
 ```bash
-curl -fsSL oponomarov.com/d | DOTFILES_REF=v1.2.3 sh -s -- --all
+curl -fsSL oponomarov.com/d | DOTFILES_REF=v1.2.3 sh
 ```
 
 ??? "Download the script before running it"
@@ -143,60 +137,45 @@ curl -fsSL oponomarov.com/d | DOTFILES_REF=v1.2.3 sh -s -- --all
     curl -fsSL https://raw.githubusercontent.com/shmileee/dotfiles/master/scripts/setup.sh > setup.sh
     less setup.sh
     chmod +x setup.sh
-    ./setup.sh --all
+    ./setup.sh
     ```
 
-## What `--all` does
+## What setup does
 
 <ol class="install-flow">
   <li>
     <span>01</span>
     <div>
       <strong>Validate the platform</strong>
-      <p>Continue only on macOS or Linux, then locate the current checkout or download one.</p>
+      <p>Require macOS or Debian, the tools already implied by the one-liner, and administrator access.</p>
     </div>
   </li>
   <li>
     <span>02</span>
     <div>
-      <strong>Prepare Ubuntu</strong>
-      <p>On the tested Linux target, install only the native packages required to bootstrap Homebrew.</p>
+      <strong>Prepare the automation runtime</strong>
+      <p>Download a pinned standalone uv and use the repository lockfile to install the same Python and Ansible versions on both platforms.</p>
     </div>
   </li>
   <li>
     <span>03</span>
     <div>
-      <strong>Prepare Homebrew</strong>
-      <p>Install Homebrew if necessary and disable analytics. Install Ansible through Homebrew on macOS or a pinned isolated Python environment on Linux.</p>
+      <strong>Run the bootstrap role</strong>
+      <p>Let Ansible install Debian's minimal native packages or macOS Command Line Tools, then install Homebrew through the same role.</p>
     </div>
   </li>
   <li>
     <span>04</span>
     <div>
-      <strong>Run Ansible</strong>
-      <p>Install the required collections, prompt for a sudo password if needed, and run the local playbook.</p>
+      <strong>Converge the workstation</strong>
+      <p>Apply every workstation role and preserve the downloaded source as a real Git checkout for future updates.</p>
     </div>
   </li>
 </ol>
 
-## Run one stage
-
-Stage flags must be run from a repository checkout.
-
-<div class="setup-reference" markdown>
-
-| Command | Purpose |
-| --- | --- |
-| `./scripts/setup.sh --deps` | Install native bootstrap prerequisites on Linux; tested on Ubuntu 24.04 ARM64. |
-| `./scripts/setup.sh --brew` | Install Homebrew if it is missing. |
-| `./scripts/setup.sh --ansible` | Ensure Homebrew and Ansible are installed, install collections, and run every role. |
-| `./scripts/setup.sh --all` | Run the complete platform-specific sequence. |
-| `./scripts/setup.sh` | Same as `--all`. |
-
-</div>
-
-If the prerequisites are already installed, use Ansible to preview supported
-changes:
+There are no public stage flags. Partial bootstrap states were difficult to
+reason about and allowed the two platforms to follow different paths. For
+development and maintenance, use the lower-level Ansible wrapper directly:
 
 ```bash
 ./scripts/common/ansible.sh --all --check
@@ -219,7 +198,7 @@ Make changes in four places:
 | Packages and applications | [`scripts/common/ansible/config.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml) | Homebrew packages, casks, Dock items, keyboard shortcuts |
 | System behavior | [`scripts/common/ansible/roles/`](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles) | Installation logic and macOS defaults |
 | Home-directory files | [`config/`](https://github.com/shmileee/dotfiles/tree/master/config) | fish, Git, tmux, Neovim, Alacritty, OpenCode |
-| Tool versions | [`config/private_dot_config/mise/config.toml`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/mise/config.toml) | Language runtimes and developer tools |
+| Tool versions | [`config/private_dot_config/mise/config.toml`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/mise/config.toml) and [`uv.lock`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/uv.lock) | Language runtimes, developer tools, and the bootstrap Ansible runtime |
 
 </div>
 
@@ -236,6 +215,7 @@ repository or branch setting.
 
 | Role | Responsibility |
 | --- | --- |
+| [`bootstrap` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/bootstrap){ .role-link aria-label="bootstrap role on GitHub" } | Install the minimal native requirements and Homebrew on either platform |
 | [`common` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/common){ .role-link aria-label="common role on GitHub" } | Install shared command-line tools and platform-specific packages and applications |
 | [`fonts` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/fonts){ .role-link aria-label="fonts role on GitHub" } | Install developer fonts on macOS or the Ubuntu integration environment |
 | [`dotfiles` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/dotfiles){ .role-link aria-label="dotfiles role on GitHub" } | Install chezmoi and apply the current checkout |
@@ -275,7 +255,7 @@ mise tasks
 !!! important "Bootstrap before using tasks"
 
     `mise` is the task runner, but it is also installed by Ansible. On a new
-    machine, run `./scripts/setup.sh --all` first. The mise tasks are the
+    machine, run `./scripts/setup.sh` first. The mise tasks are the
     post-bootstrap interface, not a replacement for initial setup.
 
 Task execution installs any missing tools declared in `mise.toml`
@@ -366,7 +346,9 @@ mise exec -- scripts/common/ansible.sh --install
 mise exec -- prek run --all-files
 mise exec -- bats tests/shell
 mise exec -- env ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
-  ansible-playbook --inventory '127.0.0.1,' \
+  UV_PROJECT_ENVIRONMENT="$HOME/.local/share/dotfiles/ansible-runtime" \
+  uv run --locked --project scripts/common/ansible ansible-playbook \
+  --inventory '127.0.0.1,' \
   --syntax-check scripts/common/ansible/main.yaml
 ```
 

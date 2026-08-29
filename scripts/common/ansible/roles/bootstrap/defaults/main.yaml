@@ -1,0 +1,10 @@
+---
+
+bootstrap_debian_packages:
+  - build-essential
+  - ca-certificates
+  - curl
+  - file
+  - git
+  - procps
+  - sudo

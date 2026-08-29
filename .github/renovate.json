@@ -23,6 +23,15 @@
     "semanticCommitType": "fix",
     "semanticCommitScope": "security"
   },
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/^scripts/setup\\.sh$/"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\nreadonly uv_version=\"\\$\\{UV_BOOTSTRAP_VERSION:-(?<currentValue>[^}]+)\\}\""
+      ]
+    }
+  ],
   "packageRules": [
     {
       "description": "Group updates across the repository's GitHub Actions",
@@ -43,8 +52,11 @@
     },
     {
       "description": "Group Ansible content used to provision machines",
-      "matchManagers": ["ansible-galaxy"],
-      "matchFileNames": ["scripts/common/ansible/requirements.yml"],
+      "matchManagers": ["ansible-galaxy", "pep621"],
+      "matchFileNames": [
+        "scripts/common/ansible/requirements.yml",
+        "scripts/common/ansible/pyproject.toml"
+      ],
       "groupName": "provisioning dependencies",
       "groupSlug": "ansible",
       "semanticCommitType": "chore",
@@ -66,6 +78,15 @@
       "groupSlug": "repo-toolchain",
       "semanticCommitType": "chore",
       "semanticCommitScope": "tooling"
+    },
+    {
+      "description": "Keep the stage-zero and repository uv versions synchronized",
+      "matchPackageNames": ["astral-sh/uv", "uv"],
+      "matchFileNames": ["scripts/setup.sh", "mise.toml"],
+      "groupName": "bootstrap uv",
+      "groupSlug": "bootstrap-uv",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "bootstrap"
     },
     {
       "description": "Keep workstation changes separate from repository tooling",

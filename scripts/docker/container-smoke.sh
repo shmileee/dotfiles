@@ -30,7 +30,7 @@ runtime_user=$(id -un)
 [ "${HOME}" = '/home/linuxbrew' ]
 
 phase executables
-for executable in brew chezmoi fish mise tmux; do
+for executable in brew chezmoi fish mise tmux uv; do
   command -v "${executable}" > /dev/null 2>&1
 done
 

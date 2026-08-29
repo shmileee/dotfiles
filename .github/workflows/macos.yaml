@@ -63,11 +63,13 @@ jobs:
       - name: Restore Ansible collections
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
-          path: ~/.ansible/collections
-          key: ${{ runner.os }}-ansible-${{ hashFiles('mise.toml', 'scripts/common/ansible/requirements.yml') }}
+          path: |
+            ~/.ansible/collections
+            ~/.local/share/dotfiles/ansible-runtime
+          key: ${{ runner.os }}-ansible-${{ hashFiles('scripts/common/ansible/uv.lock', 'scripts/common/ansible/requirements.yml') }}
 
       - name: Install using setup.sh
-        run: ./scripts/setup.sh --all
+        run: ./scripts/setup.sh
 
       - name: Validate
         run: |

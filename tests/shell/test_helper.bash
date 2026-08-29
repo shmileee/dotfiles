@@ -3,12 +3,10 @@ setup_test_environment() {
   test_root=$(mktemp -d "${TMPDIR:-/tmp}/dotfiles-tests.XXXXXX")
   mock_bin="${test_root}/bin"
   mock_log="${test_root}/commands.log"
-  TEST_ANSIBLE_VERSION='99.88.77'
-
   mkdir -p "${mock_bin}"
   : > "${mock_log}"
 
-  export project_root test_root mock_bin mock_log TEST_ANSIBLE_VERSION
+  export project_root test_root mock_bin mock_log
   export MOCK_LOG="${mock_log}"
   export PATH="${mock_bin}:${PATH}"
 }

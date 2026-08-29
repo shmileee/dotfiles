@@ -23,6 +23,7 @@ tags
 .gitconfig.proxy
 .proxy
 .venv
+__pycache__/
 
 # MkDocs build output
 /site/

@@ -12,6 +12,9 @@
     dockerized: "{{ lookup('ansible.builtin.env', 'DOCKERIZED') == 'true' }}"
 
   roles:
+    - role: bootstrap
+      tags: bootstrap
+
     - role: common
       tags: common
 
