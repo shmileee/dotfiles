@@ -92,7 +92,7 @@ from urllib.parse import urlsplit
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.dotfiles_macos import (
-    dock_option_arguments,
+    dock_rebuild_commands,
     dock_states_match,
     normalize_location,
     parse_dockutil_output,
@@ -231,21 +231,11 @@ def desired_items(module: AnsibleModule) -> List[Dict[str, Any]]:
     return desired
 
 
-def add_arguments(dockutil: str, item: Mapping[str, Any]) -> List[str]:
-    argv = [dockutil, "--add", item["path"], "--position", "end"]
-    if item["section"] != "apps":
-        argv.extend(["--section", item["section"]])
-    argv.extend(dock_option_arguments(item.get("options", {})))
-    argv.append("--no-restart")
-    return argv
-
-
 def rebuild(
     module: AnsibleModule, dockutil: str, items: List[Mapping[str, Any]]
 ) -> None:
-    run_dockutil(module, [dockutil, "--remove", "all", "--no-restart"])
-    for item in items:
-        run_dockutil(module, add_arguments(dockutil, item))
+    for arguments in dock_rebuild_commands(dockutil, items):
+        run_dockutil(module, arguments)
 
 
 def restore(
