@@ -123,6 +123,12 @@ source file for the exact mappings used by this configuration.
 
 Press ++ctrl+a++, release it, and then press the command key.
 
+<div class="shortcut-prefix-summary" aria-label="Prefix: Control plus A, then release" data-search-exclude>
+  <span class="shortcut-prefix-summary__label">Prefix</span>
+  <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span>
+  <span class="shortcut-prefix-summary__release">then release</span>
+</div>
+
 ### Create and arrange
 
 | Command | Action |
@@ -130,7 +136,7 @@ Press ++ctrl+a++, release it, and then press the command key.
 | ++ctrl+a++ <span class="shortcut-then">then</span> `c` | Create a window in the current directory |
 | ++ctrl+a++ <span class="shortcut-then">then</span> `r` | Rename the current window |
 | ++ctrl+a++ <span class="shortcut-then">then</span> `R` | Rename the current session |
-| ++ctrl+a++ <span class="shortcut-then">then</span> `\|` | Split the pane horizontally |
+| ++ctrl+a++ <span class="shortcut-then">then</span> <code>&#124;</code> | Split the pane horizontally |
 | ++ctrl+a++ <span class="shortcut-then">then</span> `_` | Split the pane vertically |
 | ++ctrl+a++ <span class="shortcut-then">then</span> `+` | Toggle pane zoom |
 
@@ -177,10 +183,10 @@ LazyVim provides most editor mappings. This repository adds only a small set:
 
 | Mode | Shortcut | Action |
 | --- | --- | --- |
-| Normal | `o` | Create a blank line below without staying in Insert mode |
-| Normal | `O` | Create a blank line above without staying in Insert mode |
-| Normal | `<leader><leader>` | Clear search highlights |
-| Visual | `>` / `<` | Indent while keeping the selection active |
+| <span class="shortcut-mode shortcut-mode--start">Normal</span> | `o` | Create a blank line below without staying in Insert mode |
+| <span class="shortcut-mode">Normal</span> | `O` | Create a blank line above without staying in Insert mode |
+| <span class="shortcut-mode">Normal</span> | <code>&lt;leader&gt;<wbr>&lt;leader&gt;</code> | Clear search highlights |
+| <span class="shortcut-mode shortcut-mode--start">Visual</span> | `>` / `<` | Indent while keeping the selection active |
 
 </section>
 
