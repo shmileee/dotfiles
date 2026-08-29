@@ -130,23 +130,31 @@ def expected_collections() -> dict[str, str]:
 
 
 def validate_collections(collections_path: Path) -> dict[str, str]:
-    report = command_output(
-        "ansible-galaxy",
-        "collection",
-        "list",
-        "--collections-path",
-        str(collections_path),
-        "--format",
-        "json",
-    )
-    installed_paths = json.loads(report)
+    collection_root = collections_path / "ansible_collections"
+    if not collection_root.is_dir():
+        fail(f"collection root {collection_root} does not exist")
+
     actual: dict[str, str] = {}
-    for installed in installed_paths.values():
-        for name, metadata in installed.items():
-            if name in actual:
+    for namespace_path in sorted(collection_root.iterdir()):
+        if not namespace_path.is_dir():
+            continue
+        for collection_path in sorted(namespace_path.iterdir()):
+            if not collection_path.is_dir():
+                continue
+            manifest_path = collection_path / "MANIFEST.json"
+            if not manifest_path.is_file():
+                fail(f"collection path {collection_path} has no MANIFEST.json")
+            metadata = json.loads(manifest_path.read_text())["collection_info"]
+            name = f"{metadata['namespace']}.{metadata['name']}"
+            expected_path = (
+                collection_root / metadata["namespace"] / metadata["name"]
+            )
+            if collection_path != expected_path:
                 fail(
-                    f"collection {name} is installed in multiple isolated paths"
+                    f"collection {name} is installed at unexpected path {collection_path}"
                 )
+            if name in actual:
+                fail(f"collection {name} is installed more than once")
             actual[name] = str(metadata["version"])
 
     expected = expected_collections()
