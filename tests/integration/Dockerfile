@@ -2,7 +2,7 @@
 
 FROM ghcr.io/astral-sh/uv:0.12.6 AS uv
 
-FROM ubuntu:24.04 AS ubuntu-bootstrap-integration
+FROM ubuntu:latest AS ubuntu-bootstrap-integration
 
 ENV HOME=/home/linuxbrew
 ENV DEBIAN_FRONTEND=noninteractive
@@ -14,8 +14,13 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update && \
     apt-get install --yes --no-install-recommends curl sudo && \
-    groupmod --new-name linuxbrew ubuntu && \
-    usermod --login linuxbrew --home /home/linuxbrew --move-home ubuntu && \
+    if getent passwd ubuntu >/dev/null; then \
+      groupmod --new-name linuxbrew ubuntu && \
+      usermod --login linuxbrew --home /home/linuxbrew --move-home ubuntu; \
+    else \
+      groupadd --gid 1000 linuxbrew && \
+      useradd --uid 1000 --gid linuxbrew --create-home --shell /bin/bash linuxbrew; \
+    fi && \
     echo "linuxbrew ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/linuxbrew && \
     chmod 0440 /etc/sudoers.d/linuxbrew && \
     ! command -v git && \
@@ -51,7 +56,9 @@ RUN ANSIBLE_COLLECTIONS_PATH=/tmp/ansible-collections \
 
 RUN ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
     ANSIBLE_COLLECTIONS_PATH=/tmp/ansible-collections \
-    DOTFILES_PERSISTENT_CHECKOUT=/home/linuxbrew/ghq/personalgit/shmileee/dotfiles \
+    DOTFILES_PERSISTENT_CHECKOUT=/home/linuxbrew/bootstrap-integration/dotfiles \
+    DOTFILES_PERSISTENT_REPOSITORY_URL="$(./scripts/setup.sh --print-config | sed -n 's/^repository_url=//p')" \
+    DOTFILES_PERSISTENT_REF="$(./scripts/setup.sh --print-config | sed -n 's/^repository_ref=//p')" \
     uv run --project bootstrap --locked --managed-python \
       ansible-playbook --inventory '127.0.0.1,' \
       -e ansible_user=linuxbrew \
@@ -60,7 +67,8 @@ RUN ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
 
 RUN ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
     ANSIBLE_COLLECTIONS_PATH=/tmp/ansible-collections \
-    DOTFILES_PERSISTENT_CHECKOUT=/home/linuxbrew/ghq/personalgit/shmileee/dotfiles \
+    DOTFILES_PERSISTENT_CHECKOUT=/home/linuxbrew/bootstrap-integration/dotfiles \
+    DOTFILES_PERSISTENT_REPOSITORY_URL="$(./scripts/setup.sh --print-config | sed -n 's/^repository_url=//p')" \
     uv run --project bootstrap --locked --managed-python \
       ansible-playbook --inventory '127.0.0.1,' \
       -e ansible_user=linuxbrew \
@@ -72,7 +80,8 @@ RUN test -x /home/linuxbrew/.linuxbrew/bin/brew && \
 
 RUN ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
     ANSIBLE_COLLECTIONS_PATH=/tmp/ansible-collections \
-    DOTFILES_PERSISTENT_CHECKOUT=/home/linuxbrew/ghq/personalgit/shmileee/dotfiles \
+    DOTFILES_PERSISTENT_CHECKOUT=/home/linuxbrew/bootstrap-integration/dotfiles \
+    DOTFILES_PERSISTENT_REPOSITORY_URL="$(./scripts/setup.sh --print-config | sed -n 's/^repository_url=//p')" \
     uv run --project bootstrap --locked --managed-python \
       ansible-playbook --inventory '127.0.0.1,' \
       -e ansible_user=linuxbrew \
@@ -80,18 +89,19 @@ RUN ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
       scripts/common/ansible/main.yaml | tee /tmp/homebrew-idempotence.log && \
     grep -Eq 'changed=0 +unreachable=0 +failed=0' /tmp/homebrew-idempotence.log
 
-RUN repository=/home/linuxbrew/ghq/personalgit/shmileee/dotfiles && \
+RUN repository=/home/linuxbrew/bootstrap-integration/dotfiles && \
+    repository_url="$(./scripts/setup.sh --print-config | sed -n 's/^repository_url=//p')" && \
     test -x /usr/bin/git && \
     test -s /etc/ssl/certs/ca-certificates.crt && \
-    test "$(git -C "$repository" remote get-url origin)" = \
-      https://github.com/shmileee/dotfiles.git && \
+    test "$(git -C "$repository" remote get-url origin)" = "$repository_url" && \
     test -z "$(git -C "$repository" config --local --get http.sslVerify || true)" && \
     test "$(git -C "$repository" rev-parse --is-shallow-repository)" = false && \
     test -z "$(git -C "$repository" config --local --get remote.origin.promisor || true)"
 
 RUN ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
     ANSIBLE_COLLECTIONS_PATH=/tmp/ansible-collections \
-    DOTFILES_PERSISTENT_CHECKOUT=/home/linuxbrew/ghq/personalgit/shmileee/dotfiles \
+    DOTFILES_PERSISTENT_CHECKOUT=/home/linuxbrew/bootstrap-integration/dotfiles \
+    DOTFILES_PERSISTENT_REPOSITORY_URL="$(./scripts/setup.sh --print-config | sed -n 's/^repository_url=//p')" \
     uv run --project bootstrap --locked --managed-python \
       ansible-playbook --inventory '127.0.0.1,' \
       -e ansible_user=linuxbrew \

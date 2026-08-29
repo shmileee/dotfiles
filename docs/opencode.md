@@ -39,22 +39,22 @@ hide:
 <div class="surface-grid">
   <article>
     <span>OpenCode</span>
-    <a class="repo-path" href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_opencode/opencode.json" aria-label="Open the managed OpenCode configuration on GitHub"><code class="path-token">~/.config/<wbr>opencode/<wbr>opencode.json</code></a>
+    <code class="path-token">~/.config/<wbr>opencode/<wbr>opencode.json</code>
     <p>Plugins, formatters, language servers, and personal MCP configuration.</p>
   </article>
   <article>
     <span>OmO</span>
-    <a class="repo-path" href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_omo/omo.jsonc" aria-label="Open the managed OmO configuration on GitHub"><code class="path-token">~/.omo/<wbr>omo.jsonc</code></a>
+    <code class="path-token">~/.omo/<wbr>omo.jsonc</code>
     <p>Agent categories, model choices, fallbacks, and disabled hooks.</p>
   </article>
   <article>
     <span>fish</span>
-    <a class="repo-path" href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_fish/conf.d/opencode.fish" aria-label="Open the managed fish configuration on GitHub"><code class="path-token">~/.config/<wbr>fish/<wbr>conf.d/<wbr>opencode.fish</code></a>
+    <code class="path-token">~/.config/<wbr>fish/<wbr>conf.d/<wbr>opencode.fish</code>
     <p>Activates the optional corporate configuration.</p>
   </article>
   <article>
     <span>tmux</span>
-    <a class="repo-path" href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf" aria-label="Open the managed tmux configuration on GitHub"><code class="path-token">~/.config/<wbr>tmux/<wbr>tmux.conf</code></a>
+    <code class="path-token">~/.config/<wbr>tmux/<wbr>tmux.conf</code>
     <p>Installs the contextual-notifier companion plugin.</p>
   </article>
 </div>
@@ -121,7 +121,7 @@ the overlay.
 
 ## Model routing
 
-[`~/.omo/omo.jsonc`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_omo/omo.jsonc)
+`~/.omo/omo.jsonc`
 is the routing source of truth. It assigns primary and fallback models to named
 agents and task categories, using a fallback when the first choice is
 unavailable.
@@ -136,9 +136,9 @@ are handled by the dedicated contextual-notifier plugin.
 OpenCode declares the
 [`opencode-contextual-notifier`](https://github.com/shmileee/opencode-contextual-notifier)
 package in the managed
-[`opencode.json`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_opencode/opencode.json).
+`config/private_dot_config/private_opencode/opencode.json`.
 Its tmux companion is declared through TPM in the managed
-[`tmux.conf`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf).
+`config/private_dot_config/private_tmux/tmux.conf`.
 
 Together they mark the originating tmux window when an OpenCode session needs
 attention and clear that state when the window is selected or focused. The

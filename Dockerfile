@@ -1,8 +1,8 @@
 # syntax=docker/dockerfile:1.7
 
-FROM ubuntu:24.04
+FROM ubuntu:latest
 
-ARG DOTFILES_PERSISTENT_REF=master
+ARG DOTFILES_PERSISTENT_REF=
 ARG DOTFILES_PERSISTENT_REFSPEC=
 ARG DOTFILES_PERSISTENT_EXPECTED_COMMIT=
 
@@ -20,8 +20,13 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update && \
     apt-get install --yes --no-install-recommends curl sudo && \
-    groupmod --new-name linuxbrew ubuntu && \
-    usermod --login linuxbrew --home /home/linuxbrew --move-home ubuntu && \
+    if getent passwd ubuntu >/dev/null; then \
+      groupmod --new-name linuxbrew ubuntu && \
+      usermod --login linuxbrew --home /home/linuxbrew --move-home ubuntu; \
+    else \
+      groupadd --gid 1000 linuxbrew && \
+      useradd --uid 1000 --gid linuxbrew --create-home --shell /bin/bash linuxbrew; \
+    fi && \
     echo "linuxbrew ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/linuxbrew && \
     chmod 0440 /etc/sudoers.d/linuxbrew && \
     ln -snf "/usr/share/zoneinfo/${TIMEZONE}" /etc/localtime && \
@@ -46,6 +51,6 @@ USER root
 RUN rm -rf /bootstrap-source
 USER linuxbrew
 
-WORKDIR /home/linuxbrew/ghq/personalgit/shmileee/dotfiles
+WORKDIR /home/linuxbrew
 
 CMD ["fish", "-l"]

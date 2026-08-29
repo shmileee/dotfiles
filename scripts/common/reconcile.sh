@@ -45,13 +45,19 @@ command -v sudo > /dev/null 2>&1 || {
   printf 'sudo is required to reconcile this workstation.\n' >&2
   exit 1
 }
+if ! persistent_repository_url=$(git -C "$repository_root" remote get-url origin); then
+  printf 'The reconciliation checkout must have an origin remote.\n' >&2
+  exit 1
+fi
 
 UV_PROJECT_ENVIRONMENT=$project/.venv
 ANSIBLE_COLLECTIONS_PATH=$collections
 DOTFILES_PERSISTENT_CHECKOUT=$repository_root
+DOTFILES_PERSISTENT_REPOSITORY_URL=$persistent_repository_url
 ANSIBLE_CONFIG=$script_directory/ansible/ansible.cfg
 export UV_PROJECT_ENVIRONMENT ANSIBLE_COLLECTIONS_PATH
-export DOTFILES_PERSISTENT_CHECKOUT ANSIBLE_CONFIG
+export DOTFILES_PERSISTENT_CHECKOUT DOTFILES_PERSISTENT_REPOSITORY_URL
+export ANSIBLE_CONFIG
 
 if [ -L "$runtime_state" ] || [ -L "$collections" ] || [ -L "$collection_snapshot" ]; then
   printf 'Refusing to replace reconciliation state through a symbolic link beneath %s.\n' "$runtime_state" >&2

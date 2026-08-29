@@ -60,7 +60,7 @@ hide:
 ## macOS system shortcuts
 
 These mappings are applied by the
-[`system_defaults`](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/system_defaults)
+`system_defaults`
 Ansible role.
 
 | Shortcut | Action |
@@ -164,8 +164,8 @@ Press ++ctrl+a++, release it, and then press the command key.
 
 | Command | Action |
 | --- | --- |
-| ++ctrl+a++ <span class="shortcut-then">then</span> ++ctrl+e++ | Edit [`tmux.conf`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf), then reload it |
-| ++ctrl+a++ <span class="shortcut-then">then</span> ++ctrl+r++ | Reload [`tmux.conf`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf) |
+| ++ctrl+a++ <span class="shortcut-then">then</span> ++ctrl+e++ | Edit `tmux.conf`, then reload it |
+| ++ctrl+a++ <span class="shortcut-then">then</span> ++ctrl+r++ | Reload `tmux.conf` |
 | ++ctrl+s++ | Enter copy mode without the prefix |
 | ++ctrl+a++ <span class="shortcut-then">then</span> `p` | Paste the latest tmux buffer |
 | ++ctrl+a++ <span class="shortcut-then">then</span> ++ctrl+p++ | Choose a tmux buffer |
@@ -193,12 +193,12 @@ LazyVim provides most editor mappings. This repository adds only a small set:
 ## Source of truth
 
 *   macOS shortcuts:
-    [`config.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml)
+    `scripts/common/ansible/config.yaml`
 *   Alacritty shortcuts:
-    [`alacritty.toml.tmpl`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_alacritty/alacritty.toml.tmpl)
+    `config/private_dot_config/private_alacritty/alacritty.toml.tmpl`
 *   fish shortcuts:
-    [`binds.fish`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_fish/conf.d/binds.fish)
+    `config/private_dot_config/private_fish/conf.d/binds.fish`
 *   tmux shortcuts:
-    [`tmux.conf`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf)
+    `config/private_dot_config/private_tmux/tmux.conf`
 *   Neovim additions:
-    [`keymaps.lua`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/nvim/lua/config/keymaps.lua)
+    `config/private_dot_config/nvim/lua/config/keymaps.lua`

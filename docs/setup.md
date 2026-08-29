@@ -62,9 +62,7 @@ The full setup can:
 *   change macOS defaults, Dock contents, and keyboard shortcuts.
 
 Back up your existing configuration before continuing. At minimum, inspect
-[`config.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml)
-and the files under
-[`config/`](https://github.com/shmileee/dotfiles/tree/master/config).
+`scripts/common/ansible/config.yaml` and the files under `config/`.
 
 ### Platform requirements
 
@@ -80,29 +78,29 @@ and the files under
 
 === "Ubuntu"
 
-    Use Ubuntu 24.04 ARM64 with a non-root account authorized to use the
+    Use Ubuntu ARM64 with a non-root account authorized to use the
     installed `sudo` command. The base installation must provide a POSIX shell,
     `curl`, `tar`, and standard shell utilities. Ansible installs Git, native
     apt prerequisites, and Homebrew.
 
-Apple Silicon macOS is the supported workstation target. Ubuntu 24.04 ARM64 is
-the continuously tested container and integration target. Every other target
-is rejected before source staging or privileged work.
+Apple Silicon macOS and Ubuntu ARM64 are the supported targets. Ubuntu release
+numbers are deliberately not allowlisted; the current `ubuntu:latest` base is
+continuously tested in the container integration job. Other Linux
+distributions and non-ARM64 architectures are rejected before source staging
+or privileged work.
 
 ## Recommended: review, then run
 
 Clone the repository so you can inspect exactly what the setup will run. Pay
-particular attention to
-[`config.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml)
-and the
-[`main.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/main.yaml)
-playbook:
+particular attention to `scripts/common/ansible/config.yaml` and the
+`scripts/common/ansible/main.yaml` playbook:
 
 ```bash
-mkdir -p "$HOME/ghq/personalgit/shmileee"
-git clone https://github.com/shmileee/dotfiles.git \
-  "$HOME/ghq/personalgit/shmileee/dotfiles"
-cd "$HOME/ghq/personalgit/shmileee/dotfiles"
+repository_url=https://github.com/OWNER/REPOSITORY.git
+checkout="$HOME/ghq/personalgit/OWNER/REPOSITORY"
+mkdir -p "$(dirname "$checkout")"
+git clone "$repository_url" "$checkout"
+cd "$checkout"
 
 less scripts/common/ansible/config.yaml
 less scripts/common/ansible/main.yaml
@@ -124,9 +122,8 @@ from this checkout and preserves all durable Ansible changes if a task fails.
 curl -fsSL https://oponomarov.com/d | sh
 ```
 
-The short URL redirects to
-[`scripts/setup.sh`](https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh)
-on the mutable `master` branch. The POSIX loader stages that branch in a private
+The short URL redirects to `scripts/setup.sh` on the configured mutable branch.
+The POSIX loader stages that branch in a private
 temporary workspace, downloads the pinned uv controller, and hands all
 workstation changes to Ansible. The controller workspace is deleted on every
 ordinary exit; uv's normal download cache is retained.
@@ -148,7 +145,7 @@ insecure setting is written.
     a shell:
 
     ```bash
-    curl -fsSL https://raw.githubusercontent.com/shmileee/dotfiles/master/scripts/setup.sh > setup.sh
+    curl -fsSL https://oponomarov.com/d > setup.sh
     less setup.sh
     chmod +x setup.sh
     ./setup.sh
@@ -221,20 +218,46 @@ Make changes in four places:
 
 | Area | Source of truth | Typical changes |
 | --- | --- | --- |
-| Packages and applications | [`scripts/common/ansible/config.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml) | Homebrew packages, casks, Dock items, keyboard shortcuts |
-| System behavior | [`scripts/common/ansible/roles/`](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles) | Installation logic and macOS defaults |
-| Home-directory files | [`config/`](https://github.com/shmileee/dotfiles/tree/master/config) | fish, Git, tmux, Neovim, Alacritty, OpenCode |
-| Tool versions | [`config/private_dot_config/mise/config.toml`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/mise/config.toml) | Language runtimes and developer tools |
+| Packages and applications | `scripts/common/ansible/config.yaml` | Homebrew packages, casks, Dock items, keyboard shortcuts |
+| System behavior | `scripts/common/ansible/roles/` | Installation logic and macOS defaults |
+| Home-directory files | `config/` | fish, Git, tmux, Neovim, Alacritty, OpenCode |
+| Tool versions | `config/private_dot_config/mise/config.toml` | Language runtimes and developer tools |
 
 </div>
 
-The `dotfiles.checkout` value in
-[`config.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml)
-points chezmoi at `$HOME/ghq/personalgit/shmileee/dotfiles`. The role
-force-applies that persistent checkout's
-[`config/`](https://github.com/shmileee/dotfiles/tree/master/config) directory,
-so the source remains available after the temporary bootstrap controller is
-removed.
+The `dotfiles.checkout` value in `scripts/common/ansible/config.yaml` points
+chezmoi at the persistent path derived from the configured repository slug.
+The role force-applies that checkout's `config/` directory, so the source
+remains available after the temporary bootstrap controller is removed.
+
+### Reuse this repository as your own
+
+The bootstrap repository identity has one source of truth: the settings at the
+top of `scripts/setup.sh`. Before using a fork, update:
+
+*   `repository_slug` to `OWNER/REPOSITORY`;
+*   `repository_ref` if the default branch is not `master`; and
+*   `bootstrap_url` to your own redirect, or to the raw setup script URL.
+
+Setup derives the archive URL, HTTPS clone URL, and
+`$HOME/ghq/personalgit/OWNER/REPOSITORY` path from those settings. It passes the
+derived values to Ansible. `mise run reconcile` later derives the path and URL
+from the checkout where it runs, so neither the playbook nor its roles repeat
+the repository owner or local absolute path. Run `./scripts/setup.sh
+--print-config` to inspect the effective values without changing the machine.
+
+Repository identity is only one part of adopting personal dotfiles. Also
+review and replace these intentionally personal publication and user settings:
+
+*   the public redirect itself, so it points to your slug and branch;
+*   the Docker Hub identity in `.github/workflows/docker.yaml` if it differs
+    from the GitHub repository owner and slug used by its defaults;
+*   the documentation domain in `mkdocs.yml`, `docs/robots.txt`,
+    `.github/workflows/docs.yaml`, and `README.md`;
+*   Git author and namespace values under
+    `config/private_dot_config/private_git/`; and
+*   every package, application, secret template, shell preference, and macOS
+    default under `scripts/common/ansible/config.yaml` and `config/`.
 
 ### Ansible roles
 
@@ -244,15 +267,15 @@ removed.
 | --- | --- |
 | `bootstrap_prerequisites` | Assert the platform, install Ubuntu native prerequisites, and validate or create the persistent full clone |
 | `homebrew` | Install the current official macOS package or Linux script non-interactively through Ansible |
-| [`common` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/common){ .role-link aria-label="common role on GitHub" } | Install shared command-line tools and platform-specific packages and applications |
-| [`fonts` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/fonts){ .role-link aria-label="fonts role on GitHub" } | Install developer fonts on macOS or the Ubuntu integration environment |
-| [`dotfiles` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/dotfiles){ .role-link aria-label="dotfiles role on GitHub" } | Install chezmoi and apply the current checkout |
-| [`fish` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/fish){ .role-link aria-label="fish role on GitHub" } | Install fish, make it the login shell, and synchronize Fisher plugins |
-| [`mise` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/mise){ .role-link aria-label="mise role on GitHub" } | Install the tools declared in the mise configuration |
-| [`neovim` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/neovim){ .role-link aria-label="neovim role on GitHub" } | Install LazyVim and its plugins in headless mode |
-| [`docker` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/docker){ .role-link aria-label="docker role on GitHub" } | Install Rancher Desktop on macOS |
-| [`tmux` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/tmux){ .role-link aria-label="tmux role on GitHub" } | Install tmux, TPM, and declared plugins |
-| [`system_defaults` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/system_defaults){ .role-link aria-label="system_defaults role on GitHub" } | Apply macOS preferences, Dock items, and keyboard settings |
+| `common` | Install shared command-line tools and platform-specific packages and applications |
+| `fonts` | Install developer fonts on macOS or the Ubuntu integration environment |
+| `dotfiles` | Install chezmoi and apply the current checkout |
+| `fish` | Install fish, make it the login shell, and synchronize Fisher plugins |
+| `mise` | Install the tools declared in the mise configuration |
+| `neovim` | Install LazyVim and its plugins in headless mode |
+| `docker` | Install Rancher Desktop on macOS |
+| `tmux` | Install tmux, TPM, and declared plugins |
+| `system_defaults` | Apply macOS preferences, Dock items, and keyboard settings |
 | `handoff` | Prepare and validate the persistent mise-managed runtime and pinned collections, then atomically write the completion receipt |
 
 </div>
@@ -361,7 +384,7 @@ force-applied during setup.
 Run the published image:
 
 ```bash
-docker run --rm -it shmileee/dotfiles
+docker run --rm -it DOCKERHUB_USER/IMAGE
 ```
 
 Test the current checkout in Docker:
@@ -371,7 +394,7 @@ mise run test:docker
 ```
 
 The integration fixture at `tests/integration/Dockerfile` starts a Git-less
-Ubuntu 24.04 ARM64 stage, builds the locked Ansible controller, lets Ansible
+current Ubuntu ARM64 stage, builds the locked Ansible controller, lets Ansible
 install the native prerequisites, and verifies that the resulting persistent
 clone is full and uses verified HTTPS. Bats runs directly on the host through
 `mise run test:bats`, not inside the image.

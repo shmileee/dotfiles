@@ -97,12 +97,12 @@ jobs:
 
       - name: Validate
         run: |
-          cd "$HOME/ghq/personalgit/shmileee/dotfiles"
+          cd "$HOME/ghq/personalgit/$GITHUB_REPOSITORY"
           mise install
           mise exec -- prek run --all-files
 
       - name: Verify a second run is idempotent
         run: |
-          cd "$HOME/ghq/personalgit/shmileee/dotfiles"
+          cd "$HOME/ghq/personalgit/$GITHUB_REPOSITORY"
           mise run reconcile | tee /tmp/ansible-idempotence.log
           grep -Eq 'changed=0 +unreachable=0 +failed=0' /tmp/ansible-idempotence.log
