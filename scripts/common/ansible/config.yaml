@@ -1,3 +1,23 @@
+bootstrap_linux_packages:
+  - bash
+  - build-essential
+  - ca-certificates
+  - curl
+  - file
+  - git
+  - gpg
+  - libssl-dev
+  - less
+  - locales
+  - llvm
+  - make
+  - procps
+  - python3-pip
+  - python-is-python3
+  - unzip
+  - vim
+  - wget
+
 brew:
   taps:
     - carlocab/personal

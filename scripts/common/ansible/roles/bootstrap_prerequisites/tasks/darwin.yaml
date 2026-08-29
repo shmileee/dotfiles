@@ -1,0 +1,14 @@
+---
+
+- name: "bootstrap prerequisites | assert a supported macos target"
+  ansible.builtin.assert:
+    that:
+      - ansible_facts['system'] == 'Darwin'
+      - ansible_facts['architecture'] == 'arm64'
+    fail_msg: >-
+      Apple Silicon macOS is required. No workstation packages have been
+      installed.
+
+- name: "bootstrap prerequisites | verify macos command line tools"
+  ansible.builtin.command: xcode-select -p
+  changed_when: false

@@ -1,0 +1,22 @@
+---
+
+- name: "bootstrap prerequisites | assert a supported linux target"
+  ansible.builtin.assert:
+    that:
+      - ansible_facts['system'] == 'Linux'
+      - ansible_facts['distribution'] == 'Ubuntu'
+      - ansible_facts['distribution_version'] == '24.04'
+      - ansible_facts['architecture'] in ['aarch64', 'arm64']
+    fail_msg: >-
+      Ubuntu 24.04 ARM64 is required. No workstation packages have been
+      installed.
+
+- name: "bootstrap prerequisites | install linux native prerequisites"
+  become: true
+  ansible.builtin.apt:
+    name: "{{ bootstrap_linux_packages }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+  environment:
+    DEBIAN_FRONTEND: noninteractive
