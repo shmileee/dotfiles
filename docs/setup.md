@@ -241,7 +241,7 @@ removed.
 | Role | Responsibility |
 | --- | --- |
 | `bootstrap_prerequisites` | Assert the platform, install Ubuntu native prerequisites, and validate or create the persistent full clone |
-| `homebrew` | Install the current official Homebrew release non-interactively on both supported targets |
+| `homebrew` | Install the current official macOS package or Linux script non-interactively through Ansible |
 | [`common` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/common){ .role-link aria-label="common role on GitHub" } | Install shared command-line tools and platform-specific packages and applications |
 | [`fonts` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/fonts){ .role-link aria-label="fonts role on GitHub" } | Install developer fonts on macOS or the Ubuntu integration environment |
 | [`dotfiles` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/dotfiles){ .role-link aria-label="dotfiles role on GitHub" } | Install chezmoi and apply the current checkout |
@@ -254,6 +254,11 @@ removed.
 | `handoff` | Validate mise-managed uv against the shared lock and atomically write the completion receipt |
 
 </div>
+
+On macOS, the Homebrew role downloads the current signed `Homebrew.pkg` and
+installs it through Ansible's become mechanism. On Ubuntu, Ansible first creates
+the user-owned Linuxbrew prefix, then runs Homebrew's current shell installer
+without sudo. Neither installer needs access to the user's password.
 
 ## Routine work with mise
 
@@ -271,6 +276,7 @@ mise tasks
 | --- | --- |
 | `mise run reconcile` | Install the required Ansible collections and reconcile the machine. |
 | `mise run reconcile:check` | Preview the reconciliation using Ansible check mode. |
+| `mise run ansible:validate-runtime` | Report and validate the checkout, uv, Python, Ansible, locked dependencies, and collections. |
 | `mise run status` | Show differences between the chezmoi source and files in the home directory. |
 | `mise run import` | Import all modified, non-template managed files into `config/`. |
 | `mise run import ~/.config/nvim` | Import one managed file or directory. |
@@ -286,7 +292,9 @@ mise tasks
     post-bootstrap interface, not a replacement for initial setup.
 
 Task execution installs any missing tools declared in `mise.toml`
-automatically.
+automatically. Before each reconciliation, the runtime validator prints the
+persistent checkout commit and every version selected by the shared lock and
+collection requirements.
 
 ### Import local dotfile changes
 
@@ -382,7 +390,7 @@ Run the same static checks and Ansible syntax validation used by CI:
 
 ```bash
 mise install
-mise run ansible:prepare
+mise run ansible:validate-runtime
 mise run test:docker
 mise run test:bats
 mise run bootstrap:lint

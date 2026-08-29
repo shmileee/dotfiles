@@ -49,7 +49,7 @@ jobs:
 
       - name: Run repository checks
         run: |
-          mise run ansible:prepare
+          mise run ansible:validate-runtime
           mise exec -- prek run --all-files
 
       - name: Validate Ansible syntax
