@@ -94,7 +94,7 @@ applies dotfiles with `--force`, and modifies macOS preferences.
     <span>04</span>
     <div>
       <strong>Hand off to reconciliation</strong>
-      <p>The final role validates the persistent locked runtime and records completion; later workstation management uses <code>mise run reconcile</code>.</p>
+      <p>The final role prepares and validates the persistent locked runtime and pinned collections before recording completion; later workstation management uses <code>mise run reconcile</code>.</p>
     </div>
   </li>
 </ol>
