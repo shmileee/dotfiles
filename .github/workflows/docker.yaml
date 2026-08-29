@@ -52,7 +52,7 @@ jobs:
 
       - name: Verify the public bootstrap redirect
         run: |
-          target="$(curl -kfsSIL -o /dev/null --write-out '%{url_effective}' https://oponomarov.com/d)"
+          target="$(curl -fsSIL -o /dev/null --write-out '%{url_effective}' https://oponomarov.com/d)"
           test "$target" = https://raw.githubusercontent.com/shmileee/dotfiles/master/scripts/setup.sh
 
       - name: Set up mise
