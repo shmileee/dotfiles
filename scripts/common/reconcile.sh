@@ -62,6 +62,12 @@ run_in_runtime ansible-galaxy collection install \
   --collections-path "$collections" \
   --requirements-file "$script_directory/ansible/requirements.yml"
 
+printf '[dotfiles] Validating locked runtime identity\n'
+run_in_runtime python "$repository_root/scripts/validate_bootstrap_runtime.py" \
+  --uv-executable "$(command -v uv)" \
+  --collections-path "$collections" \
+  --checkout "$repository_root"
+
 set -- ansible-playbook --inventory '127.0.0.1,' \
   -e "ansible_user=$(id -un)" "$script_directory/ansible/main.yaml"
 if [ "$check_mode" = true ]; then

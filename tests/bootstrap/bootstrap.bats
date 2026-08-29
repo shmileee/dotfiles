@@ -54,6 +54,7 @@ teardown() {
   assert_log_contains " sync --project "
   assert_log_contains "--locked --managed-python"
   assert_log_contains "ansible-galaxy collection install --ignore-certs"
+  assert_log_contains "validate_bootstrap_runtime.py --uv-executable"
   assert_log_contains "ansible-playbook --inventory 127.0.0.1,"
 }
 

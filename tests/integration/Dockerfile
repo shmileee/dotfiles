@@ -42,6 +42,13 @@ RUN ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
       ansible-playbook --inventory '127.0.0.1,' \
       --syntax-check scripts/common/ansible/main.yaml
 
+RUN ANSIBLE_COLLECTIONS_PATH=/tmp/ansible-collections \
+    uv run --project bootstrap --locked --managed-python \
+      python scripts/validate_bootstrap_runtime.py \
+      --uv-executable /usr/local/bin/uv \
+      --collections-path /tmp/ansible-collections \
+      --checkout /source
+
 RUN ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
     ANSIBLE_COLLECTIONS_PATH=/tmp/ansible-collections \
     DOTFILES_PERSISTENT_CHECKOUT=/home/linuxbrew/ghq/personalgit/shmileee/dotfiles \
@@ -50,6 +57,28 @@ RUN ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
       -e ansible_user=linuxbrew \
       --tags bootstrap_prerequisites \
       scripts/common/ansible/main.yaml
+
+RUN ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
+    ANSIBLE_COLLECTIONS_PATH=/tmp/ansible-collections \
+    DOTFILES_PERSISTENT_CHECKOUT=/home/linuxbrew/ghq/personalgit/shmileee/dotfiles \
+    uv run --project bootstrap --locked --managed-python \
+      ansible-playbook --inventory '127.0.0.1,' \
+      -e ansible_user=linuxbrew \
+      --tags homebrew_install \
+      scripts/common/ansible/main.yaml
+
+RUN test -x /home/linuxbrew/.linuxbrew/bin/brew && \
+    /home/linuxbrew/.linuxbrew/bin/brew --version
+
+RUN ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
+    ANSIBLE_COLLECTIONS_PATH=/tmp/ansible-collections \
+    DOTFILES_PERSISTENT_CHECKOUT=/home/linuxbrew/ghq/personalgit/shmileee/dotfiles \
+    uv run --project bootstrap --locked --managed-python \
+      ansible-playbook --inventory '127.0.0.1,' \
+      -e ansible_user=linuxbrew \
+      --tags homebrew_install \
+      scripts/common/ansible/main.yaml | tee /tmp/homebrew-idempotence.log && \
+    grep -Eq 'changed=0 +unreachable=0 +failed=0' /tmp/homebrew-idempotence.log
 
 RUN repository=/home/linuxbrew/ghq/personalgit/shmileee/dotfiles && \
     test -x /usr/bin/git && \

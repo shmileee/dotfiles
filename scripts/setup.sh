@@ -333,11 +333,10 @@ prepare_ansible() {
 
   phase 'Locked controller versions'
   printf 'requested repository ref: %s\n' "$repository_ref"
-  "$uv_executable" --version
-  run_bootstrap_runtime python --version
-  run_bootstrap_runtime ansible-playbook --version
-  run_bootstrap_runtime \
-    ansible-galaxy collection list --collections-path "$ANSIBLE_COLLECTIONS_PATH"
+  run_bootstrap_runtime python "$source_root/scripts/validate_bootstrap_runtime.py" \
+    --uv-executable "$uv_executable" \
+    --collections-path "$ANSIBLE_COLLECTIONS_PATH" \
+    --checkout "$persistent_checkout"
 }
 
 run_ansible() {
