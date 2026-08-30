@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="A reproducible Apple Silicon macOS workstation and Ubuntu ARM64 integration environment built with Ansible and chezmoi.">
+        <meta name="description" content="A reproducible Apple Silicon macOS workstation and Ubuntu integration environment built with Ansible and chezmoi.">
       
       
       
@@ -576,7 +576,7 @@
 <section class="docs-hero docs-hero--home">
 <p class="section-eyebrow">Personal workstation · documented publicly</p>
 <h1 id="a-workstation-i-can-rebuild">A workstation I can rebuild.<span class="hero-cursor" aria-hidden="true"></span><a class="headerlink" href="#a-workstation-i-can-rebuild" title="Permanent link">&para;</a></h1>
-<p class="hero-copy">This repository rebuilds my Apple Silicon macOS workstation and continuously tests the shared setup in Ubuntu 24.04 ARM64. Ansible, the automation engine, configures the system; chezmoi, the dotfile manager, puts the files in place.</p>
+<p class="hero-copy">This repository rebuilds my workstation on Apple Silicon macOS and Ubuntu. Ansible, the automation engine, configures the system; chezmoi, the dotfile manager, puts the files in place.</p>
 <div class="hero-actions">
     <a class="primary-link" href="/setup/">Read the setup guide →</a>
     <a class="secondary-link" href="https://github.com/shmileee/dotfiles">Browse the repository ↗</a>
@@ -627,35 +627,35 @@ applies dotfiles with <code>--force</code>, and modifies macOS preferences.</p>
     <span>01</span>
     <div>
       <strong>Bootstrap</strong>
-      <p><a class="repo-path" href="https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh"><code>scripts/setup.sh</code></a> detects the platform and prepares the supported installation path.</p>
+      <p>The POSIX <a class="repo-path" href="https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh"><code>scripts/setup.sh</code></a> validates the platform and starts a disposable, repository-locked Ansible controller.</p>
     </div>
   </li>
   <li>
     <span>02</span>
     <div>
-      <strong>Install prerequisites</strong>
-      <p>On Ubuntu, the script installs the required apt packages; on both targets, it prepares Homebrew and Ansible.</p>
+      <strong>Establish workstation state</strong>
+      <p>Ansible installs Ubuntu prerequisites, creates the persistent repository checkout, and installs Homebrew on both supported targets.</p>
     </div>
   </li>
   <li>
     <span>03</span>
     <div>
       <strong>Configure the workstation</strong>
-      <p>Ansible runs focused roles for packages, fonts, fish, mise, Neovim, Rancher Desktop, tmux, and system defaults.</p>
+      <p>Focused roles install packages and applications, apply dotfiles, and configure fish, mise, Neovim, Rancher Desktop, tmux, and system defaults.</p>
     </div>
   </li>
   <li>
     <span>04</span>
     <div>
-      <strong>Apply the dotfiles</strong>
-      <p>chezmoi renders the files in <a class="repo-path" href="https://github.com/shmileee/dotfiles/tree/master/config"><code>config/</code></a> for the current operating system and architecture.</p>
+      <strong>Hand off to reconciliation</strong>
+      <p>The final role prepares the persistent runtime used by <code>mise run reconcile</code> for future updates.</p>
     </div>
   </li>
 </ol>
 
 <aside class="home-validation">
-  <strong>Continuously tested</strong>
-  <p>The setup is tested on Apple Silicon macOS and in an Ubuntu 24.04 ARM64 container. The container exercises the shared Linux path; macOS applications and system preferences are validated on macOS.</p>
+  <strong>Supported platforms</strong>
+  <p>Apple Silicon macOS and Ubuntu.</p>
 </aside>
 
 <h2 id="choose-what-you-need">Choose what you need<a class="headerlink" href="#choose-what-you-need" title="Permanent link">&para;</a></h2>
@@ -681,7 +681,7 @@ applies dotfiles with <code>--force</code>, and modifies macOS preferences.</p>
 <dl class="principle-grid">
   <div><dt>Repeatable over clever</dt><dd>Repeated runs should converge on the same state.</dd></div>
   <div><dt>Visible over magical</dt><dd>Package lists, roles, and managed files stay in the repository.</dd></div>
-  <div><dt>Portable where practical</dt><dd>Shared behavior works on macOS and the Ubuntu integration environment; platform-specific changes stay explicit.</dd></div>
+  <div><dt>Portable where practical</dt><dd>Shared behavior works on macOS and Ubuntu; platform-specific changes stay explicit.</dd></div>
   <div><dt>Personal by design</dt><dd>This is a working environment, not a universal starter kit.</dd></div>
 </dl>
 
