@@ -147,6 +147,26 @@
       "semanticCommitScope": "bootstrap"
     },
     {
+      "description": "Rely on the timestamped bootstrap Python declaration",
+      "matchManagers": ["pyenv"],
+      "matchFileNames": ["bootstrap/.python-version"],
+      "matchPackageNames": ["python"],
+      "minimumReleaseAge": null
+    },
+    {
+      "description": "Rely on the timestamped bootstrap uv declarations",
+      "matchManagers": ["dockerfile"],
+      "matchFileNames": ["tests/integration/Dockerfile"],
+      "matchPackageNames": ["ghcr.io/astral-sh/uv"],
+      "minimumReleaseAge": null
+    },
+    {
+      "description": "Skip lock-file maintenance for Mise without lockfiles",
+      "matchManagers": ["mise"],
+      "matchUpdateTypes": ["lockFileMaintenance"],
+      "enabled": false
+    },
+    {
       "description": "Allow for the slower release cadence of stable tooling",
       "matchPackageNames": ["koalaman/shellcheck"],
       "abandonmentThreshold": "2 years"
