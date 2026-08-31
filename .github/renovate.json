@@ -36,7 +36,7 @@
       "description": "Group documentation build dependencies",
       "matchManagers": ["pip_requirements"],
       "matchFileNames": ["requirements-docs.txt"],
-      "groupName": "documentation dependencies",
+      "groupName": "build dependencies",
       "groupSlug": "docs",
       "semanticCommitType": "docs",
       "semanticCommitScope": "deps"
@@ -44,7 +44,7 @@
     {
       "description": "Group dependencies used by the bootstrap runtime",
       "matchFileNames": ["bootstrap/**"],
-      "groupName": "bootstrap dependencies",
+      "groupName": "runtime dependencies",
       "groupSlug": "bootstrap",
       "semanticCommitType": "chore",
       "semanticCommitScope": "bootstrap"
@@ -62,16 +62,16 @@
       "description": "Group tools used to develop and validate this repository",
       "matchManagers": ["mise"],
       "matchFileNames": ["mise.toml"],
-      "groupName": "repository toolchain",
-      "groupSlug": "repo-toolchain",
+      "groupName": "development dependencies",
+      "groupSlug": "development-dependencies",
       "semanticCommitType": "chore",
       "semanticCommitScope": "tooling"
     },
     {
-      "description": "Include pre-commit hooks in the repository toolchain group",
+      "description": "Include pre-commit hooks in the development dependency group",
       "matchManagers": ["pre-commit"],
-      "groupName": "repository toolchain",
-      "groupSlug": "repo-toolchain",
+      "groupName": "development dependencies",
+      "groupSlug": "development-dependencies",
       "semanticCommitType": "chore",
       "semanticCommitScope": "tooling"
     },
@@ -79,7 +79,7 @@
       "description": "Keep workstation changes separate from repository tooling",
       "matchManagers": ["mise"],
       "matchFileNames": ["config/private_dot_config/mise/config.toml"],
-      "groupName": "workstation toolchain",
+      "groupName": "toolchain",
       "groupSlug": "workstation-toolchain",
       "semanticCommitType": "chore",
       "semanticCommitScope": "workstation"
