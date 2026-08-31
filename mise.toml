@@ -2,6 +2,9 @@
 experimental = true
 legacy_version_file = false
 
+[task_config]
+includes = ["docs/tasks.toml"]
+
 [tools]
 "aqua:rhysd/actionlint" = "1.7.12"
 "aqua:bats-core/bats-core" = "1.14.0"
@@ -23,29 +26,6 @@ uv = "0.12.6"
 [tasks.lint]
 description = "Run all prek hooks against the repository"
 run = "prek run --all-files"
-
-[tasks.docs]
-description = "Preview the documentation at http://localhost:8000"
-run = """
-finalize_docs_site() {
-  if [ -d docs/site ]; then
-    rm -rf site
-    mv docs/site site
-  fi
-}
-trap finalize_docs_site EXIT
-uv run --directory docs --with-requirements requirements.txt zensical serve --config-file mkdocs.yml
-"""
-raw = true
-
-[tasks."docs:build"]
-description = "Build the documentation with CI's strict settings"
-run = """
-uv run --directory docs --with-requirements requirements.txt zensical build --config-file mkdocs.yml --strict
-rm -rf site
-mv docs/site site
-uv run --directory docs python tooling/version_assets.py ../site
-"""
 
 [tasks.reconcile]
 description = "Reconcile this machine with the shared locked Ansible runtime"

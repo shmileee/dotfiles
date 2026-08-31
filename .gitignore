@@ -27,4 +27,5 @@ tags
 
 # MkDocs build output
 /site/
+/docs/site/
 .omo/
