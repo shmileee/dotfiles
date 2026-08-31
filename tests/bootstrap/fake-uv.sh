@@ -31,13 +31,13 @@ case " $* " in
   *" ansible-galaxy collection list "*)
     printf '%s\n' 'installed collections available'
     ;;
-  *" python "*"/scripts/validate_bootstrap_runtime.py "*)
+  *" python "*"/bootstrap/validate_runtime.py "*)
     exit "${TEST_RUNTIME_VALIDATION_STATUS:-0}"
     ;;
   *" ansible-playbook --version "*)
     printf '%s\n' 'ansible-playbook available'
     ;;
-  *" ansible-playbook "*"/scripts/common/ansible/main.yaml "*)
+  *" ansible-playbook "*"/bootstrap/ansible/main.yaml "*)
     exit "${TEST_ANSIBLE_STATUS:-0}"
     ;;
   *" python --version "*)

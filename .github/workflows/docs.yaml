@@ -5,10 +5,6 @@ on:
   pull_request:
     paths:
       - "docs/**"
-      - "docs-overrides/**"
-      - "mkdocs.yml"
-      - "requirements-docs.txt"
-      - "scripts/version_docs_assets.py"
       - ".github/actions/build-docs/action.yaml"
       - ".github/workflows/docs.yaml"
   push:
@@ -16,10 +12,6 @@ on:
       - "master"
     paths:
       - "docs/**"
-      - "docs-overrides/**"
-      - "mkdocs.yml"
-      - "requirements-docs.txt"
-      - "scripts/version_docs_assets.py"
       - ".github/actions/build-docs/action.yaml"
       - ".github/workflows/docs.yaml"
 

@@ -39,58 +39,58 @@ RUN uv sync --project bootstrap --locked --managed-python && \
     uv run --project bootstrap --locked --managed-python \
       ansible-galaxy collection install --ignore-certs \
       --collections-path /tmp/ansible-collections \
-      --requirements-file scripts/common/ansible/requirements.yml
+      --requirements-file bootstrap/ansible/requirements.yml
 
-RUN ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
+RUN ANSIBLE_CONFIG=bootstrap/ansible/ansible.cfg \
     ANSIBLE_COLLECTIONS_PATH=/tmp/ansible-collections \
     uv run --project bootstrap --locked --managed-python \
       ansible-playbook --inventory '127.0.0.1,' \
-      --syntax-check scripts/common/ansible/main.yaml
+      --syntax-check bootstrap/ansible/main.yaml
 
 RUN ANSIBLE_COLLECTIONS_PATH=/tmp/ansible-collections \
     uv run --project bootstrap --locked --managed-python \
-      python scripts/validate_bootstrap_runtime.py \
+      python bootstrap/validate_runtime.py \
       --uv-executable /usr/local/bin/uv \
       --collections-path /tmp/ansible-collections \
       --checkout /source
 
-RUN ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
+RUN ANSIBLE_CONFIG=bootstrap/ansible/ansible.cfg \
     ANSIBLE_COLLECTIONS_PATH=/tmp/ansible-collections \
     DOTFILES_PERSISTENT_CHECKOUT=/home/linuxbrew/bootstrap-integration/dotfiles \
-    DOTFILES_PERSISTENT_REPOSITORY_URL="$(./scripts/setup.sh --print-config | sed -n 's/^repository_url=//p')" \
-    DOTFILES_PERSISTENT_REF="$(./scripts/setup.sh --print-config | sed -n 's/^repository_ref=//p')" \
+    DOTFILES_PERSISTENT_REPOSITORY_URL="$(./bootstrap/setup.sh --print-config | sed -n 's/^repository_url=//p')" \
+    DOTFILES_PERSISTENT_REF="$(./bootstrap/setup.sh --print-config | sed -n 's/^repository_ref=//p')" \
     uv run --project bootstrap --locked --managed-python \
       ansible-playbook --inventory '127.0.0.1,' \
       -e ansible_user=linuxbrew \
       --tags bootstrap_prerequisites \
-      scripts/common/ansible/main.yaml
+      bootstrap/ansible/main.yaml
 
-RUN ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
+RUN ANSIBLE_CONFIG=bootstrap/ansible/ansible.cfg \
     ANSIBLE_COLLECTIONS_PATH=/tmp/ansible-collections \
     DOTFILES_PERSISTENT_CHECKOUT=/home/linuxbrew/bootstrap-integration/dotfiles \
-    DOTFILES_PERSISTENT_REPOSITORY_URL="$(./scripts/setup.sh --print-config | sed -n 's/^repository_url=//p')" \
+    DOTFILES_PERSISTENT_REPOSITORY_URL="$(./bootstrap/setup.sh --print-config | sed -n 's/^repository_url=//p')" \
     uv run --project bootstrap --locked --managed-python \
       ansible-playbook --inventory '127.0.0.1,' \
       -e ansible_user=linuxbrew \
       --tags homebrew_install \
-      scripts/common/ansible/main.yaml
+      bootstrap/ansible/main.yaml
 
 RUN test -x /home/linuxbrew/.linuxbrew/bin/brew && \
     /home/linuxbrew/.linuxbrew/bin/brew --version
 
-RUN ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
+RUN ANSIBLE_CONFIG=bootstrap/ansible/ansible.cfg \
     ANSIBLE_COLLECTIONS_PATH=/tmp/ansible-collections \
     DOTFILES_PERSISTENT_CHECKOUT=/home/linuxbrew/bootstrap-integration/dotfiles \
-    DOTFILES_PERSISTENT_REPOSITORY_URL="$(./scripts/setup.sh --print-config | sed -n 's/^repository_url=//p')" \
+    DOTFILES_PERSISTENT_REPOSITORY_URL="$(./bootstrap/setup.sh --print-config | sed -n 's/^repository_url=//p')" \
     uv run --project bootstrap --locked --managed-python \
       ansible-playbook --inventory '127.0.0.1,' \
       -e ansible_user=linuxbrew \
       --tags homebrew_install \
-      scripts/common/ansible/main.yaml | tee /tmp/homebrew-idempotence.log && \
+      bootstrap/ansible/main.yaml | tee /tmp/homebrew-idempotence.log && \
     grep -Eq 'changed=0 +unreachable=0 +failed=0' /tmp/homebrew-idempotence.log
 
 RUN repository=/home/linuxbrew/bootstrap-integration/dotfiles && \
-    repository_url="$(./scripts/setup.sh --print-config | sed -n 's/^repository_url=//p')" && \
+    repository_url="$(./bootstrap/setup.sh --print-config | sed -n 's/^repository_url=//p')" && \
     test -x /usr/bin/git && \
     test -s /etc/ssl/certs/ca-certificates.crt && \
     test "$(git -C "$repository" remote get-url origin)" = "$repository_url" && \
@@ -98,15 +98,15 @@ RUN repository=/home/linuxbrew/bootstrap-integration/dotfiles && \
     test "$(git -C "$repository" rev-parse --is-shallow-repository)" = false && \
     test -z "$(git -C "$repository" config --local --get remote.origin.promisor || true)"
 
-RUN ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
+RUN ANSIBLE_CONFIG=bootstrap/ansible/ansible.cfg \
     ANSIBLE_COLLECTIONS_PATH=/tmp/ansible-collections \
     DOTFILES_PERSISTENT_CHECKOUT=/home/linuxbrew/bootstrap-integration/dotfiles \
-    DOTFILES_PERSISTENT_REPOSITORY_URL="$(./scripts/setup.sh --print-config | sed -n 's/^repository_url=//p')" \
+    DOTFILES_PERSISTENT_REPOSITORY_URL="$(./bootstrap/setup.sh --print-config | sed -n 's/^repository_url=//p')" \
     uv run --project bootstrap --locked --managed-python \
       ansible-playbook --inventory '127.0.0.1,' \
       -e ansible_user=linuxbrew \
       --tags bootstrap_prerequisites \
-      scripts/common/ansible/main.yaml | tee /tmp/prerequisites-idempotence.log && \
+      bootstrap/ansible/main.yaml | tee /tmp/prerequisites-idempotence.log && \
     grep -Eq 'changed=0 +unreachable=0 +failed=0' /tmp/prerequisites-idempotence.log
 
 RUN handoff_target=/tmp/handoff-checkout && \
@@ -117,26 +117,26 @@ RUN handoff_target=/tmp/handoff-checkout && \
     : > /tmp/mise.log && \
     PATH="$fake_bin:$PATH" \
     MISE_LOG=/tmp/mise.log \
-    ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
+    ANSIBLE_CONFIG=bootstrap/ansible/ansible.cfg \
     ANSIBLE_COLLECTIONS_PATH=/tmp/ansible-collections \
     DOTFILES_PERSISTENT_CHECKOUT="$handoff_target" \
     uv run --project bootstrap --locked --managed-python \
       ansible-playbook --inventory '127.0.0.1,' \
       -e ansible_user=linuxbrew \
       --tags handoff \
-    scripts/common/ansible/main.yaml && \
+    bootstrap/ansible/main.yaml && \
     test "$(cat "$handoff_target/.git/dotfiles-bootstrap-complete")" = \
       'locked runtime validated' && \
     PATH="$fake_bin:$PATH" \
     MISE_LOG=/tmp/mise.log \
-    ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg \
+    ANSIBLE_CONFIG=bootstrap/ansible/ansible.cfg \
     ANSIBLE_COLLECTIONS_PATH=/tmp/ansible-collections \
     DOTFILES_PERSISTENT_CHECKOUT="$handoff_target" \
     uv run --project bootstrap --locked --managed-python \
       ansible-playbook --inventory '127.0.0.1,' \
       -e ansible_user=linuxbrew \
       --tags handoff \
-      scripts/common/ansible/main.yaml | tee /tmp/handoff-idempotence.log && \
+      bootstrap/ansible/main.yaml | tee /tmp/handoff-idempotence.log && \
     grep -Eq 'changed=0 +unreachable=0 +failed=0' /tmp/handoff-idempotence.log && \
     test "$(wc -l < /tmp/mise.log)" -eq 6 && \
     grep -F 'exec -- uv' /tmp/mise.log >/dev/null && \

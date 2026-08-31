@@ -73,7 +73,7 @@ applies dotfiles with `--force`, and modifies macOS preferences.
     <span>01</span>
     <div>
       <strong>Bootstrap</strong>
-      <p>The POSIX <a class="repo-path" href="https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh"><code>scripts/setup.sh</code></a> validates the platform and starts a disposable, repository-locked Ansible controller.</p>
+      <p>The POSIX <a class="repo-path" href="https://github.com/shmileee/dotfiles/blob/master/bootstrap/setup.sh"><code>bootstrap/setup.sh</code></a> validates the platform and starts a disposable, repository-locked Ansible controller.</p>
     </div>
   </li>
   <li>

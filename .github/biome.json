@@ -1,8 +1,15 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.5.11/schema.json",
+  "root": false,
   "files": {
     "ignoreUnknown": true,
     "includes": ["**", "!config/private_dot_config/nvim/lazy-lock.json"]
+  },
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true,
+    "root": "../"
   },
   "formatter": {
     "enabled": true,

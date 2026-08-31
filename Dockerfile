@@ -45,7 +45,7 @@ RUN --mount=type=secret,id=GITHUB_TOKEN,uid=1000,gid=1000 \
     export GIT_CONFIG_KEY_0=http.version GIT_CONFIG_VALUE_0=HTTP/1.1 && \
     export DOTFILES_PERSISTENT_REF DOTFILES_PERSISTENT_REFSPEC && \
     export DOTFILES_PERSISTENT_EXPECTED_COMMIT && \
-    ./scripts/setup.sh
+    ./bootstrap/setup.sh
 
 USER root
 RUN rm -rf /bootstrap-source

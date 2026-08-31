@@ -1,11 +1,13 @@
-docs_dir: docs
+docs_dir: content
+# Zensical 0.0.57 requires this path to remain beneath the config directory.
+# Repository tasks relocate the completed output to the root-level site/.
 site_dir: site
 site_name: dotfiles
 site_description: Reproducible workstation setup and the reasoning behind it.
 site_url: https://dotfiles.oponomarov.com
 repo_url: https://github.com/shmileee/dotfiles
 repo_name: shmileee/dotfiles
-edit_uri: edit/master/docs/
+edit_uri: edit/master/docs/content/
 copyright: Copyright &copy; 2021&ndash;2026 Oleksandr Ponomarov
 
 nav:
@@ -18,7 +20,7 @@ theme:
   name: material
   # Preserve Material's DOM and visual defaults while moving to Zensical.
   variant: classic
-  custom_dir: docs-overrides
+  custom_dir: overrides
   palette:
     - media: "(prefers-color-scheme)"
       toggle:

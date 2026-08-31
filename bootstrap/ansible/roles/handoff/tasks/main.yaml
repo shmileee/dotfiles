@@ -48,7 +48,7 @@
           - --collections-path
           - bootstrap/.ansible/collections
           - --requirements-file
-          - scripts/common/ansible/requirements.yml
+          - bootstrap/ansible/requirements.yml
       args:
         chdir: "{{ persistent_checkout }}"
       register: persistent_collections

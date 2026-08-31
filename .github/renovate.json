@@ -33,7 +33,7 @@
     {
       "customType": "regex",
       "description": "Update annotated shell variables",
-      "managerFilePatterns": ["/^scripts\\/setup\\.sh$/"],
+      "managerFilePatterns": ["/^bootstrap\\/setup\\.sh$/"],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\s+[A-Za-z_][A-Za-z0-9_]*=(?<currentValue>\\S+)"
       ]
@@ -55,7 +55,7 @@
     {
       "description": "Group documentation build dependencies",
       "matchManagers": ["pip_requirements"],
-      "matchFileNames": ["requirements-docs.txt"],
+      "matchFileNames": ["docs/requirements.txt"],
       "groupName": "build dependencies",
       "groupSlug": "docs",
       "semanticCommitType": "docs",
@@ -72,7 +72,7 @@
     {
       "description": "Group Ansible content used to provision machines",
       "matchManagers": ["ansible-galaxy"],
-      "matchFileNames": ["scripts/common/ansible/requirements.yml"],
+      "matchFileNames": ["bootstrap/ansible/requirements.yml"],
       "groupName": "provisioning dependencies",
       "groupSlug": "ansible",
       "semanticCommitType": "chore",
@@ -113,7 +113,7 @@
     {
       "description": "Group Docker updates",
       "matchManagers": ["dockerfile"],
-      "matchFileNames": ["**/Dockerfile"],
+      "matchFileNames": ["Dockerfile", "tests/integration/Dockerfile"],
       "groupName": "container images",
       "groupSlug": "container-images"
     },
@@ -136,7 +136,7 @@
       "matchDepNames": ["uv", "astral-sh/uv", "ghcr.io/astral-sh/uv"],
       "matchFileNames": [
         "mise.toml",
-        "scripts/setup.sh",
+        "bootstrap/setup.sh",
         "tests/integration/Dockerfile"
       ],
       "matchUpdateTypes": ["major", "minor", "patch"],

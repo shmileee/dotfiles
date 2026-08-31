@@ -45,4 +45,4 @@ ol-multi = 2
 style = "fenced"
 
 [per-file-ignores]
-"docs/setup.md" = ["MD046"]
+"docs/content/setup.md" = ["MD046"]
