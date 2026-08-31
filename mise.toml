@@ -57,14 +57,6 @@ description = "Preview the Ansible reconciliation (check mode has limits)"
 run = "bootstrap/reconcile.sh --check"
 raw = true
 
-[tasks."bootstrap:format"]
-description = "Format bootstrap, reconciliation, and test shell code"
-run = "shfmt -w bootstrap/setup.sh bootstrap/reconcile.sh tests/integration/workstation-smoke.sh tests/bootstrap/*.sh tests/bootstrap/test-helper.bash tests/bootstrap/bootstrap.bats"
-
-[tasks."bootstrap:lint"]
-description = "Lint bootstrap, reconciliation, and test shell code"
-run = "shellcheck -s sh bootstrap/setup.sh bootstrap/reconcile.sh tests/bootstrap/*.sh && shellcheck -s bash tests/integration/workstation-smoke.sh tests/bootstrap/test-helper.bash"
-
 [tasks."ansible:prepare"]
 description = "Install the locked Ansible runtime and pinned collections"
 run = "env ANSIBLE_COLLECTIONS_PATH=bootstrap/.ansible/collections uv run --project bootstrap --locked --managed-python ansible-galaxy collection install --collections-path bootstrap/.ansible/collections --requirements-file bootstrap/ansible/requirements.yml"

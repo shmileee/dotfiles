@@ -419,7 +419,6 @@ mise install
 mise run ansible:validate-runtime
 mise run test:docker
 mise run test:bats
-mise run bootstrap:lint
 mise exec -- prek install --force
 mise run lint
 mise exec -- env \
