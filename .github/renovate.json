@@ -47,18 +47,10 @@
       "semanticCommitScope": "deps"
     },
     {
-      "description": "Group GitHub Actions version updates",
+      "description": "Group GitHub Actions updates",
       "matchManagers": ["github-actions"],
-      "matchUpdateTypes": ["major", "minor", "patch"],
       "groupName": "GitHub Actions",
       "groupSlug": "github-actions"
-    },
-    {
-      "description": "Group GitHub Actions digest updates",
-      "matchManagers": ["github-actions"],
-      "matchUpdateTypes": ["digest", "pinDigest"],
-      "groupName": "GitHub Actions digests",
-      "groupSlug": "github-actions-digests"
     },
     {
       "description": "Group documentation build dependencies",
@@ -119,20 +111,11 @@
       "semanticCommitScope": "deps"
     },
     {
-      "description": "Group Docker version updates",
+      "description": "Group Docker updates",
       "matchManagers": ["dockerfile"],
       "matchFileNames": ["**/Dockerfile"],
-      "matchUpdateTypes": ["major", "minor", "patch"],
       "groupName": "container images",
       "groupSlug": "container-images"
-    },
-    {
-      "description": "Group Docker digest updates",
-      "matchManagers": ["dockerfile"],
-      "matchFileNames": ["**/Dockerfile"],
-      "matchUpdateTypes": ["digest", "pinDigest"],
-      "groupName": "container image digests",
-      "groupSlug": "container-image-digests"
     },
     {
       "description": "Keep bootstrap Python declarations synchronized",
