@@ -14,10 +14,10 @@ teardown() {
 }
 
 @test "the public loader parses under Dash and /bin/sh" {
-  run "$dash_path" -n "$project_root/scripts/setup.sh"
+  run "$dash_path" -n "$project_root/bootstrap/setup.sh"
   [ "$status" -eq 0 ]
 
-  run /bin/sh -n "$project_root/scripts/setup.sh"
+  run /bin/sh -n "$project_root/bootstrap/setup.sh"
   [ "$status" -eq 0 ]
 }
 
@@ -59,7 +59,7 @@ teardown() {
   assert_log_contains " sync --project "
   assert_log_contains "--locked --managed-python"
   assert_log_contains "ansible-galaxy collection install --ignore-certs"
-  assert_log_contains "validate_bootstrap_runtime.py --uv-executable"
+  assert_log_contains "validate_runtime.py --uv-executable"
   assert_log_contains "env -u UV_PYTHON_INSTALL_DIR -u UV_PROJECT_ENVIRONMENT ansible-playbook"
   assert_log_contains "ansible-playbook --inventory 127.0.0.1,"
 }
@@ -155,7 +155,7 @@ teardown() {
 
   [ "$status" -eq 1 ]
   [[ $output == *"hosted fresh-workstation bootstrap cannot continue"* ]]
-  [[ $output == *"./scripts/setup.sh"* ]]
+  [[ $output == *"./bootstrap/setup.sh"* ]]
   refute_log_contains "uname"
   refute_log_contains "sudo"
   refute_log_contains "curl"
@@ -171,7 +171,7 @@ teardown() {
 
   [ "$status" -eq 1 ]
   [[ $output == *"mise run reconcile"* ]]
-  [[ $output == *"./scripts/setup.sh"* ]]
+  [[ $output == *"./bootstrap/setup.sh"* ]]
   refute_log_contains "uname"
   refute_log_contains "sudo"
   refute_log_contains "curl"
@@ -179,13 +179,13 @@ teardown() {
 
 @test "the checked-out setup command recovers an incomplete persistent clone" {
   target=$expected_persistent_checkout
-  mkdir -p "$target/scripts/common/ansible" "$target/bootstrap"
-  cp "$project_root/scripts/setup.sh" "$target/scripts/setup.sh"
+  mkdir -p "$target/bootstrap/ansible" "$target/bootstrap"
+  cp "$project_root/bootstrap/setup.sh" "$target/bootstrap/setup.sh"
   touch "$target/bootstrap/uv.lock"
-  touch "$target/scripts/common/ansible/main.yaml"
-  touch "$target/scripts/common/ansible/requirements.yml"
-  touch "$target/scripts/common/ansible/ansible.cfg"
-  TEST_SETUP_PATH=$target/scripts/setup.sh
+  touch "$target/bootstrap/ansible/main.yaml"
+  touch "$target/bootstrap/ansible/requirements.yml"
+  touch "$target/bootstrap/ansible/ansible.cfg"
+  TEST_SETUP_PATH=$target/bootstrap/setup.sh
 
   run_bootstrap
 
@@ -328,15 +328,15 @@ teardown() {
 
 @test "reconciliation prunes collections removed from the pinned manifest" {
   reconcile_root=$test_root/reconcile-repository
-  reconcile_script=$reconcile_root/scripts/common/reconcile.sh
-  requirements=$reconcile_root/scripts/common/ansible/requirements.yml
+  reconcile_script=$reconcile_root/bootstrap/reconcile.sh
+  requirements=$reconcile_root/bootstrap/ansible/requirements.yml
   runtime_state=$reconcile_root/bootstrap/.ansible
   mkdir -p "$(dirname "$reconcile_script")/ansible" "$runtime_state/collections"
-  cp "$project_root/scripts/common/reconcile.sh" "$reconcile_script"
+  cp "$project_root/bootstrap/reconcile.sh" "$reconcile_script"
   cp "$project_root/tests/bootstrap/fake-uv.sh" "$fake_bin/uv"
   chmod +x "$reconcile_script" "$fake_bin/uv"
-  touch "$reconcile_root/scripts/common/ansible/main.yaml"
-  touch "$reconcile_root/scripts/validate_bootstrap_runtime.py"
+  touch "$reconcile_root/bootstrap/ansible/main.yaml"
+  touch "$reconcile_root/bootstrap/validate_runtime.py"
   printf '%s\n' 'collections: [current]' > "$requirements"
   printf '%s\n' 'collections: [obsolete]' > "$runtime_state/requirements.yml"
   touch "$runtime_state/collections/obsolete"
@@ -352,7 +352,7 @@ teardown() {
   [ ! -e "$runtime_state/collections/obsolete" ]
   cmp -s "$requirements" "$runtime_state/requirements.yml"
   assert_log_contains "ansible-galaxy collection install"
-  assert_log_contains "validate_bootstrap_runtime.py"
+  assert_log_contains "validate_runtime.py"
   assert_log_contains "env -u UV_PROJECT_ENVIRONMENT ansible-playbook"
   assert_log_contains "ansible-playbook"
 }

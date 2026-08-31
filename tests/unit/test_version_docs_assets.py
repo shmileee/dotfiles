@@ -1,11 +1,27 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.version_docs_assets import version_assets
+MODULE_PATH = (
+    Path(__file__).resolve().parents[2]
+    / "docs"
+    / "tooling"
+    / "version_assets.py"
+)
+MODULE_SPEC = importlib.util.spec_from_file_location(
+    "version_docs_assets", MODULE_PATH
+)
+if MODULE_SPEC is None or MODULE_SPEC.loader is None:
+    raise RuntimeError(
+        f"Could not load documentation tooling from {MODULE_PATH}"
+    )
+VERSION_DOCS_ASSETS = importlib.util.module_from_spec(MODULE_SPEC)
+MODULE_SPEC.loader.exec_module(VERSION_DOCS_ASSETS)
+version_assets = VERSION_DOCS_ASSETS.version_assets
 
 
 class VersionDocsAssetsTest(unittest.TestCase):

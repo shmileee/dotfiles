@@ -6,7 +6,6 @@ on:
     paths:
       - "config/**"
       - "bootstrap/**"
-      - "scripts/**"
       - "tests/bootstrap/**"
       - "tests/integration/**"
       - ".dockerignore"
@@ -20,7 +19,6 @@ on:
     paths:
       - "config/**"
       - "bootstrap/**"
-      - "scripts/**"
       - "tests/bootstrap/**"
       - "tests/integration/**"
       - ".dockerignore"
@@ -56,11 +54,11 @@ jobs:
 
       - name: Verify the public bootstrap redirect
         run: |
-          repository_slug="$(./scripts/setup.sh --print-config | sed -n 's/^repository_slug=//p')"
-          repository_ref="$(./scripts/setup.sh --print-config | sed -n 's/^repository_ref=//p')"
-          bootstrap_url="$(./scripts/setup.sh --print-config | sed -n 's/^bootstrap_url=//p')"
+          repository_slug="$(./bootstrap/setup.sh --print-config | sed -n 's/^repository_slug=//p')"
+          repository_ref="$(./bootstrap/setup.sh --print-config | sed -n 's/^repository_ref=//p')"
+          bootstrap_url="$(./bootstrap/setup.sh --print-config | sed -n 's/^bootstrap_url=//p')"
           target="$(curl -fsSIL -o /dev/null --write-out '%{url_effective}' "$bootstrap_url")"
-          test "$target" = "https://raw.githubusercontent.com/$repository_slug/$repository_ref/scripts/setup.sh"
+          test "$target" = "https://raw.githubusercontent.com/$repository_slug/$repository_ref/bootstrap/setup.sh"
 
       - name: Set up mise
         uses: jdx/mise-action@5228313ee0372e111a38da051671ca30fc5a96db # v3
@@ -121,7 +119,7 @@ jobs:
             GITHUB_TOKEN=${{ github.token }}
 
       - name: Smoke-test image and second provisioning pass
-        run: scripts/docker/smoke.sh dotfiles:test
+        run: tests/integration/workstation-smoke.sh dotfiles:test
 
       - name: Login to DockerHub
         if: github.event_name == 'push'

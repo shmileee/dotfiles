@@ -60,7 +60,7 @@ hide:
 ## macOS system shortcuts
 
 These mappings are applied by the
-[`system_defaults`](https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/system_defaults)
+[`system_defaults`](https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/system_defaults)
 Ansible role.
 
 | Shortcut | Action |
@@ -193,7 +193,7 @@ LazyVim provides most editor mappings. This repository adds only a small set:
 ## Source of truth
 
 *   macOS shortcuts:
-    [`config.yaml`](https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml)
+    [`config.yaml`](https://github.com/shmileee/dotfiles/blob/master/bootstrap/ansible/config.yaml)
 *   Alacritty shortcuts:
     [`alacritty.toml.tmpl`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_alacritty/alacritty.toml.tmpl)
 *   fish shortcuts:

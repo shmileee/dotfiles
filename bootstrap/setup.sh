@@ -28,7 +28,7 @@ phase() {
 recovery_advice() {
   if [ -n "$persistent_checkout" ] && { [ -e "$persistent_checkout" ] || [ -L "$persistent_checkout" ]; }; then
     printf 'Inspect %s. If it is a valid incomplete clone, run:\n' "$persistent_checkout" >&2
-    printf '  cd "%s" && ./scripts/setup.sh\n' "$persistent_checkout" >&2
+    printf '  cd "%s" && ./bootstrap/setup.sh\n' "$persistent_checkout" >&2
   else
     printf 'After correcting the problem, run:\n' >&2
     printf '  curl -kfsSL %s | sh\n' "$bootstrap_url" >&2
@@ -61,7 +61,7 @@ cleanup() {
 
 usage() {
   cat << 'EOF'
-Usage: ./scripts/setup.sh [--print-config]
+Usage: ./bootstrap/setup.sh [--print-config]
 
 Bootstrap a supported workstation, or recover an incomplete bootstrap from
 the persistent checkout. Normal ongoing management uses `mise run reconcile`.
@@ -129,10 +129,10 @@ validate_identity() {
 
 find_local_sources() {
   case $0 in
-    */scripts/setup.sh)
+    */bootstrap/setup.sh)
       if script_directory=$(CDPATH='' cd -P "$(dirname "$0")" 2> /dev/null && pwd); then
         candidate_root=$(CDPATH='' cd -P "$script_directory/.." 2> /dev/null && pwd) || candidate_root=
-        if [ -f "$candidate_root/bootstrap/uv.lock" ] && [ -f "$candidate_root/scripts/common/ansible/main.yaml" ]; then
+        if [ -f "$candidate_root/bootstrap/uv.lock" ] && [ -f "$candidate_root/bootstrap/ansible/main.yaml" ]; then
           source_root=$candidate_root
           invocation_mode=local
         fi
@@ -152,10 +152,10 @@ guard_streamed_target() {
     printf '[dotfiles] Ansible previously completed the runtime handoff. The receipt is advisory; run:\n' >&2
     printf '  cd "%s" && mise run reconcile\n' "$persistent_checkout" >&2
     printf '[dotfiles] If mise is missing or broken, recover with:\n' >&2
-    printf '  cd "%s" && ./scripts/setup.sh\n' "$persistent_checkout" >&2
+    printf '  cd "%s" && ./bootstrap/setup.sh\n' "$persistent_checkout" >&2
   else
     printf '[dotfiles] No completion receipt was found. Inspect the path; for a valid incomplete clone, run:\n' >&2
-    printf '  cd "%s" && ./scripts/setup.sh\n' "$persistent_checkout" >&2
+    printf '  cd "%s" && ./bootstrap/setup.sh\n' "$persistent_checkout" >&2
   fi
   exit 1
 }
@@ -269,7 +269,7 @@ stage_sources() {
     stage_status=$?
     fail 'could not extract the downloaded source archive; tar diagnostics are shown above.' "$stage_status"
   fi
-  if [ ! -f "$source_root/bootstrap/uv.lock" ] || [ ! -f "$source_root/scripts/common/ansible/main.yaml" ]; then
+  if [ ! -f "$source_root/bootstrap/uv.lock" ] || [ ! -f "$source_root/bootstrap/ansible/main.yaml" ]; then
     fail 'the downloaded archive does not contain the locked bootstrap project and playbook.'
   fi
   rm -f "$archive_path"
@@ -329,7 +329,7 @@ run_bootstrap_runtime() {
 install_bootstrap_collections() {
   run_bootstrap_runtime ansible-galaxy collection install "$@" \
     --collections-path "$ANSIBLE_COLLECTIONS_PATH" \
-    --requirements-file "$source_root/scripts/common/ansible/requirements.yml"
+    --requirements-file "$source_root/bootstrap/ansible/requirements.yml"
 }
 
 prepare_ansible() {
@@ -356,7 +356,7 @@ prepare_ansible() {
 
   phase 'Locked controller versions'
   printf 'requested repository ref: %s\n' "$repository_ref"
-  if run_bootstrap_runtime python "$source_root/scripts/validate_bootstrap_runtime.py" \
+  if run_bootstrap_runtime python "$source_root/bootstrap/validate_runtime.py" \
     --uv-executable "$uv_executable" \
     --collections-path "$ANSIBLE_COLLECTIONS_PATH" \
     --checkout "$persistent_checkout"; then
@@ -369,7 +369,7 @@ prepare_ansible() {
 
 run_ansible() {
   phase 'Running the complete workstation playbook'
-  ANSIBLE_CONFIG=$source_root/scripts/common/ansible/ansible.cfg
+  ANSIBLE_CONFIG=$source_root/bootstrap/ansible/ansible.cfg
   export ANSIBLE_CONFIG
   if ! workstation_user=$(id -un 2> /dev/null); then
     fail 'could not determine the workstation user name before Ansible.'
@@ -378,7 +378,7 @@ run_ansible() {
   if sudo -k -n true > /dev/null 2>&1; then
     if run_bootstrap_runtime ansible-playbook --inventory '127.0.0.1,' \
       -e "ansible_user=$workstation_user" \
-      "$source_root/scripts/common/ansible/main.yaml"; then
+      "$source_root/bootstrap/ansible/main.yaml"; then
       return 0
     else
       ansible_status=$?
@@ -387,7 +387,7 @@ run_ansible() {
     phase 'Sudo needs the workstation password; Ansible will ask once'
     if run_bootstrap_runtime ansible-playbook --inventory '127.0.0.1,' \
       -e "ansible_user=$workstation_user" \
-      "$source_root/scripts/common/ansible/main.yaml" \
+      "$source_root/bootstrap/ansible/main.yaml" \
       --ask-become-pass; then
       return 0
     else

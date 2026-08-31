@@ -5,7 +5,7 @@ import unittest
 from pathlib import Path
 
 
-ANSIBLE_DIR = Path(__file__).parents[2] / "scripts" / "common" / "ansible"
+ANSIBLE_DIR = Path(__file__).parents[2] / "bootstrap" / "ansible"
 sys.path.insert(0, str(ANSIBLE_DIR / "module_utils"))
 
 from dotfiles_macos import (  # noqa: E402

@@ -41,10 +41,10 @@ def normalized_name(name: str) -> str:
 
 
 def configured_uv_version() -> str:
-    setup_text = (REPOSITORY_ROOT / "scripts/setup.sh").read_text()
+    setup_text = (REPOSITORY_ROOT / "bootstrap/setup.sh").read_text()
     match = re.search(r"^uv_version=([^\s#]+)$", setup_text, re.MULTILINE)
     if match is None:
-        fail("scripts/setup.sh does not declare one uv_version")
+        fail("bootstrap/setup.sh does not declare one uv_version")
     setup_version = match.group(1)
 
     with (REPOSITORY_ROOT / "mise.toml").open("rb") as mise_file:
@@ -63,7 +63,7 @@ def configured_uv_version() -> str:
     integration_version = integration_match.group(1)
 
     versions = {
-        "scripts/setup.sh": setup_version,
+        "bootstrap/setup.sh": setup_version,
         "mise.toml": mise_version,
         "tests/integration/Dockerfile": integration_version,
     }
@@ -132,9 +132,7 @@ def validate_python_packages() -> dict[str, str]:
 
 
 def expected_collections() -> dict[str, str]:
-    requirements_path = (
-        REPOSITORY_ROOT / "scripts/common/ansible/requirements.yml"
-    )
+    requirements_path = REPOSITORY_ROOT / "bootstrap/ansible/requirements.yml"
     requirements = yaml.safe_load(requirements_path.read_text())
     expected = {
         item["name"]: str(item["version"])

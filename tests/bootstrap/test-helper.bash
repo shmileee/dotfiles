@@ -13,10 +13,10 @@ setup_bootstrap_test() {
   os_release=$test_root/os-release
   ca_bundle=$test_root/ca-certificates.crt
   dash_path=$(command -v dash)
-  expected_uv_version=$(sed -n 's/^uv_version=//p' "$project_root/scripts/setup.sh")
+  expected_uv_version=$(sed -n 's/^uv_version=//p' "$project_root/bootstrap/setup.sh")
 
   mkdir -p "$test_home" "$test_tmp" "$fake_bin" "$base_bin"
-  cp "$project_root/scripts/setup.sh" "$setup_copy"
+  cp "$project_root/bootstrap/setup.sh" "$setup_copy"
   chmod +x "$setup_copy"
   bootstrap_config=$(HOME="$test_home" "$dash_path" "$setup_copy" --print-config)
   expected_repository_slug=$(printf '%s\n' "$bootstrap_config" | sed -n 's/^repository_slug=//p')
@@ -105,11 +105,11 @@ printf 'tar %s\n' "$archive" >>"$MOCK_LOG"
 case $archive in
   */source.tar.gz)
     [ "${TEST_SOURCE_TAR_STATUS:-0}" -eq 0 ] || exit "$TEST_SOURCE_TAR_STATUS"
-    mkdir -p "$destination/bootstrap" "$destination/scripts/common/ansible"
+    mkdir -p "$destination/bootstrap" "$destination/bootstrap/ansible"
     touch "$destination/bootstrap/uv.lock"
-    touch "$destination/scripts/common/ansible/main.yaml"
-    touch "$destination/scripts/common/ansible/requirements.yml"
-    touch "$destination/scripts/common/ansible/ansible.cfg"
+    touch "$destination/bootstrap/ansible/main.yaml"
+    touch "$destination/bootstrap/ansible/requirements.yml"
+    touch "$destination/bootstrap/ansible/ansible.cfg"
     ;;
   */uv.tar.gz)
     [ "${TEST_UV_TAR_STATUS:-0}" -eq 0 ] || exit "$TEST_UV_TAR_STATUS"

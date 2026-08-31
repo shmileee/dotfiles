@@ -3,7 +3,7 @@
 set -eu
 
 script_directory=$(CDPATH='' cd -P "$(dirname "$0")" && pwd)
-repository_root=$(CDPATH='' cd -P "$script_directory/../.." && pwd)
+repository_root=$(CDPATH='' cd -P "$script_directory/.." && pwd)
 project=$repository_root/bootstrap
 runtime_state=$project/.ansible
 collections=$runtime_state/collections
@@ -38,7 +38,7 @@ case $# in
 esac
 
 command -v uv > /dev/null 2>&1 || {
-  printf 'uv is missing. Recover with ./scripts/setup.sh from the persistent checkout.\n' >&2
+  printf 'uv is missing. Recover with ./bootstrap/setup.sh from the persistent checkout.\n' >&2
   exit 1
 }
 command -v sudo > /dev/null 2>&1 || {
@@ -89,7 +89,7 @@ run_in_runtime ansible-galaxy collection install \
   --requirements-file "$collection_requirements"
 
 printf '[dotfiles] Validating locked runtime identity\n'
-run_in_runtime python "$repository_root/scripts/validate_bootstrap_runtime.py" \
+run_in_runtime python "$repository_root/bootstrap/validate_runtime.py" \
   --uv-executable "$(command -v uv)" \
   --collections-path "$collections" \
   --checkout "$repository_root"

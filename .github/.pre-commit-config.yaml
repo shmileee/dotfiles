@@ -34,22 +34,24 @@ repos:
     hooks:
       - id: gitleaks
         name: scan secrets with gitleaks
-        entry: gitleaks dir --redact --no-banner .
+        entry: gitleaks dir --config .github/.gitleaks.toml --redact
+          --no-banner .
         language: system
         pass_filenames: false
       - id: biome
         name: lint and format web files with biome
-        entry: biome check --write --no-errors-on-unmatched
+        entry: biome check --config-path .github/biome.json --vcs-root .
+          --write --no-errors-on-unmatched
         language: system
         files: \.(css|js|json|jsonc)$
       - id: ruff-check
         name: lint python with ruff
-        entry: ruff check
+        entry: ruff check --config .github/ruff.toml
         language: system
         types: [python]
       - id: ruff-format
         name: format python with ruff
-        entry: ruff format
+        entry: ruff format --config .github/ruff.toml
         language: system
         types: [python]
       - id: stylua
@@ -64,7 +66,7 @@ repos:
         types: [toml]
       - id: rumdl
         name: format markdown with rumdl
-        entry: rumdl fmt
+        entry: rumdl fmt --config .github/.rumdl.toml
         language: system
         types: [markdown]
       - id: chezmoi-templates
@@ -89,7 +91,7 @@ repos:
         types: [shell]
       - id: yamllint
         name: lint yaml with yamllint
-        entry: yamllint
+        entry: yamllint --config-file .github/.yamllint.yaml
         language: system
         types: [yaml]
       - id: actionlint
@@ -106,9 +108,10 @@ repos:
         types: [yaml]
       - id: ansible-lint
         name: lint ansible with ansible-lint
-        entry: env ANSIBLE_CONFIG=scripts/common/ansible/ansible.cfg
+        entry: env ANSIBLE_CONFIG=bootstrap/ansible/ansible.cfg
           ANSIBLE_COLLECTIONS_PATH=bootstrap/.ansible/collections ansible-lint
-          scripts/common/ansible
+          --config-file .github/.ansible-lint --project-dir .
+          --yamllint-file .github/.yamllint.yaml bootstrap/ansible
         language: system
         pass_filenames: false
-        files: ^scripts/common/ansible/
+        files: ^bootstrap/ansible/
