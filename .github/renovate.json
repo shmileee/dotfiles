@@ -42,6 +42,14 @@
       "semanticCommitScope": "deps"
     },
     {
+      "description": "Group dependencies used by the bootstrap runtime",
+      "matchFileNames": ["bootstrap/**"],
+      "groupName": "bootstrap dependencies",
+      "groupSlug": "bootstrap",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "bootstrap"
+    },
+    {
       "description": "Group Ansible content used to provision machines",
       "matchManagers": ["ansible-galaxy"],
       "matchFileNames": ["scripts/common/ansible/requirements.yml"],
