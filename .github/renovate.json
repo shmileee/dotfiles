@@ -1,10 +1,21 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:best-practices", ":enablePreCommit"],
+  "ignorePresets": [":ignoreModulesAndTests"],
+  "ignorePaths": [
+    "**/node_modules/**",
+    "**/bower_components/**",
+    "**/vendor/**",
+    "**/examples/**",
+    "**/__tests__/**",
+    "**/test/**",
+    "**/__fixtures__/**"
+  ],
   "timezone": "Europe/Warsaw",
   "schedule": ["* 0-5 * * 1"],
   "updateNotScheduled": false,
   "minimumReleaseAge": "3 days",
+  "minimumReleaseAgeBehaviour": "timestamp-optional",
   "prConcurrentLimit": 4,
   "prHourlyLimit": 2,
   "rebaseWhen": "conflicted",
@@ -13,24 +24,41 @@
   "major": {
     "dependencyDashboardApproval": true
   },
-  "lockFileMaintenance": {
-    "enabled": false
-  },
   "vulnerabilityAlerts": {
     "enabled": true,
-    "schedule": ["at any time"],
-    "minimumReleaseAge": "0 days",
     "semanticCommitType": "fix",
     "semanticCommitScope": "security"
   },
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Update annotated shell variables",
+      "managerFilePatterns": ["/^scripts\\/setup\\.sh$/"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\s+[A-Za-z_][A-Za-z0-9_]*=(?<currentValue>\\S+)"
+      ]
+    }
+  ],
   "packageRules": [
     {
-      "description": "Group updates across the repository's GitHub Actions",
+      "description": "Use CI commit semantics for GitHub Actions",
       "matchManagers": ["github-actions"],
-      "groupName": "GitHub Actions",
-      "groupSlug": "github-actions",
       "semanticCommitType": "ci",
       "semanticCommitScope": "deps"
+    },
+    {
+      "description": "Group GitHub Actions version updates",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["major", "minor", "patch"],
+      "groupName": "GitHub Actions",
+      "groupSlug": "github-actions"
+    },
+    {
+      "description": "Group GitHub Actions digest updates",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["digest", "pinDigest"],
+      "groupName": "GitHub Actions digests",
+      "groupSlug": "github-actions-digests"
     },
     {
       "description": "Group documentation build dependencies",
@@ -85,13 +113,55 @@
       "semanticCommitScope": "workstation"
     },
     {
-      "description": "Group the runtime and frontend images used by Docker builds",
+      "description": "Use build commit semantics for Docker dependencies",
       "matchManagers": ["dockerfile"],
-      "matchFileNames": ["Dockerfile"],
-      "groupName": "container images",
-      "groupSlug": "container-images",
       "semanticCommitType": "build",
       "semanticCommitScope": "deps"
+    },
+    {
+      "description": "Group Docker version updates",
+      "matchManagers": ["dockerfile"],
+      "matchFileNames": ["**/Dockerfile"],
+      "matchUpdateTypes": ["major", "minor", "patch"],
+      "groupName": "container images",
+      "groupSlug": "container-images"
+    },
+    {
+      "description": "Group Docker digest updates",
+      "matchManagers": ["dockerfile"],
+      "matchFileNames": ["**/Dockerfile"],
+      "matchUpdateTypes": ["digest", "pinDigest"],
+      "groupName": "container image digests",
+      "groupSlug": "container-image-digests"
+    },
+    {
+      "description": "Keep bootstrap Python declarations synchronized",
+      "matchDepNames": ["python"],
+      "matchFileNames": [
+        "bootstrap/.python-version",
+        "bootstrap/pyproject.toml"
+      ],
+      "matchUpdateTypes": ["major", "minor", "patch"],
+      "groupName": "bootstrap Python",
+      "groupSlug": "bootstrap-python",
+      "minimumGroupSize": 2,
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "bootstrap"
+    },
+    {
+      "description": "Keep bootstrap uv declarations synchronized",
+      "matchDepNames": ["uv", "astral-sh/uv", "ghcr.io/astral-sh/uv"],
+      "matchFileNames": [
+        "mise.toml",
+        "scripts/setup.sh",
+        "tests/integration/Dockerfile"
+      ],
+      "matchUpdateTypes": ["major", "minor", "patch"],
+      "groupName": "bootstrap uv",
+      "groupSlug": "bootstrap-uv",
+      "minimumGroupSize": 3,
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "bootstrap"
     },
     {
       "description": "Allow for the slower release cadence of stable tooling",
