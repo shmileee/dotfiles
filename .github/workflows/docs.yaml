@@ -5,6 +5,7 @@ on:
   pull_request:
     paths:
       - "docs/**"
+      - "mise.toml"
       - ".github/actions/build-docs/action.yaml"
       - ".github/workflows/docs.yaml"
   push:
