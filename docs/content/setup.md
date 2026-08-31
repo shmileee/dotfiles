@@ -309,6 +309,7 @@ mise tasks
 | `mise run reconcile` | Install the required Ansible collections and reconcile the machine. |
 | `mise run reconcile:check` | Preview the reconciliation using Ansible check mode. |
 | `mise run ansible:validate-runtime` | Report and validate the checkout, uv, Python, Ansible, locked dependencies, and collections. |
+| `mise run lint` | Run all prek hooks against the repository. |
 | `mise run status` | Show differences between the chezmoi source and files in the home directory. |
 | `mise run import` | Import all modified, non-template managed files into `config/`. |
 | `mise run import ~/.config/nvim` | Import one managed file or directory. |
@@ -419,8 +420,8 @@ mise run ansible:validate-runtime
 mise run test:docker
 mise run test:bats
 mise run bootstrap:lint
-mise exec -- prek --config .github/.pre-commit-config.yaml install --force
-mise exec -- prek --config .github/.pre-commit-config.yaml run --all-files
+mise exec -- prek install --force
+mise run lint
 mise exec -- env \
   ANSIBLE_CONFIG=bootstrap/ansible/ansible.cfg \
   ANSIBLE_COLLECTIONS_PATH=bootstrap/.ansible/collections \

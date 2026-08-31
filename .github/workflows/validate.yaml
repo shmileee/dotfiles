@@ -50,7 +50,7 @@ jobs:
       - name: Run repository checks
         run: |
           mise run ansible:validate-runtime
-          mise exec -- prek --config .github/.pre-commit-config.yaml run --all-files
+          mise run lint
 
       - name: Validate Ansible syntax
         run: |

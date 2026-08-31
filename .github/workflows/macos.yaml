@@ -97,7 +97,7 @@ jobs:
         run: |
           cd "$HOME/ghq/personalgit/$GITHUB_REPOSITORY"
           mise install
-          mise exec -- prek --config .github/.pre-commit-config.yaml run --all-files
+          mise run lint
 
       - name: Verify a second run is idempotent
         run: |
