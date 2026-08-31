@@ -33,6 +33,7 @@
           - --show-toplevel
       register: checkout_root
       changed_when: false
+      check_mode: false
       failed_when: checkout_root.rc != 0 or checkout_root.stdout != persistent_checkout
 
     - name: "bootstrap prerequisites | verify the persistent checkout origin"
@@ -46,6 +47,7 @@
           - origin
       register: checkout_origin
       changed_when: false
+      check_mode: false
       failed_when: >-
         checkout_origin.rc != 0
         or checkout_origin.stdout != persistent_repository_url
@@ -62,6 +64,7 @@
           - remote.origin.promisor
       register: remote_promisor
       changed_when: false
+      check_mode: false
       failed_when: remote_promisor.rc not in [0, 1]
 
     - name: "bootstrap prerequisites | inspect the repository partial-clone extension"
@@ -76,6 +79,7 @@
           - extensions.partialClone
       register: partial_clone_extension
       changed_when: false
+      check_mode: false
       failed_when: partial_clone_extension.rc not in [0, 1]
 
     - name: "bootstrap prerequisites | inspect the shallow-clone marker"
@@ -88,6 +92,7 @@
           - --is-shallow-repository
       register: shallow_repository
       changed_when: false
+      check_mode: false
 
     - name: "bootstrap prerequisites | reject an incomplete persistent clone"
       ansible.builtin.assert:
@@ -119,6 +124,7 @@
       - HEAD
   register: persistent_commit
   changed_when: false
+  check_mode: false
 
 - name: "bootstrap prerequisites | verify the requested checkout commit"
   ansible.builtin.assert:

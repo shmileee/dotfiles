@@ -109,6 +109,20 @@ RUN ANSIBLE_CONFIG=bootstrap/ansible/ansible.cfg \
       bootstrap/ansible/main.yaml | tee /tmp/prerequisites-idempotence.log && \
     grep -Eq 'changed=0 +unreachable=0 +failed=0' /tmp/prerequisites-idempotence.log
 
+RUN repository=/home/linuxbrew/bootstrap-integration/dotfiles && \
+    expected_commit="$(git -C "$repository" rev-parse HEAD)" && \
+    ANSIBLE_CONFIG=bootstrap/ansible/ansible.cfg \
+    ANSIBLE_COLLECTIONS_PATH=/tmp/ansible-collections \
+    DOTFILES_PERSISTENT_CHECKOUT="$repository" \
+    DOTFILES_PERSISTENT_REPOSITORY_URL="$(git -C "$repository" remote get-url origin)" \
+    DOTFILES_PERSISTENT_EXPECTED_COMMIT="$expected_commit" \
+    uv run --project bootstrap --locked --managed-python \
+      ansible-playbook --inventory '127.0.0.1,' \
+      -e ansible_user=linuxbrew \
+      --check \
+      --tags bootstrap_prerequisites \
+      bootstrap/ansible/main.yaml
+
 RUN handoff_target=/tmp/handoff-checkout && \
     fake_bin=/tmp/handoff-bin && \
     mkdir -p "$handoff_target/.git" "$fake_bin" && \
