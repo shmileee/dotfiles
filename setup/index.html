@@ -399,10 +399,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#reuse-this-repository-as-your-own" class="md-nav__link">
+  <a href="#forking-the-repository" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Reuse this repository as your own
+        Forking the repository
       </span>
     </span>
   </a>
@@ -701,10 +701,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#reuse-this-repository-as-your-own" class="md-nav__link">
+  <a href="#forking-the-repository" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Reuse this repository as your own
+        Forking the repository
       </span>
     </span>
   </a>
@@ -919,8 +919,8 @@ particular attention to
 and the
 <a href="https://github.com/shmileee/dotfiles/blob/master/bootstrap/ansible/main.yaml"><code>main.yaml</code></a>
 playbook:</p>
-<div class="language-bash highlight"><pre><span></span><code><span class="nv">repository_url</span><span class="o">=</span>https://github.com/OWNER/REPOSITORY.git
-<span class="nv">checkout</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/ghq/personalgit/OWNER/REPOSITORY"</span>
+<div class="language-bash highlight"><pre><span></span><code><span class="nv">repository_url</span><span class="o">=</span>https://github.com/shmileee/dotfiles.git
+<span class="nv">checkout</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/ghq/personalgit/shmileee/dotfiles"</span>
 mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">"</span><span class="k">$(</span>dirname<span class="w"> </span><span class="s2">"</span><span class="nv">$checkout</span><span class="s2">"</span><span class="k">)</span><span class="s2">"</span>
 git<span class="w"> </span>clone<span class="w"> </span><span class="s2">"</span><span class="nv">$repository_url</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$checkout</span><span class="s2">"</span>
 <span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$checkout</span><span class="s2">"</span>
@@ -1074,30 +1074,24 @@ slug. The role force-applies that checkout's
 <a href="https://github.com/shmileee/dotfiles/tree/master/config"><code>config/</code></a> directory,
 so the source remains available after the temporary bootstrap controller is
 removed.</p>
-<h3 id="reuse-this-repository-as-your-own">Reuse this repository as your own<a class="headerlink" href="#reuse-this-repository-as-your-own" title="Permanent link">&para;</a></h3>
-<p>The bootstrap repository identity has one source of truth: the settings at the
-top of <code>bootstrap/setup.sh</code>. Before using a fork, update:</p>
+<h3 id="forking-the-repository">Forking the repository<a class="headerlink" href="#forking-the-repository" title="Permanent link">&para;</a></h3>
+<p>This documentation describes <code>shmileee/dotfiles</code> and deliberately uses its
+real repository URLs, checkout path, documentation domain, Docker image, and
+personal settings. It is not a generic dotfiles template.</p>
+<p>If you fork this repository to provision your own dotfiles, update the code and
+documentation in multiple places. At minimum, replace or review:</p>
 <ul>
-<li><code>repository_slug</code> to <code>OWNER/REPOSITORY</code>;</li>
-<li><code>repository_ref</code> if the default branch is not <code>master</code>; and</li>
-<li><code>bootstrap_url</code> to your own redirect, or to the raw setup script URL.</li>
-</ul>
-<p>Setup derives the archive URL, HTTPS clone URL, and
-<code>$HOME/ghq/personalgit/OWNER/REPOSITORY</code> path from those settings. Run
-<code>./bootstrap/setup.sh --print-config</code> to inspect the effective values without
-changing the machine.</p>
-<p>Repository identity is only one part of adopting personal dotfiles. Also
-review and replace these personal publication and user settings:</p>
-<ul>
+<li><code>repository_slug</code>, <code>repository_ref</code>, and <code>bootstrap_url</code> at the top of
+    <code>bootstrap/setup.sh</code>;</li>
 <li>the public redirect itself, so it points to your slug and branch;</li>
 <li>the Docker Hub identity in <code>.github/workflows/docker.yaml</code> if it differs
     from the GitHub repository owner and slug used by its defaults;</li>
 <li>the <code>UBUNTU_ARM_RUNNER</code> GitHub Actions repository variable used by the
     Docker workflow;</li>
 <li>the documentation domain in <code>docs/mkdocs.yml</code>, <code>docs/content/robots.txt</code>,
-    <code>.github/workflows/docs.yaml</code>, and <code>README.md</code>;</li>
-<li>the repository file links throughout <code>README.md</code> and <code>docs/</code>, plus
-    <code>repo_url</code>, <code>repo_name</code>, and <code>edit_uri</code> in <code>docs/mkdocs.yml</code>;</li>
+    <code>.github/workflows/docs.yaml</code>, and <code>docs/README.md</code>;</li>
+<li>the repository file links throughout <code>docs/</code>, plus <code>repo_url</code>, <code>repo_name</code>,
+    and <code>edit_uri</code> in <code>docs/mkdocs.yml</code>;</li>
 <li>Git author and namespace values under
     <code>config/private_dot_config/private_git/</code>; and</li>
 <li>every package, application, secret template, shell preference, and macOS
