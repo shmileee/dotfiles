@@ -1,0 +1,19 @@
+[tools]
+"aqua:rhysd/actionlint" = "1.7.12"
+"aqua:twpayne/chezmoi" = "2.72.0"
+"aqua:zizmorcore/zizmor" = "1.29.0"
+biome = "2.5.11"
+gitleaks = "8.30.1"
+"pipx:ansible-lint" = "26.8.0"
+"pipx:yamllint" = "1.38.0"
+prek = "0.4.14"
+rumdl = "0.2.62"
+ruff = "0.16.5"
+shellcheck = "0.11.0"
+shfmt = "3.13.1"
+stylua = "2.5.2"
+taplo = "0.10.0"
+
+[tasks.lint]
+description = "Run all prek hooks against the repository"
+run = "prek run --all-files"
