@@ -9,4 +9,4 @@ and each tool's native update workflow.
 
 [![macos](https://github.com/shmileee/dotfiles/actions/workflows/macos.yaml/badge.svg)](https://github.com/shmileee/dotfiles/actions/workflows/macos.yaml)
 [![docker](https://github.com/shmileee/dotfiles/actions/workflows/docker.yaml/badge.svg)](https://github.com/shmileee/dotfiles/actions/workflows/docker.yaml)
-[![validate](https://github.com/shmileee/dotfiles/actions/workflows/validate.yaml/badge.svg)](https://github.com/shmileee/dotfiles/actions/workflows/validate.yaml)
+[![checks](https://github.com/shmileee/dotfiles/actions/workflows/checks.yaml/badge.svg)](https://github.com/shmileee/dotfiles/actions/workflows/checks.yaml)

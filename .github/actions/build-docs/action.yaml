@@ -1,15 +1,15 @@
 ---
-name: Build documentation
-description: Install the pinned documentation toolchain and build the site
+name: build site
+description: install the pinned documentation toolchain and build the site
 
 runs:
   using: composite
   steps:
-    - name: Set up mise
+    - name: set up mise
       uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
       with:
         install_args: uv
 
-    - name: Build
+    - name: build site
       shell: bash
       run: mise run docs:build
