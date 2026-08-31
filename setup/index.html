@@ -825,7 +825,7 @@
                 
                   
   
-    <a href="https://github.com/shmileee/dotfiles/edit/master/docs/setup.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/shmileee/dotfiles/edit/master/docs/content/setup.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -834,7 +834,7 @@
     
       
     
-    <a href="https://github.com/shmileee/dotfiles/raw/master/docs/setup.md" title="View source of this page" class="md-content__button md-icon">
+    <a href="https://github.com/shmileee/dotfiles/raw/master/docs/content/setup.md" title="View source of this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
     </a>
@@ -889,7 +889,7 @@
 <li>change macOS defaults, Dock contents, and keyboard shortcuts.</li>
 </ul>
 <p>Back up your existing configuration before continuing. At minimum, inspect
-<a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml"><code>config.yaml</code></a>
+<a href="https://github.com/shmileee/dotfiles/blob/master/bootstrap/ansible/config.yaml"><code>config.yaml</code></a>
 and the files under
 <a href="https://github.com/shmileee/dotfiles/tree/master/config"><code>config/</code></a>.</p>
 <h3 id="platform-requirements">Platform requirements<a class="headerlink" href="#platform-requirements" title="Permanent link">&para;</a></h3>
@@ -915,9 +915,9 @@ operating system before downloading sources or requesting elevated privileges.</
 <h2 id="recommended-review-then-run">Recommended: review, then run<a class="headerlink" href="#recommended-review-then-run" title="Permanent link">&para;</a></h2>
 <p>Clone the repository so you can inspect exactly what the setup will run. Pay
 particular attention to
-<a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml"><code>config.yaml</code></a>
+<a href="https://github.com/shmileee/dotfiles/blob/master/bootstrap/ansible/config.yaml"><code>config.yaml</code></a>
 and the
-<a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/main.yaml"><code>main.yaml</code></a>
+<a href="https://github.com/shmileee/dotfiles/blob/master/bootstrap/ansible/main.yaml"><code>main.yaml</code></a>
 playbook:</p>
 <div class="language-bash highlight"><pre><span></span><code><span class="nv">repository_url</span><span class="o">=</span>https://github.com/OWNER/REPOSITORY.git
 <span class="nv">checkout</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/ghq/personalgit/OWNER/REPOSITORY"</span>
@@ -925,11 +925,11 @@ mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">"</span>
 git<span class="w"> </span>clone<span class="w"> </span><span class="s2">"</span><span class="nv">$repository_url</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$checkout</span><span class="s2">"</span>
 <span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$checkout</span><span class="s2">"</span>
 
-less<span class="w"> </span>scripts/common/ansible/config.yaml
-less<span class="w"> </span>scripts/common/ansible/main.yaml
+less<span class="w"> </span>bootstrap/ansible/config.yaml
+less<span class="w"> </span>bootstrap/ansible/main.yaml
 </code></pre></div>
 <p>When you are comfortable with the configuration, run the complete setup:</p>
-<div class="language-bash highlight"><pre><span></span><code>./scripts/setup.sh
+<div class="language-bash highlight"><pre><span></span><code>./bootstrap/setup.sh
 </code></pre></div>
 <p>The local command is also the recovery path after a bootstrap that created the
 checkout but did not finish. It builds a disposable locked Ansible controller
@@ -939,7 +939,7 @@ from this checkout and preserves all durable Ansible changes if a task fails.</p
 </code></pre></div>
 <p><code>https://oponomarov.com/d</code> is the author's convenience redirect for installing
 this repository on a fresh, trusted workstation. It redirects to
-<a href="https://github.com/shmileee/dotfiles/blob/master/scripts/setup.sh"><code>scripts/setup.sh</code></a>
+<a href="https://github.com/shmileee/dotfiles/blob/master/bootstrap/setup.sh"><code>bootstrap/setup.sh</code></a>
 on the configured mutable branch. The POSIX loader stages that branch in a
 private temporary workspace, downloads the pinned uv controller, and hands all
 workstation changes to Ansible. The controller workspace is deleted on every
@@ -958,7 +958,7 @@ insecure setting is written.</p>
 <summary>Download the script before running it</summary>
 <p>If you want the convenience of the bootstrap without piping directly into
 a shell:</p>
-<div class="language-bash highlight"><pre><span></span><code>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://raw.githubusercontent.com/shmileee/dotfiles/master/scripts/setup.sh<span class="w"> </span>&gt;<span class="w"> </span>setup.sh
+<div class="language-bash highlight"><pre><span></span><code>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://raw.githubusercontent.com/shmileee/dotfiles/master/bootstrap/setup.sh<span class="w"> </span>&gt;<span class="w"> </span>setup.sh
 less<span class="w"> </span>setup.sh
 chmod<span class="w"> </span>+x<span class="w"> </span>setup.sh
 ./setup.sh
@@ -1007,7 +1007,7 @@ chmod<span class="w"> </span>+x<span class="w"> </span>setup.sh
 </thead>
 <tbody>
 <tr>
-<td><code>./scripts/setup.sh</code></td>
+<td><code>./bootstrap/setup.sh</code></td>
 <td>Bootstrap a workstation or recover a valid incomplete persistent clone.</td>
 </tr>
 <tr>
@@ -1023,7 +1023,7 @@ chmod<span class="w"> </span>+x<span class="w"> </span>setup.sh
 </div>
 <p>The hosted one-line installer is for a new workstation. It stops if the derived
 checkout path already exists and leaves that path untouched. For a valid
-incomplete checkout, run <code>./scripts/setup.sh</code> from that checkout. After a
+incomplete checkout, run <code>./bootstrap/setup.sh</code> from that checkout. After a
 successful setup, use <code>mise run reconcile</code>; rerun the local setup script only if
 the installed mise environment needs to be recovered.</p>
 <div class="admonition note">
@@ -1046,12 +1046,12 @@ simulation.</p>
 <tbody>
 <tr>
 <td>Packages and applications</td>
-<td><a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml"><code>scripts/common/ansible/config.yaml</code></a></td>
+<td><a href="https://github.com/shmileee/dotfiles/blob/master/bootstrap/ansible/config.yaml"><code>bootstrap/ansible/config.yaml</code></a></td>
 <td>Homebrew packages, casks, Dock items, keyboard shortcuts</td>
 </tr>
 <tr>
 <td>System behavior</td>
-<td><a href="https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles"><code>scripts/common/ansible/roles/</code></a></td>
+<td><a href="https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles"><code>bootstrap/ansible/roles/</code></a></td>
 <td>Installation logic and macOS defaults</td>
 </tr>
 <tr>
@@ -1068,7 +1068,7 @@ simulation.</p>
 </table>
 </div>
 <p>The <code>dotfiles.checkout</code> value in
-<a href="https://github.com/shmileee/dotfiles/blob/master/scripts/common/ansible/config.yaml"><code>config.yaml</code></a>
+<a href="https://github.com/shmileee/dotfiles/blob/master/bootstrap/ansible/config.yaml"><code>config.yaml</code></a>
 points chezmoi at the persistent path derived from the configured repository
 slug. The role force-applies that checkout's
 <a href="https://github.com/shmileee/dotfiles/tree/master/config"><code>config/</code></a> directory,
@@ -1076,7 +1076,7 @@ so the source remains available after the temporary bootstrap controller is
 removed.</p>
 <h3 id="reuse-this-repository-as-your-own">Reuse this repository as your own<a class="headerlink" href="#reuse-this-repository-as-your-own" title="Permanent link">&para;</a></h3>
 <p>The bootstrap repository identity has one source of truth: the settings at the
-top of <code>scripts/setup.sh</code>. Before using a fork, update:</p>
+top of <code>bootstrap/setup.sh</code>. Before using a fork, update:</p>
 <ul>
 <li><code>repository_slug</code> to <code>OWNER/REPOSITORY</code>;</li>
 <li><code>repository_ref</code> if the default branch is not <code>master</code>; and</li>
@@ -1084,7 +1084,7 @@ top of <code>scripts/setup.sh</code>. Before using a fork, update:</p>
 </ul>
 <p>Setup derives the archive URL, HTTPS clone URL, and
 <code>$HOME/ghq/personalgit/OWNER/REPOSITORY</code> path from those settings. Run
-<code>./scripts/setup.sh --print-config</code> to inspect the effective values without
+<code>./bootstrap/setup.sh --print-config</code> to inspect the effective values without
 changing the machine.</p>
 <p>Repository identity is only one part of adopting personal dotfiles. Also
 review and replace these personal publication and user settings:</p>
@@ -1094,14 +1094,14 @@ review and replace these personal publication and user settings:</p>
     from the GitHub repository owner and slug used by its defaults;</li>
 <li>the <code>UBUNTU_ARM_RUNNER</code> GitHub Actions repository variable used by the
     Docker workflow;</li>
-<li>the documentation domain in <code>mkdocs.yml</code>, <code>docs/robots.txt</code>,
+<li>the documentation domain in <code>docs/mkdocs.yml</code>, <code>docs/content/robots.txt</code>,
     <code>.github/workflows/docs.yaml</code>, and <code>README.md</code>;</li>
 <li>the repository file links throughout <code>README.md</code> and <code>docs/</code>, plus
-    <code>repo_url</code>, <code>repo_name</code>, and <code>edit_uri</code> in <code>mkdocs.yml</code>;</li>
+    <code>repo_url</code>, <code>repo_name</code>, and <code>edit_uri</code> in <code>docs/mkdocs.yml</code>;</li>
 <li>Git author and namespace values under
     <code>config/private_dot_config/private_git/</code>; and</li>
 <li>every package, application, secret template, shell preference, and macOS
-    default under <code>scripts/common/ansible/config.yaml</code> and <code>config/</code>.</li>
+    default under <code>bootstrap/ansible/config.yaml</code> and <code>config/</code>.</li>
 </ul>
 <h3 id="ansible-roles">Ansible roles<a class="headerlink" href="#ansible-roles" title="Permanent link">&para;</a></h3>
 <div class="setup-reference">
@@ -1114,51 +1114,51 @@ review and replace these personal publication and user settings:</p>
 </thead>
 <tbody>
 <tr>
-<td><a aria-label="bootstrap_prerequisites role on GitHub" class="role-link" href="https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/bootstrap_prerequisites"><code>bootstrap_prerequisites</code> <span aria-hidden="true">↗</span></a></td>
+<td><a aria-label="bootstrap_prerequisites role on GitHub" class="role-link" href="https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/bootstrap_prerequisites"><code>bootstrap_prerequisites</code> <span aria-hidden="true">↗</span></a></td>
 <td>Validate the platform, install Ubuntu prerequisites, and create or verify the persistent checkout</td>
 </tr>
 <tr>
-<td><a aria-label="homebrew role on GitHub" class="role-link" href="https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/homebrew"><code>homebrew</code> <span aria-hidden="true">↗</span></a></td>
+<td><a aria-label="homebrew role on GitHub" class="role-link" href="https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/homebrew"><code>homebrew</code> <span aria-hidden="true">↗</span></a></td>
 <td>Install Homebrew on macOS and Ubuntu</td>
 </tr>
 <tr>
-<td><a aria-label="common role on GitHub" class="role-link" href="https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/common"><code>common</code> <span aria-hidden="true">↗</span></a></td>
+<td><a aria-label="common role on GitHub" class="role-link" href="https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/common"><code>common</code> <span aria-hidden="true">↗</span></a></td>
 <td>Install shared command-line tools and platform-specific packages and applications</td>
 </tr>
 <tr>
-<td><a aria-label="fonts role on GitHub" class="role-link" href="https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/fonts"><code>fonts</code> <span aria-hidden="true">↗</span></a></td>
+<td><a aria-label="fonts role on GitHub" class="role-link" href="https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/fonts"><code>fonts</code> <span aria-hidden="true">↗</span></a></td>
 <td>Install developer fonts on macOS and Ubuntu</td>
 </tr>
 <tr>
-<td><a aria-label="dotfiles role on GitHub" class="role-link" href="https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/dotfiles"><code>dotfiles</code> <span aria-hidden="true">↗</span></a></td>
+<td><a aria-label="dotfiles role on GitHub" class="role-link" href="https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/dotfiles"><code>dotfiles</code> <span aria-hidden="true">↗</span></a></td>
 <td>Install chezmoi and apply the current checkout</td>
 </tr>
 <tr>
-<td><a aria-label="fish role on GitHub" class="role-link" href="https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/fish"><code>fish</code> <span aria-hidden="true">↗</span></a></td>
+<td><a aria-label="fish role on GitHub" class="role-link" href="https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/fish"><code>fish</code> <span aria-hidden="true">↗</span></a></td>
 <td>Install fish, make it the login shell, and synchronize Fisher plugins</td>
 </tr>
 <tr>
-<td><a aria-label="mise role on GitHub" class="role-link" href="https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/mise"><code>mise</code> <span aria-hidden="true">↗</span></a></td>
+<td><a aria-label="mise role on GitHub" class="role-link" href="https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/mise"><code>mise</code> <span aria-hidden="true">↗</span></a></td>
 <td>Install the tools declared in the mise configuration</td>
 </tr>
 <tr>
-<td><a aria-label="neovim role on GitHub" class="role-link" href="https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/neovim"><code>neovim</code> <span aria-hidden="true">↗</span></a></td>
+<td><a aria-label="neovim role on GitHub" class="role-link" href="https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/neovim"><code>neovim</code> <span aria-hidden="true">↗</span></a></td>
 <td>Install LazyVim and its plugins in headless mode</td>
 </tr>
 <tr>
-<td><a aria-label="docker role on GitHub" class="role-link" href="https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/docker"><code>docker</code> <span aria-hidden="true">↗</span></a></td>
+<td><a aria-label="docker role on GitHub" class="role-link" href="https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/docker"><code>docker</code> <span aria-hidden="true">↗</span></a></td>
 <td>Install Rancher Desktop on macOS</td>
 </tr>
 <tr>
-<td><a aria-label="tmux role on GitHub" class="role-link" href="https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/tmux"><code>tmux</code> <span aria-hidden="true">↗</span></a></td>
+<td><a aria-label="tmux role on GitHub" class="role-link" href="https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/tmux"><code>tmux</code> <span aria-hidden="true">↗</span></a></td>
 <td>Install tmux, TPM, and declared plugins</td>
 </tr>
 <tr>
-<td><a aria-label="system_defaults role on GitHub" class="role-link" href="https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/system_defaults"><code>system_defaults</code> <span aria-hidden="true">↗</span></a></td>
+<td><a aria-label="system_defaults role on GitHub" class="role-link" href="https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/system_defaults"><code>system_defaults</code> <span aria-hidden="true">↗</span></a></td>
 <td>Apply macOS preferences, Dock items, and keyboard settings</td>
 </tr>
 <tr>
-<td><a aria-label="handoff role on GitHub" class="role-link" href="https://github.com/shmileee/dotfiles/tree/master/scripts/common/ansible/roles/handoff"><code>handoff</code> <span aria-hidden="true">↗</span></a></td>
+<td><a aria-label="handoff role on GitHub" class="role-link" href="https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/handoff"><code>handoff</code> <span aria-hidden="true">↗</span></a></td>
 <td>Prepare the persistent runtime used by <code>mise run reconcile</code></td>
 </tr>
 </tbody>
@@ -1221,7 +1221,7 @@ After that bootstrap, run routine workflows from the repository checkout with
 <div class="admonition important">
 <p class="admonition-title">Bootstrap before using tasks</p>
 <p><code>mise</code> is the task runner, but it is also installed by Ansible. On a new
-machine, run <code>./scripts/setup.sh</code> first. The mise tasks are the
+machine, run <code>./bootstrap/setup.sh</code> first. The mise tasks are the
 post-bootstrap interface, not a replacement for initial setup.</p>
 </div>
 <p>Task execution installs any missing tools declared in <code>mise.toml</code>
@@ -1253,7 +1253,7 @@ change, run the strict build:</p>
 <p>After the initial setup has installed <code>mise</code>, pull the latest changes, review
 them, and rerun the Ansible stage:</p>
 <div class="language-bash highlight"><pre><span></span><code>git<span class="w"> </span>pull<span class="w"> </span>--ff-only
-git<span class="w"> </span>diff<span class="w"> </span>HEAD@<span class="o">{</span><span class="m">1</span><span class="o">}</span><span class="w"> </span>--<span class="w"> </span>scripts/common/ansible<span class="w"> </span>config
+git<span class="w"> </span>diff<span class="w"> </span>HEAD@<span class="o">{</span><span class="m">1</span><span class="o">}</span><span class="w"> </span>--<span class="w"> </span>bootstrap/ansible<span class="w"> </span>config
 mise<span class="w"> </span>run<span class="w"> </span>reconcile
 </code></pre></div>
 <p>The roles are designed to be rerun, and a repeated run should leave converged
@@ -1286,13 +1286,14 @@ mise<span class="w"> </span>run<span class="w"> </span>ansible:validate-runtime
 mise<span class="w"> </span>run<span class="w"> </span>test:docker
 mise<span class="w"> </span>run<span class="w"> </span>test:bats
 mise<span class="w"> </span>run<span class="w"> </span>bootstrap:lint
-mise<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--<span class="w"> </span>prek<span class="w"> </span>run<span class="w"> </span>--all-files
+mise<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--<span class="w"> </span>prek<span class="w"> </span>--config<span class="w"> </span>.github/.pre-commit-config.yaml<span class="w"> </span>install<span class="w"> </span>--force
+mise<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--<span class="w"> </span>prek<span class="w"> </span>--config<span class="w"> </span>.github/.pre-commit-config.yaml<span class="w"> </span>run<span class="w"> </span>--all-files
 mise<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--<span class="w"> </span>env<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span><span class="nv">ANSIBLE_CONFIG</span><span class="o">=</span>scripts/common/ansible/ansible.cfg<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">ANSIBLE_CONFIG</span><span class="o">=</span>bootstrap/ansible/ansible.cfg<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span><span class="nv">ANSIBLE_COLLECTIONS_PATH</span><span class="o">=</span>bootstrap/.ansible/collections<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>uv<span class="w"> </span>run<span class="w"> </span>--project<span class="w"> </span>bootstrap<span class="w"> </span>--locked<span class="w"> </span>--managed-python<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>ansible-playbook<span class="w"> </span>--inventory<span class="w"> </span><span class="s1">'127.0.0.1,'</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--syntax-check<span class="w"> </span>scripts/common/ansible/main.yaml
+<span class="w">  </span>--syntax-check<span class="w"> </span>bootstrap/ansible/main.yaml
 </code></pre></div>
 <p>If the prerequisites are installed, preview the playbook too:</p>
 <div class="language-bash highlight"><pre><span></span><code>mise<span class="w"> </span>run<span class="w"> </span>reconcile:check
