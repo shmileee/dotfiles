@@ -1,6 +1,6 @@
 docs_dir: content
 # Zensical 0.0.57 requires this path to remain beneath the config directory.
-# Repository tasks relocate the completed output to the root-level site/.
+# Local tasks and CI consume this output directory directly.
 site_dir: site
 site_name: dotfiles
 site_description: Reproducible workstation setup and the reasoning behind it.
