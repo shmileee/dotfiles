@@ -1,5 +1,5 @@
 ---
-name: validate
+name: checks
 
 on:
   pull_request:
@@ -14,26 +14,26 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  static:
-    name: Validate repository
+  lint:
+    name: lint and test
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
       GITHUB_TOKEN: ${{ github.token }}
 
     steps:
-      - name: Checkout
+      - name: checkout
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
 
-      - name: Set up mise
+      - name: set up mise
         uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
 
-      - name: Install Fish
+      - name: install fish
         run: sudo apt-get update && sudo apt-get install --yes --no-install-recommends fish
 
-      - name: Validate Fish syntax and templates
+      - name: check fish syntax and templates
         run: |
           find config -type f -name '*.fish' -exec fish --no-execute {} +
 
@@ -41,18 +41,18 @@ jobs:
             mise exec -- chezmoi execute-template < "$template" | fish --no-execute
           done < <(find config -type f -name '*.fish.tmpl' -print0)
 
-      - name: Restore Ansible collections
+      - name: restore ansible collections
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: bootstrap/.ansible/collections
           key: ${{ runner.os }}-ansible-${{ hashFiles('bootstrap/uv.lock', 'bootstrap/ansible/requirements.yml') }}
 
-      - name: Run repository checks
+      - name: validate runtime and run lint
         run: |
           mise run ansible:validate-runtime
           mise run lint
 
-      - name: Validate Ansible syntax
+      - name: check ansible syntax
         run: |
           mise exec -- env \
             ANSIBLE_CONFIG=bootstrap/ansible/ansible.cfg \
@@ -61,5 +61,5 @@ jobs:
             --inventory "127.0.0.1," \
             --syntax-check bootstrap/ansible/main.yaml
 
-      - name: Test local Ansible module helpers
+      - name: test ansible module helpers
         run: python3 -m unittest discover -s tests/unit -v

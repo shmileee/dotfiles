@@ -25,37 +25,23 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  build:
-    name: Build documentation
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - name: Checkout
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
-        with:
-          persist-credentials: false
-
-      - name: Build documentation
-        uses: ./.github/actions/build-docs
-
-  deploy:
-    name: Build and deploy documentation
-    if: github.event_name == 'push'
+  site:
+    name: ${{ github.event_name == 'push' && 'publish' || 'build' }}
     permissions:
       contents: write # Push the generated site to the gh-pages branch.
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Checkout
+      - name: checkout
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
 
-      - name: Build documentation
+      - name: build site
         uses: ./.github/actions/build-docs
 
-      - name: Deploy
+      - name: deploy site
+        if: github.event_name == 'push'
         uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4.0.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
