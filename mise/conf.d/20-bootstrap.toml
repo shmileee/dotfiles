@@ -1,0 +1,29 @@
+[tools]
+"aqua:bats-core/bats-core" = "1.14.0"
+
+[tasks.reconcile]
+description = "Reconcile this machine with the shared locked Ansible runtime"
+run = "bootstrap/reconcile.sh"
+raw = true
+
+[tasks."reconcile:check"]
+description = "Preview the Ansible reconciliation (check mode has limits)"
+run = "bootstrap/reconcile.sh --check"
+raw = true
+
+[tasks."ansible:prepare"]
+description = "Install the locked Ansible runtime and pinned collections"
+run = "env ANSIBLE_COLLECTIONS_PATH=bootstrap/.ansible/collections uv run --project bootstrap --locked --managed-python ansible-galaxy collection install --collections-path bootstrap/.ansible/collections --requirements-file bootstrap/ansible/requirements.yml"
+
+[tasks."ansible:validate-runtime"]
+description = "Validate and report the locked runtime and pinned collections"
+depends = ["ansible:prepare"]
+run = "env ANSIBLE_COLLECTIONS_PATH=bootstrap/.ansible/collections uv run --project bootstrap --locked --managed-python python bootstrap/validate_runtime.py --collections-path bootstrap/.ansible/collections"
+
+[tasks."test:bats"]
+description = "Run black-box bootstrap behavior tests"
+run = "bats tests/bootstrap"
+
+[tasks."test:docker"]
+description = "Run the Ubuntu bootstrap and Ansible integration tests in Docker"
+run = "docker build --file tests/integration/Dockerfile --tag dotfiles-bootstrap-tests ."

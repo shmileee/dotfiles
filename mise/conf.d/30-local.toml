@@ -1,0 +1,8 @@
+[tasks.import]
+description = "Import modified managed files from $HOME into config/"
+run = "chezmoi re-add"
+raw = true
+
+[tasks.status]
+description = "Show differences between config/ and the files in $HOME"
+run = "chezmoi status"

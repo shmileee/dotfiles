@@ -81,7 +81,7 @@
     {
       "description": "Group tools used to develop and validate this repository",
       "matchManagers": ["mise"],
-      "matchFileNames": ["mise.toml"],
+      "matchFileNames": ["mise/conf.d/10-validation.toml"],
       "groupName": "development dependencies",
       "groupSlug": "development-dependencies",
       "semanticCommitType": "chore",
@@ -94,6 +94,15 @@
       "groupSlug": "development-dependencies",
       "semanticCommitType": "chore",
       "semanticCommitScope": "tooling"
+    },
+    {
+      "description": "Group tools used by bootstrap tests",
+      "matchManagers": ["mise"],
+      "matchFileNames": ["mise/conf.d/20-bootstrap.toml"],
+      "groupName": "bootstrap test dependencies",
+      "groupSlug": "bootstrap-test-dependencies",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "bootstrap"
     },
     {
       "description": "Keep workstation changes separate from repository tooling",
