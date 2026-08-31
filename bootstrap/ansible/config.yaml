@@ -21,9 +21,10 @@ bootstrap_linux_packages:
 brew:
   taps:
     - carlocab/personal
+    - shmileee/tap
   casks:
     - 1password
-    - alacritty
+    - shmileee/tap/alacritty
     - alt-tab
     - aws-vault
     - chatgpt
