@@ -103,6 +103,15 @@ jobs:
           mise install
           mise run lint
 
+      - name: verify managed runtime dependencies
+        run: |
+          test "$(command -v bash)" = /opt/homebrew/bin/bash
+          bash -c '(( BASH_VERSINFO[0] >= 4 ))'
+          command -v git-lfs
+          command -v session-manager-plugin
+          test "$(git config --file "$HOME/.config/git/personal" --get commit.gpgsign)" = true
+          test "$(git config --file "$HOME/.config/git/personal" --get gpg.ssh.program)" = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+
       - name: verify idempotency
         run: |
           cd "$HOME/ghq/personalgit/$GITHUB_REPOSITORY"

@@ -87,8 +87,6 @@ def run():
                     content[line_num] = new_text + "\n"
                 if edit:
                     to_be_edited.append(line_num + 1)
-        except:
-            raise
         finally:
             with open(filename, "w") as f:
                 f.writelines(content)

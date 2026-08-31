@@ -23,14 +23,18 @@ docker run --rm --entrypoint /bin/bash "$image" -lc '
   test -z "$(git config --local --get remote.origin.promisor || true)"
 
   printf "%s\n" "SMOKE phase=executables"
-  for executable in brew chezmoi fish mise tmux; do
+  for executable in bash brew chezmoi fish git-lfs mise tmux xclip; do
     command -v "$executable" >/dev/null
   done
+  bash -c "(( BASH_VERSINFO[0] >= 4 ))"
   mise exec -- ansible-lint --version >/dev/null
   mise exec -- yamllint --version >/dev/null
 
   printf "%s\n" "SMOKE phase=startup"
   test -z "$(fish -c true)"
+  test ! -e "$HOME/bin/ssm-session"
+  test -z "$(git config --file "$HOME/.config/git/personal" --get commit.gpgsign || true)"
+  test -z "$(git config --file "$HOME/.config/git/personal" --get gpg.ssh.program || true)"
   mise exec -- nvim --headless +qa
 
   printf "%s\n" "SMOKE phase=idempotence"

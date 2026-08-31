@@ -2,6 +2,11 @@
 
 set -euo pipefail
 
+if ((BASH_VERSINFO[0] < 4)); then
+  printf 'exec-atlantis requires Bash 4 or newer; found %s.\n' "${BASH_VERSION}" >&2
+  exit 1
+fi
+
 aws_profile=iris-operations
 aws_region=eu-west-1
 ecs_cluster=atlantis

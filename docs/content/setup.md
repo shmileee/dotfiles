@@ -284,7 +284,8 @@ documentation in multiple places. At minimum, replace or review:
 On macOS, the Homebrew role downloads the current signed `Homebrew.pkg` and
 installs it through Ansible's become mechanism. On Ubuntu, Ansible first creates
 the user-owned Linuxbrew prefix, then runs Homebrew's current shell installer
-without sudo. Neither installer needs access to the user's password.
+without sudo. The macOS package installation and Ubuntu prefix preparation may
+prompt for the user's sudo password through Ansible.
 
 ## Routine work with mise
 
