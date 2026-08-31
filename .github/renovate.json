@@ -54,8 +54,8 @@
     },
     {
       "description": "Group documentation build dependencies",
-      "matchManagers": ["pip_requirements"],
-      "matchFileNames": ["docs/requirements.txt"],
+      "matchManagers": ["pip_requirements", "pyenv"],
+      "matchFileNames": ["docs/requirements.txt", "docs/.python-version"],
       "groupName": "build dependencies",
       "groupSlug": "docs",
       "semanticCommitType": "docs",
