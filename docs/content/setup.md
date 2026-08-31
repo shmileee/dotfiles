@@ -98,8 +98,8 @@ and the
 playbook:
 
 ```bash
-repository_url=https://github.com/OWNER/REPOSITORY.git
-checkout="$HOME/ghq/personalgit/OWNER/REPOSITORY"
+repository_url=https://github.com/shmileee/dotfiles.git
+checkout="$HOME/ghq/personalgit/shmileee/dotfiles"
 mkdir -p "$(dirname "$checkout")"
 git clone "$repository_url" "$checkout"
 cd "$checkout"
@@ -235,32 +235,26 @@ slug. The role force-applies that checkout's
 so the source remains available after the temporary bootstrap controller is
 removed.
 
-### Reuse this repository as your own
+### Forking the repository
 
-The bootstrap repository identity has one source of truth: the settings at the
-top of `bootstrap/setup.sh`. Before using a fork, update:
+This documentation describes `shmileee/dotfiles` and deliberately uses its
+real repository URLs, checkout path, documentation domain, Docker image, and
+personal settings. It is not a generic dotfiles template.
 
-*   `repository_slug` to `OWNER/REPOSITORY`;
-*   `repository_ref` if the default branch is not `master`; and
-*   `bootstrap_url` to your own redirect, or to the raw setup script URL.
+If you fork this repository to provision your own dotfiles, update the code and
+documentation in multiple places. At minimum, replace or review:
 
-Setup derives the archive URL, HTTPS clone URL, and
-`$HOME/ghq/personalgit/OWNER/REPOSITORY` path from those settings. Run
-`./bootstrap/setup.sh --print-config` to inspect the effective values without
-changing the machine.
-
-Repository identity is only one part of adopting personal dotfiles. Also
-review and replace these personal publication and user settings:
-
+*   `repository_slug`, `repository_ref`, and `bootstrap_url` at the top of
+    `bootstrap/setup.sh`;
 *   the public redirect itself, so it points to your slug and branch;
 *   the Docker Hub identity in `.github/workflows/docker.yaml` if it differs
     from the GitHub repository owner and slug used by its defaults;
 *   the `UBUNTU_ARM_RUNNER` GitHub Actions repository variable used by the
     Docker workflow;
 *   the documentation domain in `docs/mkdocs.yml`, `docs/content/robots.txt`,
-    `.github/workflows/docs.yaml`, and `README.md`;
-*   the repository file links throughout `README.md` and `docs/`, plus
-    `repo_url`, `repo_name`, and `edit_uri` in `docs/mkdocs.yml`;
+    `.github/workflows/docs.yaml`, and `docs/README.md`;
+*   the repository file links throughout `docs/`, plus `repo_url`, `repo_name`,
+    and `edit_uri` in `docs/mkdocs.yml`;
 *   Git author and namespace values under
     `config/private_dot_config/private_git/`; and
 *   every package, application, secret template, shell preference, and macOS
