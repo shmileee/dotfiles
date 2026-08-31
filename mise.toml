@@ -34,17 +34,17 @@ finalize_docs_site() {
   fi
 }
 trap finalize_docs_site EXIT
-uv run --python 3.14 --with-requirements docs/requirements.txt zensical serve --config-file docs/mkdocs.yml
+uv run --directory docs --with-requirements requirements.txt zensical serve --config-file mkdocs.yml
 """
 raw = true
 
 [tasks."docs:build"]
 description = "Build the documentation with CI's strict settings"
 run = """
-uv run --python 3.14 --with-requirements docs/requirements.txt zensical build --config-file docs/mkdocs.yml --strict
+uv run --directory docs --with-requirements requirements.txt zensical build --config-file mkdocs.yml --strict
 rm -rf site
 mv docs/site site
-uv run --python 3.14 python docs/tooling/version_assets.py
+uv run --directory docs python tooling/version_assets.py ../site
 """
 
 [tasks.reconcile]
