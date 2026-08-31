@@ -6,8 +6,8 @@
 # Usage:
 #
 #   Switch between speakers / headphones:
-#   - audio headphones
-#   - audio speakers
+#   - switch-audio headphones
+#   - switch-audio speakers
 #
 
 if ! command -v "SwitchAudioSource" &> /dev/null; then

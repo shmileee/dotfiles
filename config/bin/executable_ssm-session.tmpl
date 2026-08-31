@@ -1,9 +1,10 @@
+{{- if eq .chezmoi.os "darwin" -}}
 #!/usr/bin/env bash
 #
-# Based on https://github.com/corrupt952/ssm-session
-#
 # Requirements:
-#   - fzf (brew install fzf)
+#   - AWS CLI
+#   - Session Manager plugin
+#   - fzf
 #
 # Usage:
 #
@@ -58,3 +59,4 @@ case "$1" in
     print_usage
     ;;
 esac
+{{ end -}}

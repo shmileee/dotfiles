@@ -18,7 +18,11 @@ fish_add_path /opt/homebrew/opt/libpq/bin
 
 set -gx HOMEBREW_NO_ANALYTICS 1
 
+{{- if eq .chezmoi.os "darwin" }}
+set -gx DIRENV_BASH /opt/homebrew/bin/bash
+{{- else }}
 set -gx DIRENV_BASH /bin/bash
+{{- end }}
 
 if status is-interactive
     if type -q bat

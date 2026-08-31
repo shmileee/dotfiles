@@ -52,7 +52,7 @@ osx_global_defaults:
   #########################################
 
   - { name: "orient macos dock to the bottom of the screen", domain: com.apple.dock, key: orientation, type: string, value: bottom }
-  - { name: "set the icon size of dock items to 42 pixels (monterrey)", domain: com.apple.dock, key: tilesize, type: float, value: 42 }
+  - { name: "set the icon size of dock items to 42 pixels", domain: com.apple.dock, key: tilesize, type: float, value: 42 }
   - { name: "remove the auto-hiding dock delay", domain: com.apple.dock, key: autohide-delay, type: float, value: 0.0 }
   - { name: "remove the animation when hiding/showing the dock", domain: com.apple.dock, key: autohide-time-modifier, type: float, value: 0.0 }
   - { name: "automatically hide and show the dock", domain: com.apple.dock, key: autohide, type: bool, value: true }

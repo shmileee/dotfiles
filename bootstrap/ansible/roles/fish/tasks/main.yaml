@@ -14,7 +14,7 @@
         (
           '/home/linuxbrew/.linuxbrew'
           if ansible_facts['system'] == 'Linux'
-          else ('/opt/homebrew' if ansible_facts['architecture'] == 'arm64' else '/usr/local')
+          else '/opt/homebrew'
         ) + '/bin/fish'
       }}
 

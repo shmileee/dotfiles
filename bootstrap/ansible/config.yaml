@@ -17,6 +17,7 @@ bootstrap_linux_packages:
   - unzip
   - vim
   - wget
+  - xclip
 
 brew:
   taps:
@@ -32,6 +33,7 @@ brew:
     - kdiff3
     - microsoft-outlook
     - rectangle
+    - session-manager-plugin
     - slack
     - spotify
     - telegram
@@ -48,6 +50,7 @@ brew:
       - gh
       - ghq
       - git-delta
+      - git-lfs
       - highlight
       - jq
       - lazygit
@@ -58,6 +61,7 @@ brew:
       - tree
       - zoxide
     darwin:
+      - bash
       - carlocab/personal/unrar
       - dockutil
       - switchaudio-osx
