@@ -39,6 +39,9 @@
       ]
     }
   ],
+  "mise": {
+    "managerFilePatterns": ["/^mise\\/conf\\.d\\/[^/]+\\.toml$/"]
+  },
   "packageRules": [
     {
       "description": "Use CI commit semantics for GitHub Actions",
