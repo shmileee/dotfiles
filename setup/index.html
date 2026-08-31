@@ -1196,6 +1196,10 @@ After that bootstrap, run routine workflows from the repository checkout with
 <td>Report and validate the checkout, uv, Python, Ansible, locked dependencies, and collections.</td>
 </tr>
 <tr>
+<td><code>mise run lint</code></td>
+<td>Run all prek hooks against the repository.</td>
+</tr>
+<tr>
 <td><code>mise run status</code></td>
 <td>Show differences between the chezmoi source and files in the home directory.</td>
 </tr>
@@ -1285,9 +1289,8 @@ and verifies that setup completes on Ubuntu.</p>
 mise<span class="w"> </span>run<span class="w"> </span>ansible:validate-runtime
 mise<span class="w"> </span>run<span class="w"> </span>test:docker
 mise<span class="w"> </span>run<span class="w"> </span>test:bats
-mise<span class="w"> </span>run<span class="w"> </span>bootstrap:lint
-mise<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--<span class="w"> </span>prek<span class="w"> </span>--config<span class="w"> </span>.github/.pre-commit-config.yaml<span class="w"> </span>install<span class="w"> </span>--force
-mise<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--<span class="w"> </span>prek<span class="w"> </span>--config<span class="w"> </span>.github/.pre-commit-config.yaml<span class="w"> </span>run<span class="w"> </span>--all-files
+mise<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--<span class="w"> </span>prek<span class="w"> </span>install<span class="w"> </span>--force
+mise<span class="w"> </span>run<span class="w"> </span>lint
 mise<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--<span class="w"> </span>env<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span><span class="nv">ANSIBLE_CONFIG</span><span class="o">=</span>bootstrap/ansible/ansible.cfg<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span><span class="nv">ANSIBLE_COLLECTIONS_PATH</span><span class="o">=</span>bootstrap/.ansible/collections<span class="w"> </span><span class="se">\</span>
