@@ -49,10 +49,31 @@ def configured_uv_version() -> str:
 
     with (REPOSITORY_ROOT / "mise.toml").open("rb") as mise_file:
         mise_version = tomllib.load(mise_file)["tools"]["uv"]
-    if setup_version != mise_version:
+
+    integration_text = (
+        REPOSITORY_ROOT / "tests/integration/Dockerfile"
+    ).read_text()
+    integration_match = re.search(
+        r"^FROM ghcr\.io/astral-sh/uv:([^@\s]+)(?:@sha256:[0-9a-f]+)? AS uv$",
+        integration_text,
+        re.MULTILINE,
+    )
+    if integration_match is None:
+        fail("tests/integration/Dockerfile does not declare one uv image")
+    integration_version = integration_match.group(1)
+
+    versions = {
+        "scripts/setup.sh": setup_version,
+        "mise.toml": mise_version,
+        "tests/integration/Dockerfile": integration_version,
+    }
+    if len(set(versions.values())) != 1:
         fail(
             "uv version drift: "
-            f"scripts/setup.sh declares {setup_version}, mise.toml declares {mise_version}"
+            + ", ".join(
+                f"{path} declares {version}"
+                for path, version in versions.items()
+            )
         )
     return setup_version
 
