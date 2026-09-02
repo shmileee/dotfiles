@@ -1,21 +1,12 @@
 ---
-title: OpenCode configuration
+title: "OpenCode + OmO"
 description: Local secrets, model routing, corporate overlays, contextual notifications, and local voice dictation.
-tags:
-  - OpenCode
-  - AI tooling
-  - tmux
-  - chezmoi
-  - Voice
-hide:
-  - tags
+editUrl: https://github.com/shmileee/dotfiles/edit/master/docs/content/opencode.md
 ---
-
-# OpenCode + OmO
 
 <p class="page-lead" data-mobile-toc-anchor>chezmoi, the dotfile manager, manages the shared OpenCode configuration, Oh My OpenAgent routing, fish integration, and tmux notification plumbing. Secrets and company-specific endpoints stay local.</p>
 
-<section class="context-help-source" hidden data-search-exclude>
+<section class="context-help-source" hidden data-search-exclude data-pagefind-ignore>
 <button class="context-help-trigger" type="button" aria-label="Open quick context" aria-controls="context-help" aria-haspopup="dialog" title="Quick context" data-context-open data-context-ui><span aria-hidden="true">?</span></button>
 <dialog class="context-help" id="context-help" aria-labelledby="context-help-title" data-context-dialog data-context-ui>
 <div class="context-help__panel">
@@ -78,7 +69,7 @@ declared plugin with Bun when it starts.
 
 ## First-run checklist
 
-1.  Apply the dotfiles with the [setup guide](setup.md).
+1.  Apply the dotfiles with the [setup guide](/dotfiles/setup/).
 2.  Create the local secret files if you want to use the Home Assistant MCP
     server.
 3.  Put only the secret value in each file—no quotes or variable names.
@@ -109,10 +100,10 @@ The `home-assistant` server ships with `"enabled": false`, so populating the
 files does not switch it on by itself. Enable it in the managed configuration or
 in a corporate overlay once the values are in place.
 
-!!! warning "The files start empty"
-
-    The `install` commands create secure placeholders. Populate them before
-    enabling or using the Home Assistant MCP integration.
+> [!WARNING] The files start empty
+>
+> The `install` commands create secure placeholders. Populate them before
+> enabling or using the Home Assistant MCP integration.
 
 ## Corporate overlay
 
@@ -168,17 +159,17 @@ dotfiles repository only declares and configures it.
 After changing the notifier declaration:
 
 1.  Restart OpenCode so Bun can synchronize the package.
-2.  Reload tmux with ++ctrl+a++ then ++ctrl+r++.
+2.  Reload tmux with <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> then <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>R</kbd></span>.
 3.  Run the TPM installation flow if the companion plugin is not present.
 
 ## Voice dictation
 
-++ctrl+r++ records a prompt, transcribes it, and inserts the cleaned text into
+<span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>R</kbd></span> records a prompt, transcribes it, and inserts the cleaned text into
 the prompt box. Both models run on this machine, so no audio leaves it.
 
 The plugin is declared in the managed
 [`tui.json`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_opencode/tui.json),
-which also frees ++ctrl+r++ by disabling the factory `session_rename`
+which also frees <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>R</kbd></span> by disabling the factory `session_rename`
 binding—rename a session with `/rename` instead. The plugin talks to two local
 services:
 
@@ -206,6 +197,8 @@ The task is idempotent. It verifies the whisper checksum, brings ollama up,
 rebuilds the derived model from its Modelfile, restarts the transcription
 service, and probes both endpoints before reporting success.
 
+<div class="setup-reference">
+
 | Managed file | Role |
 | --- | --- |
 | `bin/whisper-voice-server` | Starts `whisper-server` with the vocabulary as its initial prompt. |
@@ -214,16 +207,22 @@ service, and probes both endpoints before reporting success.
 | `.config/opencode/voice-vocabulary.txt` | Tool names fed to whisper so it stops mangling them. |
 | `.config/opencode/voice-stt-prompt.md` | System prompt that cleans up the raw transcript. |
 
+</div>
+
 Both services are LaunchAgents declared in this repository rather than
 `brew services` entries, so the bind address, tuning flags, and log paths are
 reviewable here instead of being whatever the Homebrew formula ships. Nothing
 in this repository starts `brew services`, so a machine that had the Homebrew
 `ollama` service running needs it stopped once by hand—it binds the same port.
 
+<div class="setup-reference setup-reference--wrap">
+
 | Managed service | Role |
 | --- | --- |
 | `Library/LaunchAgents/com.shmileee.whisper-voice-server.plist` | Keeps whisper.cpp running and owns `~/Library/Logs/whisper-voice-server.log`. |
 | `Library/LaunchAgents/com.shmileee.ollama.plist` | Keeps `ollama serve` bound to loopback and owns `~/Library/Logs/ollama.log`. |
+
+</div>
 
 Neither log is rotated by launchd, so each wrapper truncates its own in place
 once it grows past a limit.
@@ -238,12 +237,12 @@ The two text files reload differently:
     needs `chezmoi apply` and an OpenCode restart. `voice:setup` does nothing
     for it.
 
-!!! warning "whisper truncates a long vocabulary from the front"
-
-    The initial prompt is capped at 224 tokens and whisper keeps the last 223,
-    so a vocabulary that grows past the cap loses its opening entries in
-    silence. Add terms that are actually mangled rather than every installed
-    binary.
+> [!WARNING] whisper truncates a long vocabulary from the front
+>
+> The initial prompt is capped at 224 tokens and whisper keeps the last 223,
+> so a vocabulary that grows past the cap loses its opening entries in
+> silence. Add terms that are actually mangled rather than every installed
+> binary.
 
 ## Deliberately unmanaged
 
@@ -281,7 +280,7 @@ functions opencode | grep -q workgit; and echo wrapper active
 ### A notification or tmux marker is stale
 
 Focus the originating tmux window first. If the marker remains, restart
-OpenCode and reload tmux configuration with ++ctrl+a++ then ++ctrl+r++.
+OpenCode and reload tmux configuration with <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> then <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>R</kbd></span>.
 
 ### Voice recording does nothing
 
