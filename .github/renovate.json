@@ -1,7 +1,12 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:best-practices", ":enablePreCommit"],
-  "ignorePresets": [":ignoreModulesAndTests"],
+  "extends": [
+    "config:best-practices",
+    ":enablePreCommit"
+  ],
+  "ignorePresets": [
+    ":ignoreModulesAndTests"
+  ],
   "ignorePaths": [
     "**/node_modules/**",
     "**/bower_components/**",
@@ -12,7 +17,9 @@
     "**/__fixtures__/**"
   ],
   "timezone": "Europe/Warsaw",
-  "schedule": ["* 0-5 * * 1"],
+  "schedule": [
+    "* 0-5 * * 1"
+  ],
   "updateNotScheduled": false,
   "minimumReleaseAge": "3 days",
   "minimumReleaseAgeBehaviour": "timestamp-optional",
@@ -33,40 +40,41 @@
     {
       "customType": "regex",
       "description": "Update annotated shell variables",
-      "managerFilePatterns": ["/^bootstrap\\/setup\\.sh$/"],
+      "managerFilePatterns": [
+        "/^bootstrap\\/setup\\.sh$/"
+      ],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\s+[A-Za-z_][A-Za-z0-9_]*=(?<currentValue>\\S+)"
       ]
     }
   ],
   "mise": {
-    "managerFilePatterns": ["/^mise\\/conf\\.d\\/[^/]+\\.toml$/"]
+    "managerFilePatterns": [
+      "/^mise\\/conf\\.d\\/[^/]+\\.toml$/"
+    ]
   },
   "packageRules": [
     {
       "description": "Use CI commit semantics for GitHub Actions",
-      "matchManagers": ["github-actions"],
+      "matchManagers": [
+        "github-actions"
+      ],
       "semanticCommitType": "ci",
       "semanticCommitScope": "deps"
     },
     {
       "description": "Group GitHub Actions updates",
-      "matchManagers": ["github-actions"],
+      "matchManagers": [
+        "github-actions"
+      ],
       "groupName": "GitHub Actions",
       "groupSlug": "github-actions"
     },
     {
-      "description": "Group documentation build dependencies",
-      "matchManagers": ["pip_requirements", "pyenv"],
-      "matchFileNames": ["docs/requirements.txt", "docs/.python-version"],
-      "groupName": "build dependencies",
-      "groupSlug": "docs",
-      "semanticCommitType": "docs",
-      "semanticCommitScope": "deps"
-    },
-    {
       "description": "Group dependencies used by the bootstrap runtime",
-      "matchFileNames": ["bootstrap/**"],
+      "matchFileNames": [
+        "bootstrap/**"
+      ],
       "groupName": "runtime dependencies",
       "groupSlug": "bootstrap",
       "semanticCommitType": "chore",
@@ -74,8 +82,12 @@
     },
     {
       "description": "Group Ansible content used to provision machines",
-      "matchManagers": ["ansible-galaxy"],
-      "matchFileNames": ["bootstrap/ansible/requirements.yml"],
+      "matchManagers": [
+        "ansible-galaxy"
+      ],
+      "matchFileNames": [
+        "bootstrap/ansible/requirements.yml"
+      ],
       "groupName": "provisioning dependencies",
       "groupSlug": "ansible",
       "semanticCommitType": "chore",
@@ -83,8 +95,12 @@
     },
     {
       "description": "Group tools used to develop and validate this repository",
-      "matchManagers": ["mise"],
-      "matchFileNames": ["mise/conf.d/10-validation.toml"],
+      "matchManagers": [
+        "mise"
+      ],
+      "matchFileNames": [
+        "mise/conf.d/10-validation.toml"
+      ],
       "groupName": "development dependencies",
       "groupSlug": "development-dependencies",
       "semanticCommitType": "chore",
@@ -92,7 +108,9 @@
     },
     {
       "description": "Include pre-commit hooks in the development dependency group",
-      "matchManagers": ["pre-commit"],
+      "matchManagers": [
+        "pre-commit"
+      ],
       "groupName": "development dependencies",
       "groupSlug": "development-dependencies",
       "semanticCommitType": "chore",
@@ -100,8 +118,12 @@
     },
     {
       "description": "Group tools used by bootstrap tests",
-      "matchManagers": ["mise"],
-      "matchFileNames": ["mise/conf.d/20-bootstrap.toml"],
+      "matchManagers": [
+        "mise"
+      ],
+      "matchFileNames": [
+        "mise/conf.d/20-bootstrap.toml"
+      ],
       "groupName": "bootstrap test dependencies",
       "groupSlug": "bootstrap-test-dependencies",
       "semanticCommitType": "chore",
@@ -109,8 +131,12 @@
     },
     {
       "description": "Keep workstation changes separate from repository tooling",
-      "matchManagers": ["mise"],
-      "matchFileNames": ["config/private_dot_config/mise/config.toml"],
+      "matchManagers": [
+        "mise"
+      ],
+      "matchFileNames": [
+        "config/private_dot_config/mise/config.toml"
+      ],
       "groupName": "toolchain",
       "groupSlug": "workstation-toolchain",
       "semanticCommitType": "chore",
@@ -118,25 +144,38 @@
     },
     {
       "description": "Use build commit semantics for Docker dependencies",
-      "matchManagers": ["dockerfile"],
+      "matchManagers": [
+        "dockerfile"
+      ],
       "semanticCommitType": "build",
       "semanticCommitScope": "deps"
     },
     {
       "description": "Group Docker updates",
-      "matchManagers": ["dockerfile"],
-      "matchFileNames": ["Dockerfile", "tests/integration/Dockerfile"],
+      "matchManagers": [
+        "dockerfile"
+      ],
+      "matchFileNames": [
+        "Dockerfile",
+        "tests/integration/Dockerfile"
+      ],
       "groupName": "container images",
       "groupSlug": "container-images"
     },
     {
       "description": "Keep bootstrap Python declarations synchronized",
-      "matchDepNames": ["python"],
+      "matchDepNames": [
+        "python"
+      ],
       "matchFileNames": [
         "bootstrap/.python-version",
         "bootstrap/pyproject.toml"
       ],
-      "matchUpdateTypes": ["major", "minor", "patch"],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch"
+      ],
       "groupName": "bootstrap Python",
       "groupSlug": "bootstrap-python",
       "minimumGroupSize": 2,
@@ -145,13 +184,21 @@
     },
     {
       "description": "Keep bootstrap uv declarations synchronized",
-      "matchDepNames": ["uv", "astral-sh/uv", "ghcr.io/astral-sh/uv"],
+      "matchDepNames": [
+        "uv",
+        "astral-sh/uv",
+        "ghcr.io/astral-sh/uv"
+      ],
       "matchFileNames": [
         "mise.toml",
         "bootstrap/setup.sh",
         "tests/integration/Dockerfile"
       ],
-      "matchUpdateTypes": ["major", "minor", "patch"],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch"
+      ],
       "groupName": "bootstrap uv",
       "groupSlug": "bootstrap-uv",
       "minimumGroupSize": 3,
@@ -160,27 +207,45 @@
     },
     {
       "description": "Rely on the timestamped bootstrap Python declaration",
-      "matchManagers": ["pyenv"],
-      "matchFileNames": ["bootstrap/.python-version"],
-      "matchPackageNames": ["python"],
+      "matchManagers": [
+        "pyenv"
+      ],
+      "matchFileNames": [
+        "bootstrap/.python-version"
+      ],
+      "matchPackageNames": [
+        "python"
+      ],
       "minimumReleaseAge": null
     },
     {
       "description": "Rely on the timestamped bootstrap uv declarations",
-      "matchManagers": ["dockerfile"],
-      "matchFileNames": ["tests/integration/Dockerfile"],
-      "matchPackageNames": ["ghcr.io/astral-sh/uv"],
+      "matchManagers": [
+        "dockerfile"
+      ],
+      "matchFileNames": [
+        "tests/integration/Dockerfile"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/astral-sh/uv"
+      ],
       "minimumReleaseAge": null
     },
     {
       "description": "Skip lock-file maintenance for Mise without lockfiles",
-      "matchManagers": ["mise"],
-      "matchUpdateTypes": ["lockFileMaintenance"],
+      "matchManagers": [
+        "mise"
+      ],
+      "matchUpdateTypes": [
+        "lockFileMaintenance"
+      ],
       "enabled": false
     },
     {
       "description": "Allow for the slower release cadence of stable tooling",
-      "matchPackageNames": ["koalaman/shellcheck"],
+      "matchPackageNames": [
+        "koalaman/shellcheck"
+      ],
       "abandonmentThreshold": "2 years"
     }
   ]

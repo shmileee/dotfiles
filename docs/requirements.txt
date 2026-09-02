@@ -1,2 +1,0 @@
-# Zensical replaces both MkDocs and Material for MkDocs.
-zensical==0.0.57

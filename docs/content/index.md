@@ -1,23 +1,15 @@
 ---
-title: Home
+title: "Home"
 description: A reproducible Apple Silicon macOS workstation and Ubuntu integration environment built with Ansible and chezmoi.
-tags:
-  - Overview
-  - macOS
-  - Ubuntu
-  - Ansible
-  - chezmoi
-hide:
-  - toc
-  - tags
+template: splash
+editUrl: https://github.com/shmileee/dotfiles/edit/master/docs/content/index.md
 ---
 
-<section class="docs-hero docs-hero--home" markdown>
-  <p class="section-eyebrow">Personal workstation · documented publicly</p>
+<section class="docs-hero docs-hero--home experience-hero">
   <h1>A workstation I can rebuild.<span class="hero-cursor" aria-hidden="true"></span></h1>
   <p class="hero-copy">This repository rebuilds my workstation on Apple Silicon macOS and Ubuntu. Ansible, the automation engine, configures the system; chezmoi, the dotfile manager, puts the files in place.</p>
   <div class="hero-actions">
-    <a class="primary-link" href="/setup/">Read the setup guide →</a>
+    <a class="primary-link" href="/dotfiles/setup/">Read the setup guide →</a>
     <a class="secondary-link" href="https://github.com/shmileee/dotfiles">Browse the repository ↗</a>
   </div>
   <dl class="hero-signals">
@@ -27,7 +19,7 @@ hide:
   </dl>
 </section>
 
-<section class="context-help-source" hidden data-search-exclude>
+<section class="context-help-source" hidden data-search-exclude data-pagefind-ignore>
 <button class="context-help-trigger" type="button" aria-label="Open quick context" aria-controls="context-help" aria-haspopup="dialog" title="Quick context" data-context-open data-context-ui><span aria-hidden="true">?</span></button>
 <dialog class="context-help" id="context-help" aria-labelledby="context-help-title" data-context-dialog data-context-ui>
 <div class="context-help__panel">
@@ -46,23 +38,15 @@ hide:
 </dialog>
 </section>
 
-<section class="home-overview" markdown>
-<div class="home-overview__summary" markdown>
-## What it builds
-
-The result is an opinionated terminal-first environment built around fish,
-tmux, Alacritty, Neovim, mise, Git tools, and a curated set of command-line
-utilities. On macOS, it also installs desktop applications and applies personal
-system defaults.
+<section class="home-overview">
+<div class="home-overview__summary">
+<h2 id="what-it-builds">What it builds<a class="headerlink" href="#what-it-builds" aria-label="Permanent link" data-pagefind-ignore>¶</a></h2>
+<p>The result is an opinionated terminal-first environment built around fish, tmux, Alacritty, Neovim, mise, Git tools, and a curated set of command-line utilities. On macOS, it also installs desktop applications and applies personal system defaults.</p>
 </div>
-
-<aside class="home-caution" markdown>
-### Before you run it
-
-This is a personal configuration. The playbook changes the login shell,
-applies dotfiles with `--force`, and modifies macOS preferences.
-
-[Review the setup guide first →](setup.md)
+<aside class="home-caution">
+<h3 id="before-you-run-it">Before you run it<a class="headerlink" href="#before-you-run-it" aria-label="Permanent link" data-pagefind-ignore>¶</a></h3>
+<p>This is a personal configuration. The playbook changes the login shell, applies dotfiles with <code>--force</code>, and modifies macOS preferences.</p>
+<p><a href="/dotfiles/setup/">Review the setup guide first →</a></p>
 </aside>
 </section>
 
@@ -107,17 +91,17 @@ applies dotfiles with `--force`, and modifies macOS preferences.
 ## Choose what you need
 
 <div class="doc-card-grid">
-  <a href="/setup/">
+  <a href="/dotfiles/setup/">
     <span>01 · Start here</span>
     <strong>Set up or customize a machine</strong>
     <p>Review the changes, choose an installation path, and learn how to reapply the configuration.</p>
   </a>
-  <a href="/shortcuts/">
+  <a href="/dotfiles/shortcuts/">
     <span>02 · Reference</span>
     <strong>Find a keyboard shortcut</strong>
     <p>Look up bindings for macOS, Alacritty, fish, tmux, and Neovim.</p>
   </a>
-  <a href="/opencode/">
+  <a href="/dotfiles/opencode/">
     <span>03 · AI tooling</span>
     <strong>Configure OpenCode + OmO</strong>
     <p>Set up local secrets, corporate overlays, model routing, and contextual notifications.</p>
