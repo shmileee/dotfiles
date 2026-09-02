@@ -6,8 +6,7 @@
     "includes": [
       "**",
       "!config/private_dot_config/nvim/lazy-lock.json",
-      "!config/private_dot_config/private_opencode/tui.json",
-      "!docs/overrides"
+      "!config/private_dot_config/private_opencode/tui.json"
     ]
   },
   "formatter": {
