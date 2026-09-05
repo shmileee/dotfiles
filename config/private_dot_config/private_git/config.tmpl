@@ -3,8 +3,17 @@
 [core]
   editor = nvim
   excludesfile = ~/.config/git/ignore
+  pager = delta
+[interactive]
+  diffFilter = delta --color-only
+[delta]
+  dark = true
+  line-numbers = true
+  navigate = true
 [color "diff"]
   whitespace = red reverse
+[include]
+  path = ~/.config/git/tokyonight_night.gitconfig
 [include]
   path = ~/.config/git/user
 [include]
