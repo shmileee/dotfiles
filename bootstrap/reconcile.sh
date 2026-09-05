@@ -111,13 +111,18 @@ fi
 # password as a variable (wired to SUDO_ASKPASS), so it is captured here and
 # handed to the playbook through the environment.
 if ! sudo -k -n true > /dev/null 2>&1; then
-  printf '[dotfiles] Sudo needs the workstation password (become tasks + Homebrew pkg installers): '
-  stty -echo < /dev/tty
-  read -r DOTFILES_BECOME_PASSWORD < /dev/tty || {
-    stty echo < /dev/tty
+  become_tty=${DOTFILES_TTY_DEVICE:-/dev/tty}
+  if ! (: < "$become_tty") 2> /dev/null; then
+    printf '[dotfiles] Sudo needs the workstation password but no terminal is available to ask for it.\n' >&2
     exit 1
-  }
-  stty echo < /dev/tty
+  fi
+  printf '[dotfiles] Sudo needs the workstation password (become tasks + Homebrew pkg installers): '
+  stty -echo < "$become_tty" 2> /dev/null || :
+  if ! read -r DOTFILES_BECOME_PASSWORD < "$become_tty"; then
+    stty echo < "$become_tty" 2> /dev/null || :
+    exit 1
+  fi
+  stty echo < "$become_tty" 2> /dev/null || :
   printf '\n'
   if ! printf '%s\n' "$DOTFILES_BECOME_PASSWORD" | sudo -k -S true > /dev/null 2>&1; then
     printf '[dotfiles] The sudo password was not accepted.\n' >&2

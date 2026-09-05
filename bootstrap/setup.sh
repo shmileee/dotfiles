@@ -380,14 +380,18 @@ run_ansible() {
   # sudo password as a variable (wired to SUDO_ASKPASS), so it is captured
   # here and handed to the playbook through the environment.
   if ! sudo -k -n true > /dev/null 2>&1; then
+    become_tty=${DOTFILES_TTY_DEVICE:-/dev/tty}
+    if ! (: < "$become_tty") 2> /dev/null; then
+      fail 'sudo needs the workstation password but no terminal is available to ask for it.'
+    fi
     phase 'Sudo needs the workstation password; it is asked for once'
     printf 'Workstation password: '
-    stty -echo < /dev/tty
-    read -r DOTFILES_BECOME_PASSWORD < /dev/tty || {
-      stty echo < /dev/tty
+    stty -echo < "$become_tty" 2> /dev/null || :
+    if ! read -r DOTFILES_BECOME_PASSWORD < "$become_tty"; then
+      stty echo < "$become_tty" 2> /dev/null || :
       fail 'could not read the sudo password from the terminal.'
-    }
-    stty echo < /dev/tty
+    fi
+    stty echo < "$become_tty" 2> /dev/null || :
     printf '\n'
     if ! printf '%s\n' "$DOTFILES_BECOME_PASSWORD" | sudo -k -S true > /dev/null 2>&1; then
       fail 'the sudo password was not accepted.'

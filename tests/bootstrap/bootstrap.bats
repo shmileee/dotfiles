@@ -290,25 +290,55 @@ teardown() {
   [ -z "$(find "$test_tmp" -mindepth 1 -print -quit)" ]
 }
 
-@test "passwordless sudo omits the become prompt flag" {
+@test "passwordless sudo skips the password prompt" {
   TEST_SUDO_STATUS=0
 
   run_bootstrap
 
   [ "$status" -eq 0 ]
   assert_log_contains "sudo -k -n true"
-  refute_log_contains "--ask-become-pass"
+  refute_log_contains "sudo -k -S true"
+  [[ $output != *"Workstation password"* ]]
 }
 
-@test "a failed passwordless probe delegates one password prompt to Ansible" {
+@test "a failed passwordless probe captures one password for Ansible" {
   TEST_SUDO_STATUS=1
+  printf 'workstation-secret\n' > "$test_root/tty-input"
+  TEST_TTY_DEVICE=$test_root/tty-input
 
   run_bootstrap
 
   [ "$status" -eq 0 ]
   assert_log_contains "sudo -k -n true"
-  assert_log_contains "--ask-become-pass"
-  [[ $output == *"Ansible will ask once"* ]]
+  assert_log_contains "sudo -k -S true"
+  assert_log_contains "sudo-password workstation-secret"
+  assert_log_contains "ansible-playbook --inventory 127.0.0.1,"
+  [[ $output == *"Sudo needs the workstation password"* ]]
+}
+
+@test "a rejected sudo password stops bootstrap" {
+  TEST_SUDO_STATUS=1
+  TEST_SUDO_PASSWORD_STATUS=1
+  printf 'wrong-secret\n' > "$test_root/tty-input"
+  TEST_TTY_DEVICE=$test_root/tty-input
+
+  run_bootstrap
+
+  [ "$status" -eq 1 ]
+  [[ $output == *"the sudo password was not accepted."* ]]
+  refute_log_contains "ansible-playbook --inventory 127.0.0.1,"
+}
+
+@test "sudo needing a password without a terminal is actionable" {
+  TEST_SUDO_STATUS=1
+  TEST_TTY_DEVICE=$test_root/absent-tty
+
+  run_bootstrap
+
+  [ "$status" -eq 1 ]
+  [[ $output == *"no terminal is available"* ]]
+  refute_log_contains "sudo -k -S true"
+  refute_log_contains "ansible-playbook --inventory 127.0.0.1,"
 }
 
 @test "phase messages are ordered and completion is actionable" {
