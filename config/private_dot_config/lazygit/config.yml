@@ -1,2 +1,60 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/jesseduffield/lazygit/v0.64.1/schema/config.json
 os:
-  edit: 'nvim {{filename}}'
+  # Preset replaces the manual edit template; auto-detects nvim-remote when
+  # lazygit is launched from inside a Neovim terminal ($NVIM set).
+  editPreset: nvim
+
+git:
+  # Delta as diff renderer (replaces git.paging since v0.64).
+  # Line-number hyperlinks jump straight into the editor.
+  # Cycle renderers with '|'.
+  diffRenderers:
+    - name: delta
+      command: delta --dark --paging=never --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
+    - type: rawGit
+      name: default
+  # Prefill commit subject from branch name, e.g. feature/JIRA-123-foo -> "[JIRA-123] "
+  commitPrefix:
+    - pattern: "^\\w+\\/(\\w+-\\w+).*"
+      replace: "[$1] "
+  commit:
+    # Explicitly pin the 0.64 defaults for wrapping commit message bodies.
+    autoWrapCommitMessage: true
+    autoWrapWidth: 72
+
+gui:
+  # FiraCode Nerd Font is installed -> enable v3 icons.
+  nerdFontsVersion: "3"
+  filterMode: fuzzy
+  border: rounded
+  # Tokyo Night (night) - matches the Neovim colorscheme.
+  # Source: https://github.com/folke/tokyonight.nvim/blob/main/extras/lazygit/tokyonight_night.yml
+  theme:
+    activeBorderColor:
+      - "#ff9e64"
+      - "bold"
+    inactiveBorderColor:
+      - "#27a1b9"
+    searchingActiveBorderColor:
+      - "#ff9e64"
+      - "bold"
+    optionsTextColor:
+      - "#7aa2f7"
+    selectedLineBgColor:
+      - "#283457"
+    cherryPickedCommitFgColor:
+      - "#7aa2f7"
+    cherryPickedCommitBgColor:
+      - "#bb9af7"
+    markedBaseCommitFgColor:
+      - "#7aa2f7"
+    markedBaseCommitBgColor:
+      - "#e0af68"
+    unstagedChangesColor:
+      - "#db4b4b"
+    defaultFgColor:
+      - "#c0caf5"
+
+update:
+  # Check for updates silently in the background (Homebrew still owns installs).
+  method: background
