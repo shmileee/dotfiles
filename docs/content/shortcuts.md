@@ -1,18 +1,8 @@
 ---
-title: Shortcut reference
+title: "Keyboard shortcuts"
 description: Keyboard shortcuts configured for macOS, Alacritty, fish, tmux, and Neovim.
-tags:
-  - Shortcuts
-  - macOS
-  - Alacritty
-  - fish
-  - tmux
-  - Neovim
-hide:
-  - tags
+editUrl: https://github.com/shmileee/dotfiles/edit/master/docs/content/shortcuts.md
 ---
-
-# Keyboard shortcuts
 
 <p class="page-lead">Choose the layer where the shortcut runs. Alacritty, the terminal application, sends many macOS-style shortcuts directly to tmux; fish adds command-line bindings; tmux commands use <kbd>Ctrl</kbd> + <kbd>A</kbd> as their prefix.</p>
 
@@ -33,7 +23,7 @@ hide:
   <p class="shortcut-filter__status" aria-live="polite" data-shortcut-status></p>
 </div>
 
-<section class="context-help-source" hidden data-search-exclude>
+<section class="context-help-source" hidden data-search-exclude data-pagefind-ignore>
 <button class="context-help-trigger" type="button" aria-label="Open quick context" aria-controls="context-help" aria-haspopup="dialog" title="Quick context" data-context-open data-context-ui><span aria-hidden="true">?</span></button>
 <dialog class="context-help" id="context-help" aria-labelledby="context-help-title" data-context-dialog data-context-ui>
 <div class="context-help__panel">
@@ -55,7 +45,7 @@ hide:
 
 <p class="shortcut-filter-empty" data-shortcut-empty hidden>No shortcuts match this search.</p>
 
-<section class="shortcut-reference shortcut-filter-section" data-shortcut-section="macos" markdown>
+<section class="shortcut-reference shortcut-filter-section" data-shortcut-section="macos">
 
 ## macOS system shortcuts
 
@@ -65,15 +55,15 @@ Ansible role.
 
 | Shortcut | Action |
 | --- | --- |
-| ++cmd+g++ | Open Spotlight |
-| ++cmd+space++ | Select the next input source |
+| <span class="keys"><kbd>Cmd</kbd><span>+</span><kbd>G</kbd></span> | Open Spotlight |
+| <span class="keys"><kbd>Cmd</kbd><span>+</span><kbd>Space</kbd></span> | Select the next input source |
 
 The default shortcut for selecting the previous input source is disabled so it
 does not conflict with the configured next-source binding.
 
 </section>
 
-<section class="shortcut-reference shortcut-filter-section" data-shortcut-section="alacritty" markdown>
+<section class="shortcut-reference shortcut-filter-section" data-shortcut-section="alacritty">
 
 ## Alacritty and tmux
 
@@ -83,25 +73,25 @@ These shortcuts work from Alacritty without first entering the tmux prefix.
 
 | Shortcut | Action |
 | --- | --- |
-| ++cmd+n++ | Open a new Alacritty window |
-| ++cmd+t++ | Create a tmux window in the current directory |
-| ++cmd+shift+r++ | Rename the tmux session |
-| ++cmd+w++ | Kill the current tmux window |
-| ++cmd+x++ | Kill the current tmux pane |
+| <span class="keys"><kbd>Cmd</kbd><span>+</span><kbd>N</kbd></span> | Open a new Alacritty window |
+| <span class="keys"><kbd>Cmd</kbd><span>+</span><kbd>T</kbd></span> | Create a tmux window in the current directory |
+| <span class="keys"><kbd>Cmd</kbd><span>+</span><kbd>Shift</kbd><span>+</span><kbd>R</kbd></span> | Rename the tmux session |
+| <span class="keys"><kbd>Cmd</kbd><span>+</span><kbd>W</kbd></span> | Kill the current tmux window |
+| <span class="keys"><kbd>Cmd</kbd><span>+</span><kbd>X</kbd></span> | Kill the current tmux pane |
 
 ### Navigation and search
 
 | Shortcut | Action |
 | --- | --- |
-| ++ctrl+tab++ | Select the next tmux window |
-| ++ctrl+shift+tab++ | Select the previous tmux window |
-| ++cmd+1++ … ++cmd+9++ | Select tmux window 1–9 |
-| ++cmd+f++ | Enter copy mode and search forward |
-| ++cmd+0++ | Reset the Alacritty font size |
+| <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>Tab</kbd></span> | Select the next tmux window |
+| <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>Shift</kbd><span>+</span><kbd>Tab</kbd></span> | Select the previous tmux window |
+| <span class="keys"><kbd>Cmd</kbd><span>+</span><kbd>1</kbd></span> … <span class="keys"><kbd>Cmd</kbd><span>+</span><kbd>9</kbd></span> | Select tmux window 1–9 |
+| <span class="keys"><kbd>Cmd</kbd><span>+</span><kbd>F</kbd></span> | Enter copy mode and search forward |
+| <span class="keys"><kbd>Cmd</kbd><span>+</span><kbd>0</kbd></span> | Reset the Alacritty font size |
 
 </section>
 
-<section class="shortcut-reference shortcut-filter-section" data-shortcut-section="fish" markdown>
+<section class="shortcut-reference shortcut-filter-section" data-shortcut-section="fish">
 
 ## fish shell
 
@@ -109,19 +99,20 @@ These bindings act on the current fish command line.
 
 | Shortcut | Action |
 | --- | --- |
-| ++alt+s++ | Prepend `sudo` unless the command line already starts with it |
-| ++ctrl+g++ | Open the project chooser powered by fzf |
+| <span class="keys"><kbd>Alt</kbd><span>+</span><kbd>S</kbd></span> | Prepend `sudo` unless the command line already starts with it |
+| <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>G</kbd></span> | Open the project chooser powered by fzf |
 
 Some additional character bindings are keyboard-layout dependent. See the
 source file for the exact mappings used by this configuration.
 
 </section>
 
-<section class="shortcut-reference shortcut-filter-section" data-shortcut-section="tmux" markdown>
+<section class="shortcut-reference shortcut-filter-section" data-shortcut-section="tmux">
 
 ## tmux prefix commands
 
-Press ++ctrl+a++, release it, and then press the command key.
+Press <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span>,
+release it, and then press the command key.
 
 <div class="shortcut-prefix-summary" aria-label="Prefix: Control plus A, then release" data-search-exclude>
   <span class="shortcut-prefix-summary__label">Prefix</span>
@@ -133,49 +124,49 @@ Press ++ctrl+a++, release it, and then press the command key.
 
 | Command | Action |
 | --- | --- |
-| ++ctrl+a++ <span class="shortcut-then">then</span> `c` | Create a window in the current directory |
-| ++ctrl+a++ <span class="shortcut-then">then</span> `r` | Rename the current window |
-| ++ctrl+a++ <span class="shortcut-then">then</span> `R` | Rename the current session |
-| ++ctrl+a++ <span class="shortcut-then">then</span> <code>&#124;</code> | Split the pane horizontally |
-| ++ctrl+a++ <span class="shortcut-then">then</span> `_` | Split the pane vertically |
-| ++ctrl+a++ <span class="shortcut-then">then</span> `+` | Toggle pane zoom |
+| <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> <span class="shortcut-then">then</span> `c` | Create a window in the current directory |
+| <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> <span class="shortcut-then">then</span> `r` | Rename the current window |
+| <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> <span class="shortcut-then">then</span> `R` | Rename the current session |
+| <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> <span class="shortcut-then">then</span> <code>&#124;</code> | Split the pane horizontally |
+| <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> <span class="shortcut-then">then</span> `_` | Split the pane vertically |
+| <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> <span class="shortcut-then">then</span> `+` | Toggle pane zoom |
 
 ### Move around
 
 | Command | Action |
 | --- | --- |
-| ++ctrl+a++ <span class="shortcut-then">then</span> `h` / `j` / `k` / `l` | Move one pane left, down, up, or right |
-| ++ctrl+a++ <span class="shortcut-then">then</span> `[` / `]` | Select the previous / next pane |
-| ++ctrl+a++ <span class="shortcut-then">then</span> `{` / `}` | Select the previous / next window |
-| ++ctrl+a++ <span class="shortcut-then">then</span> ++tab++ | Return to the most recently used window |
+| <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> <span class="shortcut-then">then</span> `h` / `j` / `k` / `l` | Move one pane left, down, up, or right |
+| <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> <span class="shortcut-then">then</span> `[` / `]` | Select the previous / next pane |
+| <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> <span class="shortcut-then">then</span> `{` / `}` | Select the previous / next window |
+| <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> <span class="shortcut-then">then</span> <span class="keys"><kbd>Tab</kbd></span> | Return to the most recently used window |
 
 ### Close and detach
 
 | Command | Action |
 | --- | --- |
-| ++ctrl+a++ <span class="shortcut-then">then</span> `x` | Kill the current pane |
-| ++ctrl+a++ <span class="shortcut-then">then</span> `X` | Kill the current window |
-| ++ctrl+a++ <span class="shortcut-then">then</span> ++ctrl+x++ | Confirm and kill every other window |
-| ++ctrl+a++ <span class="shortcut-then">then</span> `Q` | Confirm and kill the session |
-| ++ctrl+a++ <span class="shortcut-then">then</span> `d` | Detach this client |
-| ++ctrl+a++ <span class="shortcut-then">then</span> `D` | Detach other clients when present |
+| <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> <span class="shortcut-then">then</span> `x` | Kill the current pane |
+| <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> <span class="shortcut-then">then</span> `X` | Kill the current window |
+| <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> <span class="shortcut-then">then</span> <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>X</kbd></span> | Confirm and kill every other window |
+| <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> <span class="shortcut-then">then</span> `Q` | Confirm and kill the session |
+| <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> <span class="shortcut-then">then</span> `d` | Detach this client |
+| <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> <span class="shortcut-then">then</span> `D` | Detach other clients when present |
 
 ### Configuration and copy mode
 
 | Command | Action |
 | --- | --- |
-| ++ctrl+a++ <span class="shortcut-then">then</span> ++ctrl+e++ | Edit [`tmux.conf`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf), then reload it |
-| ++ctrl+a++ <span class="shortcut-then">then</span> ++ctrl+r++ | Reload [`tmux.conf`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf) |
-| ++ctrl+s++ | Enter copy mode without the prefix |
-| ++ctrl+a++ <span class="shortcut-then">then</span> `p` | Paste the latest tmux buffer |
-| ++ctrl+a++ <span class="shortcut-then">then</span> ++ctrl+p++ | Choose a tmux buffer |
+| <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> <span class="shortcut-then">then</span> <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>E</kbd></span> | Edit [`tmux.conf`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf), then reload it |
+| <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> <span class="shortcut-then">then</span> <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>R</kbd></span> | Reload [`tmux.conf`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf) |
+| <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>S</kbd></span> | Enter copy mode without the prefix |
+| <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> <span class="shortcut-then">then</span> `p` | Paste the latest tmux buffer |
+| <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> <span class="shortcut-then">then</span> <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>P</kbd></span> | Choose a tmux buffer |
 
 Copy mode uses vi keys and supports the mouse wheel, Page Up and Page Down, and
 Option-based scrolling by line or half page.
 
 </section>
 
-<section class="shortcut-reference shortcut-filter-section" data-shortcut-section="neovim" markdown>
+<section class="shortcut-reference shortcut-filter-section" data-shortcut-section="neovim">
 
 ## Neovim additions
 

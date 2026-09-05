@@ -1,20 +1,12 @@
 ---
-title: OpenCode configuration
+title: "OpenCode + OmO"
 description: Local secrets, model routing, corporate overlays, and contextual notifications.
-tags:
-  - OpenCode
-  - AI tooling
-  - tmux
-  - chezmoi
-hide:
-  - tags
+editUrl: https://github.com/shmileee/dotfiles/edit/master/docs/content/opencode.md
 ---
-
-# OpenCode + OmO
 
 <p class="page-lead" data-mobile-toc-anchor>chezmoi, the dotfile manager, manages the shared OpenCode configuration, Oh My OpenAgent routing, fish integration, and tmux notification plumbing. Secrets and company-specific endpoints stay local.</p>
 
-<section class="context-help-source" hidden data-search-exclude>
+<section class="context-help-source" hidden data-search-exclude data-pagefind-ignore>
 <button class="context-help-trigger" type="button" aria-label="Open quick context" aria-controls="context-help" aria-haspopup="dialog" title="Quick context" data-context-open data-context-ui><span aria-hidden="true">?</span></button>
 <dialog class="context-help" id="context-help" aria-labelledby="context-help-title" data-context-dialog data-context-ui>
 <div class="context-help__panel">
@@ -65,7 +57,7 @@ with Bun when it starts.
 
 ## First-run checklist
 
-1.  Apply the dotfiles with the [setup guide](setup.md).
+1.  Apply the dotfiles with the [setup guide](/dotfiles/setup/).
 2.  Create the local secret files if you want to use the Home Assistant MCP
     server.
 3.  Put only the secret value in each file—no quotes or variable names.
@@ -92,10 +84,10 @@ Edit each file and store only its value. OpenCode resolves the `{file:...}`
 references when it loads the configuration; chezmoi never reads or copies the
 secret contents.
 
-!!! warning "The files start empty"
-
-    The `install` commands create secure placeholders. Populate them before
-    enabling or using the Home Assistant MCP integration.
+> [!WARNING] The files start empty
+>
+> The `install` commands create secure placeholders. Populate them before
+> enabling or using the Home Assistant MCP integration.
 
 ## Corporate overlay
 
@@ -148,7 +140,9 @@ dotfiles repository only declares and configures it.
 After changing the notifier declaration:
 
 1.  Restart OpenCode so Bun can synchronize the package.
-2.  Reload tmux with ++ctrl+a++ then ++ctrl+r++.
+2.  Reload tmux with
+    <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> then
+    <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>R</kbd></span>.
 3.  Run the TPM installation flow if the companion plugin is not present.
 
 ## Deliberately unmanaged
@@ -182,5 +176,7 @@ echo $OPENCODE_CONFIG
 
 ### A notification or tmux marker is stale
 
-Focus the originating tmux window first. If the marker remains, restart
-OpenCode and reload tmux configuration with ++ctrl+a++ then ++ctrl+r++.
+Focus the originating tmux window first. If the marker remains, restart OpenCode
+and reload tmux configuration with
+<span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> then
+<span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>R</kbd></span>.
