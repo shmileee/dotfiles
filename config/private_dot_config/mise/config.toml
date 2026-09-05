@@ -7,6 +7,7 @@ legacy_version_file = false
 "aqua:kubectl" = "1.36.3"
 "aqua:aws/aws-cli" = "2"
 "aqua:derailed/k9s" = "0.50"
+"aqua:kubernetes-sigs/aws-iam-authenticator" = "0.7"
 "aqua:hadolint/hadolint" = "2"
 "aqua:kubernetes-sigs/kustomize" = "5"
 "aqua:neovim/neovim" = "0.12.4"

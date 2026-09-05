@@ -1,0 +1,13 @@
+# Only deviations from k9s defaults are listed; missing keys fall back to defaults.
+k9s:
+  # mise manages k9s upgrades, skip the GitHub version check on startup
+  skipLatestRevCheck: true
+  ui:
+    noIcons: true
+    logoless: true
+    splashless: true
+    # hot-reload config/skin edits without restarting
+    reactive: true
+  logger:
+    # fetch last 5m of logs instead of full history (press 0 in log view for all)
+    sinceSeconds: 300
