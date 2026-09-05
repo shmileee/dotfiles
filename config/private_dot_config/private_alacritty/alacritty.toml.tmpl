@@ -12,6 +12,10 @@
   {{- $shell = "/home/linuxbrew/.linuxbrew/bin/fish" -}}
   {{- $tmux = "/home/linuxbrew/.linuxbrew/bin/tmux" -}}
 {{- end -}}
+{{- $opener := "xdg-open" -}}
+{{- if eq .chezmoi.os "darwin" -}}
+  {{- $opener = "open" -}}
+{{- end -}}
 
 [general]
 import = ["~/.config/alacritty/themes/tokyo_night.toml"]
@@ -25,14 +29,38 @@ size = 14.0
 [font.normal]
 family = "FiraCode Nerd Font"
 
+# Setting hints.enabled replaces Alacritty's defaults, so the stock URL hint
+# is redefined first, followed by custom hints.
+[[hints.enabled]]
+command = "{{ $opener }}"
+hyperlinks = true
+post_processing = true
+persist = false
+mouse = { enabled = true }
+binding = { key = "O", mods = "Control|Shift" }
+regex = "(ipfs:|ipns:|magnet:|mailto:|gemini://|gopher://|https://|http://|news:|file:|git://|ssh:|ftp://)[^\u0000-\u001F\u007F-\u009F<>\"\\s{-}\\^⟨⟩`]+"
+
+# Copy a visible file path (optionally with :line) to the clipboard.
+[[hints.enabled]]
+action = "Copy"
+post_processing = false
+persist = false
+binding = { key = "P", mods = "Command|Shift" }
+regex = '[\w~.-]*(/[\w.-]+)+(:\d+)?'
+
 [scrolling]
 history = 0
+
+[selection]
+save_to_clipboard = true
 
 [window]
 decorations = "none"
 dynamic_padding = true
 dynamic_title = true
 startup_mode = "Maximized"
+option_as_alt = "OnlyLeft"
+resize_increments = true
 
 [terminal.shell]
 program = "{{ $shell }}"
@@ -41,8 +69,6 @@ args = ["-lc", "exec {{ $tmux }} -u new-session -As main \";\" set-option -g det
 [keyboard]
 bindings = [
   { key = "N", mods = "Command", action = "CreateNewWindow" },
-  { key = "Period", mods = "Alt", chars = "\u001B." },
-  { key = "D", mods = "Alt", chars = "\u001Bd" },
   { key = "Tab", mods = "Control", command = { program = "{{ $tmux }}", args = ["select-window", "-t", "+"] } },  # Next window
   { key = "Tab", mods = "Shift|Control", command = { program = "{{ $tmux }}", args = ["select-window", "-t", "-"] } },  # Previous window
   { key = "F", mods = "Command", command = { program = "{{ $tmux }}", args = [ "copy-mode;", "command-prompt", "-i", "-I", "#{pane_search_string}", "-p", "(search down)", "send -X search-forward-incremental \"%%%\"" ] } },  # Search forward incrementally
