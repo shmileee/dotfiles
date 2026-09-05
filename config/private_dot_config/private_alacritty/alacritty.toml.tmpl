@@ -64,7 +64,11 @@ resize_increments = true
 
 [terminal.shell]
 program = "{{ $shell }}"
-args = ["-lc", "exec {{ $tmux }} -u new-session -As main \";\" set-option -g detach-on-destroy off"]
+# Grouped tmux sessions: every Alacritty window gets an independent view
+# (own current window) of the shared "main" session. The base session is
+# created detached once; per-window grouped sessions are destroyed when
+# their client closes (destroy-unattached), while "main" persists.
+args = ["-lc", "{{ $tmux }} new-session -d -s main 2>/dev/null; exec {{ $tmux }} -u new-session -t main \";\" set-option destroy-unattached on"]
 
 [keyboard]
 bindings = [
