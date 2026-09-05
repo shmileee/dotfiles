@@ -17,16 +17,11 @@ git:
   commitPrefix:
     - pattern: "^\\w+\\/(\\w+-\\w+).*"
       replace: "[$1] "
-  commit:
-    # Explicitly pin the 0.64 defaults for wrapping commit message bodies.
-    autoWrapCommitMessage: true
-    autoWrapWidth: 72
 
 gui:
   # FiraCode Nerd Font is installed -> enable v3 icons.
   nerdFontsVersion: "3"
   filterMode: fuzzy
-  border: rounded
   # Tokyo Night (night) - matches the Neovim colorscheme.
   # Source: https://github.com/folke/tokyonight.nvim/blob/main/extras/lazygit/tokyonight_night.yml
   theme:
