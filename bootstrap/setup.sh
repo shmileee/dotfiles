@@ -342,12 +342,22 @@ prepare_ansible() {
   fi
 
   phase 'Installing exactly pinned Ansible collections'
-  galaxy_status=0
-  if [ "$insecure_bootstrap_transport" = true ]; then
-    install_bootstrap_collections --ignore-certs || galaxy_status=$?
-  else
-    install_bootstrap_collections || galaxy_status=$?
-  fi
+  galaxy_retry_delay=${DOTFILES_GALAXY_RETRY_DELAY:-10}
+  galaxy_attempt=1
+  while :; do
+    galaxy_status=0
+    if [ "$insecure_bootstrap_transport" = true ]; then
+      install_bootstrap_collections --ignore-certs || galaxy_status=$?
+    else
+      install_bootstrap_collections || galaxy_status=$?
+    fi
+    if [ "$galaxy_status" -eq 0 ] || [ "$galaxy_attempt" -ge 3 ]; then
+      break
+    fi
+    phase "Ansible Galaxy attempt $galaxy_attempt failed; retrying in ${galaxy_retry_delay}s"
+    sleep "$galaxy_retry_delay"
+    galaxy_attempt=$((galaxy_attempt + 1))
+  done
   if [ "$galaxy_status" -eq 0 ]; then
     :
   else

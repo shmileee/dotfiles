@@ -35,11 +35,19 @@ WORKDIR /source
 # system bundle, so only that pre-Ansible call ignores certificates. The first
 # Ansible task installs and updates ca-certificates.
 RUN uv sync --project bootstrap --locked --managed-python && \
-    ANSIBLE_COLLECTIONS_PATH=/tmp/ansible-collections \
-    uv run --project bootstrap --locked --managed-python \
-      ansible-galaxy collection install --ignore-certs \
-      --collections-path /tmp/ansible-collections \
-      --requirements-file bootstrap/ansible/requirements.yml
+    for galaxy_attempt in 1 2 3; do \
+      if ANSIBLE_COLLECTIONS_PATH=/tmp/ansible-collections \
+        uv run --project bootstrap --locked --managed-python \
+          ansible-galaxy collection install --ignore-certs \
+          --collections-path /tmp/ansible-collections \
+          --requirements-file bootstrap/ansible/requirements.yml; then \
+        break; \
+      elif [ "$galaxy_attempt" -ge 3 ]; then \
+        exit 1; \
+      else \
+        sleep 10; \
+      fi; \
+    done
 
 RUN ANSIBLE_CONFIG=bootstrap/ansible/ansible.cfg \
     ANSIBLE_COLLECTIONS_PATH=/tmp/ansible-collections \

@@ -28,7 +28,7 @@ setup_bootstrap_test() {
   : > "$command_log"
   write_os_release ubuntu current
 
-  for command_name in cat chmod cmp cp dirname mkdir rm sed stat touch; do
+  for command_name in cat chmod cmp cp dirname mkdir rm sed sleep stat touch; do
     ln -s "$(command -v "$command_name")" "$base_bin/$command_name"
   done
 
@@ -176,6 +176,7 @@ run_bootstrap() {
     TEST_UV_VERSION_STATUS="${TEST_UV_VERSION_STATUS:-0}" \
     TEST_SYNC_STATUS="${TEST_SYNC_STATUS:-0}" \
     TEST_GALAXY_STATUS="${TEST_GALAXY_STATUS:-0}" \
+    DOTFILES_GALAXY_RETRY_DELAY=0 \
     TEST_RUNTIME_VALIDATION_STATUS="${TEST_RUNTIME_VALIDATION_STATUS:-0}" \
     TEST_ANSIBLE_STATUS="${TEST_ANSIBLE_STATUS:-0}" \
     "$bootstrap_shell" "$setup_under_test" "$@"

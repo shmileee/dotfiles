@@ -251,9 +251,12 @@ teardown() {
 
   TEST_SYNC_STATUS=0
   TEST_GALAXY_STATUS=42
+  : > "$command_log"
   run_bootstrap
   [ "$status" -eq 42 ]
   [[ $output == *"Ansible Galaxy"* ]]
+  [[ $output == *"retrying"* ]]
+  [ "$(grep -c 'ansible-galaxy collection install' "$command_log")" -eq 3 ]
 
   TEST_GALAXY_STATUS=0
   TEST_ANSIBLE_STATUS=43
