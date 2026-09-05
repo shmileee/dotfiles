@@ -113,10 +113,10 @@ These bindings act on the current fish command line.
 | <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>T</kbd></span> | Open the fzf directory picker |
 | <span class="keys"><kbd>Alt</kbd><span>+</span><kbd>Left</kbd></span> / <span class="keys"><kbd>Alt</kbd><span>+</span><kbd>Right</kbd></span> | Move the cursor one word backward or forward |
 
-Alacritty sets `option_as_alt = "OnlyLeft"`, so the <span class="keys"><kbd>Alt</kbd></span> bindings above use
-the left Option key. fzf runs with `--tmux`, so its pickers open in a tmux popup
-whenever one is available. The fzf.fish plugin installs further pickers on its
-own default keys.
+Alacritty sets `option_as_alt = "OnlyLeft"`, so the
+<span class="keys"><kbd>Alt</kbd></span> bindings above use the left Option key.
+fzf runs with `--tmux`, so its pickers open in a tmux popup whenever one is
+available. The fzf.fish plugin installs further pickers on its own default keys.
 
 </section>
 
@@ -124,8 +124,12 @@ own default keys.
 
 ## tmux prefix commands
 
-Press <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span>, release it, and then press the command key. Press <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span>
-twice to send a literal <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> through to the program in the pane.
+Press <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span>,
+release it, and then press the command key. Press
+<span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> twice to
+send a literal
+<span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> through to
+the program in the pane.
 
 <div class="shortcut-prefix-summary" aria-label="Prefix: Control plus A, then release" data-search-exclude>
   <span class="shortcut-prefix-summary__label">Prefix</span>
@@ -228,9 +232,10 @@ These act inside the OpenCode TUI, so the tmux prefix is not involved.
 | --- | --- |
 | <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>R</kbd></span> | Record a voice prompt, transcribe it, and insert the cleaned text |
 
-<span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>R</kbd></span> is OpenCode's factory binding for renaming a session. The managed
-`tui.json` disables that binding so the voice plugin can own the key; rename a
-session with the `/rename` command instead.
+<span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>R</kbd></span> is
+OpenCode's factory binding for renaming a session. The managed `tui.json`
+disables that binding so the voice plugin can own the key; rename a session with
+the `/rename` command instead.
 
 </section>
 
