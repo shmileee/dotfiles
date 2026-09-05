@@ -375,24 +375,32 @@ run_ansible() {
     fail 'could not determine the workstation user name before Ansible.'
   fi
 
-  if sudo -k -n true > /dev/null 2>&1; then
-    if run_bootstrap_runtime ansible-playbook --inventory '127.0.0.1,' \
-      -e "ansible_user=$workstation_user" \
-      "$source_root/bootstrap/ansible/main.yaml"; then
-      return 0
-    else
-      ansible_status=$?
+  # --ask-become-pass is not used because it only feeds the become plugin and
+  # is never available to task templating. Homebrew pkg-based casks need the
+  # sudo password as a variable (wired to SUDO_ASKPASS), so it is captured
+  # here and handed to the playbook through the environment.
+  if ! sudo -k -n true > /dev/null 2>&1; then
+    phase 'Sudo needs the workstation password; it is asked for once'
+    printf 'Workstation password: '
+    stty -echo < /dev/tty
+    read -r DOTFILES_BECOME_PASSWORD < /dev/tty || {
+      stty echo < /dev/tty
+      fail 'could not read the sudo password from the terminal.'
+    }
+    stty echo < /dev/tty
+    printf '\n'
+    if ! printf '%s\n' "$DOTFILES_BECOME_PASSWORD" | sudo -k -S true > /dev/null 2>&1; then
+      fail 'the sudo password was not accepted.'
     fi
+    export DOTFILES_BECOME_PASSWORD
+  fi
+
+  if run_bootstrap_runtime ansible-playbook --inventory '127.0.0.1,' \
+    -e "ansible_user=$workstation_user" \
+    "$source_root/bootstrap/ansible/main.yaml"; then
+    return 0
   else
-    phase 'Sudo needs the workstation password; Ansible will ask once'
-    if run_bootstrap_runtime ansible-playbook --inventory '127.0.0.1,' \
-      -e "ansible_user=$workstation_user" \
-      "$source_root/bootstrap/ansible/main.yaml" \
-      --ask-become-pass; then
-      return 0
-    else
-      ansible_status=$?
-    fi
+    ansible_status=$?
   fi
 
   fail 'Ansible stopped before workstation provisioning completed; durable changes and any checkout were left in place.' "$ansible_status"

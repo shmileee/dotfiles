@@ -105,8 +105,25 @@ fi
 
 # Invalidate cached credentials so this distinguishes configured passwordless
 # sudo from a timestamp left by an earlier command.
+#
+# --ask-become-pass is not used because it only feeds the become plugin and is
+# never available to task templating. Homebrew pkg-based casks need the sudo
+# password as a variable (wired to SUDO_ASKPASS), so it is captured here and
+# handed to the playbook through the environment.
 if ! sudo -k -n true > /dev/null 2>&1; then
-  set -- "$@" --ask-become-pass
+  printf '[dotfiles] Sudo needs the workstation password (become tasks + Homebrew pkg installers): '
+  stty -echo < /dev/tty
+  read -r DOTFILES_BECOME_PASSWORD < /dev/tty || {
+    stty echo < /dev/tty
+    exit 1
+  }
+  stty echo < /dev/tty
+  printf '\n'
+  if ! printf '%s\n' "$DOTFILES_BECOME_PASSWORD" | sudo -k -S true > /dev/null 2>&1; then
+    printf '[dotfiles] The sudo password was not accepted.\n' >&2
+    exit 1
+  fi
+  export DOTFILES_BECOME_PASSWORD
 fi
 
 printf '[dotfiles] Running complete workstation playbook\n'

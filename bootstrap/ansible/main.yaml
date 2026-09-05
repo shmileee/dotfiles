@@ -8,6 +8,12 @@
     - config.yaml
     - vars/runtime.yaml
 
+  vars:
+    # Captured by setup.sh/reconcile.sh when sudo needs a password; empty when
+    # passwordless sudo is configured. A variable (unlike --ask-become-pass)
+    # is templatable, which homebrew_cask's sudo_password requires.
+    ansible_become_password: "{{ lookup('ansible.builtin.env', 'DOTFILES_BECOME_PASSWORD') }}"
+
   environment:
     PATH: "{{ workstation_path }}"
   roles:
