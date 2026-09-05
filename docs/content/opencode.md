@@ -159,19 +159,23 @@ dotfiles repository only declares and configures it.
 After changing the notifier declaration:
 
 1.  Restart OpenCode so Bun can synchronize the package.
-2.  Reload tmux with <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> then <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>R</kbd></span>.
+2.  Reload tmux with
+    <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> then
+    <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>R</kbd></span>.
 3.  Run the TPM installation flow if the companion plugin is not present.
 
 ## Voice dictation
 
-<span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>R</kbd></span> records a prompt, transcribes it, and inserts the cleaned text into
-the prompt box. Both models run on this machine, so no audio leaves it.
+<span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>R</kbd></span> records a
+prompt, transcribes it, and inserts the cleaned text into the prompt box. Both
+models run on this machine, so no audio leaves it.
 
 The plugin is declared in the managed
 [`tui.json`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_opencode/tui.json),
-which also frees <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>R</kbd></span> by disabling the factory `session_rename`
-binding—rename a session with `/rename` instead. The plugin talks to two local
-services:
+which also frees
+<span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>R</kbd></span> by disabling
+the factory `session_rename` binding—rename a session with `/rename` instead.
+The plugin talks to two local services:
 
 <div class="surface-grid">
   <article>
@@ -279,8 +283,10 @@ functions opencode | grep -q workgit; and echo wrapper active
 
 ### A notification or tmux marker is stale
 
-Focus the originating tmux window first. If the marker remains, restart
-OpenCode and reload tmux configuration with <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> then <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>R</kbd></span>.
+Focus the originating tmux window first. If the marker remains, restart OpenCode
+and reload tmux configuration with
+<span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> then
+<span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>R</kbd></span>.
 
 ### Voice recording does nothing
 
