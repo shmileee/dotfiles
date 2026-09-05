@@ -300,15 +300,28 @@ teardown() {
   refute_log_contains "--ask-become-pass"
 }
 
-@test "a failed passwordless probe delegates one password prompt to Ansible" {
+@test "a failed passwordless probe validates the provided become password" {
   TEST_SUDO_STATUS=1
+  DOTFILES_BECOME_PASSWORD=test-password
 
   run_bootstrap
 
   [ "$status" -eq 0 ]
   assert_log_contains "sudo -k -n true"
-  assert_log_contains "--ask-become-pass"
-  [[ $output == *"Ansible will ask once"* ]]
+  assert_log_contains "sudo -k -S true"
+  refute_log_contains "--ask-become-pass"
+}
+
+@test "a rejected become password stops before provisioning" {
+  TEST_SUDO_STATUS=1
+  TEST_SUDO_VALIDATE_STATUS=1
+  DOTFILES_BECOME_PASSWORD=wrong-password
+
+  run_bootstrap
+
+  [ "$status" -ne 0 ]
+  [[ $output == *"password was not accepted"* ]]
+  refute_log_contains "ansible-playbook"
 }
 
 @test "phase messages are ordered and completion is actionable" {

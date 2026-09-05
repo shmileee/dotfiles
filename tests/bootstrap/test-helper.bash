@@ -56,7 +56,10 @@ EOF
 
   make_mock sudo << 'EOF'
 printf 'sudo %s\n' "$*" >>"$MOCK_LOG"
-exit "${TEST_SUDO_STATUS:-0}"
+case " $* " in
+  *" -S "*) exit "${TEST_SUDO_VALIDATE_STATUS:-0}" ;;
+  *) exit "${TEST_SUDO_STATUS:-0}" ;;
+esac
 EOF
 
   make_mock git << 'EOF'
@@ -163,6 +166,8 @@ run_bootstrap() {
     TEST_ID_UID="${TEST_ID_UID:-1000}" \
     TEST_XCODE_STATUS="${TEST_XCODE_STATUS:-0}" \
     TEST_SUDO_STATUS="${TEST_SUDO_STATUS:-0}" \
+    TEST_SUDO_VALIDATE_STATUS="${TEST_SUDO_VALIDATE_STATUS:-0}" \
+    DOTFILES_BECOME_PASSWORD="${DOTFILES_BECOME_PASSWORD:-}" \
     TEST_SOURCE_CURL_STATUS="${TEST_SOURCE_CURL_STATUS:-0}" \
     TEST_UV_CURL_STATUS="${TEST_UV_CURL_STATUS:-0}" \
     TEST_SOURCE_TAR_STATUS="${TEST_SOURCE_TAR_STATUS:-0}" \
