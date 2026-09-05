@@ -140,7 +140,9 @@ dotfiles repository only declares and configures it.
 After changing the notifier declaration:
 
 1.  Restart OpenCode so Bun can synchronize the package.
-2.  Reload tmux with <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> then <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>R</kbd></span>.
+2.  Reload tmux with
+    <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> then
+    <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>R</kbd></span>.
 3.  Run the TPM installation flow if the companion plugin is not present.
 
 ## Deliberately unmanaged
@@ -174,5 +176,7 @@ echo $OPENCODE_CONFIG
 
 ### A notification or tmux marker is stale
 
-Focus the originating tmux window first. If the marker remains, restart
-OpenCode and reload tmux configuration with <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> then <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>R</kbd></span>.
+Focus the originating tmux window first. If the marker remains, restart OpenCode
+and reload tmux configuration with
+<span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> then
+<span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>R</kbd></span>.

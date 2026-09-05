@@ -111,7 +111,8 @@ source file for the exact mappings used by this configuration.
 
 ## tmux prefix commands
 
-Press <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span>, release it, and then press the command key.
+Press <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span>,
+release it, and then press the command key.
 
 <div class="shortcut-prefix-summary" aria-label="Prefix: Control plus A, then release" data-search-exclude>
   <span class="shortcut-prefix-summary__label">Prefix</span>
