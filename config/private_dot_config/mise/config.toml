@@ -21,7 +21,6 @@ legacy_version_file = false
 bun = "1.4.0"
 go = "1.26.7"
 golangci-lint = "2.13.2"
-maven = "3.9.16"
 node = "24.18.1"
 prek = "0.4.14"
 python = "3.14.7"
