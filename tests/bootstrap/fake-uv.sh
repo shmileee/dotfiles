@@ -26,6 +26,12 @@ fi
 
 case " $* " in
   *" ansible-galaxy collection install "*)
+    if [ -n "${TEST_GALAXY_FAIL_ATTEMPTS:-}" ]; then
+      galaxy_attempt=$(($(cat "$MOCK_LOG.galaxy-attempts" 2> /dev/null || printf 0) + 1))
+      printf '%s\n' "$galaxy_attempt" > "$MOCK_LOG.galaxy-attempts"
+      [ "$galaxy_attempt" -gt "$TEST_GALAXY_FAIL_ATTEMPTS" ] || exit 1
+      exit 0
+    fi
     exit "${TEST_GALAXY_STATUS:-0}"
     ;;
   *" ansible-galaxy collection list "*)

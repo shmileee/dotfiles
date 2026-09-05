@@ -324,6 +324,27 @@ teardown() {
   refute_log_contains "ansible-playbook"
 }
 
+@test "transient Ansible Galaxy failures are retried" {
+  TEST_GALAXY_FAIL_ATTEMPTS=2
+
+  run_bootstrap
+
+  [ "$status" -eq 0 ]
+  [[ $output == *"retrying (2/3)"* ]]
+  [ "$(grep -c 'ansible-galaxy collection install' "$command_log")" -eq 3 ]
+}
+
+@test "persistent Ansible Galaxy failures exhaust retries and preserve status" {
+  TEST_GALAXY_STATUS=42
+
+  run_bootstrap
+
+  [ "$status" -eq 42 ]
+  [[ $output == *"retrying (3/3)"* ]]
+  [[ $output == *"Ansible Galaxy"* ]]
+  [ "$(grep -c 'ansible-galaxy collection install' "$command_log")" -eq 3 ]
+}
+
 @test "phase messages are ordered and completion is actionable" {
   run_bootstrap
 

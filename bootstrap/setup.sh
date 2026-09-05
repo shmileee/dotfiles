@@ -342,12 +342,21 @@ prepare_ansible() {
   fi
 
   phase 'Installing exactly pinned Ansible collections'
-  galaxy_status=0
-  if [ "$insecure_bootstrap_transport" = true ]; then
-    install_bootstrap_collections --ignore-certs || galaxy_status=$?
-  else
-    install_bootstrap_collections || galaxy_status=$?
-  fi
+  # Galaxy regularly returns transient 5xx; ansible-core only retries 429/502/520.
+  galaxy_attempt=1
+  while :; do
+    galaxy_status=0
+    if [ "$insecure_bootstrap_transport" = true ]; then
+      install_bootstrap_collections --ignore-certs || galaxy_status=$?
+    else
+      install_bootstrap_collections || galaxy_status=$?
+    fi
+    [ "$galaxy_status" -ne 0 ] || break
+    [ "$galaxy_attempt" -lt 3 ] || break
+    galaxy_attempt=$((galaxy_attempt + 1))
+    phase "Ansible Galaxy failed transiently; retrying ($galaxy_attempt/3)"
+    sleep "${DOTFILES_GALAXY_RETRY_DELAY:-5}"
+  done
   if [ "$galaxy_status" -eq 0 ]; then
     :
   else

@@ -84,9 +84,19 @@ printf '[dotfiles] Synchronizing locked reconciliation runtime\n'
 uv sync --project "$project" --locked --managed-python
 
 printf '[dotfiles] Installing exactly pinned Ansible collections\n'
-run_in_runtime ansible-galaxy collection install \
-  --collections-path "$collections" \
-  --requirements-file "$collection_requirements"
+# Galaxy regularly returns transient 5xx; ansible-core only retries 429/502/520.
+galaxy_attempt=1
+while :; do
+  galaxy_status=0
+  run_in_runtime ansible-galaxy collection install \
+    --collections-path "$collections" \
+    --requirements-file "$collection_requirements" || galaxy_status=$?
+  [ "$galaxy_status" -ne 0 ] || break
+  [ "$galaxy_attempt" -lt 3 ] || exit "$galaxy_status"
+  galaxy_attempt=$((galaxy_attempt + 1))
+  printf '[dotfiles] Ansible Galaxy failed transiently; retrying (%s/3)\n' "$galaxy_attempt"
+  sleep "${DOTFILES_GALAXY_RETRY_DELAY:-5}"
+done
 
 printf '[dotfiles] Validating locked runtime identity\n'
 run_in_runtime python "$repository_root/bootstrap/validate_runtime.py" \
