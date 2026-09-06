@@ -55,8 +55,6 @@
       delay: 5
 
     - name: "inspect fisher plugins"
-      # fish-async-prompt stays commit-pinned until prompt callbacks preserve
-      # pipeline status reliably.
       ansible.builtin.command:
         argv: ['{{ fish_path }}', -c, fisher list]
       check_mode: false

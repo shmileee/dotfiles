@@ -10,3 +10,6 @@
 .config/opencode/tmux-waiting-marker.sh
 .config/opencode/tsconfig.json
 .config/fish/conf.d/functions.fish
+.config/fish/conf.d/starship.fish
+.config/fish/functions/_tide_item_spwd.fish
+.config/starship.toml
