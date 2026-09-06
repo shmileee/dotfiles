@@ -11,6 +11,10 @@ map({ "n" }, "O", "O<Esc>")
 
 map({ "n" }, "<leader><leader>", "<cmd>nohlsearch<cr>")
 
+-- comment via native gc (0.10+) + ts-comments.nvim; replaces mini.comment
+map("n", "<leader>/", "gcc", { remap = true, desc = "Comment line" })
+map("x", "<leader>/", "gc", { remap = true, desc = "Comment selection" })
+
 -- https://github.com/LazyVim/LazyVim/discussions/1239
 map({ "v" }, ">", ">")
 map({ "v" }, "<", "<")
