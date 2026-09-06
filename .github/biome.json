@@ -3,7 +3,11 @@
   "root": false,
   "files": {
     "ignoreUnknown": true,
-    "includes": ["**", "!config/private_dot_config/nvim/lazy-lock.json"]
+    "includes": [
+      "**",
+      "!config/private_dot_config/nvim/lazy-lock.json",
+      "!config/private_dot_config/private_opencode/tui.json"
+    ]
   },
   "vcs": {
     "enabled": true,
