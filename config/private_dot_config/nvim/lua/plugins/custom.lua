@@ -6,8 +6,12 @@ local plugins = {
   { "mfussenegger/nvim-lint", enabled = false },
   {
     "ibhagwan/fzf-lua",
-    event = "VimEnter",
-    keys = { { "<leader><space>", false } },
+    keys = {
+      -- both conflict with custom keymaps (keymaps.lua):
+      -- <leader><leader> -> nohlsearch, <leader>/ -> comment
+      { "<leader><space>", false },
+      { "<leader>/", false },
+    },
   },
   {
     "nvim-mini/mini.move",
