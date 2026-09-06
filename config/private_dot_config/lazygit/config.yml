@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/jesseduffield/lazygit/v0.64.1/schema/config.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/jesseduffield/lazygit/v0.65.0/schema/config.json
 os:
   # Preset replaces the manual edit template; auto-detects nvim-remote when
   # lazygit is launched from inside a Neovim terminal ($NVIM set).
