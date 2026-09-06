@@ -17,10 +17,16 @@
 # - fish_key_bindings: the worker only forwards fish_bind_mode; without this,
 #   _tide_item_character falls back to the vi-mode ❮ icon instead of ❯
 # - left items: no `os` item (mac icon)
+# - right items: pruned from the wizard default. `time` dropped — with the
+#   transient prompt the timestamp only shows on the current prompt, so it
+#   lost its "when did I run this" value in scrollback. Language/tool items
+#   for stacks not in use (and gcloud/node) dropped — dead weight per repaint.
 # - empty-LIST tide_git_icon drops the branch icon and its trailing space
 #   (_tide_item_git concatenates `$tide_git_icon' '` unquoted)
 set -g fish_key_bindings fish_default_key_bindings
 set -g tide_left_prompt_items pwd git newline character
+set -g tide_right_prompt_items status cmd_duration context jobs direnv \
+    python go kubectl terraform aws
 set -g tide_git_icon
 
 status is-interactive; or exit
