@@ -50,6 +50,7 @@ brew:
       - fzf
       - gh
       - ghq
+      - git
       - git-delta
       - git-lfs
       - jaq
