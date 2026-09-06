@@ -29,20 +29,8 @@
 
   set-upstream = !git branch --set-upstream-to=origin/$(git symbolic-ref --short HEAD)
 
-[push]
-  default = current
-
 [filter "lfs"]
   smudge = git-lfs smudge -- %f
   process = git-lfs filter-process
   required = true
   clean = git-lfs clean -- %f
-
-[pager]
-  diff = delta
-  log = delta
-  reflog = delta
-  show = delta
-
-[interactive]
-  diffFilter = delta --color-only
