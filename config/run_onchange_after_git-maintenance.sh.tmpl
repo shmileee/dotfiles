@@ -1,0 +1,11 @@
+#!/bin/sh
+# Register the dotfiles repo for background `git maintenance` (commit-graph,
+# prefetch, gc via launchd/systemd timers). Re-runs when this file changes.
+# git config version hash: {{ include "private_dot_config/private_git/config.tmpl" | sha256sum }}
+set -eu
+command -v git >/dev/null 2>&1 || exit 0
+# `git maintenance` writes maintenance.repo with --global. Ensure ~/.gitconfig
+# exists first so the write lands there (git prefers ~/.gitconfig when
+# present) instead of drifting the chezmoi-managed ~/.config/git/config.
+touch "$HOME/.gitconfig"
+git -C "{{ .chezmoi.workingTree }}" maintenance start >/dev/null 2>&1 || true
