@@ -59,6 +59,7 @@ brew:
       - yq
       - ripgrep
       - sponge
+      - tmux
       - zoxide
     darwin:
       - bash
