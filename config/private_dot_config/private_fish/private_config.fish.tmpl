@@ -10,7 +10,7 @@ if status is-interactive
         set -gx MANPAGER "sh -c 'col -bx | bat -l man -p'"
     end
 
-    # TokyoNight (night) palette, from tokyonight.nvim extras/fzf. --tmux
+    # TokyoNight (moon) palette, from tokyonight.nvim extras/fzf. --tmux
     # renders fzf in a tmux popup (ignored outside tmux).
     set -gx FZF_DEFAULT_OPTS (string join ' ' -- \
         --tmux \
@@ -19,21 +19,21 @@ if status is-interactive
         --ansi \
         --layout=reverse \
         --border=none \
-        --color=bg+:#283457 \
-        --color=bg:#16161e \
-        --color=border:#27a1b9 \
-        --color=fg:#c0caf5 \
-        --color=gutter:#16161e \
-        --color=header:#ff9e64 \
-        --color=hl+:#2ac3de \
-        --color=hl:#2ac3de \
+        --color=bg+:#2d3f76 \
+        --color=bg:#1e2030 \
+        --color=border:#589ed7 \
+        --color=fg:#c8d3f5 \
+        --color=gutter:#1e2030 \
+        --color=header:#ff966c \
+        --color=hl+:#65bcff \
+        --color=hl:#65bcff \
         --color=info:#545c7e \
         --color=marker:#ff007c \
         --color=pointer:#ff007c \
-        --color=prompt:#2ac3de \
-        --color=query:#c0caf5:regular \
-        --color=scrollbar:#27a1b9 \
-        --color=separator:#ff9e64 \
+        --color=prompt:#65bcff \
+        --color=query:#c8d3f5:regular \
+        --color=scrollbar:#589ed7 \
+        --color=separator:#ff966c \
         --color=spinner:#ff007c)
     set -gx FZF_DEFAULT_COMMAND 'fd --type f --hidden --follow --exclude .git'
     set -g fzf_fd_opts --hidden --follow --exclude .git

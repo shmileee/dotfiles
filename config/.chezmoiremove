@@ -20,3 +20,4 @@
 .config/fish/functions/drmf.fish
 .config/fish/functions/drmi.fish
 .config/fish/functions/dstop.fish
+.config/git/tokyonight_night.gitconfig

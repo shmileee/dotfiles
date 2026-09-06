@@ -36,6 +36,12 @@ local plugins = {
   },
   -- customize defaults:
   {
+    -- LazyVim already defaults to moon; pinned so the style stays explicit
+    -- and in sync with the terminal stack (alacritty/tmux/fzf/lazygit/bat).
+    "folke/tokyonight.nvim",
+    opts = { style = "moon" },
+  },
+  {
     "neovim/nvim-lspconfig",
     opts = {
       servers = {

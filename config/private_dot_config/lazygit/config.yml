@@ -22,33 +22,33 @@ gui:
   # FiraCode Nerd Font is installed -> enable v3 icons.
   nerdFontsVersion: "3"
   filterMode: fuzzy
-  # Tokyo Night (night) - matches the Neovim colorscheme.
-  # Source: https://github.com/folke/tokyonight.nvim/blob/main/extras/lazygit/tokyonight_night.yml
+  # Tokyo Night (moon) - matches the Neovim colorscheme.
+  # Source: https://github.com/folke/tokyonight.nvim/blob/main/extras/lazygit/tokyonight_moon.yml
   theme:
     activeBorderColor:
-      - "#ff9e64"
+      - "#ff966c"
       - "bold"
     inactiveBorderColor:
-      - "#27a1b9"
+      - "#589ed7"
     searchingActiveBorderColor:
-      - "#ff9e64"
+      - "#ff966c"
       - "bold"
     optionsTextColor:
-      - "#7aa2f7"
+      - "#82aaff"
     selectedLineBgColor:
-      - "#283457"
+      - "#2d3f76"
     cherryPickedCommitFgColor:
-      - "#7aa2f7"
+      - "#82aaff"
     cherryPickedCommitBgColor:
-      - "#bb9af7"
+      - "#c099ff"
     markedBaseCommitFgColor:
-      - "#7aa2f7"
+      - "#82aaff"
     markedBaseCommitBgColor:
-      - "#e0af68"
+      - "#ffc777"
     unstagedChangesColor:
-      - "#db4b4b"
+      - "#c53b53"
     defaultFgColor:
-      - "#c0caf5"
+      - "#c8d3f5"
 
 update:
   # Check for updates silently in the background (Homebrew still owns installs).
