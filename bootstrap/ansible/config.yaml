@@ -52,14 +52,12 @@ brew:
       - ghq
       - git-delta
       - git-lfs
-      - highlight
       - jaq
       - lazygit
       - mise
       - yq
       - ripgrep
       - sponge
-      - tree
       - zoxide
     darwin:
       - bash
