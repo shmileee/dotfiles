@@ -4,6 +4,10 @@
   editor = nvim
   excludesfile = ~/.config/git/ignore
   pager = delta
+  # Per-repo filesystem watcher daemon + untracked cache: big speedup for
+  # `git status` in large repos, harmless in small ones.
+  fsmonitor = true
+  untrackedCache = true
 [interactive]
   diffFilter = delta --color-only
 [delta]
@@ -18,11 +22,9 @@
 [include]
   path = ~/.config/git/tokyonight_moon.gitconfig
 [include]
-  path = ~/.config/git/user
+  path = ~/.config/git/aliases
 [include]
   path = ~/.config/git/proxy
-[includeIf "gitdir:~/dotfiles/**"]
-  path = ~/.config/git/personal
 [includeIf "gitdir:~/.local/share/**"]
   path = ~/.config/git/personal
 [includeIf "gitdir:~/projects/**"]
@@ -31,7 +33,11 @@
   path = ~/.config/git/work
 [includeIf "gitdir:~/ghq/github.com/**"]
   path = ~/.config/git/work
-[includeIf "gitdir:/tmp/**/**"]
+[includeIf "gitdir:/tmp/**"]
+  path = ~/.config/git/work
+# macOS: git canonicalizes /tmp to /private/tmp, so the rule above never
+# matches there - this one does.
+[includeIf "gitdir:/private/tmp/**"]
   path = ~/.config/git/work
 [includeIf "gitdir:~/private/**"]
   path = ~/.config/git/personal
@@ -39,25 +45,74 @@
   path = ~/.config/git/personal
 [includeIf "gitdir:~/ghq/workgit/**"]
   path = ~/.config/git/work
+# Remote-based override (git 2.36+): any repo whose remote points at the
+# personal GitHub account gets the personal identity, regardless of where it
+# is cloned. Last matching include wins over the directory rules above.
+# Caveat: hasconfig matches against ALL remotes, so in a mixed-remote repo
+# (e.g. a work clone with a personal fork remote) the LAST matching rule
+# below decides - a workgit remote always wins over personal ones. Repos
+# matching no rule get no identity at all; user.useConfigOnly then makes
+# commits fail loudly instead of guessing.
+[includeIf "hasconfig:remote.*.url:git@github.com:shmileee/**"]
+  path = ~/.config/git/personal
+[includeIf "hasconfig:remote.*.url:ssh://git@github.com/shmileee/**"]
+  path = ~/.config/git/personal
+[includeIf "hasconfig:remote.*.url:https://github.com/shmileee/**"]
+  path = ~/.config/git/personal
+# SSH host aliases used by ghq roots.
+[includeIf "hasconfig:remote.*.url:ssh://personalgit/**"]
+  path = ~/.config/git/personal
+[includeIf "hasconfig:remote.*.url:ssh://workgit/**"]
+  path = ~/.config/git/work
 [credential]
 {{- if eq .chezmoi.os "darwin" }}
   helper = osxkeychain
 {{- else }}
   helper = cache --timeout=3600
 {{- end }}
+[user]
+  # Refuse to commit unless an identity rule above matched (no guessed
+  # user@hostname identities in unclassified repos).
+  useConfigOnly = true
 [pull]
-  rebase = false
+  rebase = true
+[fetch]
+  prune = true
+[rebase]
+  autoStash = true
+  autoSquash = true
+  # Stacked branches: rebasing a branch moves the dependent branches with it.
+  updateRefs = true
 [init]
   defaultBranch = main
 [push]
   default = current
+  # First push of a new branch sets up tracking automatically.
+  autoSetupRemote = true
+  followTags = true
+[commit]
+  # Show the full diff in the commit message editor.
+  verbose = true
 [rerere]
   enabled = true
+  autoupdate = true
 [branch]
   sort = -committerdate
+[tag]
+  sort = version:refname
 [column]
   ui = auto
 [diff]
   algorithm = histogram
+  colorMoved = default
+  mnemonicPrefix = true
+  renames = true
 [merge]
   conflictStyle = zdiff3
+[help]
+  autocorrect = prompt
+[filter "lfs"]
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true
