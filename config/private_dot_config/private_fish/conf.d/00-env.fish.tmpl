@@ -6,6 +6,10 @@ set -gx XDG_CONFIG_HOME $HOME/.config
 set -gx XDG_CACHE_HOME $HOME/.cache
 set -gx EDITOR nvim
 set -gx VISUAL nvim
+# Custom theme from ~/.config/bat/themes, registered by the chezmoi
+# run_onchange bat-cache script (bat cache --build). Used by bat itself
+# (MANPAGER, fzf.fish previews); delta pins its own syntax-theme in gitconfig.
+set -gx BAT_THEME tokyonight_moon
 set -gx GOPATH $HOME/go
 set -gx HOMEBREW_NO_ANALYTICS 1
 

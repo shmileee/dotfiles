@@ -1,0 +1,6 @@
+#!/bin/sh
+# Rebuild bat's syntax/theme cache whenever the bundled theme changes, so bat
+# (BAT_THEME) and delta (syntax-theme) can resolve it.
+# tokyonight_moon.tmTheme hash: {{ include "private_dot_config/bat/themes/tokyonight_moon.tmTheme" | sha256sum }}
+command -v bat >/dev/null 2>&1 || exit 0
+bat cache --build >/dev/null

@@ -1,0 +1,108 @@
+# TokyoNight (moon) skin, hand-rolled from the tokyonight.nvim moon palette
+# (no official k9s extra upstream). Backgrounds stay `default` so the
+# terminal/tmux background (and inactive-pane dimming) shows through.
+
+foreground: &foreground "#c8d3f5"
+background: &background default
+current_line: &current_line "#2d3f76"
+comment: &comment "#636da6"
+border: &border "#3b4261"
+border_focus: &border_focus "#589ed7"
+blue: &blue "#82aaff"
+cyan: &cyan "#86e1fc"
+green: &green "#c3e88d"
+orange: &orange "#ff966c"
+magenta: &magenta "#c099ff"
+red: &red "#ff757f"
+yellow: &yellow "#ffc777"
+black: &black "#1b1d2b"
+
+k9s:
+  body:
+    fgColor: *foreground
+    bgColor: *background
+    logoColor: *blue
+  prompt:
+    fgColor: *foreground
+    bgColor: *background
+    suggestColor: *orange
+  info:
+    fgColor: *magenta
+    sectionColor: *foreground
+  help:
+    fgColor: *foreground
+    bgColor: *background
+    keyColor: *magenta
+    numKeyColor: *magenta
+    sectionColor: *green
+  dialog:
+    fgColor: *foreground
+    bgColor: *background
+    buttonFgColor: *black
+    buttonBgColor: *blue
+    buttonFocusFgColor: *black
+    buttonFocusBgColor: *orange
+    labelFgColor: *orange
+    fieldFgColor: *foreground
+  frame:
+    border:
+      fgColor: *border
+      focusColor: *border_focus
+    menu:
+      fgColor: *foreground
+      keyColor: *magenta
+      numKeyColor: *magenta
+    crumbs:
+      fgColor: *foreground
+      bgColor: *current_line
+      activeColor: *orange
+    status:
+      newColor: *cyan
+      modifyColor: *blue
+      addColor: *green
+      errorColor: *red
+      highlightColor: *orange
+      killColor: *comment
+      completedColor: *comment
+    title:
+      fgColor: *foreground
+      bgColor: *background
+      highlightColor: *orange
+      counterColor: *blue
+      filterColor: *magenta
+  views:
+    charts:
+      bgColor: *background
+      defaultDialColors:
+        - *blue
+        - *red
+      defaultChartColors:
+        - *blue
+        - *red
+    table:
+      fgColor: *foreground
+      bgColor: *background
+      cursorFgColor: *foreground
+      cursorBgColor: *current_line
+      header:
+        fgColor: *blue
+        bgColor: *background
+        sorterColor: *cyan
+    xray:
+      fgColor: *foreground
+      bgColor: *background
+      cursorColor: *current_line
+      graphicColor: *blue
+      showIcons: false
+    yaml:
+      keyColor: *blue
+      colonColor: *comment
+      valueColor: *foreground
+    logs:
+      fgColor: *foreground
+      bgColor: *background
+      indicator:
+        fgColor: *black
+        bgColor: *blue
+        toggleOnColor: *green
+        toggleOffColor: *comment
