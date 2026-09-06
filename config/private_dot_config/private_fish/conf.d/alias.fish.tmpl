@@ -3,7 +3,7 @@
 status is-interactive; or return
 
 {{- if (eq .chezmoi.os "darwin") }}
-if command -v gsed > /dev/null
+if command -q gsed
   alias sed 'gsed'
 end
 {{- end }}
@@ -17,13 +17,8 @@ alias pbpaste 'xclip -selection clipboard -o'
 alias vim nvim
 alias vi nvim
 
-# common
-if command -v tree > /dev/null
-  alias tree 'tree -a -I ".git|*.pyc|*pycache*"'
-end
-
 # eza
-if command -v eza > /dev/null
+if command -q eza
   alias l="eza --icons=auto"
   alias ls="eza --git --icons=auto"
   alias la="eza --git -a --icons=auto"
@@ -36,20 +31,15 @@ else
 end
 
 # bat
-if command -v bat > /dev/null
+if command -q bat
   alias cat="bat --plain"
 end
-
-# git
-alias gho 'gh browse'
-alias gdc 'git diff --cached | vim -'
-alias cdp 'cd (git rev-parse --show-toplevel)'
 
 # rg
 alias rg 'rg --hidden --follow --glob "!.git"'
 
 # chezmoi
-if command -v chezmoi > /dev/null
+if command -q chezmoi
   alias d="chezmoi cd"
 end
 
