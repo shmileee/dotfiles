@@ -2,6 +2,4 @@
 
 status is-interactive; or return
 
-if type -q zoxide
-    zoxide init fish | source
-end
+_source_cached_init zoxide zoxide init fish
