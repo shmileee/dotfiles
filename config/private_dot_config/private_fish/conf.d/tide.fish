@@ -39,7 +39,7 @@ set -l _tide_flags \
     --prompt_connection_andor_frame_color=Lightest \
     --prompt_spacing=Compact \
     --icons='Many icons' \
-    --transient=No
+    --transient=Yes
 
 set -l _tide_desired (string join ' | ' -- (tide --version) $_tide_flags)
 
