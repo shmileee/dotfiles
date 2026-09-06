@@ -1,11 +1,5 @@
 ---
 
-- name: "install tmux"
-  community.general.homebrew:
-    name: tmux
-    state: latest
-  tags: homebrew
-
 - name: "install tmux plugins"
   ansible.builtin.git:
     repo: "{{ item['repo'] }}"
