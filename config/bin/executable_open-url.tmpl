@@ -1,0 +1,143 @@
+#!/bin/sh
+{{- $tmux := lookPath "tmux" }}
+{{- $mise := lookPath "mise" }}
+{{- if not $tmux }}{{ fail "open-url: tmux not found on PATH during chezmoi apply" }}{{ end }}
+{{- if not $mise }}{{ fail "open-url: mise not found on PATH during chezmoi apply" }}{{ end }}
+
+set -eu
+
+# Alacritty invokes this handler for clicked hyperlink hints (see
+# alacritty.toml). file:// URLs open in nvim inside a new tmux window,
+# honoring a trailing #L<line> fragment as emitted by opencode; every other
+# URL goes to the system opener. macOS `open` cannot handle the file:// case
+# itself: extensions without an associated application (for example .tmpl)
+# fail silently with kLSApplicationNotFoundErr.
+#
+# Alacritty is a GUI application, so this script runs with the minimal
+# launchd PATH (/usr/bin:/bin:/usr/sbin:/sbin). Instead of reconstructing a
+# shell PATH at runtime, chezmoi resolves the two non-base-system binaries
+# below at apply time, when the full interactive PATH is available.
+tmux_executable={{ $tmux | quote }}
+mise_executable={{ $mise | quote }}
+
+url=
+file_path=
+fragment=
+line_number=
+nvim_executable=
+target_session=
+
+usage() {
+  printf 'Usage: %s <url>\n' "$0"
+}
+
+fail() {
+  failure_message=$1
+  failure_status=${2:-1}
+  printf '[open-url] Error: %s\n' "$failure_message" >&2
+  exit "$failure_status"
+}
+
+validate_arguments() {
+  case $# in
+    1) url=$1 ;;
+    *)
+      usage >&2
+      fail 'exactly one URL argument is required.' 2
+      ;;
+  esac
+}
+
+validate_runtime() {
+  # The paths above were baked at apply time; if tmux or mise moved since
+  # (for example between package managers), fail diagnosably instead of
+  # repeating the silent no-op this script exists to fix.
+  if [ ! -x "$tmux_executable" ]; then
+    fail "baked tmux path $tmux_executable is stale; rerun chezmoi apply."
+  fi
+  if [ ! -x "$mise_executable" ]; then
+    fail "baked mise path $mise_executable is stale; rerun chezmoi apply."
+  fi
+}
+
+open_with_system_handler() {
+  if command -v open > /dev/null 2>&1; then
+    exec open "$url"
+  fi
+  exec xdg-open "$url"
+}
+
+parse_file_url() {
+  file_path=${url#file://}
+  file_path=${file_path#localhost}
+  case $file_path in
+    *'#'*)
+      fragment=${file_path##*#}
+      file_path=${file_path%#*}
+      ;;
+  esac
+
+  # Percent-decode only when the path needs it; perl is part of the base
+  # system on both supported platforms.
+  case $file_path in
+    *%*) file_path=$(printf '%s' "$file_path" | perl -pe 's/%([0-9A-Fa-f]{2})/chr hex $1/ge') ;;
+  esac
+
+  # "#L28" and "#L15-L23" jump to lines 28 and 15: strip an optional leading
+  # L, then keep the leading digits.
+  line_number=${fragment#L}
+  line_number=${line_number%%[!0-9]*}
+}
+
+resolve_nvim() {
+  # nvim lives under a mise-versioned directory, so a path baked at apply
+  # time would go stale on every upgrade; mise resolves the current one.
+  if ! nvim_executable=$("$mise_executable" which nvim 2> /dev/null); then
+    fail 'mise could not resolve an nvim executable.'
+  fi
+  if [ ! -x "$nvim_executable" ]; then
+    fail "mise resolved nvim to $nvim_executable, which is not executable."
+  fi
+}
+
+resolve_session() {
+  # This script runs outside tmux, where an untargeted new-window may pick an
+  # arbitrary session; the click always comes from the most recently active
+  # attached client.
+  target_session=$("$tmux_executable" list-clients -F '#{client_activity} #{session_name}' 2> /dev/null \
+    | sort -rn \
+    | head -n 1 \
+    | cut -d ' ' -f 2-)
+}
+
+open_in_nvim() {
+  validate_runtime
+  parse_file_url
+  resolve_nvim
+  resolve_session
+
+  editor_command=$nvim_executable
+  if [ -n "$line_number" ]; then
+    editor_command="$editor_command +$line_number"
+  fi
+
+  # The pane command is parsed by the session's shell; single quotes with the
+  # POSIX '\'' escape are quoting that sh and fish both accept.
+  quoted_path=$(printf '%s' "$file_path" | sed "s/'/'\\\\''/g")
+
+  set -- -n nvim -c "$(dirname "$file_path")" "$editor_command '$quoted_path'"
+  if [ -n "$target_session" ]; then
+    set -- -t "$target_session" "$@"
+  fi
+  exec "$tmux_executable" new-window "$@"
+}
+
+main() {
+  validate_arguments "$@"
+  case $url in
+    file://*) open_in_nvim ;;
+    *) open_with_system_handler ;;
+  esac
+}
+
+main "$@"
