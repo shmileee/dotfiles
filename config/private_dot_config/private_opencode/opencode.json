@@ -1,6 +1,10 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "autoupdate": true,
+  "small_model": "openai/gpt-5.4-mini",
+  "experimental": {
+    "mcp_timeout": 30000
+  },
   "formatter": {
     "terramate": {
       "command": ["terramate", "fmt"],
@@ -16,7 +20,7 @@
   "mcp": {
     "home-assistant": {
       "type": "remote",
-      "enabled": true,
+      "enabled": false,
       "url": "{file:~/.config/opencode/secrets/home-assistant-mcp-url}",
       "headers": {
         "Authorization": "Bearer {file:~/.config/opencode/secrets/home-assistant-access-token}"
@@ -24,7 +28,7 @@
     }
   },
   "plugin": [
-    "opencode-claude-auth@latest",
+    "opencode-claude-auth@2.2.0",
     "oh-my-openagent@4.19.4",
     "opencode-contextual-notifier@0.1.2"
   ]
