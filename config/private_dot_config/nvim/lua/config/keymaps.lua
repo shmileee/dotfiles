@@ -2,6 +2,10 @@
 
 local map = vim.keymap.set
 
+-- Ctrl-S belongs to tmux (copy-mode trigger); drop LazyVim's save-file mapping
+-- so the terminal-level shadowing is explicit rather than accidental.
+vim.keymap.del({ "i", "x", "n", "s" }, "<C-s>")
+
 map({ "n" }, "o", "o<Esc>")
 map({ "n" }, "O", "O<Esc>")
 
