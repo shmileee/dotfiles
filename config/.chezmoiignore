@@ -1,3 +1,6 @@
 {{ if ne .chezmoi.os "darwin" }}
 bin/ssm-session
 {{ end }}
+{{ if or (not (lookPath "tmux")) (not (lookPath "mise")) }}
+bin/open-url
+{{ end }}
