@@ -61,8 +61,11 @@ family = "FiraCode Nerd Font"
 
 # Setting hints.enabled replaces Alacritty's defaults, so the stock URL hint
 # is redefined first, followed by custom hints.
+# open-url sends file:// URLs to nvim in a new tmux window (macOS `open`
+# fails silently on extensions without an associated app, e.g. .tmpl) and
+# forwards everything else to {{ $opener }}.
 [[hints.enabled]]
-command = "{{ $opener }}"
+command = "{{ .chezmoi.homeDir }}/bin/open-url"
 hyperlinks = true
 post_processing = true
 persist = false
