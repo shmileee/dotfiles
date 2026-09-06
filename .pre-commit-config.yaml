@@ -71,7 +71,7 @@ repos:
         types: [markdown]
       - id: chezmoi-templates
         name: validate chezmoi templates
-        entry: chezmoi execute-template --file
+        entry: chezmoi execute-template --source . --file
         language: system
         files: \.tmpl$
       - id: shfmt
