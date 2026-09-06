@@ -78,12 +78,15 @@ local plugins = {
   },
   -- custom plugins:
   { "tpope/vim-repeat" },
-  { "terramate-io/vim-terramate" },
-  { "christoomey/vim-titlecase" },
+  { "terramate-io/vim-terramate", ft = "terramate" },
+  {
+    "christoomey/vim-titlecase",
+    keys = { { "gz", mode = { "n", "x" } } },
+  },
   {
     "ntpeters/vim-better-whitespace",
     event = { "BufReadPost", "BufNewFile" },
-    config = function()
+    init = function()
       vim.g.strip_whitespace_on_save = 1
       vim.g.better_whitespace_filetypes_blacklist = {
         "lazy",
@@ -98,7 +101,7 @@ local plugins = {
   {
     "will133/vim-dirdiff",
     cmd = "DirDiff",
-    config = function()
+    init = function()
       vim.api.nvim_create_autocmd("FileType", {
         pattern = "dirdiff",
         callback = function()
