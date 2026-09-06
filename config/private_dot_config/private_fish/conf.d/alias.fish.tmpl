@@ -35,6 +35,11 @@ if command -q bat
   alias cat="bat --plain"
 end
 
+# jaq (Rust drop-in jq replacement)
+if command -q jaq
+  alias jq jaq
+end
+
 # rg
 alias rg 'rg --hidden --follow --glob "!.git"'
 

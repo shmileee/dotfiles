@@ -53,7 +53,7 @@ brew:
       - git-delta
       - git-lfs
       - highlight
-      - jq
+      - jaq
       - lazygit
       - mise
       - yq
