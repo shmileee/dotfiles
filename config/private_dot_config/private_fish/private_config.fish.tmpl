@@ -1,46 +1,57 @@
-{{- if not (env "DOCKERIZED") -}}
-fish_add_path /home/linuxbrew/.linuxbrew/bin
-{{- end }}
-
-set -x XDG_CONFIG_HOME $HOME/.config
-set -x XDG_CACHE_HOME $HOME/.cache
-set -x EDITOR nvim
-set -x VISUAL nvim
-set -x GOPATH $HOME/go
-
-fish_add_path $GOPATH/bin
-fish_add_path $HOME/.local/bin
-fish_add_path $HOME/bin
-fish_add_path $HOME/.cargo/bin
-fish_add_path /opt/homebrew/bin
-fish_add_path /opt/homebrew/sbin
-fish_add_path /opt/homebrew/opt/libpq/bin
-
-set -gx HOMEBREW_NO_ANALYTICS 1
-
-{{- if eq .chezmoi.os "darwin" }}
-set -gx DIRENV_BASH /opt/homebrew/bin/bash
-{{- else }}
-set -gx DIRENV_BASH /bin/bash
-{{- end }}
+# Interactive-only settings. Environment and PATH live in conf.d/00-env.fish,
+# which is sourced before this file (and before the rest of conf.d).
 
 if status is-interactive
+    # Suppress the default greeting (idiomatic one-liner; the default
+    # fish_greeting function prints this variable).
+    set -g fish_greeting
+
     if type -q bat
-        set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
+        set -gx MANPAGER "sh -c 'col -bx | bat -l man -p'"
     end
 
-    set -gx FZF_DEFAULT_OPTS "--color=dark"
+    # TokyoNight (night) palette, from tokyonight.nvim extras/fzf. --tmux
+    # renders fzf in a tmux popup (ignored outside tmux).
+    set -gx FZF_DEFAULT_OPTS (string join ' ' -- \
+        --tmux \
+        --highlight-line \
+        --info=inline-right \
+        --ansi \
+        --layout=reverse \
+        --border=none \
+        --color=bg+:#283457 \
+        --color=bg:#16161e \
+        --color=border:#27a1b9 \
+        --color=fg:#c0caf5 \
+        --color=gutter:#16161e \
+        --color=header:#ff9e64 \
+        --color=hl+:#2ac3de \
+        --color=hl:#2ac3de \
+        --color=info:#545c7e \
+        --color=marker:#ff007c \
+        --color=pointer:#ff007c \
+        --color=prompt:#2ac3de \
+        --color=query:#c0caf5:regular \
+        --color=scrollbar:#27a1b9 \
+        --color=separator:#ff9e64 \
+        --color=spinner:#ff007c)
+    set -gx FZF_DEFAULT_COMMAND 'fd --type f --hidden --follow --exclude .git'
     set -g fzf_fd_opts --hidden --follow --exclude .git
+    set -g fzf_preview_dir_cmd eza --all --color=always
+    set -g fzf_diff_highlighter delta --paginate
 
+    # Must stay in config.fish: the fzf.fish plugin's conf.d snippet installs
+    # its default bindings, and config.fish is sourced after all of conf.d.
     if type -q fzf_configure_bindings
-        fzf_configure_bindings --directory=\ct
+        fzf_configure_bindings --directory=ctrl-t
     end
 
-    # fish bobthefish-theme config
-    set -g theme_date_format "+20%y/%m/%d %H:%M"
-    set -g theme_display_ruby no
-    set -g theme_nerd_fonts yes
-    set -g theme_newline_cursor yes
+    # Only honored by vi-mode bindings (fish_vi_cursor); default emacs
+    # bindings never emit a cursor-shape sequence. The blinking cursor at the
+    # prompt comes from Alacritty (cursor.style.blinking = "On") and tmux
+    # (cursor-style blinking-block). Kept so vi mode, if ever enabled,
+    # matches.
+    set -g fish_cursor_default block blink
 end
 
 {{ if eq .chezmoi.os "darwin" -}}
