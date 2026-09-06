@@ -1,4 +1,3 @@
-{{- if eq .chezmoi.os "darwin" -}}
 #!/usr/bin/env bash
 #
 # Requirements:
@@ -59,4 +58,3 @@ case "$1" in
     print_usage
     ;;
 esac
-{{ end -}}

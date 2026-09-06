@@ -1,0 +1,3 @@
+{{ if ne .chezmoi.os "darwin" }}
+bin/ssm-session
+{{ end }}
