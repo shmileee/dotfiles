@@ -83,6 +83,37 @@ local plugins = {
     },
   },
   -- custom plugins:
+  {
+    -- chezmoi source files: resolve target filetype (dot_*, private_*, *.tmpl)
+    -- and layer go-template highlighting on top
+    "alker0/chezmoi.vim",
+    lazy = false,
+    init = function()
+      -- required with lazy.nvim: avoids plugin load-order constraints
+      vim.g["chezmoi#use_tmp_buffer"] = 1
+      -- source dir is non-default (ghq repo + .chezmoiroot), so resolve it
+      -- via `chezmoi source-path` instead of hardcoding
+      vim.g["chezmoi#use_external"] = 1
+      -- treesitter can't parse compound "<ft>.chezmoitmpl" filetypes and
+      -- suppresses regex syntax when attached (plugin FAQ #3): stop it and
+      -- force regex syntax so the go-template overlay actually renders
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "*.chezmoitmpl",
+        group = vim.api.nvim_create_augroup(
+          "chezmoi_tmpl_syntax",
+          { clear = true }
+        ),
+        callback = function(ev)
+          vim.schedule(function()
+            if vim.api.nvim_buf_is_valid(ev.buf) then
+              vim.treesitter.stop(ev.buf)
+              vim.bo[ev.buf].syntax = ev.match
+            end
+          end)
+        end,
+      })
+    end,
+  },
   { "tpope/vim-repeat" },
   { "terramate-io/vim-terramate", ft = "terramate" },
   {
