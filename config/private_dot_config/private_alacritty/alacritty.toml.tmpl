@@ -43,6 +43,16 @@ magenta = "#c7a9ff"
 cyan = "#a4daff"
 white = "#c0caf5"
 
+[cursor]
+# Blinking block by default. Fish's default (emacs) bindings never emit a
+# cursor-shape sequence, so the prompt shows whatever the terminal defaults
+# to — and Alacritty's default is a steady block. Apps (nvim) can still
+# override via DECSCUSR. blink_timeout = 0 keeps blinking when idle
+# (Alacritty otherwise stops after 5s).
+style = { shape = "Block", blinking = "On" }
+blink_interval = 500  # ms per blink phase; Alacritty default is 750
+blink_timeout = 0
+
 [font]
 size = 14.0
 
@@ -83,14 +93,14 @@ resize_increments = true
 
 [terminal.shell]
 program = "{{ $shell }}"
-# Grouped tmux sessions: every Alacritty window gets an independent view
-# (own current window) of the shared "main" session. The base session is
-# created detached once; per-window grouped sessions are destroyed when
-# their client closes (destroy-unattached), while "main" persists.
-args = ["-lc", "{{ $tmux }} new-session -d -s main 2>/dev/null; exec {{ $tmux }} -u new-session -t main \";\" set-option destroy-unattached on"]
+# Single shared "main" session: attach if it exists, create otherwise (-A).
+# Killing the last window/pane destroys the session naturally; the first
+# Alacritty launch after a reboot recreates it.
+args = ["-lc", "exec {{ $tmux }} -u new-session -As main"]
 
 [keyboard]
 bindings = [
+  { key = "Enter", mods = "Shift", chars = "\u001b[13;2u" },  # CSI-u Shift+Enter so TUIs (opencode) can distinguish it from Enter
   { key = "Tab", mods = "Control", command = { program = "{{ $tmux }}", args = ["select-window", "-t", "+"] } },  # Next window
   { key = "Tab", mods = "Shift|Control", command = { program = "{{ $tmux }}", args = ["select-window", "-t", "-"] } },  # Previous window
   { key = "F", mods = "Command", command = { program = "{{ $tmux }}", args = [ "copy-mode;", "command-prompt", "-i", "-I", "#{pane_search_string}", "-p", "(search down)", "send -X search-forward-incremental \"%%%\"" ] } },  # Search forward incrementally
