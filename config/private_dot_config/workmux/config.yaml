@@ -24,3 +24,30 @@ panes:
   # opencode is a fish wrapper function (path-scoped OPENCODE_CONFIG routing);
   # workmux runs pane commands through the default shell, so it applies here.
   - command: opencode
+
+# Autostarted from tmux.conf (run-shell "workmux sidebar on").
+sidebar:
+  position: left
+  width: 30
+  layout: compact
+
+# Dashboard/sidebar recolored to the TokyoNight moon palette used by
+# alacritty, tmux, and the rest of the setup.
+theme:
+  mode: dark
+  custom:
+    bg: '#2f334d'
+    highlight_row_bg: '#2d3f76'
+    fg: '#c8d3f5'
+    current_worktree_fg: '#82aaff'
+    dimmed: '#636da6'
+    border: '#3b4261'
+    help_border: '#3b4261'
+    help_muted: '#636da6'
+    header: '#82aaff'
+    keycap: '#c099ff'
+    accent: '#82aaff'
+    info: '#86e1fc'
+    success: '#c3e88d'
+    warning: '#ffc777'
+    danger: '#ff757f'
