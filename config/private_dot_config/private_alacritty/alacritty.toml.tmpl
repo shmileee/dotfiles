@@ -1,5 +1,6 @@
 {{- $shell := "" -}}
 {{- $tmux := "" -}}
+{{- $session := "main" -}}
 {{- if eq .chezmoi.os "darwin" -}}
   {{- if eq .chezmoi.arch "arm64" -}}
     {{- $shell = "/opt/homebrew/bin/fish" -}}
@@ -99,25 +100,29 @@ program = "{{ $shell }}"
 # Single shared "main" session: attach if it exists, create otherwise (-A).
 # Killing the last window/pane destroys the session naturally; the first
 # Alacritty launch after a reboot recreates it.
-args = ["-lc", "exec {{ $tmux }} -u new-session -As main"]
+args = ["-lc", "exec {{ $tmux }} -u new-session -As {{ $session }}"]
 
 [keyboard]
+# Alacritty runs these as external processes with no tmux client of their own,
+# so an untargeted command resolves to whatever session tmux last considered
+# current -- which can select or kill a window in the wrong session. Every
+# command below therefore names the session explicitly.
 bindings = [
   { key = "Enter", mods = "Shift", chars = "\u001b[13;2u" },  # CSI-u Shift+Enter so TUIs (opencode) can distinguish it from Enter
-  { key = "Tab", mods = "Control", command = { program = "{{ $tmux }}", args = ["select-window", "-t", "+"] } },  # Next window
-  { key = "Tab", mods = "Shift|Control", command = { program = "{{ $tmux }}", args = ["select-window", "-t", "-"] } },  # Previous window
-  { key = "F", mods = "Command", command = { program = "{{ $tmux }}", args = [ "copy-mode;", "command-prompt", "-i", "-I", "#{pane_search_string}", "-p", "(search down)", "send -X search-forward-incremental \"%%%\"" ] } },  # Search forward incrementally
-  { key = "Key1", mods = "Command", command = { program = "{{ $tmux }}", args = ["select-window", "-t 1"] } },  # Switch to window 1
-  { key = "Key2", mods = "Command", command = { program = "{{ $tmux }}", args = ["select-window", "-t 2"] } },  # Switch to window 2
-  { key = "Key3", mods = "Command", command = { program = "{{ $tmux }}", args = ["select-window", "-t 3"] } },  # Switch to window 3
-  { key = "Key4", mods = "Command", command = { program = "{{ $tmux }}", args = ["select-window", "-t 4"] } },  # Switch to window 4
-  { key = "Key5", mods = "Command", command = { program = "{{ $tmux }}", args = ["select-window", "-t 5"] } },  # Switch to window 5
-  { key = "Key6", mods = "Command", command = { program = "{{ $tmux }}", args = ["select-window", "-t 6"] } },  # Switch to window 6
-  { key = "Key7", mods = "Command", command = { program = "{{ $tmux }}", args = ["select-window", "-t 7"] } },  # Switch to window 7
-  { key = "Key8", mods = "Command", command = { program = "{{ $tmux }}", args = ["select-window", "-t 8"] } },  # Switch to window 8
-  { key = "Key9", mods = "Command", command = { program = "{{ $tmux }}", args = ["select-window", "-t 9"] } },  # Switch to window 9
-  { key = "T", mods = "Command", command = { program = "{{ $tmux }}", args = ["new-window", "-c", "#{pane_current_path}"] } },  # Create a new tmux window
-  { key = "R", mods = "Command|Shift", command = { program = "{{ $tmux }}", args = ["command-prompt", "rename-session -- '%%'"] } },  # Rename session
-  { key = "W", mods = "Command",  command = { program = "{{ $tmux }}", args = ["kill-window"] } },  # Kill window
-  { key = "X", mods = "Command",  command = { program = "{{ $tmux }}", args = ["kill-pane"] } },  # Kill pane
+  { key = "Tab", mods = "Control", command = { program = "{{ $tmux }}", args = ["select-window", "-t", "{{ $session }}:+"] } },  # Next window
+  { key = "Tab", mods = "Shift|Control", command = { program = "{{ $tmux }}", args = ["select-window", "-t", "{{ $session }}:-"] } },  # Previous window
+  { key = "F", mods = "Command", command = { program = "{{ $tmux }}", args = [ "copy-mode", "-t", "{{ $session }}", ";", "command-prompt", "-i", "-I", "#{pane_search_string}", "-p", "(search down)", "send -X search-forward-incremental \"%%%\"" ] } },  # Search forward incrementally
+  { key = "Key1", mods = "Command", command = { program = "{{ $tmux }}", args = ["select-window", "-t", "{{ $session }}:1"] } },  # Switch to window 1
+  { key = "Key2", mods = "Command", command = { program = "{{ $tmux }}", args = ["select-window", "-t", "{{ $session }}:2"] } },  # Switch to window 2
+  { key = "Key3", mods = "Command", command = { program = "{{ $tmux }}", args = ["select-window", "-t", "{{ $session }}:3"] } },  # Switch to window 3
+  { key = "Key4", mods = "Command", command = { program = "{{ $tmux }}", args = ["select-window", "-t", "{{ $session }}:4"] } },  # Switch to window 4
+  { key = "Key5", mods = "Command", command = { program = "{{ $tmux }}", args = ["select-window", "-t", "{{ $session }}:5"] } },  # Switch to window 5
+  { key = "Key6", mods = "Command", command = { program = "{{ $tmux }}", args = ["select-window", "-t", "{{ $session }}:6"] } },  # Switch to window 6
+  { key = "Key7", mods = "Command", command = { program = "{{ $tmux }}", args = ["select-window", "-t", "{{ $session }}:7"] } },  # Switch to window 7
+  { key = "Key8", mods = "Command", command = { program = "{{ $tmux }}", args = ["select-window", "-t", "{{ $session }}:8"] } },  # Switch to window 8
+  { key = "Key9", mods = "Command", command = { program = "{{ $tmux }}", args = ["select-window", "-t", "{{ $session }}:9"] } },  # Switch to window 9
+  { key = "T", mods = "Command", command = { program = "{{ $tmux }}", args = ["new-window", "-t", "{{ $session }}", "-c", "#{pane_current_path}"] } },  # Create a new tmux window
+  { key = "R", mods = "Command|Shift", command = { program = "{{ $tmux }}", args = ["command-prompt", "rename-session -t {{ $session }} -- '%%'"] } },  # Rename session
+  { key = "W", mods = "Command",  command = { program = "{{ $tmux }}", args = ["kill-window", "-t", "{{ $session }}"] } },  # Kill window
+  { key = "X", mods = "Command",  command = { program = "{{ $tmux }}", args = ["kill-pane", "-t", "{{ $session }}"] } },  # Kill pane
 ]
