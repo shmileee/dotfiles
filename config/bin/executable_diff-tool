@@ -1,9 +1,17 @@
 #!/bin/sh
 
+if [ "$#" -ne 3 ]; then
+  printf 'usage: diff-tool <local> <chezmoi> <base>\n' >&2
+  exit 1
+fi
+
 local="$1"
 chezmoi="$2"
 base="$3"
 
-kdiff3 -m "$base" "$chezmoi" "$local" -o "$chezmoi"
+trap 'test -f "$chezmoi.orig" && rm -f -- "$chezmoi.orig"' 0
+trap 'exit 129' HUP
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
-test -f "$chezmoi.orig" && rm -f "$chezmoi.orig"
+kdiff3 -m "$base" "$chezmoi" "$local" -o "$chezmoi"
