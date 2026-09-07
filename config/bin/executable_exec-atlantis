@@ -22,13 +22,21 @@ aws_ecs() {
 # ---------------------------------------------------------------------------
 
 disable_exec() {
+  local exit_status=$?
   printf '\n\033[36m│\033[0m Disabling ECS Exec on %s...\n' "${ecs_service}" >&2
-  aws_ecs update-service \
+  if aws_ecs update-service \
     --cluster "${ecs_cluster}" \
     --service "${ecs_service}" \
-    --no-enable-execute-command \
-    --no-cli-pager > /dev/null 2>&1 || true
-  printf '\033[32m✔\033[0m ECS Exec disabled.\n' >&2
+    --disable-execute-command \
+    --no-cli-pager > /dev/null; then
+    printf '\033[32m✔\033[0m ECS Exec disabled.\n' >&2
+  else
+    printf 'Failed to disable ECS Exec on %s.\n' "${ecs_service}" >&2
+    if ((exit_status == 0)); then
+      exit_status=1
+    fi
+  fi
+  exit "${exit_status}"
 }
 
 exec_enabled=$(
@@ -41,6 +49,10 @@ exec_enabled=$(
 if [[ "${exec_enabled}" == "true" ]]; then
   printf '\033[36m│\033[0m ECS Exec already enabled.\n' >&2
 else
+  trap disable_exec EXIT
+  trap 'exit 129' HUP
+  trap 'exit 130' INT
+  trap 'exit 143' TERM
   printf '\033[36m│\033[0m Enabling ECS Exec on %s...\n' "${ecs_service}" >&2
   aws_ecs update-service \
     --cluster "${ecs_cluster}" \
@@ -48,24 +60,24 @@ else
     --enable-execute-command \
     --no-cli-pager > /dev/null
   printf '\033[32m✔\033[0m Enabled.\n' >&2
-  trap disable_exec EXIT
 fi
 
 # ---------------------------------------------------------------------------
 # Find the most recent running task with the atlantis container.
 # ---------------------------------------------------------------------------
 
-mapfile -t task_arns < <(
+task_arns_text=$(
   aws_ecs list-tasks \
     --cluster "${ecs_cluster}" \
     --desired-status RUNNING \
     | jq -r '.taskArns[]?'
 )
 
-if [[ ${#task_arns[@]} -eq 0 ]]; then
+if [[ -z "${task_arns_text}" ]]; then
   printf 'No running tasks found in cluster %s\n' "${ecs_cluster}" >&2
   exit 1
 fi
+mapfile -t task_arns <<< "${task_arns_text}"
 
 ecs_task_id=$(
   aws_ecs describe-tasks \
