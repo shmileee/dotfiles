@@ -160,7 +160,6 @@ After changing the notifier declaration:
   <div><code>opencode.corp.json</code><span>Company-specific configuration</span></div>
   <div><code>opencode/secrets/</code><span>Credentials and private endpoints</span></div>
   <div><code>tui.json</code><span>A separate server-side extension surface</span></div>
-  <div><code>opencode-notifier.json</code><span>Not referenced by the active notifier</span></div>
   <div><strong>Runtime files</strong><span>Caches, backups, lockfiles, and dependency directories</span></div>
 </div>
 
