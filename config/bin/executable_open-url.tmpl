@@ -122,10 +122,12 @@ open_in_nvim() {
   fi
 
   # The pane command is parsed by the session's shell; single quotes with the
-  # POSIX '\'' escape are quoting that sh and fish both accept.
+  # POSIX '\'' escape are quoting that sh and fish both accept. The `--`
+  # terminator stops nvim from reading a leading '+' in the decoded path as an
+  # Ex command to execute (file://%2B!id would otherwise run a shell command).
   quoted_path=$(printf '%s' "$file_path" | sed "s/'/'\\\\''/g")
 
-  set -- -n nvim -c "$(dirname "$file_path")" "$editor_command '$quoted_path'"
+  set -- -n nvim -c "$(dirname "$file_path")" "$editor_command -- '$quoted_path'"
   if [ -n "$target_session" ]; then
     set -- -t "$target_session" "$@"
   fi
