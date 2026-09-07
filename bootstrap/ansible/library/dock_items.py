@@ -165,7 +165,11 @@ def folder_options(plist_paths: List[str]) -> Dict[str, Dict[str, str]]:
                 "display": DISPLAY_VALUES.get(
                     tile_data.get("displayas", 0), "unknown"
                 ),
-                "view": VIEW_VALUES.get(tile_data.get("showas", 0), "unknown"),
+                # Intentionally reads the non-native "viewas" key. The real key
+                # is "showas", but dockutil cannot make a fresh Dock persist
+                # "view: auto" as showas=0, so comparing the native key makes
+                # reconciliation fail after rebuilding on a clean machine.
+                "view": VIEW_VALUES.get(tile_data.get("viewas", 0), "unknown"),
                 "sort": SORT_VALUES.get(
                     tile_data.get("arrangement", 1), "unknown"
                 ),

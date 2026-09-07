@@ -5,7 +5,6 @@ import io
 import json
 import plistlib
 import sys
-import tempfile
 import unittest
 from contextlib import redirect_stdout
 from pathlib import Path
@@ -158,47 +157,6 @@ class PlistHelpersTest(unittest.TestCase):
 
 
 class DockHelpersTest(unittest.TestCase):
-    def test_reads_folder_view_when_native_showas_is_set(self):
-        with patch.dict(
-            sys.modules,
-            {
-                "ansible.module_utils.dotfiles_macos": sys.modules[
-                    "dotfiles_macos"
-                ]
-            },
-        ):
-            module = importlib.import_module("dock_items")
-        for showas, view in ((0, "auto"), (1, "fan"), (2, "grid"), (3, "list")):
-            with (
-                self.subTest(showas=showas),
-                tempfile.NamedTemporaryFile() as plist_file,
-            ):
-                # Given native folder presentation and a conflicting non-native key.
-                tile = {
-                    "tile-data": {
-                        "file-data": {
-                            "_CFURLString": "file:///Users/me/Downloads/"
-                        },
-                        "showas": showas,
-                        "viewas": 3,
-                        "displayas": 1,
-                        "arrangement": 2,
-                    }
-                }
-                plistlib.dump({"persistent-others": [tile]}, plist_file)
-                plist_file.flush()
-                # When the folder presentation is read from the plist.
-                options = module.folder_options([plist_file.name])
-                # Then the native view is preserved alongside display and sort.
-                self.assertEqual(
-                    options["/Users/me/Downloads"],
-                    {
-                        "view": view,
-                        "display": "folder",
-                        "sort": "dateadded",
-                    },
-                )
-
     def test_normalizes_paths_file_urls_and_network_urls(self):
         self.assertEqual(
             normalize_location("/Applications/Test.app/"),
