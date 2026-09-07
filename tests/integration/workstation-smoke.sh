@@ -35,7 +35,14 @@ docker run --rm --entrypoint /bin/bash "$image" -lc '
   test ! -e "$HOME/bin/ssm-session"
   test -z "$(git config --file "$HOME/.config/git/personal" --get commit.gpgsign || true)"
   test -z "$(git config --file "$HOME/.config/git/personal" --get gpg.ssh.program || true)"
-  mise exec -- nvim --headless +qa
+  # nvim reports startup errors on stderr but still exits 0, so a bare exit
+  # status check passes even when the config is broken. Reject any stderr.
+  nvim_status=0
+  nvim_output="$(mise exec -- nvim --headless +qa 2>&1 >/dev/null)" || nvim_status=$?
+  if test "$nvim_status" -ne 0 || test -n "$nvim_output"; then
+    printf "nvim headless startup failed (status=%s): %s\n" "$nvim_status" "$nvim_output" >&2
+    exit 1
+  fi
 
   printf "%s\n" "SMOKE phase=idempotence"
   mise run reconcile |
