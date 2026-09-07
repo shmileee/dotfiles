@@ -1,0 +1,88 @@
+#!/bin/sh
+
+set -eu
+
+# Finish an agentic task once its pull request merged. Squash-merged branches
+# look unmerged locally, so a plain `workmux remove` prompts for confirmation;
+# this verifies that a MERGED pull request exists for the branch AND that its
+# head commit matches the local branch tip (reused slugs or amended local
+# commits refuse instead of force-removing unmerged work), then removes the
+# worktree, tmux window, and local branch. Run it inside the task's worktree,
+# or pass the slug.
+
+fail() {
+  printf '[agent-workdone] Error: %s\n' "$1" >&2
+  exit 1
+}
+
+usage() {
+  printf 'Usage: %s [task-slug]\n' "$0"
+}
+
+parse_arguments() {
+  case $# in
+    0)
+      task_slug=$(git rev-parse --abbrev-ref HEAD)
+      # Detached HEAD prints the literal 'HEAD' and is not a task branch.
+      [ "$task_slug" != HEAD ] || fail 'detached HEAD; pass the task slug explicitly.'
+      ;;
+    1)
+      case $1 in
+        -h | --help)
+          usage
+          exit 0
+          ;;
+        *) task_slug=$1 ;;
+      esac
+      ;;
+    *)
+      usage >&2
+      exit 2
+      ;;
+  esac
+}
+
+guard_project_workmux_config() {
+  # `workmux remove` executes repository-controlled pre_remove hooks from
+  # .workmux.yaml and exposes no flag to disable them (verified during
+  # security review), so refuse automation when one is present.
+  repository_root=$(git rev-parse --show-toplevel)
+  main_worktree=$(git worktree list | sed -n '1s/ .*//p')
+  for config_dir in "$repository_root" "$main_worktree"; do
+    if [ -f "$config_dir/.workmux.yaml" ]; then
+      fail "$config_dir/.workmux.yaml exists; inspect it and run 'workmux remove $task_slug' manually."
+    fi
+  done
+}
+
+verify_merged_pull_request() {
+  # --head avoids `gh pr view` misreading numeric slugs as PR numbers, and a
+  # failed gh call (auth/network) is reported as unverifiable instead of
+  # being conflated with "no PR".
+  if ! merged_head_oid=$(gh pr list --head "$task_slug" --state merged \
+    --json headRefOid --jq '.[0].headRefOid' 2> /dev/null); then
+    fail "gh could not check pull requests for '$task_slug' (auth/network?); nothing was removed."
+  fi
+
+  if [ -z "$merged_head_oid" ]; then
+    printf '[agent-workdone] No merged pull request found for %s.\n' "$task_slug" >&2
+    printf '  local merge:  workmux merge %s\n' "$task_slug" >&2
+    printf '  just remove:  workmux remove %s\n' "$task_slug" >&2
+    exit 1
+  fi
+
+  local_head_oid=$(git rev-parse --verify --quiet "refs/heads/$task_slug") \
+    || fail "no local branch '$task_slug' to compare against the merged pull request."
+  if [ "$merged_head_oid" != "$local_head_oid" ]; then
+    fail "merged PR head $merged_head_oid does not match local $task_slug tip $local_head_oid (reused slug or unpushed commits); refusing to clean up."
+  fi
+}
+
+main() {
+  parse_arguments "$@"
+  guard_project_workmux_config
+  verify_merged_pull_request
+  exec workmux remove --force "$task_slug"
+}
+
+main "$@"

@@ -1,0 +1,141 @@
+#!/bin/sh
+
+set -eu
+
+# Start an agentic task from a tmux popup:
+#
+#   1. Pick a mainline repository checkout from ghq with fzf.
+#   2. Ask for a task name and normalize it into a slug.
+#   3. Hand the slug to workmux: it creates <repo>-worktrees/<slug> with
+#      branch <slug> off the local origin mainline (never fetches: staleness
+#      is accepted and reconciles at PR rebase) and opens a tmux window named
+#      <slug> running opencode.
+#
+# Designed for `tmux display-popup -E`. The target session comes from
+# WM_PARENT_SESSION when a caller provides it, otherwise from the popup's own
+# pane context below (display-popup does not format-expand -e values, so the
+# binding cannot pass it). Picking a task that already has a worktree reopens
+# its window.
+
+# Pin new windows to the session the popup was opened in: a display-popup
+# runs with $TMUX set and its client attached to that session. workmux's own
+# pane detection is ambiguous inside popups (it created windows in a
+# freestanding unnamed session during QA).
+# All workmux invocations pin --config to the managed global file and disable
+# hooks/file operations: a cloned third-party repository can otherwise supply
+# .workmux.yaml whose post_create/panes/files entries execute arbitrary
+# commands as this user (verified during security review).
+workmux_config=$HOME/.config/workmux/config.yaml
+
+fail() {
+  printf '[agent-workon] Error: %s\n' "$1" >&2
+  # The popup closes with the process; keep the message readable for a moment.
+  sleep 2
+  exit 1
+}
+
+parent_session=${WM_PARENT_SESSION:-}
+if [ -z "$parent_session" ] && [ -n "${TMUX:-}" ]; then
+  parent_session=$(tmux display-message -p '#S')
+fi
+[ -n "$parent_session" ] || fail "not inside tmux and WM_PARENT_SESSION is unset."
+case $parent_session in
+  *:*) fail "session name '$parent_session' contains ':', which breaks tmux targets." ;;
+esac
+
+select_repository() {
+  ghq_root=$(ghq root)
+  repository=$(ghq list | grep -v -- '-worktrees/' | fzf --reverse --prompt='repo> ') || exit 0
+  [ -n "$repository" ] || exit 0
+  repository_path=$ghq_root/$repository
+  repository_name=$(basename "$repository_path")
+}
+
+read_task_slug() {
+  # The task prompt doubles as a picker over the repository's existing
+  # worktrees: selecting one reopens/resumes it, a new name creates a task.
+  # Alt-Enter forces the typed name even when it fuzzy-matches an existing
+  # task (Enter would accept the highlighted match).
+  worktrees_root=${repository_path}-worktrees
+  if [ -e "$worktrees_root" ] && [ ! -d "$worktrees_root" ]; then
+    fail "$worktrees_root exists but is not a directory."
+  fi
+  existing_tasks=$(ls -1 "$worktrees_root" 2> /dev/null || true)
+  fzf_output=$(printf '%s\n' "$existing_tasks" | grep -v '^$' | fzf \
+    --reverse --print-query --expect=alt-enter \
+    --prompt="task ($repository_name)> " \
+    --header='Enter: reopen selected / create typed name | Alt-Enter: force new') || true
+  task_query=$(printf '%s\n' "$fzf_output" | sed -n 1p)
+  task_pressed_key=$(printf '%s\n' "$fzf_output" | sed -n 2p)
+  task_selection=$(printf '%s\n' "$fzf_output" | sed -n 3p)
+  if [ "$task_pressed_key" = alt-enter ] || [ -z "$task_selection" ]; then
+    task_name=$task_query
+  else
+    task_name=$task_selection
+  fi
+  [ -n "$task_name" ] || exit 0
+
+  task_slug=$(printf '%s' "$task_name" \
+    | tr '[:upper:]' '[:lower:]' \
+    | sed -E 's/[^a-z0-9]+/-/g; s/^-+//; s/-+$//')
+  [ -n "$task_slug" ] || fail "task name '$task_name' normalizes to an empty slug."
+  # tmux.conf prompts to rename any new window called 'fish'.
+  [ "$task_slug" != fish ] || fail "'fish' is a reserved window name."
+  git check-ref-format --branch "$task_slug" > /dev/null 2>&1 \
+    || fail "'$task_slug' is not a valid branch name."
+}
+
+# workmux switches focus itself, but not reliably when invoked from inside a
+# display-popup (client ambiguity; observed windows left inactive during QA),
+# so the target window is selected explicitly.
+focus_task_window() {
+  [ -n "$parent_session" ] || return 0
+  tmux select-window -t "=$parent_session:$task_slug" 2> /dev/null || true
+}
+
+reopen_existing_worktree() {
+  [ -d "../$repository_name-worktrees/$task_slug" ] || return 0
+  # --continue resumes the agent's previous conversation in this worktree.
+  workmux open --config "$workmux_config" --continue \
+    --parent-session "$parent_session" "$task_slug"
+  focus_task_window
+  exit 0
+}
+
+guard_window_collision() {
+  # A same-named window from another repository would make workmux suffix the
+  # handle, breaking window = branch = worktree name equality.
+  if tmux list-windows -t "=$parent_session" -F '#W' | grep -qx "$task_slug"; then
+    fail "window '$task_slug' already exists in session '$parent_session' (another repository?)."
+  fi
+}
+
+resolve_mainline() {
+  # Local-only resolution; nothing here may touch the network (a synchronous
+  # `git remote set-head` could block the popup). Repositories without
+  # origin/HEAD fall back to conventional mainline names.
+  if mainline_ref=$(git symbolic-ref --short refs/remotes/origin/HEAD 2> /dev/null); then
+    return 0
+  fi
+  for mainline_candidate in origin/main origin/master main master; do
+    if git rev-parse --verify --quiet "$mainline_candidate^{commit}" > /dev/null; then
+      mainline_ref=$mainline_candidate
+      return 0
+    fi
+  done
+  fail "cannot determine the mainline branch; run 'git remote set-head origin --auto' in $repository_path."
+}
+
+main() {
+  select_repository
+  cd "$repository_path"
+  read_task_slug
+  reopen_existing_worktree
+  guard_window_collision
+  resolve_mainline
+  workmux add --config "$workmux_config" --no-hooks --no-file-ops \
+    --base "$mainline_ref" --parent-session "$parent_session" "$task_slug"
+  focus_task_window
+}
+
+main "$@"
