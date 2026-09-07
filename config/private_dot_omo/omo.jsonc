@@ -144,6 +144,10 @@
         ]
       }
     },
+    "git_master": {
+      "commit_footer": false,
+      "include_co_authored_by": false
+    },
     "model_fallback": true,
     "runtime_fallback": {
       "enabled": false,
