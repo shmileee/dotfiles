@@ -166,13 +166,6 @@
       "minimumReleaseAge": null
     },
     {
-      "description": "Rely on the timestamped bootstrap uv declarations",
-      "matchManagers": ["dockerfile"],
-      "matchFileNames": ["tests/integration/Dockerfile"],
-      "matchPackageNames": ["ghcr.io/astral-sh/uv"],
-      "minimumReleaseAge": null
-    },
-    {
       "description": "Skip lock-file maintenance for Mise without lockfiles",
       "matchManagers": ["mise"],
       "matchUpdateTypes": ["lockFileMaintenance"],
