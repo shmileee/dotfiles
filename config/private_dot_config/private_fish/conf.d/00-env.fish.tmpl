@@ -12,6 +12,10 @@ set -gx VISUAL nvim
 set -gx BAT_THEME tokyonight_moon
 set -gx GOPATH $HOME/go
 set -gx HOMEBREW_NO_ANALYTICS 1
+# mise's embedded npm backend (aube) prompts (tty) or hard-refuses
+# (non-interactive) for low-download npm packages; allowlist the vetted ones
+# pinned in mise config so mise install/upgrade never stalls on them.
+set -gx NPM_CONFIG_ALLOWED_UNPOPULAR_PACKAGES mcp-server-linear
 
 {{- if eq .chezmoi.os "darwin" }}
 set -gx DIRENV_BASH /opt/homebrew/bin/bash

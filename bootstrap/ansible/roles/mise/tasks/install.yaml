@@ -7,6 +7,10 @@
   environment:
     GITHUB_TOKEN: "{{ lookup('ansible.builtin.env', 'GITHUB_TOKEN') }}"
     MISE_HTTP_TIMEOUT: 120s
+    # mise's embedded npm backend (aube) hard-refuses low-download packages in
+    # non-interactive contexts (ERR_AUBE_LOW_DOWNLOAD_PACKAGE); allowlist the
+    # vetted ones pinned in ~/.config/mise/config.toml or bootstrap fails.
+    NPM_CONFIG_ALLOWED_UNPOPULAR_PACKAGES: mcp-server-linear
   register: mise_install
   changed_when: "'all tools are installed' not in (mise_install.stdout + mise_install.stderr)"
 
