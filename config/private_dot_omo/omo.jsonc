@@ -9,6 +9,12 @@
   "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/dev/assets/omo.schema.json",
   "[opencode]": {
     "disabled_hooks": ["session-notification"],
+    "hashline_edit": true,
+    "telemetry": false,
+    "experimental": {
+      "preemptive_compaction": true,
+      "dynamic_context_pruning": { "enabled": true }
+    },
     "agents": {
       "sisyphus": {
         "model": "anthropic/claude-opus-5",
