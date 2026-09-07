@@ -5,4 +5,4 @@ legacy_version_file = false
 includes = ["docs/tasks.toml"]
 
 [tools]
-uv = "0.12.6"
+uv = "0.12.9"
