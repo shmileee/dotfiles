@@ -21,7 +21,9 @@ bootstrap_linux_packages:
 
 brew:
   taps:
+    - anomalyco/tap
     - carlocab/personal
+    - raine/workmux
     - shmileee/tap
   casks:
     - 1password
@@ -56,6 +58,9 @@ brew:
       - jaq
       - lazygit
       - mise
+      # fully qualified: shadows homebrew/core/opencode
+      - anomalyco/tap/opencode
+      - raine/workmux/workmux
       - yq
       - ripgrep
       - sponge
