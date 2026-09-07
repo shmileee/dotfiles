@@ -29,3 +29,7 @@ tags
 /site/
 /docs/site/
 .omo/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
