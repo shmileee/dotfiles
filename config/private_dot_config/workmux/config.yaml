@@ -1,0 +1,26 @@
+# workmux global config (evaluated at v0.1.256). Used by agent-workon/
+# agent-workdone (~/bin) and the tmux prefix+C-g binding.
+#
+# Agent status tracking runs alongside opencode-contextual-notifier: the
+# vendored opencode plugin (private_opencode/plugins/workmux-status.ts) feeds
+# workmux's dashboard/sidebar. status_format false keeps the status icons out
+# of the tmux window names (the dashboard reads workmux state, not the
+# format); the notifier's @opencode_waiting segment in tmux.conf remains the
+# only window-name indicator.
+status_format: false
+
+# Sibling of the repo: <repo>-worktrees/<slug>. Relative paths resolve against
+# the project root, hence the leading ../
+worktree_dir: '../{project}-worktrees'
+
+# Window name = pure task slug (window = branch = worktree dir).
+window_prefix: ''
+
+# FiraCode Nerd Font is the terminal font; answering this in config keeps the
+# first-run wizard from hijacking the agent-workon popup on fresh machines.
+nerdfont: true
+
+panes:
+  # opencode is a fish wrapper function (path-scoped OPENCODE_CONFIG routing);
+  # workmux runs pane commands through the default shell, so it applies here.
+  - command: opencode
