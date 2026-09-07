@@ -1,0 +1,34 @@
+# ~/.ssh/config - managed by chezmoi (source: config/private_dot_ssh/private_config).
+#
+# Private keys live ONLY in the 1Password SSH agent. Each host pins one key by
+# pointing IdentityFile at a PUBLIC key stub (IdentitiesOnly), so the agent
+# never offers the wrong identity to GitHub.
+#
+# Machine-local hosts (home lab, corp servers) are NOT in the dotfiles repo:
+# put them in ~/.ssh/config.local (included first, so its blocks win).
+Include ~/.ssh/config.local
+
+# Personal GitHub (shmileee). ghq derives ~/ghq/personalgit/... from this alias.
+Host personalgit
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/github_shmileee.pub
+  IdentitiesOnly yes
+
+# Work GitHub (oponomarov-tu). ghq derives ~/ghq/workgit/... from this alias.
+Host workgit
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/github_oponomarov-tu.pub
+  IdentitiesOnly yes
+
+# Bare github.com defaults to the WORK identity (safe default on a corp
+# machine). Personal remotes always go through the personalgit alias, or are
+# rewritten to it by url.<base>.insteadOf in ~/.config/git/config.
+Host github.com
+  User git
+  IdentityFile ~/.ssh/github_oponomarov-tu.pub
+  IdentitiesOnly yes
+
+Host *
+  IdentityAgent ~/.1password/agent.sock
