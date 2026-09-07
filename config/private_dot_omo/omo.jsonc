@@ -18,7 +18,6 @@
     "hashline_edit": true,
     "telemetry": false,
     "experimental": {
-      "preemptive_compaction": true,
       "dynamic_context_pruning": { "enabled": true }
     },
     "agents": {
