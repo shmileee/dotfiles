@@ -22,8 +22,9 @@ case "$1" in
 
     ;;
   refresh)
-    list_asgs \
-      | fzf \
+    asgs=$(list_asgs | fzf) || exit $?
+    [[ -n "${asgs}" ]] || exit 0
+    printf '%s\n' "${asgs}" \
       | xargs -I '{}' \
         aws autoscaling start-instance-refresh \
         --auto-scaling-group-name {} \
@@ -31,5 +32,6 @@ case "$1" in
     ;;
   *)
     print_usage
+    exit 1
     ;;
 esac
