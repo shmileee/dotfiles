@@ -21,11 +21,18 @@ ssm_instance_ids() {
 }
 
 list_instances() {
-  instance_ids=$(ssm_instance_ids)
+  local instance_ids=() line_ids instance_ids_text
+  instance_ids_text=$(ssm_instance_ids) || return $?
+
+  # AWS text output separates IDs with whitespace, including paginated lines.
+  while IFS=$' \t\n' read -r -a line_ids; do
+    instance_ids+=("${line_ids[@]}")
+  done <<< "${instance_ids_text}"
+  [[ ${#instance_ids[@]} -gt 0 ]] || return 0
 
   aws ec2 describe-instances \
-    --instance-ids "${instance_ids}" \
-    --filter "Name=instance-state-name,Values=running" \
+    --instance-ids "${instance_ids[@]}" \
+    --filters "Name=instance-state-name,Values=running" \
     --query "Reservations[*].Instances[*].[InstanceId,Tags[?Key=='Name']|[0].Value]" \
     --output text
 }
@@ -48,13 +55,14 @@ case "$1" in
     # Ignore SIGINT(Ctrl-C) to prevent accidental exit from session
     trap '' 2
 
-    list_instances \
-      | fzf \
-      | cut -f 1 \
+    target=$(list_instances | fzf | cut -f 1) || exit $?
+    [[ -n "${target}" ]] || exit 0
+    printf '%s\n' "${target}" \
       | xargs -o aws ssm start-session --target
 
     ;;
   *)
     print_usage
+    exit 1
     ;;
 esac
