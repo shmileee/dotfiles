@@ -1,7 +1,7 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "autoupdate": true,
-  "small_model": "openai/gpt-5.4-mini",
+  "small_model": "openai/gpt-5.6-luna-fast",
   "experimental": {
     "mcp_timeout": 30000
   },
