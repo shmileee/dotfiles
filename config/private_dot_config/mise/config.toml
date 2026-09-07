@@ -1,5 +1,11 @@
 [settings]
 legacy_version_file = false
+# Per-tree gh account pins (GH_TOKEN) are chezmoi-managed; trusting them here
+# keeps `mise trust` out of the bootstrap.
+trusted_config_paths = [
+  "~/ghq/personalgit/mise.toml",
+  "~/ghq/workgit/mise.toml",
+]
 
 [tools]
 "aqua:helm" = "4.2.4"

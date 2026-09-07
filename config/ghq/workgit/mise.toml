@@ -1,0 +1,9 @@
+# Pins the gh CLI to the WORK account for everything under
+# ~/ghq/workgit (no more `gh auth switch`). The token is gh's own keyring
+# entry for this login (`gh auth token --user` ignores GH_TOKEN, so cd-ing
+# between trees is safe); `|| true` keeps a machine without that login working
+# (an empty GH_TOKEN is "unset" for gh). Cached 1h so the keychain is not hit
+# on every prompt; after a fresh `gh auth login`, run `mise cache clear`.
+# Long-lived processes (tmux panes, agents) keep the token they started with.
+[env]
+GH_TOKEN = "{{ exec(command='gh auth token --user oponomarov-tu 2>/dev/null || true', cache_key='gh-token-oponomarov-tu', cache_duration='1h') }}"
