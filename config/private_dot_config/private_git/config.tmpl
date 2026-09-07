@@ -1,5 +1,3 @@
-[ghq "ssh://git@github.com/shmileee"]
-  root = ~/private
 [core]
   editor = nvim
   excludesfile = ~/.config/git/ignore
@@ -23,24 +21,14 @@
   path = ~/.config/git/tokyonight_moon.gitconfig
 [include]
   path = ~/.config/git/aliases
-[include]
-  path = ~/.config/git/proxy
 [includeIf "gitdir:~/.local/share/**"]
   path = ~/.config/git/personal
-[includeIf "gitdir:~/projects/**"]
-  path = ~/.config/git/work
-[includeIf "gitdir:~/work/**"]
-  path = ~/.config/git/work
-[includeIf "gitdir:~/ghq/github.com/**"]
-  path = ~/.config/git/work
 [includeIf "gitdir:/tmp/**"]
   path = ~/.config/git/work
 # macOS: git canonicalizes /tmp to /private/tmp, so the rule above never
 # matches there - this one does.
 [includeIf "gitdir:/private/tmp/**"]
   path = ~/.config/git/work
-[includeIf "gitdir:~/private/**"]
-  path = ~/.config/git/personal
 [includeIf "gitdir:~/ghq/personalgit/**"]
   path = ~/.config/git/personal
 [includeIf "gitdir:~/ghq/workgit/**"]
@@ -58,6 +46,13 @@
 [includeIf "hasconfig:remote.*.url:ssh://git@github.com/shmileee/**"]
   path = ~/.config/git/personal
 [includeIf "hasconfig:remote.*.url:https://github.com/shmileee/**"]
+  path = ~/.config/git/personal
+# Second personal owner (GitHub org): same three URL forms.
+[includeIf "hasconfig:remote.*.url:git@github.com:devops-roast/**"]
+  path = ~/.config/git/personal
+[includeIf "hasconfig:remote.*.url:ssh://git@github.com/devops-roast/**"]
+  path = ~/.config/git/personal
+[includeIf "hasconfig:remote.*.url:https://github.com/devops-roast/**"]
   path = ~/.config/git/personal
 # SSH host aliases used by ghq roots.
 [includeIf "hasconfig:remote.*.url:ssh://personalgit/**"]
@@ -116,3 +111,15 @@
   smudge = git-lfs smudge -- %f
   process = git-lfs filter-process
   required = true
+# Personal owners always travel through the personalgit SSH alias (personal
+# key), whatever SSH URL a tool produced (gh repo clone/fork/pr checkout with
+# git_protocol=ssh, pasted clone URLs). https is deliberately NOT rewritten:
+# brew (shmileee/tap) and plugin managers fetch personal repos over https and
+# must keep working without the SSH agent. Bare github.com stays the work
+# default (see ~/.ssh/config).
+[url "ssh://personalgit/shmileee/"]
+  insteadOf = git@github.com:shmileee/
+  insteadOf = ssh://git@github.com/shmileee/
+[url "ssh://personalgit/devops-roast/"]
+  insteadOf = git@github.com:devops-roast/
+  insteadOf = ssh://git@github.com/devops-roast/
