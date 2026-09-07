@@ -6,9 +6,9 @@ set -eu
 # look unmerged locally, so a plain `workmux remove` prompts for confirmation;
 # this verifies that a MERGED pull request exists for the branch AND that its
 # head commit matches the local branch tip (reused slugs or amended local
-# commits refuse instead of force-removing unmerged work), then removes the
-# worktree, tmux window, and local branch. Run it inside the task's worktree,
-# or pass the slug.
+# commits refuse instead of force-removing unmerged work) AND that the task
+# worktree has no uncommitted changes, then removes the worktree, tmux window,
+# and local branch. Run it inside the task's worktree, or pass the slug.
 
 fail() {
   printf '[agent-workdone] Error: %s\n' "$1" >&2
@@ -78,10 +78,34 @@ verify_merged_pull_request() {
   fi
 }
 
+verify_clean_worktree() {
+  # The merged-PR check above compares commits, which says nothing about the
+  # working tree, and `workmux remove --force` skips workmux's own dirty-state
+  # prompt. Without this guard, uncommitted or untracked files in the task
+  # worktree are destroyed silently.
+  task_worktree=$(git worktree list --porcelain \
+    | awk -v branch="refs/heads/$task_slug" '
+        /^worktree / { path = substr($0, 10) }
+        /^branch /   { if (substr($0, 8) == branch) { print path; exit } }
+      ')
+  # No checked-out worktree for the branch means there is no working tree to
+  # lose; workmux just deletes the branch.
+  [ -n "$task_worktree" ] || return 0
+
+  worktree_status=$(git -C "$task_worktree" status --porcelain) \
+    || fail "could not inspect '$task_worktree' for uncommitted changes; nothing was removed."
+  if [ -n "$worktree_status" ]; then
+    printf '[agent-workdone] Uncommitted changes in %s:\n' "$task_worktree" >&2
+    printf '%s\n' "$worktree_status" >&2
+    fail 'refusing to remove a worktree with uncommitted changes; commit, stash, or discard them first.'
+  fi
+}
+
 main() {
   parse_arguments "$@"
   guard_project_workmux_config
   verify_merged_pull_request
+  verify_clean_worktree
   exec workmux remove --force "$task_slug"
 }
 
