@@ -2,11 +2,17 @@
 //
 // Models follow OMO's built-in AGENT_MODEL_REQUIREMENTS / CATEGORY_MODEL_REQUIREMENTS
 // chains, filtered to the anthropic + openai providers. Where OMO's chain has no
-// second anthropic/openai entry (prometheus, metis, hephaestus, multimodal-looker,
-// writing) a same-tier cross-provider fallback is added so a 429/5xx is not a
-// hard stop; hephaestus must stay on a GPT model.
+// second anthropic/openai entry (prometheus, metis, hephaestus, writing) a same-tier
+// cross-provider fallback is added so a 429/5xx is not a hard stop; hephaestus must
+// stay on a GPT model.
+//
+// multimodal-looker deviates on purpose: OMO's second openai entry there is
+// gpt-5-nano, swapped here for claude-sonnet-5(low) as the stronger vision model.
+//
+// runtime_fallback is what actually enforces the retry, and it reads these same
+// per-agent / per-category fallback_models chains.
 {
-  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/dev/assets/omo.schema.json",
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/v5.0.0-beta.46/assets/omo.schema.json",
   "[opencode]": {
     "disabled_hooks": ["session-notification"],
     "hashline_edit": true,
@@ -127,7 +133,9 @@
       "quick": {
         "model": "openai/gpt-5.6-luna-fast",
         "reasoning": "low",
-        "fallback_models": [{ "model": "anthropic/claude-haiku-4-5" }]
+        "fallback_models": [
+          { "model": "anthropic/claude-haiku-4-5", "reasoning": "off" }
+        ]
       },
       "unspecified-low": {
         "model": "openai/gpt-5.6-terra",
@@ -150,13 +158,13 @@
     },
     "model_fallback": true,
     "runtime_fallback": {
-      "enabled": false,
-      "retry_on_errors": [402, 429, 500, 502, 503, 504, 529],
+      "enabled": true,
+      "retry_on_errors": [429, 500, 502, 503, 504, 529],
       "max_fallback_attempts": 1,
       "cooldown_seconds": 60,
       "timeout_seconds": 30,
       "notify_on_fallback": true,
-      "restore_primary_after_cooldown": false
+      "restore_primary_after_cooldown": true
     }
   },
   "_migrations": [
