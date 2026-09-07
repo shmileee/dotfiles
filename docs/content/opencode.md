@@ -111,13 +111,16 @@ This file is unmanaged and should use mode `0600`:
 install -m 600 /dev/null "$HOME/.config/opencode/opencode.corp.json"
 ```
 
-When the file exists, the managed fish snippet sets `OPENCODE_CONFIG` to its
-path. Keep company endpoints, profiles, and credentials there rather
-than adding them to the personal repository. The overlay can use the same
-`{file:...}` syntax for credentials stored in separate local files.
+When the file exists, the managed `opencode` fish wrapper function sets
+`OPENCODE_CONFIG` to its path for that invocation—but only when the current
+directory is under `~/ghq/workgit/`. Personal repositories always use the
+default configuration, even on a machine that has the corporate overlay. Keep
+company endpoints, profiles, and credentials in the overlay rather than adding
+them to the personal repository. The overlay can use the same `{file:...}`
+syntax for credentials stored in separate local files.
 
-Start a new fish shell—or source the managed snippet—after creating or removing
-the overlay.
+The routing is decided per invocation from the working directory, so no shell
+restart is needed after creating or removing the overlay.
 
 ## Model routing
 
@@ -174,10 +177,15 @@ stat -c '%A %n' "$HOME/.config/opencode/secrets/"*  # Linux
 
 ### The corporate configuration is ignored
 
-Open a new fish shell and confirm that the variable points to the expected file:
+`OPENCODE_CONFIG` is set per invocation by the `opencode` wrapper function,
+only inside `~/ghq/workgit/`—a bare `echo $OPENCODE_CONFIG` in a shell is
+expected to print nothing. Confirm the overlay file exists and that the
+wrapper resolves it from a corporate checkout:
 
 ```fish
-echo $OPENCODE_CONFIG
+cd ~/ghq/workgit/Trackunit/<repo>
+test -f ~/.config/opencode/opencode.corp.json; and echo overlay present
+functions opencode | grep -q workgit; and echo wrapper active
 ```
 
 ### A notification or tmux marker is stale

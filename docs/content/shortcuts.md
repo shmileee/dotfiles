@@ -149,6 +149,14 @@ Press ++ctrl+a++, release it, and then press the command key.
 | ++ctrl+a++ <span class="shortcut-then">then</span> `{` / `}` | Select the previous / next window |
 | ++ctrl+a++ <span class="shortcut-then">then</span> ++tab++ | Return to the most recently used window |
 
+### Agentic tasks
+
+| Command | Action |
+| --- | --- |
+| ++ctrl+a++ <span class="shortcut-then">then</span> ++ctrl+g++ | Start or reopen an agent task: pick a repository, name the task, get a git worktree with an OpenCode window |
+| ++ctrl+a++ <span class="shortcut-then">then</span> `S` | Create or attach a context session by name, then open the task launcher |
+| ++ctrl+a++ <span class="shortcut-then">then</span> ++ctrl+d++ | Open the workmux agent dashboard |
+
 ### Close and detach
 
 | Command | Action |
