@@ -4,3 +4,11 @@ useDefault = true
 [[allowlists]]
 description = "ignore downloaded Ansible collections"
 paths = ['''^bootstrap/\.ansible/''']
+
+[[allowlists]]
+# Agent scratch state (plans, evidence, ledgers). Gitignored, so it can never
+# be committed - but `gitleaks dir` scans the filesystem, not git, so it needs
+# an explicit exemption. Contents are SSH key fingerprints and command logs,
+# which the generic-api-key rule matches on entropy alone.
+description = "ignore agent scratch state"
+paths = ['''^\.omo/''']
