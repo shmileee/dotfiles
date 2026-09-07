@@ -69,4 +69,9 @@ jobs:
             --syntax-check bootstrap/ansible/main.yaml
 
       - name: test ansible module helpers
-        run: python3 -m unittest discover -s tests/unit -v
+        run: |
+          mise exec -- env \
+            ANSIBLE_CONFIG=bootstrap/ansible/ansible.cfg \
+            ANSIBLE_COLLECTIONS_PATH=bootstrap/.ansible/collections \
+            uv run --project bootstrap --locked --managed-python \
+            python -m unittest discover -s tests/unit -v
