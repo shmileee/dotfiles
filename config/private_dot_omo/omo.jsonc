@@ -5,10 +5,10 @@
     "disabled_hooks": ["session-notification"],
     "agents": {
       "sisyphus": {
-        "model": "anthropic/claude-fable-5",
+        "model": "anthropic/claude-fable-5-1",
         "reasoning": "max",
         "ultrawork": {
-          "model": "anthropic/claude-fable-5",
+          "model": "anthropic/claude-fable-5-1",
           "reasoning": "max"
         },
         "fallback_models": [
@@ -16,7 +16,7 @@
         ]
       },
       "prometheus": {
-        "model": "anthropic/claude-fable-5",
+        "model": "anthropic/claude-fable-5-1",
         "reasoning": "max",
         "fallback_models": [
           { "model": "openai/gpt-5.6-sol", "reasoning": "high" }
@@ -29,10 +29,10 @@
         ]
       },
       "momus": {
-        "model": "openai/gpt-5.6-terra",
-        "reasoning": "high",
+        "model": "openai/gpt-6-astra",
+        "reasoning": "xhigh",
         "fallback_models": [
-          { "model": "openai/gpt-5.6-sol", "reasoning": "xhigh" }
+          { "model": "anthropic/claude-opus-5", "reasoning": "max" }
         ]
       },
       "oracle": {
@@ -62,7 +62,7 @@
       "sisyphus-junior": {
         "model": "anthropic/claude-sonnet-5",
         "ultrawork": {
-          "model": "anthropic/claude-fable-5",
+          "model": "anthropic/claude-fable-5-1",
           "reasoning": "high"
         },
         "fallback_models": [
@@ -105,21 +105,21 @@
         ]
       },
       "ultrabrain": {
-        "model": "anthropic/claude-fable-5",
+        "model": "openai/gpt-6-astra",
         "reasoning": "max",
         "fallback_models": [
-          { "model": "openai/gpt-5.6-sol", "reasoning": "xhigh" }
+          { "model": "anthropic/claude-fable-5-1", "reasoning": "max" }
         ]
       },
       "deep": {
-        "model": "openai/gpt-5.6-terra",
-        "reasoning": "xhigh",
+        "model": "openai/gpt-6-astra",
+        "reasoning": "high",
         "fallback_models": [
           { "model": "openai/gpt-5.6-sol", "reasoning": "high" }
         ]
       },
       "writing": {
-        "model": "anthropic/claude-fable-5",
+        "model": "anthropic/claude-fable-5-1",
         "reasoning": "high",
         "fallback_models": [
           { "model": "openai/gpt-5.6-terra", "reasoning": "xhigh" }
@@ -137,10 +137,10 @@
         "fallback_models": [{ "model": "openai/gpt-5.4-mini" }]
       },
       "unspecified-high": {
-        "model": "anthropic/claude-fable-5",
+        "model": "anthropic/claude-fable-5-1",
         "reasoning": "max",
         "fallback_models": [
-          { "model": "openai/gpt-5.6-sol", "reasoning": "xhigh" }
+          { "model": "openai/gpt-6-astra", "reasoning": "xhigh" }
         ]
       }
     },
