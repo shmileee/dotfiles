@@ -8,9 +8,20 @@ git:
   # Delta as diff renderer (replaces git.paging since v0.64).
   # Line-number hyperlinks jump straight into the editor.
   # Cycle renderers with '|'.
+  #
+  # Wrapped in `sh -c` only to cap the line length at the panel width: delta
+  # never wraps or truncates in unified mode (dandavison/delta#1966), so
+  # lazygit's own view soft-wraps overlong lines, and the continuation row
+  # starts at column 0 without delta's line-number gutter - which breaks the
+  # numbering. lazygit runs the renderer in a PTY and exports COLUMNS = main
+  # panel width; -12 leaves room for the widest gutter (12 cols once line
+  # numbers reach 5 digits). Truncated lines end in a '→'; cycle to the raw git
+  # renderer with '|' to read the full text. Caveat: lazygit re-shows the
+  # cached diff after a terminal resize, so overlong lines can spill once until
+  # the next refresh.
   diffRenderers:
     - name: delta
-      command: delta --dark --paging=never --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
+      command: sh -c 'w=${COLUMNS:-80}; exec delta --dark --paging=never --line-numbers --max-line-length=$((w - 12)) --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"'
     - type: rawGit
       name: default
   # Prefill commit subject from branch name, e.g. feature/JIRA-123-foo -> "[JIRA-123] "
