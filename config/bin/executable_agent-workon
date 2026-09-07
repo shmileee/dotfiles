@@ -45,7 +45,14 @@ esac
 
 select_repository() {
   ghq_root=$(ghq root)
-  repository=$(ghq list | grep -v -- '-worktrees/' | fzf --reverse --prompt='repo> ') || exit 0
+  repositories=$(ghq list)
+  repository=$(printf '%s\n' "$repositories" | grep -v -- '-worktrees/' | fzf --reverse --prompt='repo> ') || {
+    picker_status=$?
+    case $picker_status in
+      1 | 130) exit 0 ;;
+      *) exit "$picker_status" ;;
+    esac
+  }
   [ -n "$repository" ] || exit 0
   repository_path=$ghq_root/$repository
   repository_name=$(basename "$repository_path")
@@ -60,11 +67,20 @@ read_task_slug() {
   if [ -e "$worktrees_root" ] && [ ! -d "$worktrees_root" ]; then
     fail "$worktrees_root exists but is not a directory."
   fi
-  existing_tasks=$(ls -1 "$worktrees_root" 2> /dev/null || true)
+  existing_tasks=
+  if [ -d "$worktrees_root" ]; then
+    existing_tasks=$(ls -1 "$worktrees_root")
+  fi
+  picker_status=0
   fzf_output=$(printf '%s\n' "$existing_tasks" | grep -v '^$' | fzf \
     --reverse --print-query --expect=alt-enter \
     --prompt="task ($repository_name)> " \
-    --header='Enter: reopen selected / create typed name | Alt-Enter: force new') || true
+    --header='Enter: reopen selected / create typed name | Alt-Enter: force new') || picker_status=$?
+  case $picker_status in
+    0 | 1) ;; # No match still allows creating the typed task name.
+    130) exit 0 ;;
+    *) exit "$picker_status" ;;
+  esac
   task_query=$(printf '%s\n' "$fzf_output" | sed -n 1p)
   task_pressed_key=$(printf '%s\n' "$fzf_output" | sed -n 2p)
   task_selection=$(printf '%s\n' "$fzf_output" | sed -n 3p)
@@ -105,7 +121,8 @@ reopen_existing_worktree() {
 guard_window_collision() {
   # A same-named window from another repository would make workmux suffix the
   # handle, breaking window = branch = worktree name equality.
-  if tmux list-windows -t "=$parent_session" -F '#W' | grep -qx "$task_slug"; then
+  task_windows=$(tmux list-windows -t "=$parent_session" -F '#W')
+  if printf '%s\n' "$task_windows" | grep -qx "$task_slug"; then
     fail "window '$task_slug' already exists in session '$parent_session' (another repository?)."
   fi
 }
