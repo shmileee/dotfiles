@@ -10,11 +10,13 @@
 #   - switch-audio speakers
 #
 
+set -e
+
 if ! command -v "SwitchAudioSource" &> /dev/null; then
   echo "SwitchAudioSource could not be found."
   echo "Run:"
   echo "  - brew install switchaudio-osx"
-  exit
+  exit 1
 fi
 
 set_speakers() {
@@ -28,9 +30,11 @@ set_headphones() {
 }
 
 toggle() {
-  if test "$(SwitchAudioSource -c)" == "MacBook Pro Speakers"; then
+  local current_device
+  current_device=$(SwitchAudioSource -c)
+  if test "${current_device}" == "MacBook Pro Speakers"; then
     set_headphones
-  elif test "$(SwitchAudioSource -c)" == "Jabra Evolve2 40 SE"; then
+  elif test "${current_device}" == "Jabra Evolve2 40 SE"; then
     set_speakers
   fi
 }
