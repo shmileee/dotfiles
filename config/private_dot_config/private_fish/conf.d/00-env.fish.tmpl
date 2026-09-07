@@ -27,6 +27,10 @@ set -gx HOMEBREW_NO_ANALYTICS 1
 # (non-interactive) for low-download npm packages; allowlist the vetted ones
 # pinned in mise config so mise install/upgrade never stalls on them.
 set -gx NPM_CONFIG_ALLOWED_UNPOPULAR_PACKAGES mcp-server-linear
+# Two 1Password accounts are registered (personal + work), so a bare op
+# command fails with "multiple accounts found". Default to personal;
+# override per-command with `op --account <work-account-url>`.
+set -gx OP_ACCOUNT my.1password.com
 
 {{- if and (eq .chezmoi.os "darwin") $brewPrefix }}
 set -gx DIRENV_BASH {{ $brewPrefix }}/bin/bash
@@ -34,6 +38,14 @@ set -gx DIRENV_BASH {{ $brewPrefix }}/bin/bash
 set -gx DIRENV_BASH /bin/bash
 {{- end }}
 set -gx DIRENV_LOG_FORMAT ''
+
+# 1Password is the only SSH agent (private keys never touch disk). Point
+# everything that talks to an agent (ssh-add, ansible, tools bypassing
+# ~/.ssh/config) at its socket. ~/.1password/agent.sock is a chezmoi-managed
+# symlink on macOS and 1Password's native socket path on Linux.
+if test -S $HOME/.1password/agent.sock
+    set -gx SSH_AUTH_SOCK $HOME/.1password/agent.sock
+end
 
 # -g keeps PATH session-scoped and fully declared here, instead of
 # accumulating in the persistent universal fish_user_paths variable.
