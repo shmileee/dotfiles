@@ -29,6 +29,23 @@ set -g tide_right_prompt_items status cmd_duration context jobs direnv \
     python go kubectl terraform aws
 set -g tide_git_icon
 
+# Narrow terminals: drop the right prompt entirely. Tide's own width guard,
+# tide_prompt_min_cols, is read only by the one-line prompt, so the two-line
+# prompt overflows $COLUMNS unchecked — and fish then left-truncates the whole
+# line to '…', eating the pwd and branch, the half worth reading. Right-side
+# items are ambient context, so they are the ones to sacrifice.
+# _tide_right_items is tide's tool-pruned copy of tide_right_prompt_items,
+# published as a universal variable by _tide_remove_unusable_items (which runs
+# in interactive shells only). A global shadows it inside the prompt worker,
+# and the worker re-sources conf.d on every render with the live $COLUMNS, so
+# resizes apply at once (fish_prompt repaints --on-variable COLUMNS). Pruning
+# is irrelevant here because the shadowing value is empty.
+# Above the cutoff nothing is shadowed and the full right prompt returns; the
+# residual overflow from long branch names is absorbed by _tide_pwd.
+if set -q COLUMNS[1]; and test $COLUMNS -lt 60
+    set -g _tide_right_items
+end
+
 status is-interactive; or exit
 type -q tide; or exit
 
