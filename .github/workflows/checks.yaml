@@ -35,11 +35,18 @@ jobs:
 
       - name: check fish syntax and templates
         run: |
-          find config -type f -name '*.fish' -exec fish --no-execute {} +
+          failed=0
+          while IFS= read -r -d '' file; do
+            if ! fish --no-execute "$file"; then
+              printf 'Fish syntax check failed: %s\n' "$file" >&2
+              failed=1
+            fi
+          done < <(find config -type f -name '*.fish' -print0)
 
           while IFS= read -r -d '' template; do
             mise exec -- chezmoi execute-template < "$template" | fish --no-execute
           done < <(find config -type f -name '*.fish.tmpl' -print0)
+          exit "$failed"
 
       - name: restore ansible collections
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
