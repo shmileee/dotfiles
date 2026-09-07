@@ -1,12 +1,21 @@
 from __future__ import annotations
 
+import importlib
+import io
+import json
+import plistlib
 import sys
+import tempfile
 import unittest
+from contextlib import redirect_stdout
 from pathlib import Path
+from unittest.mock import patch
 
+from ansible.module_utils import basic
 
 ANSIBLE_DIR = Path(__file__).parents[2] / "bootstrap" / "ansible"
 sys.path.insert(0, str(ANSIBLE_DIR / "module_utils"))
+sys.path.insert(0, str(ANSIBLE_DIR / "library"))
 
 from dotfiles_macos import (  # noqa: E402
     dock_option_arguments,
@@ -22,6 +31,95 @@ from dotfiles_macos import (  # noqa: E402
 
 
 class PlistHelpersTest(unittest.TestCase):
+    def test_reconciles_when_boolean_and_integer_values_differ(self):
+        with patch.dict(
+            sys.modules,
+            {
+                "ansible.module_utils.dotfiles_macos": sys.modules[
+                    "dotfiles_macos"
+                ]
+            },
+        ):
+            module = importlib.import_module("macos_defaults_plist")
+        for current, desired, value_type, persisted, changed, failed in (
+            (1, True, "bool", True, True, False),
+            (0, False, "bool", False, True, False),
+            (True, 1, "int", 1, True, False),
+            (False, 0, "int", 0, True, False),
+            ([1], [True], "array", [True], True, False),
+            (
+                {"enabled": 0},
+                {"enabled": False},
+                "dict",
+                {"enabled": False},
+                True,
+                False,
+            ),
+            (True, True, "bool", True, False, False),
+            (1, 1, "int", 1, False, False),
+            (
+                {"a": 1, "b": True},
+                {"b": True, "a": 1},
+                "dict",
+                {},
+                False,
+                False,
+            ),
+            ("old", True, "bool", 1, True, True),
+            ("old", [False], "array", [0], True, True),
+        ):
+            for check_mode in (True, False):
+                with self.subTest(
+                    current=current, desired=desired, check_mode=check_mode
+                ):
+                    # Given a real Ansible request and exported preference.
+                    arguments = {
+                        "ANSIBLE_MODULE_ARGS": {
+                            "domain": "test.dotfiles",
+                            "key": "value",
+                            "value": desired,
+                            "value_type": value_type,
+                            "_ansible_check_mode": check_mode,
+                        }
+                    }
+                    responses = [
+                        (0, plistlib.dumps({"value": current}), b""),
+                        (0, "", ""),
+                        (0, plistlib.dumps({"value": persisted}), b""),
+                    ]
+                    output = io.StringIO()
+                    with (
+                        patch.object(basic, "_ANSIBLE_PROFILE", "legacy"),
+                        patch(
+                            "ansible.module_utils.basic._ANSIBLE_ARGS",
+                            json.dumps(arguments).encode(),
+                        ),
+                        patch.object(
+                            module.AnsibleModule,
+                            "get_bin_path",
+                            return_value="defaults",
+                        ),
+                        patch.object(
+                            module.AnsibleModule,
+                            "run_command",
+                            side_effect=responses,
+                        ),
+                        redirect_stdout(output),
+                        self.assertRaises(SystemExit) as exit_result,
+                    ):
+                        # When the module reconciles the preference.
+                        module.main()
+                    # Then only genuinely equal plist values are unchanged.
+                    self.assertEqual(
+                        exit_result.exception.code,
+                        int(failed and not check_mode),
+                        output.getvalue(),
+                    )
+                    self.assertEqual(
+                        json.loads(output.getvalue())["changed"],
+                        changed,
+                    )
+
     def test_normalizes_scalars_without_bool_integer_confusion(self):
         self.assertEqual(normalize_plist_value("7", "int"), 7)
         self.assertEqual(normalize_plist_value(1, "string"), "1")
@@ -60,6 +158,47 @@ class PlistHelpersTest(unittest.TestCase):
 
 
 class DockHelpersTest(unittest.TestCase):
+    def test_reads_folder_view_when_native_showas_is_set(self):
+        with patch.dict(
+            sys.modules,
+            {
+                "ansible.module_utils.dotfiles_macos": sys.modules[
+                    "dotfiles_macos"
+                ]
+            },
+        ):
+            module = importlib.import_module("dock_items")
+        for showas, view in ((0, "auto"), (1, "fan"), (2, "grid"), (3, "list")):
+            with (
+                self.subTest(showas=showas),
+                tempfile.NamedTemporaryFile() as plist_file,
+            ):
+                # Given native folder presentation and a conflicting non-native key.
+                tile = {
+                    "tile-data": {
+                        "file-data": {
+                            "_CFURLString": "file:///Users/me/Downloads/"
+                        },
+                        "showas": showas,
+                        "viewas": 3,
+                        "displayas": 1,
+                        "arrangement": 2,
+                    }
+                }
+                plistlib.dump({"persistent-others": [tile]}, plist_file)
+                plist_file.flush()
+                # When the folder presentation is read from the plist.
+                options = module.folder_options([plist_file.name])
+                # Then the native view is preserved alongside display and sort.
+                self.assertEqual(
+                    options["/Users/me/Downloads"],
+                    {
+                        "view": view,
+                        "display": "folder",
+                        "sort": "dateadded",
+                    },
+                )
+
     def test_normalizes_paths_file_urls_and_network_urls(self):
         self.assertEqual(
             normalize_location("/Applications/Test.app/"),
@@ -98,6 +237,36 @@ class DockHelpersTest(unittest.TestCase):
         )
         with self.assertRaisesRegex(ValueError, "line 1"):
             parse_dockutil_output("not tab delimited")
+
+    def test_preserves_persistent_items_when_recent_apps_are_listed(self):
+        # Given a persistent item followed by a valid recent application.
+        persistent = "Terminal\t/Applications/Terminal.app\tpersistentApps\t/dock.plist\n"
+        recent = "Safari\t/Applications/Safari.app\trecentApps\t/dock.plist\tcom.apple.Safari\n"
+        # When dockutil output includes both sections.
+        items = parse_dockutil_output(persistent + recent)
+        # Then recent applications do not enter persistent reconciliation.
+        self.assertEqual(
+            items,
+            [
+                {
+                    "name": "Terminal",
+                    "path": "/Applications/Terminal.app",
+                    "section": "apps",
+                    "plist": "/dock.plist",
+                }
+            ],
+        )
+
+    def test_rejects_malformed_rows_when_recent_apps_are_supported(self):
+        for row in (
+            "Safari\t/Applications/Safari.app\trecentApps",
+            "Safari\t/Applications/Safari.app\tunknownApps\t/dock.plist",
+        ):
+            with (
+                self.subTest(row=row),
+                self.assertRaisesRegex(ValueError, "line 1"),
+            ):
+                parse_dockutil_output(row)
 
     def test_compares_order_and_only_requested_presentation(self):
         current = [

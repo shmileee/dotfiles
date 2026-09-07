@@ -230,7 +230,8 @@ def main() -> None:
         and module.params["dict_mode"] == "merge"
         else desired_input
     )
-    changed = current is MISSING or current != desired
+    desired_plist = plistlib.dumps(desired)
+    changed = current is MISSING or plistlib.dumps(current) != desired_plist
     before = preference_state(current)
     after = preference_state(desired)
     result = {
@@ -247,7 +248,7 @@ def main() -> None:
     persisted = export_domain(module, defaults).get(
         module.params["key"], MISSING
     )
-    if persisted is MISSING or persisted != desired:
+    if persisted is MISSING or plistlib.dumps(persisted) != desired_plist:
         module.fail_json(
             msg="Preference still differs after reconciliation",
             changed=True,
