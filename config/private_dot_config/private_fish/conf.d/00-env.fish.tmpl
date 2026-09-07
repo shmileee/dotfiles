@@ -1,3 +1,14 @@
+{{- $brewPrefix := "" -}}
+{{- if eq .chezmoi.os "darwin" -}}
+  {{- if eq .chezmoi.arch "arm64" -}}
+    {{- $brewPrefix = "/opt/homebrew" -}}
+  {{- else if eq .chezmoi.arch "amd64" -}}
+    {{- $brewPrefix = "/usr/local" -}}
+  {{- end -}}
+{{- else if or (env "DOCKERIZED") (eq .chezmoi.os "linux") -}}
+  {{- $brewPrefix = "/home/linuxbrew/.linuxbrew" -}}
+{{- end -}}
+
 # Environment and PATH. Named 00-* so it is sourced before every other
 # conf.d snippet: the mise/zoxide/direnv hooks below need PATH already set,
 # and conf.d runs *before* config.fish, so none of this can live there.
@@ -17,8 +28,8 @@ set -gx HOMEBREW_NO_ANALYTICS 1
 # pinned in mise config so mise install/upgrade never stalls on them.
 set -gx NPM_CONFIG_ALLOWED_UNPOPULAR_PACKAGES mcp-server-linear
 
-{{- if eq .chezmoi.os "darwin" }}
-set -gx DIRENV_BASH /opt/homebrew/bin/bash
+{{- if and (eq .chezmoi.os "darwin") $brewPrefix }}
+set -gx DIRENV_BASH {{ $brewPrefix }}/bin/bash
 {{- else }}
 set -gx DIRENV_BASH /bin/bash
 {{- end }}
@@ -26,13 +37,12 @@ set -gx DIRENV_LOG_FORMAT ''
 
 # -g keeps PATH session-scoped and fully declared here, instead of
 # accumulating in the persistent universal fish_user_paths variable.
-{{- if and (eq .chezmoi.os "linux") (not (env "DOCKERIZED")) }}
-fish_add_path -g /home/linuxbrew/.linuxbrew/bin
-{{- end }}
 fish_add_path -g $GOPATH/bin
 fish_add_path -g $HOME/.local/bin
 fish_add_path -g $HOME/bin
 fish_add_path -g $HOME/.cargo/bin
-fish_add_path -g /opt/homebrew/bin
-fish_add_path -g /opt/homebrew/sbin
-fish_add_path -g /opt/homebrew/opt/libpq/bin
+{{- if $brewPrefix }}
+fish_add_path -g {{ $brewPrefix }}/bin
+fish_add_path -g {{ $brewPrefix }}/sbin
+fish_add_path -g {{ $brewPrefix }}/opt/libpq/bin
+{{- end }}
