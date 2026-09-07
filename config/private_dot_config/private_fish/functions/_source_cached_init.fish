@@ -19,7 +19,11 @@ function _source_cached_init --description "Cache a tool's shell init script and
     # and mise session state, so it must run live. See conf.d/mise-activate.fish.
     set --local resolved (command -v $tool)
     set --local key (string replace --all --regex '[^A-Za-z0-9._-]' _ -- "$resolved-$version")
-    set --local cache $XDG_CACHE_HOME/fish/$tool-init-$key.fish
+    # Normalized because the cleanup loop below compares this path against glob
+    # output, and fish normalizes globs while plain concatenation does not: a
+    # trailing or doubled slash in XDG_CACHE_HOME would otherwise make the two
+    # differ and delete the entry that was just written.
+    set --local cache (path normalize $XDG_CACHE_HOME/fish/$tool-init-$key.fish)
 
     if not test -f "$cache"; or test "$resolved" -nt "$cache"
         mkdir -p (dirname $cache)
@@ -28,7 +32,7 @@ function _source_cached_init --description "Cache a tool's shell init script and
             # Drop variants left by an older binary path or fish version. Runs
             # only on the cold path; an unmatched glob is a no-op in fish.
             for stale in $XDG_CACHE_HOME/fish/$tool-init*.fish
-                test "$stale" = "$cache"; or rm -f $stale
+                test (path normalize $stale) = "$cache"; or rm -f $stale
             end
         else
             rm -f $cache.new
