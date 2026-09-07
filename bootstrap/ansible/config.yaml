@@ -27,6 +27,7 @@ brew:
     - shmileee/tap
   casks:
     - 1password
+    - 1password-cli
     - shmileee/tap/alacritty
     - alt-tab
     - aws-vault
