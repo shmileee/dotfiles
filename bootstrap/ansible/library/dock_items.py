@@ -165,7 +165,7 @@ def folder_options(plist_paths: List[str]) -> Dict[str, Dict[str, str]]:
                 "display": DISPLAY_VALUES.get(
                     tile_data.get("displayas", 0), "unknown"
                 ),
-                "view": VIEW_VALUES.get(tile_data.get("viewas", 0), "unknown"),
+                "view": VIEW_VALUES.get(tile_data.get("showas", 0), "unknown"),
                 "sort": SORT_VALUES.get(
                     tile_data.get("arrangement", 1), "unknown"
                 ),

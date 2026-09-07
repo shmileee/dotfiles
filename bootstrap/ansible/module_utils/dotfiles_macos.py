@@ -130,6 +130,8 @@ def parse_dockutil_output(output: str) -> List[Dict[str, str]]:
                     line_number, line
                 )
             )
+        if fields[2] == "recentApps":
+            continue
         section = sections.get(fields[2])
         if section is None:
             raise ValueError(
