@@ -44,7 +44,15 @@ jobs:
           done < <(find config -type f -name '*.fish' -print0)
 
           while IFS= read -r -d '' template; do
-            mise exec -- chezmoi execute-template < "$template" | fish --no-execute
+            if ! rendered="$(mise exec -- chezmoi execute-template < "$template")"; then
+              printf 'Template render failed: %s\n' "$template" >&2
+              failed=1
+              continue
+            fi
+            if ! printf '%s\n' "$rendered" | fish --no-execute; then
+              printf 'Fish template syntax check failed: %s\n' "$template" >&2
+              failed=1
+            fi
           done < <(find config -type f -name '*.fish.tmpl' -print0)
           exit "$failed"
 
