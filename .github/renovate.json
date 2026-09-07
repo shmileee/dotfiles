@@ -56,15 +56,6 @@
       "groupSlug": "github-actions"
     },
     {
-      "description": "Group documentation build dependencies",
-      "matchManagers": ["pip_requirements", "pyenv"],
-      "matchFileNames": ["docs/requirements.txt", "docs/.python-version"],
-      "groupName": "build dependencies",
-      "groupSlug": "docs",
-      "semanticCommitType": "docs",
-      "semanticCommitScope": "deps"
-    },
-    {
       "description": "Group dependencies used by the bootstrap runtime",
       "matchFileNames": ["bootstrap/**"],
       "groupName": "runtime dependencies",

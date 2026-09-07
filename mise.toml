@@ -1,8 +1,6 @@
 [settings]
 legacy_version_file = false
 
-[task_config]
-includes = ["docs/tasks.toml"]
 
 [tools]
 uv = "0.12.6"

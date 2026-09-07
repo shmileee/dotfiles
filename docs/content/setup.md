@@ -1,18 +1,8 @@
 ---
-title: Setup guide
+title: "Set up a workstation"
 description: Review, install, customize, and reapply the workstation configuration.
-tags:
-  - Setup
-  - macOS
-  - Ubuntu
-  - Ansible
-  - chezmoi
-  - mise
-hide:
-  - tags
+editUrl: https://github.com/shmileee/dotfiles/edit/master/docs/content/setup.md
 ---
-
-# Set up a workstation
 
 <p class="page-lead">Use the review-first path for an existing machine. The one-line installer is intended for a new machine or for a configuration you already trust.</p>
 
@@ -29,7 +19,7 @@ hide:
   </a>
 </nav>
 
-<section class="context-help-source" hidden data-search-exclude>
+<section class="context-help-source" hidden data-search-exclude data-pagefind-ignore>
 <button class="context-help-trigger" type="button" aria-label="Open quick context" aria-controls="context-help" aria-haspopup="dialog" title="Quick context" data-context-open data-context-ui><span aria-hidden="true">?</span></button>
 <dialog class="context-help" id="context-help" aria-labelledby="context-help-title" data-context-dialog data-context-ui>
 <div class="context-help__panel">
@@ -68,22 +58,29 @@ and the files under
 
 ### Platform requirements
 
-=== "macOS"
+<div class="docs-tabs">
+<section class="docs-tab" data-tab-label="macOS">
+<h3>macOS</h3>
 
-    Install available system updates and the Xcode Command Line Tools on a
-    fresh machine:
+Install available system updates and the Xcode Command Line Tools on a
+fresh machine:
 
-    ```bash
-    sudo softwareupdate -i -a
-    xcode-select --install
-    ```
+```bash
+sudo softwareupdate -i -a
+xcode-select --install
+```
 
-=== "Ubuntu"
+</section>
+<section class="docs-tab" data-tab-label="Ubuntu">
+<h3>Ubuntu</h3>
 
-    Use Ubuntu with a non-root account authorized to use the installed `sudo`
-    command. The base installation must provide a POSIX shell, `curl`, `tar`,
-    and standard shell utilities. Ansible installs Git, native apt
-    prerequisites, and Homebrew.
+Use Ubuntu with a non-root account authorized to use the installed `sudo`
+command. The base installation must provide a POSIX shell, `curl`, `tar`,
+and standard shell utilities. Ansible installs Git, native apt
+prerequisites, and Homebrew.
+
+</section>
+</div>
 
 Apple Silicon macOS and Ubuntu are the supported targets. Setup validates the
 operating system before downloading sources or requesting elevated privileges.
@@ -143,17 +140,20 @@ and every later download use normal certificate verification. macOS and Ubuntu
 systems with an existing CA bundle never disable verification. No persistent
 insecure setting is written.
 
-??? "Download the script before running it"
+<details class="download-disclosure">
+<summary>Review the installer first</summary>
 
-    If you want the convenience of the bootstrap without piping directly into
-    a shell:
+If you want the convenience of the bootstrap without piping directly into
+a shell:
 
-    ```bash
-    curl -fsSL https://raw.githubusercontent.com/shmileee/dotfiles/master/bootstrap/setup.sh > setup.sh
-    less setup.sh
-    chmod +x setup.sh
-    ./setup.sh
-    ```
+```bash
+curl -fsSL https://raw.githubusercontent.com/shmileee/dotfiles/master/bootstrap/setup.sh > setup.sh
+less setup.sh
+chmod +x setup.sh
+./setup.sh
+```
+
+</details>
 
 ## What setup does
 
@@ -190,7 +190,7 @@ insecure setting is written.
 
 ## Recover or reconcile
 
-<div class="setup-reference" markdown>
+<div class="setup-reference">
 
 | Command | Purpose |
 | --- | --- |
@@ -206,17 +206,17 @@ incomplete checkout, run `./bootstrap/setup.sh` from that checkout. After a
 successful setup, use `mise run reconcile`; rerun the local setup script only if
 the installed mise environment needs to be recovered.
 
-!!! note "Check mode has limits"
-
-    Ansible check mode is useful for file and package changes, but command-based
-    tasks cannot always predict their effects. Treat it as a preview, not a full
-    simulation.
+> [!NOTE] Check mode has limits
+>
+> Ansible check mode is useful for file and package changes, but command-based
+> tasks cannot always predict their effects. Treat it as a preview, not a full
+> simulation.
 
 ## Customize the setup
 
 Make changes in four places:
 
-<div class="setup-reference setup-reference--three" markdown>
+<div class="setup-reference setup-reference--three">
 
 | Area | Source of truth | Typical changes |
 | --- | --- | --- |
@@ -251,10 +251,8 @@ documentation in multiple places. At minimum, replace or review:
     from the GitHub repository owner and slug used by its defaults;
 *   the `UBUNTU_ARM_RUNNER` GitHub Actions repository variable used by the
     Docker workflow;
-*   the documentation domain in `docs/mkdocs.yml`, `docs/content/robots.txt`,
-    `.github/workflows/docs.yaml`, and `docs/README.md`;
-*   the repository file links throughout `docs/`, plus `repo_url`, `repo_name`,
-    and `edit_uri` in `docs/mkdocs.yml`;
+*   the repository file links throughout `docs/content/`, now rendered by the
+    oponomarov.com engine repository;
 *   Git author and namespace values under
     `config/private_dot_config/private_git/`; and
 *   every package, application, secret template, shell preference, and macOS
@@ -262,22 +260,22 @@ documentation in multiple places. At minimum, replace or review:
 
 ### Ansible roles
 
-<div class="setup-reference" markdown>
+<div class="setup-reference">
 
 | Role | Responsibility |
 | --- | --- |
-| [`bootstrap_prerequisites` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/bootstrap_prerequisites){ .role-link aria-label="bootstrap_prerequisites role on GitHub" } | Validate the platform, install Ubuntu prerequisites, and create or verify the persistent checkout |
-| [`homebrew` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/homebrew){ .role-link aria-label="homebrew role on GitHub" } | Install Homebrew on macOS and Ubuntu |
-| [`common` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/common){ .role-link aria-label="common role on GitHub" } | Install shared command-line tools and platform-specific packages and applications |
-| [`fonts` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/fonts){ .role-link aria-label="fonts role on GitHub" } | Install developer fonts on macOS and Ubuntu |
-| [`dotfiles` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/dotfiles){ .role-link aria-label="dotfiles role on GitHub" } | Install chezmoi and apply the current checkout |
-| [`fish` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/fish){ .role-link aria-label="fish role on GitHub" } | Install fish, make it the login shell, and synchronize Fisher plugins |
-| [`mise` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/mise){ .role-link aria-label="mise role on GitHub" } | Install the tools declared in the mise configuration |
-| [`neovim` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/neovim){ .role-link aria-label="neovim role on GitHub" } | Install LazyVim and its plugins in headless mode |
-| [`docker` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/docker){ .role-link aria-label="docker role on GitHub" } | Install Rancher Desktop on macOS |
-| [`tmux` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/tmux){ .role-link aria-label="tmux role on GitHub" } | Install tmux, TPM, and declared plugins |
-| [`system_defaults` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/system_defaults){ .role-link aria-label="system_defaults role on GitHub" } | Apply macOS preferences, Dock items, and keyboard settings |
-| [`handoff` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/handoff){ .role-link aria-label="handoff role on GitHub" } | Prepare the persistent runtime used by `mise run reconcile` |
+| [`bootstrap_prerequisites` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/bootstrap_prerequisites) | Validate the platform, install Ubuntu prerequisites, and create or verify the persistent checkout |
+| [`homebrew` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/homebrew) | Install Homebrew on macOS and Ubuntu |
+| [`common` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/common) | Install shared command-line tools and platform-specific packages and applications |
+| [`fonts` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/fonts) | Install developer fonts on macOS and Ubuntu |
+| [`dotfiles` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/dotfiles) | Install chezmoi and apply the current checkout |
+| [`fish` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/fish) | Install fish, make it the login shell, and synchronize Fisher plugins |
+| [`mise` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/mise) | Install the tools declared in the mise configuration |
+| [`neovim` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/neovim) | Install LazyVim and its plugins in headless mode |
+| [`docker` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/docker) | Install Rancher Desktop on macOS |
+| [`tmux` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/tmux) | Install tmux, TPM, and declared plugins |
+| [`system_defaults` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/system_defaults) | Apply macOS preferences, Dock items, and keyboard settings |
+| [`handoff` <span aria-hidden="true">↗</span>](https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles/handoff) | Prepare the persistent runtime used by `mise run reconcile` |
 
 </div>
 
@@ -297,7 +295,7 @@ After that bootstrap, run routine workflows from the repository checkout with
 mise tasks
 ```
 
-<div class="setup-reference" markdown>
+<div class="setup-reference">
 
 | Command | Purpose |
 | --- | --- |
@@ -308,16 +306,14 @@ mise tasks
 | `mise run status` | Show differences between the chezmoi source and files in the home directory. |
 | `mise run import` | Import all modified, non-template managed files into `config/`. |
 | `mise run import ~/.config/nvim` | Import one managed file or directory. |
-| `mise run docs` | Serve the documentation at <http://localhost:8000> and rebuild it on changes. |
-| `mise run docs:build` | Build the documentation with strict validation. |
 
 </div>
 
-!!! important "Bootstrap before using tasks"
-
-    `mise` is the task runner, but it is also installed by Ansible. On a new
-    machine, run `./bootstrap/setup.sh` first. The mise tasks are the
-    post-bootstrap interface, not a replacement for initial setup.
+> [!IMPORTANT] Bootstrap before using tasks
+>
+> `mise` is the task runner, but it is also installed by Ansible. On a new
+> machine, run `./bootstrap/setup.sh` first. The mise tasks are the
+> post-bootstrap interface, not a replacement for initial setup.
 
 Task execution installs any missing tools declared in `mise.toml`
 automatically. Before each reconciliation, the runtime validator prints the
@@ -340,22 +336,6 @@ Omit the path to import every modified managed file. The task uses
 For a rendered file backed by `config/**/*.tmpl`, reconcile the local change
 with its template explicitly. Always review the resulting Git diff before
 committing.
-
-### Preview the documentation
-
-Start the local Zensical server with:
-
-```bash
-mise run docs
-```
-
-Open <http://localhost:8000>. The preview rebuilds when documentation,
-configuration, templates, CSS, or JavaScript change. Before committing a docs
-change, run the strict build:
-
-```bash
-mise run docs:build
-```
 
 ## Reapply after an update
 
