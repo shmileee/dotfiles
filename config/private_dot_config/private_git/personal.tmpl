@@ -7,6 +7,7 @@
 	format = ssh
 [gpg "ssh"]
 	program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+	allowedSignersFile = ~/.config/git/allowed_signers_personal
 [commit]
 	gpgsign = true
 {{- end }}
