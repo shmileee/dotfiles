@@ -10,7 +10,7 @@ bootstrap_url=https://oponomarov.com/d
 repository_url=https://github.com/$repository_slug.git
 repository_archive_url=https://github.com/$repository_slug/archive/refs/heads/$repository_ref.tar.gz
 # renovate: datasource=github-releases depName=astral-sh/uv
-uv_version=0.12.6
+uv_version=0.12.9
 
 workspace=
 source_root=
