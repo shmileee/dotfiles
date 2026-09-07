@@ -78,7 +78,8 @@ repos:
         name: format shell with shfmt
         entry: shfmt --write
         language: system
-        types: [shell]
+        files: (\.(sh|bash)$|^config/bin/executable_[a-z0-9-]+$)
+        exclude: ^config/bin/executable_rg-sed$
       - id: fish-indent
         name: format fish with fish_indent
         entry: fish_indent --write
@@ -88,7 +89,30 @@ repos:
         name: lint shell with shellcheck
         entry: shellcheck
         language: system
-        types: [shell]
+        files: (\.(sh|bash)$|^config/bin/executable_[a-z0-9-]+$)
+        exclude: ^config/bin/executable_rg-sed$
+      - id: shellcheck-templates
+        name: lint shell templates with shellcheck
+        # Go template syntax is not valid shell, so the raw .tmpl cannot be
+        # linted directly; render it first and lint the generated script.
+        entry: |-
+          sh -c '
+            status=0
+            for file in "$@"; do
+              if ! rendered=$(chezmoi execute-template --source . --file "$file"); then
+                printf "cannot render %s\n" "$file" >&2
+                status=1
+                continue
+              fi
+              if ! printf "%s\n" "$rendered" | shellcheck --shell=sh -; then
+                printf "^ in %s\n" "$file" >&2
+                status=1
+              fi
+            done
+            exit "$status"
+          ' sh
+        language: system
+        files: ^config/bin/.*\.tmpl$
       - id: yamllint
         name: lint yaml with yamllint
         entry: yamllint --config-file .github/.yamllint.yaml
