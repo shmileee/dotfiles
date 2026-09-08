@@ -22,7 +22,7 @@ setup() {
 printf '%s\n' "$@" >> "$MOCK_LOG"
 [ "$#" -eq 4 ] && [ "$1" = auth ] && [ "$2" = token ] &&
   [ "$3" = --user ] && [ "$4" = shmileee ] || exit 64
-[ "${GITHUB_ACTIONS:-}" != true ] || exit 1
+[ "${FAKE_GH_STATUS:-0}" -eq 0 ] || exit "$FAKE_GH_STATUS"
 printf '%s\n' "$FAKE_GH_TOKEN"
 EOF
 }
@@ -53,25 +53,18 @@ run_mise() {
     FAKE_GH_TOKEN="$fake_token" \
     EXPECTED_TOKEN="$expected_token" \
     "$@" "$real_mise" -C "$nested_checkout" exec -- /bin/sh -eu -c '
-      if [ -z "${GH_TOKEN:-}" ]; then
-        printf "GH_TOKEN is empty in the mise child\n" >&2
+      if [ -z "${GH_TOKEN+x}" ]; then
+        printf "GH_TOKEN is missing in the mise child\n" >&2
         exit 41
       fi
       if [ "$GH_TOKEN" != "$EXPECTED_TOKEN" ]; then
         printf "GH_TOKEN does not match the expected credential source\n" >&2
         exit 42
       fi
-      if [ "${GITHUB_ACTIONS:-}" = true ]; then
-        if [ -e "$MOCK_LOG" ]; then
-          printf "Actions evaluated the local gh lookup\n" >&2
-          exit 43
-        fi
-      else
-        expected_call=$(printf "%s\n" auth token --user shmileee)
-        if [ "$(cat "$MOCK_LOG")" != "$expected_call" ]; then
-          printf "Expected exactly one personal-account gh lookup\n" >&2
-          exit 44
-        fi
+      expected_call=$(printf "%s\n" auth token --user shmileee)
+      if [ ! -f "$MOCK_LOG" ] || [ "$(cat "$MOCK_LOG")" != "$expected_call" ]; then
+        printf "Expected exactly one personal-account gh lookup\n" >&2
+        exit 44
       fi
     '
   if [ "$status" -ne 0 ]; then
@@ -80,12 +73,16 @@ run_mise() {
   fi
 }
 
-@test "Actions maps GITHUB_TOKEN to GH_TOKEN without a local gh lookup" {
-  run_mise "$actions_token" GITHUB_ACTIONS=true
+@test "Actions falls back to GITHUB_TOKEN after the personal gh lookup fails" {
+  run_mise "$actions_token" GITHUB_ACTIONS=true FAKE_GH_STATUS=1
 }
 
 @test "local GH_TOKEN pins the personal account and reuses the cached lookup" {
   run_mise "$personal_token"
   fake_token="fixture-changed-$BATS_TEST_NUMBER"
   run_mise "$personal_token"
+}
+
+@test "GH_TOKEN remains empty when neither credential source exists" {
+  run_mise "" env -u GITHUB_TOKEN FAKE_GH_STATUS=1
 }
