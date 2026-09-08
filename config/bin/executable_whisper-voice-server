@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+# Local speech-to-text server for the opencode-voice plugin, started by
+# ~/Library/LaunchAgents/com.shmileee.whisper-voice-server.plist.
+#
+# The plugin's built-in whisper-cli invocation cannot pass a vocabulary;
+# whisper-server can, and the plugin can be pointed at it with sttEndpoint.
+#
+# Exit status is a restart signal, not a health report: the LaunchAgent sets
+# KeepAlive{SuccessfulExit=false}, so anything diagnosable here exits 0 to stay
+# stopped. Only whisper-server's own failures earn a restart.
+
+set -euo pipefail
+
+vocabulary="${HOME}/.config/opencode/voice-vocabulary.txt"
+model="${HOME}/.local/share/whisper-cpp/ggml-large-v3-turbo-q5_0.bin"
+log="${HOME}/Library/Logs/whisper-voice-server.log"
+host=127.0.0.1
+port=8081
+log_limit=1048576
+
+note() {
+  printf '[whisper-voice-server] %s\n' "$1"
+}
+
+stop() {
+  local line
+  for line in "$@"; do
+    note "$line" >&2
+  done
+  note 'staying stopped; rerun mise run voice:setup once this is resolved' >&2
+  exit 0
+}
+
+# launchd never rotates this log. Truncating in place is safe rather than
+# sparse: the descriptor launchd handed us is O_APPEND, so the next write lands
+# at offset 0.
+if [ -f "$log" ] && [ "$(wc -c < "$log")" -gt "$log_limit" ]; then
+  : > "$log"
+  note "truncated ${log} past ${log_limit} bytes"
+fi
+
+[ -r "$model" ] || stop \
+  "whisper model not readable: ${model}" \
+  'the model is downloaded by voice:setup, not by chezmoi'
+
+# whisper-server initialises Metal before it binds and its bind-failure path
+# reaches exit() with the ggml device still allocated, tripping
+# GGML_ASSERT([rsets->data count] == 0). A busy port therefore becomes a
+# SIGABRT, which KeepAlive retries every ThrottleInterval forever.
+#
+# Two probes, because each alone has a blind spot: lsof cannot see a listener
+# owned by another user, and `nc -z` reports a full listen backlog as a free
+# port -- which would let a conflicting server pass and still lose the bind.
+listing="$(lsof -nP -iTCP:"$port" -sTCP:LISTEN 2> /dev/null || true)"
+if [ -n "$listing" ] || nc -z "$host" "$port" > /dev/null 2>&1; then
+  stop \
+    "${host}:${port} is already in use" \
+    "${listing:-identify the owner with: lsof -nP -iTCP:${port} -sTCP:LISTEN}"
+fi
+
+# whisper wants one line of context.
+prompt=""
+if [ -r "$vocabulary" ]; then
+  # Whole comment lines only: stripping from any '#' would truncate a term
+  # like C#. sed always exits 0, which matters under pipefail.
+  prompt="$(sed '/^[[:space:]]*#/d' "$vocabulary" | tr '\n' ' ' | tr -s '[:space:]' ' ')"
+fi
+
+# --inference-path matches what the plugin builds from sttEndpoint.
+# --carry-initial-prompt re-applies the vocabulary to every 30s window, so bias
+# does not decay on long dictations.
+exec whisper-server \
+  --model "$model" \
+  --host "$host" \
+  --port "$port" \
+  --inference-path /v1/audio/transcriptions \
+  --prompt "$prompt" \
+  --carry-initial-prompt

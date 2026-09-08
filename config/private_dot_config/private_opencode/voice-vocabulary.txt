@@ -1,0 +1,18 @@
+# Vocabulary fed to whisper as an initial prompt, biasing transcription toward
+# the tools actually used on this machine. Lines starting with # are stripped;
+# everything else is flattened to one line and passed as --prompt.
+#
+# Keep this SHORT. whisper caps the initial prompt at n_text_ctx/2 (~224
+# tokens) and silently keeps only the LAST 224, so overflowing it drops the
+# entries at the top of this list. Add terms that get mangled, not every
+# binary installed -- padding with words whisper already knows measurably
+# degrades bias on the rare ones that need it.
+#
+# Read only at service start: run `mise run voice:setup` after editing.
+
+Tools: chezmoi, prek, mise, ghq, direnv, eza, jaq, yq, zoxide, alacritty,
+zizmor, terramate, actionlint, yamllint, ansible-lint, shellcheck, shfmt,
+gitleaks, rumdl, taplo, stylua, biome, ruff, renovate, lazygit, workmux, tmux,
+neovim, LazyVim, ripgrep, fzf, k9s, kubectl, helm, terraform, vault, aws-vault,
+ollama, whisper-cpp, piper, sox, ffmpeg, opencode, homebrew, launchd, bats,
+uv, bun, golangci-lint, pipx, aqua, tokyonight, dotfiles, worktree.

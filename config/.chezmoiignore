@@ -7,4 +7,8 @@ bin/open-url
 {{ if ne .chezmoi.os "darwin" }}
 .1password
 .1password/**
+Library
+Library/**
+bin/whisper-voice-server
+bin/ollama-serve
 {{ end }}

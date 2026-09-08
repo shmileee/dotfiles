@@ -1,0 +1,17 @@
+# Normalization model for the opencode-voice plugin. Built by voice:setup.
+#
+# The plugin sends only `model`, `max_tokens` and `messages`, so sampling cannot
+# be set from tui.json. Baking it into a derived model is ollama's documented
+# workaround.
+#
+# The plugin inserts choices[0].message.content verbatim, so the base must be a
+# non-thinking checkpoint or its <think> block lands in the prompt box.
+
+FROM qwen3:4b-instruct-2507-q4_K_M
+
+# Greedy decoding: even 0.1 normalizes the same transcript differently between
+# runs.
+PARAMETER temperature 0
+
+# Dictated prompts are short; the 256K default reserves memory for nothing.
+PARAMETER num_ctx 4096

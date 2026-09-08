@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.shmileee.ollama</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>{{ .chezmoi.homeDir }}/bin/ollama-serve</string>
+    </array>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <!-- launchd hands over a minimal PATH; ollama lives in Homebrew. -->
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+
+        <!-- Only the local voice plugin talks to this server. -->
+        <key>OLLAMA_HOST</key>
+        <string>127.0.0.1:11434</string>
+
+        <!-- Inherited from the Homebrew plist this replaces, so the migration
+             does not change inference behaviour. -->
+        <key>OLLAMA_FLASH_ATTENTION</key>
+        <string>1</string>
+        <key>OLLAMA_KV_CACHE_TYPE</key>
+        <string>q8_0</string>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <!-- Restart on crash, but do not spin on a conflict only a human can clear. -->
+    <key>KeepAlive</key>
+    <dict>
+        <key>SuccessfulExit</key>
+        <false/>
+    </dict>
+    <key>ThrottleInterval</key>
+    <integer>30</integer>
+
+    <key>ProcessType</key>
+    <string>Adaptive</string>
+
+    <key>StandardOutPath</key>
+    <string>{{ .chezmoi.homeDir }}/Library/Logs/ollama.log</string>
+    <key>StandardErrorPath</key>
+    <string>{{ .chezmoi.homeDir }}/Library/Logs/ollama.log</string>
+</dict>
+</plist>

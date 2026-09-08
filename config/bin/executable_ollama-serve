@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Local ollama server backing the opencode-voice normalization step, started by
+# ~/Library/LaunchAgents/com.shmileee.ollama.plist, which declares the bind
+# address and tuning flags that `brew services start ollama` would otherwise
+# take from the formula.
+
+set -euo pipefail
+
+log="${HOME}/Library/Logs/ollama.log"
+log_limit=8388608
+
+# launchd never rotates this log and ollama logs every request. Truncating in
+# place is safe rather than sparse: the descriptor launchd handed us is
+# O_APPEND, so the next write lands at offset 0.
+if [ -f "$log" ] && [ "$(wc -c < "$log")" -gt "$log_limit" ]; then
+  : > "$log"
+  printf '[ollama-serve] truncated %s past %s bytes\n' "$log" "$log_limit"
+fi
+
+exec ollama serve
