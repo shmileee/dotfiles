@@ -7,8 +7,8 @@
 set -eu
 
 # Alacritty invokes this handler for clicked hyperlink hints (see
-# alacritty.toml). file:// URLs open in nvim inside a new tmux window,
-# honoring a trailing #L<line> fragment as emitted by opencode; every other
+# alacritty.toml). file:// URLs and absolute paths open in nvim inside a new
+# tmux window, honoring a trailing #L<line> or :<line>, respectively; every other
 # URL goes to the system opener. macOS `open` cannot handle the file:// case
 # itself: extensions without an associated application (for example .tmpl)
 # fail silently with kLSApplicationNotFoundErr.
@@ -112,7 +112,19 @@ resolve_session() {
 
 open_in_nvim() {
   validate_runtime
-  parse_file_url
+  case $url in
+    file://*) parse_file_url ;;
+    /*)
+      file_path=$url
+      case ${file_path##*:} in
+        ''|*[!0-9]*) ;;
+        *)
+          line_number=${file_path##*:}
+          file_path=${file_path%:*}
+          ;;
+      esac
+      ;;
+  esac
   resolve_nvim
   resolve_session
 
@@ -137,7 +149,7 @@ open_in_nvim() {
 main() {
   validate_arguments "$@"
   case $url in
-    file://*) open_in_nvim ;;
+    file://*|/*) open_in_nvim ;;
     *) open_with_system_handler ;;
   esac
 }
