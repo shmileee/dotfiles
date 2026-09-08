@@ -37,6 +37,18 @@
       "matchStrings": [
         "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\s+[A-Za-z_][A-Za-z0-9_]*=(?<currentValue>\\S+)"
       ]
+    },
+    {
+      "customType": "regex",
+      "description": "Update opencode plugin pins",
+      "managerFilePatterns": [
+        "/^config\\/private_dot_config\\/private_opencode\\/opencode\\.json$/",
+        "/^config\\/private_dot_config\\/private_opencode\\/tui\\.json$/"
+      ],
+      "matchStrings": [
+        "\"(?<depName>@?[\\w.-]+(?:/[\\w.-]+)?)@(?<currentValue>\\d[^\"]*)\""
+      ],
+      "datasourceTemplate": "npm"
     }
   ],
   "mise": {
@@ -175,6 +187,16 @@
       "description": "Allow for the slower release cadence of stable tooling",
       "matchPackageNames": ["koalaman/shellcheck"],
       "abandonmentThreshold": "2 years"
+    },
+    {
+      "description": "Match the commit style used for opencode plugin bumps",
+      "matchManagers": ["custom.regex"],
+      "matchFileNames": [
+        "config/private_dot_config/private_opencode/opencode.json",
+        "config/private_dot_config/private_opencode/tui.json"
+      ],
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "opencode"
     }
   ]
 }
