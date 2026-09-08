@@ -20,6 +20,13 @@ description = "Validate and report the locked runtime and pinned collections"
 depends = ["ansible:prepare"]
 run = "env ANSIBLE_COLLECTIONS_PATH=bootstrap/.ansible/collections uv run --project bootstrap --locked --managed-python python bootstrap/validate_runtime.py --collections-path bootstrap/.ansible/collections"
 
+# Kept out of the Ansible run on purpose: ~3 GB of model blobs that an
+# ephemeral CI runner would download and discard on every provisioning check.
+[tasks."voice:setup"]
+description = "Download the voice models and start the local transcription service"
+run = "bootstrap/voice-setup.sh"
+raw = true
+
 [tasks."test:bats"]
 description = "Run black-box bootstrap behavior tests"
 run = "bats tests/bootstrap"

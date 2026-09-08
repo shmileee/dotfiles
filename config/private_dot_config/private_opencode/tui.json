@@ -1,7 +1,19 @@
 {
   "$schema": "https://opencode.ai/tui.json",
   "theme": "tokyonight-transparent",
+  "keybinds": {
+    "session_rename": "none"
+  },
   "plugin": [
-    "oh-my-openagent@5.0.0-beta.46"
+    "oh-my-openagent@5.0.0-beta.46",
+    [
+      "@renjfk/opencode-voice@0.6.0",
+      {
+        "endpoint": "http://localhost:11434/v1",
+        "model": "voice-normalize",
+        "sttPrompt": "~/.config/opencode/voice-stt-prompt.md",
+        "sttEndpoint": "http://127.0.0.1:8081/v1"
+      }
+    ]
   ]
 }
