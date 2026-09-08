@@ -27,6 +27,44 @@ chezmoi source state lives under `config/` and maps to `$HOME`:
     `pre-commit` itself): run `prek run --files <changed files>` before
     committing.
 
+## Commit signing
+
+Commits here are signed with an SSH key held in 1Password, through
+`op-ssh-sign` as `gpg.ssh.program` (configured in `~/.config/git/personal`).
+This needs no environment setup: that binary exists precisely so `SSH_AUTH_SOCK`
+does not have to be set, and it derives 1Password's agent socket itself when the
+variable is absent.
+
+What it does need is an approval an agent cannot give. 1Password asks for Touch
+ID whenever its authorization has lapsed, and a non-interactive tool call cannot
+answer it. The commit then either fails as
+
+```text
+error: 1Password: failed to fill whole buffer
+fatal: failed to write commit object
+```
+
+or hangs until the tool's own timeout. Neither symptom names the prompt, and
+both read like a git or signing-config fault.
+
+*   **Never disable signing to get past this.** `--no-gpg-sign`, `-c
+    commit.gpgsign=false` and setting `SSH_AUTH_SOCK` all appear to work and all
+    bury the cause.
+*   Approve the prompt and rerun the identical `git commit`; there is nothing to
+    fix in the command.
+*   If no prompt arrives, 1Password is locked or not running. Report that and
+    stop — it needs the user, not a workaround.
+
+Verify that a commit was signed, not merely created:
+
+```sh
+git log -1 --format='%G? %GS'
+```
+
+`G` = good signature. `U` = signed, but the signer is missing from
+`gpg.ssh.allowedSignersFile`. `N` = not signed at all, i.e. the failure above
+was silently worked around.
+
 ## Layout
 
 *   `config/` — chezmoi source state (the actual dotfiles)
