@@ -25,6 +25,23 @@
     chdir: "{{ persistent_checkout }}"
   changed_when: false
 
+- name: "mise | resolve the repository-pinned uv runtime state"
+  ansible.builtin.command:
+    argv:
+      - mise
+      - ls
+      - uv
+      - --current
+      - --json
+  args:
+    chdir: "{{ persistent_checkout }}"
+  register: mise_uv_state
+  changed_when: false
+
+# `mise install uv` prints "already installed" when there is nothing to do, so
+# matching "installed" in its output marked every converged run as changed. Gate
+# on the resolved state instead: --current honours the checkout's pin and reports
+# installed as a boolean, independent of mise's output wording.
 - name: "mise | install the repository-pinned uv runtime"
   ansible.builtin.command:
     argv:
@@ -36,5 +53,5 @@
   environment:
     GITHUB_TOKEN: "{{ lookup('ansible.builtin.env', 'GITHUB_TOKEN') }}"
     MISE_HTTP_TIMEOUT: 120s
-  register: mise_uv_install
-  changed_when: "'installed' in (mise_uv_install.stdout + mise_uv_install.stderr) | lower"
+  when: "mise_uv_state.stdout | from_json | selectattr('installed') | list | length == 0"
+  changed_when: true
