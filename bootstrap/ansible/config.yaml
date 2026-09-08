@@ -73,6 +73,9 @@ brew:
       - dockutil
       - switchaudio-osx
       - ffmpeg
+      - sox
+      - whisper-cpp
+      - ollama
       - gawk
       - gnu-sed
       - wget
