@@ -23,5 +23,9 @@ Without it, `gh` silently falls back to the globally active account, so
 `gh pr create` in a personal repo can open the PR under the wrong identity.
 There is no error — just the wrong author. Always run `mise exec -- gh ...`.
 
+The token is cached for an hour, so `gh auth login` or `gh auth switch` leaves
+the previous account in effect. Run `mise cache clear` (or delete just
+`~/.cache/mise/exec`), then verify with `mise exec -- gh api user -q .login`.
+
 `git` needs no wrapper: identity, signing key and SSH key all resolve from
 config rather than environment.
