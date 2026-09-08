@@ -1,11 +1,8 @@
-# In GitHub Actions, reuse GITHUB_TOKEN without a local keyring lookup:
-# an empty GH_TOKEN is unsafe for non-gh consumers such as zizmor.
-# Outside Actions, pins the gh CLI to the PERSONAL account for everything under
-# ~/ghq/personalgit (no more `gh auth switch`). The token is gh's own keyring
-# entry for this login (`gh auth token --user` ignores GH_TOKEN, so cd-ing
-# between trees is safe); `|| true` keeps a machine without that login working
-# (an empty GH_TOKEN is "unset" for gh). Cached 1h so the keychain is not hit
-# on every prompt; after a fresh `gh auth login`, run `mise cache clear`.
+# Pin ~/ghq/personalgit to the PERSONAL account; --user ignores inherited tokens.
+# Fall back to GITHUB_TOKEN when no local login exists, including in Actions.
+# If neither source exists, tolerate an empty GH_TOKEN ("unset" for gh).
+# Cache 1h to avoid keychain access on every prompt; after `gh auth login`,
+# run `mise cache clear`.
 # Long-lived processes (tmux panes, agents) keep the token they started with.
 [env]
-GH_TOKEN = "{% if get_env(name='GITHUB_ACTIONS', default='') == 'true' %}{{ get_env(name='GITHUB_TOKEN') }}{% else %}{{ exec(command='gh auth token --user shmileee 2>/dev/null || true', cache_key='gh-token-shmileee', cache_duration='1h') }}{% endif %}"
+GH_TOKEN = "{{ exec(command='gh auth token --user shmileee 2>/dev/null || printenv GITHUB_TOKEN 2>/dev/null || true', cache_key='gh-token-shmileee', cache_duration='1h') }}"
