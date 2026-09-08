@@ -97,6 +97,17 @@ jobs:
       - name: install through local setup
         run: ./bootstrap/setup.sh
 
+      - name: scope mise config to the provisioned checkout
+        run: |
+          # mise merges every mise.toml between the working directory and $HOME,
+          # so the provisioned checkout inherits ~/ghq/personalgit's gh account
+          # pin. A runner has no personal gh login, so that pin resolves to an
+          # empty GH_TOKEN which masks this job's GITHUB_TOKEN and breaks zizmor.
+          # The ceiling must sit above the checkout: on the checkout itself mise
+          # would drop the repository's own tasks as well.
+          printf 'MISE_CEILING_PATHS=%s\n' \
+            "$(dirname "$HOME/ghq/personalgit/$GITHUB_REPOSITORY")" >> "$GITHUB_ENV"
+
       - name: install tools and run lint
         run: |
           cd "$HOME/ghq/personalgit/$GITHUB_REPOSITORY"
