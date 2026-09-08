@@ -33,3 +33,38 @@ chezmoi source state lives under `config/` and maps to `$HOME`:
 *   `bootstrap/` — Ansible-based machine bootstrap
 *   `docs/`, `site/` — documentation site content
 *   `tests/`, `Dockerfile` — containerized testing of the setup
+
+## Test isolation and live resources
+
+Existing terminal sessions, running applications, service instances, and
+deployed configuration are live user resources. Git worktrees share these
+resources with the rest of the machine.
+
+*   Run tests against disposable resources owned by the test: temporary
+    directories, dedicated sockets and ports, and separately started processes.
+*   Use minimal test configuration. Load user configuration or plugins into
+    an isolated test instance only when needed for the behavior under test.
+*   Keep every command and subprocess explicitly targeted at the test's
+    resources. Avoid defaults that could select a live instance.
+*   Give potentially blocking commands a timeout. Arrange cleanup before
+    starting the test, and clean up only resources that the test created.
+    Avoid broad process-name kills.
+*   When isolation is unavailable, run the remaining safe checks and report
+    what remains unverified. Do not substitute the user's live environment.
+*   Read-only diagnosis of live resources is allowed. Changes to live
+    resources must follow the user's task and remain narrowly scoped;
+    permission to implement a feature does not imply permission to experiment
+    on unrelated running sessions.
+
+### tmux tests
+
+*   Start a disposable server with a unique `-S` socket or `-L` name and
+    `-f /dev/null`. Specify that socket on every command, including cleanup
+    and commands launched by helper scripts.
+*   Never attach a client from a pane owned by the same server. Never unset
+    `TMUX` to bypass that nesting check.
+*   For popup or interactive tests, attach through a separate terminal
+    controlled by the test harness and continuously consume its output.
+*   Exercise the actual behavior under test, assert the result, and terminate
+    only the test's client and server.
+*   Test-session names alone do not provide isolation from the live server.
