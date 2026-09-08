@@ -28,6 +28,10 @@ run = "bats tests/bootstrap"
 description = "Run black-box fish function behavior tests"
 run = "bats tests/fish"
 
+[tasks."test:unit"]
+description = "Run the Python unit tests for repository tooling"
+run = "env ANSIBLE_CONFIG=bootstrap/ansible/ansible.cfg ANSIBLE_COLLECTIONS_PATH=bootstrap/.ansible/collections uv run --project bootstrap --locked --managed-python python -m unittest discover --start-directory tests/unit --verbose"
+
 [tasks."test:docker"]
 description = "Run the Ubuntu bootstrap and Ansible integration tests in Docker"
 run = "docker build --file tests/integration/Dockerfile --tag dotfiles-bootstrap-tests ."
