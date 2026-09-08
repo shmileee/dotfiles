@@ -79,10 +79,5 @@ jobs:
             --inventory "127.0.0.1," \
             --syntax-check bootstrap/ansible/main.yaml
 
-      - name: test ansible module helpers
-        run: |
-          mise exec -- env \
-            ANSIBLE_CONFIG=bootstrap/ansible/ansible.cfg \
-            ANSIBLE_COLLECTIONS_PATH=bootstrap/.ansible/collections \
-            uv run --project bootstrap --locked --managed-python \
-            python -m unittest discover -s tests/unit -v
+      - name: test python units
+        run: mise run test:unit
