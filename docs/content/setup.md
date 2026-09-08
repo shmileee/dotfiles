@@ -197,6 +197,7 @@ insecure setting is written.
 | `./bootstrap/setup.sh` | Bootstrap a workstation or recover a valid incomplete persistent clone. |
 | `mise run reconcile` | Run normal ongoing reconciliation from a completed checkout. |
 | `mise run reconcile:check` | Preview supported changes after bootstrap. |
+| `mise run voice:setup` | Download the voice dictation models and start the local transcription service. Manual because it fetches ~3 GB. |
 
 </div>
 

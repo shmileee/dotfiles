@@ -1,11 +1,12 @@
 ---
 title: OpenCode configuration
-description: Local secrets, model routing, corporate overlays, and contextual notifications.
+description: Local secrets, model routing, corporate overlays, contextual notifications, and local voice dictation.
 tags:
   - OpenCode
   - AI tooling
   - tmux
   - chezmoi
+  - Voice
 hide:
   - tags
 ---
@@ -29,6 +30,7 @@ hide:
   <div><dt>Model routing</dt><dd>Rules that choose a primary model and fallbacks for each kind of task.</dd></div>
   <div><dt>Hook</dt><dd>Logic that runs automatically when a specific OpenCode event occurs.</dd></div>
   <div><dt>TPM</dt><dd>The tmux Plugin Manager, used to install and update tmux extensions.</dd></div>
+  <div><dt>LaunchAgent</dt><dd>A macOS service definition that launchd starts and keeps running for the logged-in user.</dd></div>
 </dl>
 </div>
 </dialog>
@@ -57,11 +59,17 @@ hide:
     <a class="repo-path" href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf" aria-label="Open the managed tmux configuration on GitHub"><code class="path-token">~/.config/<wbr>tmux/<wbr>tmux.conf</code></a>
     <p>Installs the contextual-notifier companion plugin.</p>
   </article>
+  <article>
+    <span>OpenCode TUI</span>
+    <a class="repo-path" href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_opencode/tui.json" aria-label="Open the managed OpenCode TUI configuration on GitHub"><code class="path-token">~/.config/<wbr>opencode/<wbr>tui.json</code></a>
+    <p>Theme, keybinds, and the client-side plugins including voice dictation.</p>
+  </article>
 </div>
 
-The OpenCode configuration currently declares the `opencode-claude-auth`, Oh
-My OpenAgent, and contextual-notifier plugins. OpenCode installs these plugins
-with Bun when it starts.
+`opencode.json` declares the `opencode-claude-auth`, Oh My OpenAgent, and
+contextual-notifier plugins. The TUI loads its own `tui.json`, which declares
+Oh My OpenAgent again alongside the voice plugin. OpenCode installs every
+declared plugin with Bun when it starts.
 
 ## First-run checklist
 
@@ -154,13 +162,87 @@ After changing the notifier declaration:
 2.  Reload tmux with ++ctrl+a++ then ++ctrl+r++.
 3.  Run the TPM installation flow if the companion plugin is not present.
 
+## Voice dictation
+
+++ctrl+r++ records a prompt, transcribes it, and inserts the cleaned text into
+the prompt box. Both models run on this machine, so no audio leaves it.
+
+The plugin is declared in the managed
+[`tui.json`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_opencode/tui.json),
+which also frees ++ctrl+r++ by disabling the factory `session_rename`
+binding—rename a session with `/rename` instead. The plugin talks to two local
+services:
+
+<div class="surface-grid">
+  <article>
+    <span>Transcription</span>
+    <code class="path-token">127.0.0.1:8081</code>
+    <p>whisper.cpp behind a managed LaunchAgent, biased with a project vocabulary.</p>
+  </article>
+  <article>
+    <span>Normalization</span>
+    <code class="path-token">127.0.0.1:11434</code>
+    <p>ollama serving <code>voice-normalize</code>, which repunctuates the raw transcript.</p>
+  </article>
+</div>
+
+The models are roughly 3 GB, so they are installed on demand rather than during
+provisioning:
+
+```bash
+mise run voice:setup
+```
+
+The task is idempotent. It verifies the whisper checksum, brings ollama up,
+rebuilds the derived model from its Modelfile, restarts the transcription
+service, and probes both endpoints before reporting success.
+
+| Managed file | Role |
+| --- | --- |
+| `bin/whisper-voice-server` | Starts `whisper-server` with the vocabulary as its initial prompt. |
+| `bin/ollama-serve` | Starts `ollama serve` and caps its log. |
+| `.config/ollama/voice-normalize.Modelfile` | Pins the base checkpoint and bakes in deterministic sampling. |
+| `.config/opencode/voice-vocabulary.txt` | Tool names fed to whisper so it stops mangling them. |
+| `.config/opencode/voice-stt-prompt.md` | System prompt that cleans up the raw transcript. |
+
+Both services are LaunchAgents declared in this repository rather than
+`brew services` entries, so the bind address, tuning flags, and log paths are
+reviewable here instead of being whatever the Homebrew formula ships. Nothing
+in this repository starts `brew services`, so a machine that had the Homebrew
+`ollama` service running needs it stopped once by hand—it binds the same port.
+
+| Managed service | Role |
+| --- | --- |
+| `Library/LaunchAgents/com.shmileee.whisper-voice-server.plist` | Keeps whisper.cpp running and owns `~/Library/Logs/whisper-voice-server.log`. |
+| `Library/LaunchAgents/com.shmileee.ollama.plist` | Keeps `ollama serve` bound to loopback and owns `~/Library/Logs/ollama.log`. |
+
+Neither log is rotated by launchd, so each wrapper truncates its own in place
+once it grows past a limit.
+
+### Editing the vocabulary or the prompt
+
+The two text files reload differently:
+
+*   `voice-vocabulary.txt` is read by `whisper-server` when it starts, so it
+    needs a service restart: `chezmoi apply` then `mise run voice:setup`.
+*   `voice-stt-prompt.md` is read by the plugin when OpenCode starts, so it
+    needs `chezmoi apply` and an OpenCode restart. `voice:setup` does nothing
+    for it.
+
+!!! warning "whisper truncates a long vocabulary from the front"
+
+    The initial prompt is capped at 224 tokens and whisper keeps the last 223,
+    so a vocabulary that grows past the cap loses its opening entries in
+    silence. Add terms that are actually mangled rather than every installed
+    binary.
+
 ## Deliberately unmanaged
 
 <div class="boundary-list">
   <div><code>opencode.corp.json</code><span>Company-specific configuration</span></div>
   <div><code>opencode/secrets/</code><span>Credentials and private endpoints</span></div>
-  <div><code>tui.json</code><span>A separate server-side extension surface</span></div>
   <div><strong>Runtime files</strong><span>Caches, backups, lockfiles, and dependency directories</span></div>
+  <div><strong>Voice models</strong><span>The whisper weights and ollama blobs installed by <code>voice:setup</code></span></div>
 </div>
 
 ## Troubleshooting
@@ -191,3 +273,55 @@ functions opencode | grep -q workgit; and echo wrapper active
 
 Focus the originating tmux window first. If the marker remains, restart
 OpenCode and reload tmux configuration with ++ctrl+a++ then ++ctrl+r++.
+
+### Voice recording does nothing
+
+Check that the transcription service is loaded, running, and answering:
+
+```bash
+launchctl print "gui/$(id -u)/com.shmileee.whisper-voice-server" | grep 'state ='
+curl -s http://127.0.0.1:8081/health
+```
+
+A job that is loaded but not running means the wrapper diagnosed something and
+stopped deliberately—it reports success so launchd does not retry a condition
+only a person can clear. The reason is at the end of its log:
+
+```bash
+tail -n 20 ~/Library/Logs/whisper-voice-server.log
+```
+
+It reports two: a missing model, cleared by `mise run voice:setup`, and another
+process already holding the port.
+
+```bash
+lsof -nP -iTCP:8081 -sTCP:LISTEN
+```
+
+### Dictation is transcribed but the inserted text is wrong
+
+That is the normalization step rather than whisper. Confirm its agent is up and
+the derived model answers:
+
+```bash
+launchctl print "gui/$(id -u)/com.shmileee.ollama" | grep 'state ='
+ollama list | grep voice-normalize
+curl -s http://127.0.0.1:11434/v1/chat/completions \
+  -H 'Content-Type: application/json' \
+  -d '{"model":"voice-normalize","max_tokens":16,"messages":[{"role":"user","content":"ping"}]}'
+```
+
+`mise run voice:setup` runs the same probe and rebuilds the model from its
+Modelfile.
+
+If the agent will not stay up, check that a Homebrew service is not competing
+for the port. Only a machine provisioned before this agent existed can have
+one, and stopping it is a one-time fix:
+
+```bash
+brew services list | grep ollama
+```
+
+```bash
+brew services stop ollama
+```

@@ -1,6 +1,6 @@
 ---
 title: Shortcut reference
-description: Keyboard shortcuts configured for macOS, Alacritty, fish, tmux, and Neovim.
+description: Keyboard shortcuts configured for macOS, Alacritty, fish, tmux, Neovim, and OpenCode.
 tags:
   - Shortcuts
   - macOS
@@ -8,6 +8,7 @@ tags:
   - fish
   - tmux
   - Neovim
+  - OpenCode
 hide:
   - tags
 ---
@@ -29,6 +30,7 @@ hide:
     <button type="button" aria-pressed="false" data-shortcut-scope="fish">fish</button>
     <button type="button" aria-pressed="false" data-shortcut-scope="tmux">tmux</button>
     <button type="button" aria-pressed="false" data-shortcut-scope="neovim">Neovim</button>
+    <button type="button" aria-pressed="false" data-shortcut-scope="opencode">OpenCode</button>
   </div>
   <p class="shortcut-filter__status" aria-live="polite" data-shortcut-status></p>
 </div>
@@ -198,6 +200,22 @@ LazyVim provides most editor mappings. This repository adds only a small set:
 
 </section>
 
+<section class="shortcut-reference shortcut-filter-section" data-shortcut-section="opencode" markdown>
+
+## OpenCode
+
+These act inside the OpenCode TUI, so the tmux prefix is not involved.
+
+| Shortcut | Action |
+| --- | --- |
+| ++ctrl+r++ | Record a voice prompt, transcribe it, and insert the cleaned text |
+
+++ctrl+r++ is OpenCode's factory binding for renaming a session. The managed
+`tui.json` disables that binding so the voice plugin can own the key; rename a
+session with the `/rename` command instead.
+
+</section>
+
 ## Source of truth
 
 *   macOS shortcuts:
@@ -210,3 +228,5 @@ LazyVim provides most editor mappings. This repository adds only a small set:
     [`tmux.conf`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf)
 *   Neovim additions:
     [`keymaps.lua`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/nvim/lua/config/keymaps.lua)
+*   OpenCode keybinds and voice plugin:
+    [`tui.json`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_opencode/tui.json)
