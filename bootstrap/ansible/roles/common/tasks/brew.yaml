@@ -6,6 +6,9 @@
   when:
     - not dockerized
     - not ansible_check_mode
+  # Tagged so the macOS idempotency gate can hold both playbook passes to a
+  # single package index; see .github/workflows/macos.yaml.
+  tags: homebrew_update
 
 - name: "brew | install taps"
   community.general.homebrew_tap:
