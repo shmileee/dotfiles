@@ -3,7 +3,7 @@
 
   function normalizePersistentNavigationLinks() {
     const links = document.querySelectorAll(
-      '[data-md-component="header"] a[href], .md-sidebar--primary a[href]'
+      '[data-md-component="header"] a[href], .md-sidebar--primary a[href]',
     );
 
     links.forEach((link) => {
@@ -15,7 +15,7 @@
 
       link.setAttribute(
         'href',
-        `${target.pathname}${target.search}${target.hash}`
+        `${target.pathname}${target.search}${target.hash}`,
       );
     });
   }
@@ -28,10 +28,10 @@
       element.remove();
     });
     const contextHelpTrigger = document.querySelector(
-      '.md-content [data-context-open]'
+      '.md-content [data-context-open]',
     );
     const contextHelpDialog = document.querySelector(
-      '.md-content [data-context-dialog]'
+      '.md-content [data-context-dialog]',
     );
     if (contextHelpTrigger && contextHelpDialog) {
       document.body.append(contextHelpTrigger, contextHelpDialog);
@@ -55,7 +55,8 @@
 
     const enhanceInjectedSearch = () => {
       const searchHost = [...document.querySelectorAll('body > div')].find(
-        (element) => element.shadowRoot?.querySelector('input[role="combobox"]')
+        (element) =>
+          element.shadowRoot?.querySelector('input[role="combobox"]'),
       );
       const searchRoot = searchHost?.shadowRoot;
       const searchInput = searchRoot?.querySelector('input[role="combobox"]');
@@ -67,7 +68,7 @@
       ];
       const searchResults = searchRoot.querySelector('ol');
       const filterHeading = [...searchRoot.querySelectorAll('h3')].find(
-        (heading) => heading.textContent.trim() === 'Filters'
+        (heading) => heading.textContent.trim() === 'Filters',
       );
       const filterPanel = filterHeading?.parentElement?.parentElement;
       let searchPanel = searchToolbar;
@@ -105,7 +106,7 @@
           searchPanel && getComputedStyle(searchPanel).pointerEvents !== 'none';
         searchInput.setAttribute(
           'aria-expanded',
-          String(Boolean(searchIsOpen))
+          String(Boolean(searchIsOpen)),
         );
         const filtersAreOpen =
           filterPanel &&
@@ -117,7 +118,7 @@
         }
         searchButtons[1]?.setAttribute(
           'aria-expanded',
-          String(Boolean(filtersAreOpen))
+          String(Boolean(filtersAreOpen)),
         );
       };
       const injectedSearchObserver = new MutationObserver(syncInjectedSearch);
@@ -142,7 +143,7 @@
       signal.addEventListener(
         'abort',
         () => injectedSearchObserver.disconnect(),
-        { once: true }
+        { once: true },
       );
       syncInjectedSearch();
       return true;
@@ -158,7 +159,7 @@
       signal.addEventListener(
         'abort',
         () => window.clearInterval(searchEnhancementTimer),
-        { once: true }
+        { once: true },
       );
     }
 
@@ -177,7 +178,7 @@
           contextHelpDialog.showModal();
         else contextHelpDialog.setAttribute('open', '');
       },
-      { signal }
+      { signal },
     );
     contextHelpDialog
       ?.querySelector('[data-context-close]')
@@ -194,12 +195,12 @@
           event.clientY <= bounds.bottom;
         if (!isInside) closeContextHelp();
       },
-      { signal }
+      { signal },
     );
     contextHelpDialog?.addEventListener(
       'close',
       () => contextHelpTrigger?.focus(),
-      { signal }
+      { signal },
     );
 
     const currentPath =
@@ -228,7 +229,7 @@
 
     const tocLinks = [
       ...document.querySelectorAll(
-        '.md-sidebar--secondary .md-nav--secondary .md-nav__link'
+        '.md-sidebar--secondary .md-nav--secondary .md-nav__link',
       ),
     ];
     if (
@@ -239,7 +240,7 @@
     }
 
     const sourceToc = document.querySelector(
-      '.md-sidebar--secondary .md-nav--secondary > .md-nav__list'
+      '.md-sidebar--secondary .md-nav--secondary > .md-nav__list',
     );
     const pageLead = document.querySelector('.md-content__inner .page-lead');
     const mobileTocAnchor =
@@ -272,7 +273,7 @@
         mobileTocLinks.forEach((link) => {
           link.classList.toggle(
             'md-nav__link--active',
-            link.getAttribute('href') === activeHref
+            link.getAttribute('href') === activeHref,
           );
         });
       };
@@ -297,7 +298,7 @@
           });
           details.open = false;
         },
-        { signal }
+        { signal },
       );
     }
 
@@ -306,12 +307,12 @@
       drawerButton?.setAttribute('aria-expanded', String(drawerIsOpen));
       drawerButton?.setAttribute(
         'aria-label',
-        drawerIsOpen ? 'Close navigation' : 'Open navigation'
+        drawerIsOpen ? 'Close navigation' : 'Open navigation',
       );
       drawerTocLabels.forEach((label) => {
         label.setAttribute(
           'aria-expanded',
-          String(Boolean(drawerTocToggle?.checked))
+          String(Boolean(drawerTocToggle?.checked)),
         );
       });
     };
@@ -326,7 +327,7 @@
           event.preventDefault();
           label.click();
         },
-        { signal }
+        { signal },
       );
     });
 
@@ -380,7 +381,7 @@
           .querySelector("[data-md-component='search']")
           ?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
       },
-      { signal }
+      { signal },
     );
 
     drawerButton?.addEventListener(
@@ -390,7 +391,7 @@
         drawerToggle.checked = !drawerToggle.checked;
         drawerToggle.dispatchEvent(new Event('change', { bubbles: true }));
       },
-      { signal }
+      { signal },
     );
 
     drawerToggle?.addEventListener(
@@ -399,7 +400,7 @@
         syncControls();
         syncDrawerFocus();
       },
-      { signal }
+      { signal },
     );
 
     drawerTocToggle?.addEventListener(
@@ -408,7 +409,7 @@
         syncControls();
         syncDrawerFocus();
       },
-      { signal }
+      { signal },
     );
 
     document.addEventListener(
@@ -418,11 +419,11 @@
           const focusable = [
             drawerButton,
             ...primarySidebar.querySelectorAll(
-              'a:not([tabindex="-1"]), button:not([tabindex="-1"]), label[for]:not([tabindex="-1"]), [tabindex]:not([tabindex="-1"])'
+              'a:not([tabindex="-1"]), button:not([tabindex="-1"]), label[for]:not([tabindex="-1"]), [tabindex]:not([tabindex="-1"])',
             ),
           ].filter(
             (element) =>
-              !element.inert && element.getBoundingClientRect().width > 0
+              !element.inert && element.getBoundingClientRect().width > 0,
           );
           const first = focusable[0];
           const last = focusable[focusable.length - 1];
@@ -444,7 +445,7 @@
           drawerButton?.focus();
         }
       },
-      { signal }
+      { signal },
     );
 
     syncControls();
@@ -452,13 +453,13 @@
 
     const shortcutFilter = document.querySelector('[data-shortcut-filter]');
     const shortcutQuery = shortcutFilter?.querySelector(
-      '[data-shortcut-query]'
+      '[data-shortcut-query]',
     );
     const shortcutClear = shortcutFilter?.querySelector(
-      '[data-shortcut-clear]'
+      '[data-shortcut-clear]',
     );
     const shortcutStatus = shortcutFilter?.querySelector(
-      '[data-shortcut-status]'
+      '[data-shortcut-status]',
     );
     const shortcutEmpty = document.querySelector('[data-shortcut-empty]');
     const shortcutSections = [
@@ -470,9 +471,9 @@
     const shortcutHeadingIds = new Set(
       shortcutSections.flatMap((section) =>
         [...section.querySelectorAll('h2[id], h3[id]')].map(
-          (heading) => heading.id
-        )
-      )
+          (heading) => heading.id,
+        ),
+      ),
     );
     const shortcutTocRoots = [
       ...document.querySelectorAll('.md-nav--secondary'),
@@ -486,7 +487,7 @@
 
         links.forEach((link) => {
           const id = decodeURIComponent(
-            new URL(link.href, window.location.href).hash.slice(1)
+            new URL(link.href, window.location.href).hash.slice(1),
           );
           const heading = document.getElementById(id);
           const isFilterControlled = shortcutHeadingIds.has(id);
@@ -502,12 +503,12 @@
         });
 
         const visibleLinks = links.filter(
-          (link) => !link.closest('.md-nav__item')?.hidden
+          (link) => !link.closest('.md-nav__item')?.hidden,
         );
         if (
           visibleLinks.length &&
           !visibleLinks.some((link) =>
-            link.classList.contains('md-nav__link--active')
+            link.classList.contains('md-nav__link--active'),
           )
         ) {
           visibleLinks[0].classList.add('md-nav__link--active');
@@ -534,7 +535,7 @@
             .toLocaleLowerCase()
             .replace(/\s+/g, ' ');
           const queryMatches = queryTerms.every((term) =>
-            searchText.includes(term)
+            searchText.includes(term),
           );
           row.hidden = !scopeMatches || !queryMatches;
           if (!row.hidden) visibleCount += 1;
@@ -570,7 +571,7 @@
           .querySelectorAll('.md-typeset__scrollwrap')
           .forEach((tableWrap) => {
             tableWrap.hidden = !tableWrap.querySelector(
-              'tbody tr:not([hidden])'
+              'tbody tr:not([hidden])',
             );
           });
 
@@ -582,7 +583,7 @@
             sibling = sibling.nextElementSibling;
           }
           const groupHasMatch = group.some((element) =>
-            element.querySelector?.('tbody tr:not([hidden])')
+            element.querySelector?.('tbody tr:not([hidden])'),
           );
           heading.hidden = !groupHasMatch;
           group.forEach((element) => {
@@ -617,7 +618,7 @@
           shortcutQuery.value = '';
           syncShortcutFilter();
         },
-        { signal }
+        { signal },
       );
       shortcutClear.addEventListener(
         'click',
@@ -626,7 +627,7 @@
           shortcutQuery.focus();
           syncShortcutFilter();
         },
-        { signal }
+        { signal },
       );
       shortcutFilter
         .querySelectorAll('[data-shortcut-scope]')
@@ -640,12 +641,12 @@
                 .forEach((candidate) => {
                   candidate.setAttribute(
                     'aria-pressed',
-                    String(candidate === button)
+                    String(candidate === button),
                   );
                 });
               syncShortcutFilter();
             },
-            { signal }
+            { signal },
           );
         });
       syncShortcutFilter();

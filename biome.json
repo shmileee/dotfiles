@@ -23,7 +23,5 @@
       "style": { "noDescendingSpecificity": "off" }
     }
   },
-  "javascript": {
-    "formatter": { "quoteStyle": "single", "trailingCommas": "es5" }
-  }
+  "javascript": { "formatter": { "quoteStyle": "single" } }
 }
