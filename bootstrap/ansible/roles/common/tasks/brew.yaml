@@ -10,6 +10,38 @@
   # single package index; see .github/workflows/macos.yaml.
   tags: homebrew_update
 
+# `brew tap` verifies a freshly cloned tap by loading every formula and cask in
+# it, and Homebrew refuses to load either from a tap it does not trust. Trust
+# therefore has to exist before the clone, which the tap task below cannot
+# arrange on its own: homebrew_tap only adjusts trust after tapping, so on a
+# machine that has not tapped these yet `brew tap` fails verification and that
+# trust step is never reached. Seed the entries first to break the cycle.
+- name: "brew | read trusted taps"
+  ansible.builtin.command:
+    argv:
+      - brew
+      - trust
+      - --json
+      - v1
+  register: brew_trust_state
+  changed_when: false
+  when: not ansible_check_mode
+
+- name: "brew | trust taps"
+  ansible.builtin.command:
+    argv: "{{ ['brew', 'trust', '--tap'] + brew_untrusted_taps }}"
+  vars:
+    brew_untrusted_taps: >-
+      {{
+        brew.taps
+        | reject('in', (brew_trust_state.stdout | default('{"taps": []}', true) | from_json).taps)
+        | list
+      }}
+  changed_when: true
+  when:
+    - not ansible_check_mode
+    - brew_untrusted_taps | length > 0
+
 - name: "brew | install taps"
   community.general.homebrew_tap:
     name: "{{ brew.taps }}"
