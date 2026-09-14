@@ -106,11 +106,6 @@
   conflictStyle = zdiff3
 [help]
   autocorrect = prompt
-[filter "lfs"]
-  clean = git-lfs clean -- %f
-  smudge = git-lfs smudge -- %f
-  process = git-lfs filter-process
-  required = true
 # Personal owners always travel through the personalgit SSH alias (personal
 # key), whatever SSH URL a tool produced (gh repo clone/fork/pr checkout with
 # git_protocol=ssh, pasted clone URLs). https is deliberately NOT rewritten:
