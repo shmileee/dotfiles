@@ -222,9 +222,9 @@ download_file() {
   download_destination=$1
   download_url=$2
   if [ "$insecure_bootstrap_transport" = true ]; then
-    curl -kfsSL --retry 3 --output "$download_destination" "$download_url"
+    curl -kfsSL --retry 6 --output "$download_destination" "$download_url"
   else
-    curl -fsSL --retry 3 --output "$download_destination" "$download_url"
+    curl -fsSL --retry 6 --output "$download_destination" "$download_url"
   fi
 }
 

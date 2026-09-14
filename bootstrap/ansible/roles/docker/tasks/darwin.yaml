@@ -6,3 +6,7 @@
     state: latest
     accept_external_apps: true
   tags: homebrew
+  register: rancher_desktop
+  until: rancher_desktop is succeeded
+  retries: 3
+  delay: 15

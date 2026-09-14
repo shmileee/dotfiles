@@ -56,8 +56,16 @@
     sudo_password: "{{ ansible_become_password | default(omit, true) }}"
   when:
     - ansible_facts["system"] == "Darwin"
+  register: brew_casks
+  until: brew_casks is succeeded
+  retries: 3
+  delay: 15
 
 - name: "brew | install packages"
   community.general.homebrew:
     name: "{{ pkgs }}"
     state: latest
+  register: brew_packages
+  until: brew_packages is succeeded
+  retries: 3
+  delay: 15
