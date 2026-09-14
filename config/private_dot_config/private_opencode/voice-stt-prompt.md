@@ -40,7 +40,7 @@ Dotfiles and shell: chezmoi, prek, mise, ghq, direnv, fish, starship, homebrew,
 launchd, ansible, bats
 
 CLI tools: eza, jaq, yq, fd, fzf, bat, duf, dust, sponge, zoxide, ripgrep,
-git-delta, git-lfs, gh, lazygit, tmux, workmux, alacritty, neovim, LazyVim, k9s
+git-delta, gh, lazygit, tmux, workmux, alacritty, neovim, LazyVim, k9s
 
 Infra: kubectl, helm, terraform, terramate, vault, aws-vault, docker,
 1password, session-manager-plugin
