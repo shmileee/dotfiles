@@ -1,0 +1,40 @@
+# Vendored from derailed/k9s:
+# https://github.com/derailed/k9s/blob/master/plugins/crossplane.yaml
+#
+# Requires: crossplane CLI (bootstrap/ansible/config.yaml ->
+# brew.packages.common). Both entries call `crossplane resource trace`, which
+# needs CLI v2.3.2 or newer.
+#
+# Both entries are scoped to every view. <t> is the one exception: the pods view
+# binds it to Transfer, so trace is unavailable there - which costs nothing,
+# since pods are not Crossplane resources.
+plugins:
+  # crossplane-trace list all the relationships with a resource (Claim, Composite, or Managed Resource)
+  # Requires 'crossplane' cli binary installed new version 2.3.2
+  crossplane-trace:
+    shortCut: t
+    confirm: false
+    description: "Crossplane Trace"
+    scopes:
+      - all
+    command: sh
+    background: false
+    args:
+      - -c
+      - 'NS="$NAMESPACE"; if [ "$NS" = "-" ] || [ -z "$NS" ]; then crossplane resource trace -c "$CONTEXT" "${RESOURCE_NAME}.${RESOURCE_GROUP}" "$NAME" -o wide | less -K; else crossplane resource trace -c "$CONTEXT" -n "$NS" "${RESOURCE_NAME}.${RESOURCE_GROUP}" "$NAME" -o wide | less -K; fi'
+  # crossplane-watch requires 'crossplane' cli and 'viddy' binaries installed
+  #
+  # Deviation from upstream: this ships as <w>, which k9s has already bound to
+  # Warp To Namespace in every namespaced view, so it only ever fired on
+  # cluster-scoped resources. Moved to Shift-V.
+  crossplane-watch:
+    shortCut: Shift-V
+    confirm: false
+    description: "Crossplane Watch"
+    scopes:
+      - all
+    command: sh
+    background: false
+    args:
+      - -c
+      - 'NS="$NAMESPACE"; if [ "$NS" = "-" ] || [ -z "$NS" ]; then crossplane resource trace -c "$CONTEXT" "${RESOURCE_NAME}.${RESOURCE_GROUP}" "$NAME" -o wide -w; else crossplane resource trace -c "$CONTEXT" -n "$NS" "${RESOURCE_NAME}.${RESOURCE_GROUP}" "$NAME" -o wide -w; fi'
