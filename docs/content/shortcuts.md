@@ -101,6 +101,14 @@ These shortcuts work from Alacritty without first entering the tmux prefix.
 | ++cmd+f++ | Enter copy mode and search forward |
 | ++cmd+0++ | Reset the Alacritty font size |
 
+### Links and text
+
+| Shortcut | Action |
+| --- | --- |
+| ++ctrl+shift+o++ | Open a URL or path under the pointer: URLs go to the system opener, files open in a new tmux Neovim window |
+| ++cmd+shift+p++ | Copy a visible file path, including its line number when one is present |
+| ++shift+enter++ | Send a Shift-modified Enter that a TUI can tell apart from plain Enter |
+
 </section>
 
 <section class="shortcut-reference shortcut-filter-section" data-shortcut-section="fish" markdown>
@@ -113,9 +121,13 @@ These bindings act on the current fish command line.
 | --- | --- |
 | ++alt+s++ | Prepend `sudo` unless the command line already starts with it |
 | ++ctrl+g++ | Open the project chooser powered by fzf |
+| ++ctrl+t++ | Open the fzf directory picker |
+| ++alt+left++ / ++alt+right++ | Move the cursor one word backward or forward |
 
-Some additional character bindings are keyboard-layout dependent. See the
-source file for the exact mappings used by this configuration.
+Alacritty sets `option_as_alt = "OnlyLeft"`, so the ++alt++ bindings above use
+the left Option key. fzf runs with `--tmux`, so its pickers open in a tmux popup
+whenever one is available. The fzf.fish plugin installs further pickers on its
+own default keys.
 
 </section>
 
@@ -123,7 +135,8 @@ source file for the exact mappings used by this configuration.
 
 ## tmux prefix commands
 
-Press ++ctrl+a++, release it, and then press the command key.
+Press ++ctrl+a++, release it, and then press the command key. Press ++ctrl+a++
+twice to send a literal ++ctrl+a++ through to the program in the pane.
 
 <div class="shortcut-prefix-summary" aria-label="Prefix: Control plus A, then release" data-search-exclude>
   <span class="shortcut-prefix-summary__label">Prefix</span>
@@ -141,6 +154,8 @@ Press ++ctrl+a++, release it, and then press the command key.
 | ++ctrl+a++ <span class="shortcut-then">then</span> <code>&#124;</code> | Split the pane horizontally |
 | ++ctrl+a++ <span class="shortcut-then">then</span> `_` | Split the pane vertically |
 | ++ctrl+a++ <span class="shortcut-then">then</span> `+` | Toggle pane zoom |
+| ++ctrl+a++ <span class="shortcut-then">then</span> `m` | Move the current window to a prompted index |
+| ++ctrl+a++ <span class="shortcut-then">then</span> `L` | Link a window from another session |
 
 ### Move around
 
@@ -150,6 +165,8 @@ Press ++ctrl+a++, release it, and then press the command key.
 | ++ctrl+a++ <span class="shortcut-then">then</span> `[` / `]` | Select the previous / next pane |
 | ++ctrl+a++ <span class="shortcut-then">then</span> `{` / `}` | Select the previous / next window |
 | ++ctrl+a++ <span class="shortcut-then">then</span> ++tab++ | Return to the most recently used window |
+| ++ctrl+a++ <span class="shortcut-then">then</span> <code>&#92;</code> | Swap the current pane with pane 1, or select pane 1 |
+| ++ctrl+a++ <span class="shortcut-then">then</span> ++ctrl+o++ | Rotate the panes downward |
 
 ### Agentic tasks
 
@@ -189,14 +206,26 @@ Option-based scrolling by line or half page.
 
 ## Neovim additions
 
-LazyVim provides most editor mappings. This repository adds only a small set:
+LazyVim provides most editor mappings. This repository overrides or adds the
+following:
 
 | Mode | Shortcut | Action |
 | --- | --- | --- |
 | <span class="shortcut-mode shortcut-mode--start">Normal</span> | `o` | Create a blank line below without staying in Insert mode |
 | <span class="shortcut-mode">Normal</span> | `O` | Create a blank line above without staying in Insert mode |
 | <span class="shortcut-mode">Normal</span> | `<leader><leader>` | Clear search highlights |
-| <span class="shortcut-mode shortcut-mode--start">Visual</span> | `>` / `<` | Indent while keeping the selection active |
+| <span class="shortcut-mode">Normal</span> | `ys` / `ds` / `cs` | Add, delete, or replace a surrounding pair |
+| <span class="shortcut-mode shortcut-mode--start">Normal and Visual</span> | `<leader>/` | Comment the current line or the selection |
+| <span class="shortcut-mode">Normal and Visual</span> | `<S-h>` / `<S-l>` | Move the line or selection left or right |
+| <span class="shortcut-mode">Normal and Visual</span> | `<S-j>` / `<S-k>` | Move the line or selection down or up |
+| <span class="shortcut-mode">Normal and Visual</span> | `gz` | Title-case the line or the selection |
+| <span class="shortcut-mode shortcut-mode--start">Normal, Operator, and Visual</span> | `w` / `b` | Step by subword, so `camelCase` and `snake_case` split into parts |
+| <span class="shortcut-mode shortcut-mode--start">Visual</span> | `>` / `<` | Indent or outdent while keeping the selection active |
+| <span class="shortcut-mode shortcut-mode--start">Insert</span> | `<C-j>` / `<C-k>` | Select the next or previous completion item |
+
+Three LazyVim defaults are removed rather than remapped: `<C-s>` for save in
+every mode, and the fzf-lua pickers on `<leader><space>` and `<leader>/`. The
+second of those keys is reused for commenting above.
 
 </section>
 
@@ -228,5 +257,7 @@ session with the `/rename` command instead.
     [`tmux.conf`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf)
 *   Neovim additions:
     [`keymaps.lua`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/nvim/lua/config/keymaps.lua)
+    and
+    [`custom.lua`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/nvim/lua/plugins/custom.lua)
 *   OpenCode keybinds and voice plugin:
     [`tui.json`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_opencode/tui.json)
