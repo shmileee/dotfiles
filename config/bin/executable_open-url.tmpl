@@ -6,17 +6,11 @@
 
 set -eu
 
-# Alacritty invokes this handler for clicked hyperlink hints (see
-# alacritty.toml). file:// URLs and absolute paths open in nvim inside a new
-# tmux window, honoring a trailing #L<line> or :<line>, respectively; every other
-# URL goes to the system opener. macOS `open` cannot handle the file:// case
-# itself: extensions without an associated application (for example .tmpl)
-# fail silently with kLSApplicationNotFoundErr.
-#
-# Alacritty is a GUI application, so this script runs with the minimal
-# launchd PATH (/usr/bin:/bin:/usr/sbin:/sbin). Instead of reconstructing a
-# shell PATH at runtime, chezmoi resolves the two non-base-system binaries
-# below at apply time, when the full interactive PATH is available.
+# Alacritty's hyperlink hint handler. macOS `open` cannot take the file:// case
+# itself: extensions without an associated application (.tmpl) fail silently
+# with kLSApplicationNotFoundErr. And Alacritty is a GUI app, so this runs with
+# the minimal launchd PATH - hence the two binaries below are resolved by
+# chezmoi at apply time rather than reconstructing a shell PATH at runtime.
 tmux_executable={{ $tmux | quote }}
 mise_executable={{ $mise | quote }}
 

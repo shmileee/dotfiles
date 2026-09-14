@@ -2,8 +2,7 @@
 # which is sourced before this file (and before the rest of conf.d).
 
 if status is-interactive
-    # Suppress the default greeting (idiomatic one-liner; the default
-    # fish_greeting function prints this variable).
+    # Suppress the default greeting.
     set -g fish_greeting
 
     if type -q bat
@@ -46,11 +45,8 @@ if status is-interactive
         fzf_configure_bindings --directory=ctrl-t
     end
 
-    # Only honored by vi-mode bindings (fish_vi_cursor); default emacs
-    # bindings never emit a cursor-shape sequence. The blinking cursor at the
-    # prompt comes from Alacritty (cursor.style.blinking = "On") and tmux
-    # (cursor-style blinking-block). Kept so vi mode, if ever enabled,
-    # matches.
+    # Only honored by vi-mode bindings (fish_vi_cursor); inert under the
+    # default emacs bindings. Kept so vi mode, if ever enabled, matches.
     set -g fish_cursor_default block blink
 end
 

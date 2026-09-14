@@ -17,10 +17,6 @@ aws_ecs() {
   aws --profile "${aws_profile}" --region "${aws_region}" ecs "$@"
 }
 
-# ---------------------------------------------------------------------------
-# Enable ECS Exec on the service and ensure it gets disabled on exit.
-# ---------------------------------------------------------------------------
-
 disable_exec() {
   local exit_status=$?
   printf '\n\033[36m│\033[0m Disabling ECS Exec on %s...\n' "${ecs_service}" >&2
@@ -49,6 +45,7 @@ exec_enabled=$(
 if [[ "${exec_enabled}" == "true" ]]; then
   printf '\033[36m│\033[0m ECS Exec already enabled.\n' >&2
 else
+  # Only registered here, so exec stays enabled if it already was on entry.
   trap disable_exec EXIT
   trap 'exit 129' HUP
   trap 'exit 130' INT
@@ -61,10 +58,6 @@ else
     --no-cli-pager > /dev/null
   printf '\033[32m✔\033[0m Enabled.\n' >&2
 fi
-
-# ---------------------------------------------------------------------------
-# Find the most recent running task with the atlantis container.
-# ---------------------------------------------------------------------------
 
 task_arns_text=$(
   aws_ecs list-tasks \
@@ -96,10 +89,6 @@ if [[ -z "${ecs_task_id}" ]]; then
   printf 'No running %s container found in cluster %s\n' "${ecs_container}" "${ecs_cluster}" >&2
   exit 1
 fi
-
-# ---------------------------------------------------------------------------
-# Connect.
-# ---------------------------------------------------------------------------
 
 printf '\033[36m│\033[0m Connecting to task %s...\n\n' "${ecs_task_id}" >&2
 

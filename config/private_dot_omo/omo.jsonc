@@ -1,16 +1,8 @@
-// OMO configuration
-//
-// Models follow OMO's built-in AGENT_MODEL_REQUIREMENTS / CATEGORY_MODEL_REQUIREMENTS
-// chains, filtered to the anthropic + openai providers. Where OMO's chain has no
-// second anthropic/openai entry (prometheus, metis, hephaestus, writing) a same-tier
-// cross-provider fallback is added so a 429/5xx is not a hard stop; hephaestus must
-// stay on a GPT model.
-//
-// multimodal-looker deviates on purpose: OMO's second openai entry there is
-// gpt-5-nano, swapped here for claude-sonnet-5(low) as the stronger vision model.
-//
-// runtime_fallback is what actually enforces the retry, and it reads these same
-// per-agent / per-category fallback_models chains.
+// Models follow OMO's built-in AGENT_MODEL_REQUIREMENTS /
+// CATEGORY_MODEL_REQUIREMENTS chains, filtered to the anthropic + openai
+// providers. Where OMO's chain has no second entry from either (prometheus,
+// metis, hephaestus, writing) a same-tier cross-provider fallback is added so
+// a 429/5xx is not a hard stop. runtime_fallback below enforces the retry.
 {
   "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/v5.0.0-beta.46/assets/omo.schema.json",
   "[opencode]": {
@@ -56,6 +48,7 @@
           { "model": "anthropic/claude-opus-5", "reasoning": "max" }
         ]
       },
+      // Must stay on a GPT model.
       "hephaestus": {
         "model": "openai/gpt-5.6-sol",
         "reasoning": "medium",
@@ -85,6 +78,8 @@
         "reasoning": "low",
         "fallback_models": [{ "model": "anthropic/claude-haiku-4-5" }]
       },
+      // Deviates from OMO on purpose: its second openai entry is gpt-5-nano,
+      // swapped for claude-sonnet-5(low) as the stronger vision model.
       "multimodal-looker": {
         "model": "openai/gpt-5.6-sol",
         "reasoning": "low",

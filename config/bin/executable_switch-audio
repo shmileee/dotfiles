@@ -1,14 +1,4 @@
 #!/usr/bin/env bash
-#
-# Requirements:
-#   - switchaudio-osx (brew install switchaudio-osx)
-#
-# Usage:
-#
-#   Switch between speakers / headphones:
-#   - switch-audio headphones
-#   - switch-audio speakers
-#
 
 set -e
 

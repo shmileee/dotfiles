@@ -1,17 +1,5 @@
 #!/usr/bin/env bash
-#
-# Requirements:
-#   - AWS CLI
-#   - Session Manager plugin
-#   - fzf
-#
-# Usage:
-#
-#   List available instances:
-#    ssm-session list
-#
-#  Connect to instance (uses fzf to provide interactive list)
-#    ssm-session start
+# Requires: aws-cli, the Session Manager plugin, fzf.
 
 set -o pipefail
 

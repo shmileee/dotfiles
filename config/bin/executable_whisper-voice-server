@@ -1,13 +1,10 @@
 #!/usr/bin/env bash
 # Local speech-to-text server for the opencode-voice plugin, started by
-# ~/Library/LaunchAgents/com.shmileee.whisper-voice-server.plist.
-#
-# The plugin's built-in whisper-cli invocation cannot pass a vocabulary;
-# whisper-server can, and the plugin can be pointed at it with sttEndpoint.
-#
-# Exit status is a restart signal, not a health report: the LaunchAgent sets
-# KeepAlive{SuccessfulExit=false}, so anything diagnosable here exits 0 to stay
-# stopped. Only whisper-server's own failures earn a restart.
+# ~/Library/LaunchAgents/com.shmileee.whisper-voice-server.plist. The plugin's
+# built-in whisper-cli cannot pass a vocabulary; whisper-server can, via
+# sttEndpoint. Exit status is a restart signal, not a health report: the
+# LaunchAgent sets KeepAlive{SuccessfulExit=false}, so anything diagnosable
+# here exits 0 to stay stopped. Only whisper-server's failures earn a restart.
 
 set -euo pipefail
 

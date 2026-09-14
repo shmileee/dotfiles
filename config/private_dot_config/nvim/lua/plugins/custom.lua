@@ -1,5 +1,5 @@
 local plugins = {
-  -- disable "bad" defaults:
+  -- disabled defaults:
   { "folke/flash.nvim", enabled = false },
   { "zbirenbaum/copilot.lua", enabled = false },
   { "CopilotC-Nvim/CopilotChat.nvim", enabled = false },
@@ -34,6 +34,7 @@ local plugins = {
       },
     },
   },
+
   -- customize defaults:
   {
     -- LazyVim already defaults to moon; pinned so the style stays explicit
@@ -62,14 +63,12 @@ local plugins = {
     },
   },
   {
-    -- custom formatter for terramate
     "stevearc/conform.nvim",
     opts = {
       formatters_by_ft = {
         terramate = { "terramate" },
       },
       formatters = {
-        -- # Example of using shfmt with extra args
         shfmt = {
           prepend_args = { "-i", "2", "-bn", "-ci", "-sr" },
         },
@@ -82,6 +81,7 @@ local plugins = {
       },
     },
   },
+
   -- custom plugins:
   {
     -- chezmoi source files: resolve target filetype (dot_*, private_*, *.tmpl)

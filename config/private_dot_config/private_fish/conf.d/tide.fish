@@ -1,47 +1,27 @@
-# Reproducible Tide prompt configuration.
-#
-# Tide stores wizard output in fish universal variables (fish_variables),
-# which chezmoi does not manage. The wizard answers are declared below as
-# `tide configure --auto` flags — the officially recommended way to sync tide
-# config in dotfiles (tide wiki: "Syncing your tide config in your dotfiles").
-# They re-apply when the flags or the tide version change (snapshot in the
-# _tide_dotfiles_config universal variable). The guard detects recipe edits
-# and tide upgrades, NOT runtime drift: a manual `tide configure` run
-# persists until the next recipe change, so don't do that — edit this file.
+# Tide keeps its wizard output in fish universal variables, which chezmoi does
+# not manage, so the answers are declared here as `tide configure --auto`
+# flags (the tide wiki's recommended way). The guard below re-applies them when
+# the flags or the tide version change, not on drift from a manual wizard run.
 
-# Globals shadow tide's universal variables — the documented override
-# mechanism (tide wiki Configuration: "set --global in your config file").
-# Deliberately set BEFORE the interactive guard: tide renders the prompt in a
-# non-interactive background worker that sources conf.d, and these must be
-# visible there. Unconditional globals also make them immune to wizard resets.
-# - fish_key_bindings: the worker only forwards fish_bind_mode; without this,
-#   _tide_item_character falls back to the vi-mode ❮ icon instead of ❯
-# - left items: no `os` item (mac icon)
-# - right items: pruned from the wizard default. `time` dropped — with the
-#   transient prompt the timestamp only shows on the current prompt, so it
-#   lost its "when did I run this" value in scrollback. Language/tool items
-#   for stacks not in use (and gcloud/node) dropped — dead weight per repaint.
-# - empty-LIST tide_git_icon drops the branch icon and its trailing space
-#   (_tide_item_git concatenates `$tide_git_icon' '` unquoted)
+# Globals shadow tide's universal variables, its documented override mechanism,
+# and must be set before the interactive guard below: tide renders the prompt
+# in a non-interactive background worker that sources conf.d.
+# fish_key_bindings: the worker only forwards fish_bind_mode, so without this
+# _tide_item_character falls back to the vi-mode ❮ icon.
+# An empty tide_git_icon LIST also drops the icon's trailing space, which
+# _tide_item_git concatenates unquoted.
 set -g fish_key_bindings fish_default_key_bindings
 set -g tide_left_prompt_items pwd git newline character
 set -g tide_right_prompt_items status cmd_duration context jobs direnv \
     python go kubectl terraform aws
 set -g tide_git_icon
 
-# Narrow terminals: drop the right prompt entirely. Tide's own width guard,
-# tide_prompt_min_cols, is read only by the one-line prompt, so the two-line
-# prompt overflows $COLUMNS unchecked — and fish then left-truncates the whole
-# line to '…', eating the pwd and branch, the half worth reading. Right-side
-# items are ambient context, so they are the ones to sacrifice.
-# _tide_right_items is tide's tool-pruned copy of tide_right_prompt_items,
-# published as a universal variable by _tide_remove_unusable_items (which runs
-# in interactive shells only). A global shadows it inside the prompt worker,
-# and the worker re-sources conf.d on every render with the live $COLUMNS, so
-# resizes apply at once (fish_prompt repaints --on-variable COLUMNS). Pruning
-# is irrelevant here because the shadowing value is empty.
-# Above the cutoff nothing is shadowed and the full right prompt returns; the
-# residual overflow from long branch names is absorbed by _tide_pwd.
+# Tide's own width guard, tide_prompt_min_cols, is read only by the one-line
+# prompt, so the two-line prompt overflows $COLUMNS unchecked and fish
+# left-truncates the whole line to '…', pwd and branch included. Shadowing
+# _tide_right_items (tide's pruned copy of tide_right_prompt_items) with an
+# empty global drops the right side instead. The worker re-sources conf.d on
+# every render with the live $COLUMNS, so resizes apply at once.
 if set -q COLUMNS[1]; and test $COLUMNS -lt 60
     set -g _tide_right_items
 end

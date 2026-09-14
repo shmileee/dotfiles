@@ -2,13 +2,9 @@
 
 set -eu
 
-# Finish an agentic task once its pull request merged. Squash-merged branches
-# look unmerged locally, so a plain `workmux remove` prompts for confirmation;
-# this verifies that a MERGED pull request exists for the branch AND that its
-# head commit matches the local branch tip (reused slugs or amended local
-# commits refuse instead of force-removing unmerged work) AND that the task
-# worktree has no uncommitted changes, then removes the worktree, tmux window,
-# and local branch. Run it inside the task's worktree, or pass the slug.
+# Finish an agentic task whose pull request merged. Squash-merged branches look
+# unmerged locally, so a plain `workmux remove` prompts; the guards below make
+# --force safe. Run inside the task's worktree, or pass the slug.
 
 fail() {
   printf '[agent-workdone] Error: %s\n' "$1" >&2
@@ -88,6 +84,7 @@ verify_clean_worktree() {
         /^worktree / { path = substr($0, 10) }
         /^branch /   { if (substr($0, 8) == branch) { print path; exit } }
       ')
+
   # No checked-out worktree for the branch means there is no working tree to
   # lose; workmux just deletes the branch.
   [ -n "$task_worktree" ] || return 0

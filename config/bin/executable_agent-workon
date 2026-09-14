@@ -2,29 +2,16 @@
 
 set -eu
 
-# Start an agentic task from a tmux popup:
-#
-#   1. Pick a mainline repository checkout from ghq with fzf.
-#   2. Ask for a task name and normalize it into a slug.
-#   3. Hand the slug to workmux: it creates <repo>-worktrees/<slug> with
-#      branch <slug> off the local origin mainline (never fetches: staleness
-#      is accepted and reconciles at PR rebase) and opens a tmux window named
-#      <slug> running opencode.
-#
+# Start an agentic task from a tmux popup: pick a ghq repo, name the task, get
+# a worktree on a branch off the local origin mainline plus a tmux window
+# running opencode. Never fetches - staleness reconciles at PR rebase.
 # Designed for `tmux display-popup -E`. The target session comes from
 # WM_PARENT_SESSION when a caller provides it, otherwise from the popup's own
-# pane context below (display-popup does not format-expand -e values, so the
-# binding cannot pass it). Picking a task that already has a worktree reopens
-# its window.
+# pane context (display-popup does not format-expand -e values).
 
-# Pin new windows to the session the popup was opened in: a display-popup
-# runs with $TMUX set and its client attached to that session. workmux's own
-# pane detection is ambiguous inside popups (it created windows in a
-# freestanding unnamed session during QA).
-# All workmux invocations pin --config to the managed global file and disable
-# hooks/file operations: a cloned third-party repository can otherwise supply
-# .workmux.yaml whose post_create/panes/files entries execute arbitrary
-# commands as this user (verified during security review).
+# Pinned --config plus --no-hooks/--no-file-ops on every workmux call: a cloned
+# third-party repository can otherwise supply .workmux.yaml whose
+# post_create/panes/files entries run arbitrary commands as this user.
 workmux_config=$HOME/.config/workmux/config.yaml
 
 fail() {
@@ -34,6 +21,7 @@ fail() {
   exit 1
 }
 
+# workmux's own pane detection is ambiguous inside popups, so pin explicitly.
 parent_session=${WM_PARENT_SESSION:-}
 if [ -z "$parent_session" ] && [ -n "${TMUX:-}" ]; then
   parent_session=$(tmux display-message -p '#S')
@@ -111,6 +99,7 @@ focus_task_window() {
 
 reopen_existing_worktree() {
   [ -d "../$repository_name-worktrees/$task_slug" ] || return 0
+
   # --continue resumes the agent's previous conversation in this worktree.
   workmux open --config "$workmux_config" --continue \
     --parent-session "$parent_session" "$task_slug"
