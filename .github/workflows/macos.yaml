@@ -7,6 +7,7 @@ on:
       - "config/**"
       - "bootstrap/**"
       - "tests/bootstrap/**"
+      - "tests/provisioned/**"
       - ".chezmoiroot"
       - "mise.toml"
       - "mise/conf.d/20-bootstrap.toml"
@@ -19,6 +20,7 @@ on:
       - "config/**"
       - "bootstrap/**"
       - "tests/bootstrap/**"
+      - "tests/provisioned/**"
       - ".chezmoiroot"
       - "mise.toml"
       - "mise/conf.d/20-bootstrap.toml"
@@ -114,26 +116,7 @@ jobs:
           mise install
           mise run lint
 
-      - name: verify managed runtime dependencies
-        run: |
-          test "$(command -v bash)" = /opt/homebrew/bin/bash
-          bash -c '(( BASH_VERSINFO[0] >= 4 ))'
-          command -v session-manager-plugin
-          test "$(git config --file "$HOME/.config/git/personal" --get commit.gpgsign)" = true
-          test "$(git config --file "$HOME/.config/git/personal" --get gpg.ssh.program)" = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
-
-      - name: verify idempotency
-        env:
-          # `brew | update` refreshes the package index, and
-          # HOMEBREW_NO_AUTO_UPDATE only suppresses the implicit refresh brew
-          # runs before other commands, never that explicit one. Left in, this
-          # second pass re-resolves `state: latest` against a newer index and
-          # reports whatever upstream published between the two passes as local
-          # drift. Skipping it pins both passes to the index the first one
-          # installed against, so this still asserts that every install and
-          # upgrade converges.
-          ANSIBLE_SKIP_TAGS: homebrew_update
+      - name: verify the provisioned machine
         run: |
           cd "$HOME/ghq/personalgit/$GITHUB_REPOSITORY"
-          mise run reconcile | tee /tmp/ansible-idempotence.log
-          grep -Eq 'changed=0 +unreachable=0 +failed=0' /tmp/ansible-idempotence.log
+          mise run test:provisioned
