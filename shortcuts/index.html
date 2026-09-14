@@ -385,6 +385,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#links-and-text" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Links and text
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -627,6 +638,17 @@
     <span class="md-ellipsis">
       <span class="md-typeset">
         Navigation and search
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#links-and-text" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Links and text
       </span>
     </span>
   </a>
@@ -919,6 +941,29 @@ does not conflict with the configured next-source binding.</p>
 </tr>
 </tbody>
 </table>
+<h3 id="links-and-text">Links and text<a class="headerlink" href="#links-and-text" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Shortcut</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-shift">Shift</kbd><span>+</span><kbd class="key-o">O</kbd></span></td>
+<td>Open a URL or path under the pointer: URLs go to the system opener, files open in a new tmux Neovim window</td>
+</tr>
+<tr>
+<td><span class="keys"><kbd class="key-command">Cmd</kbd><span>+</span><kbd class="key-shift">Shift</kbd><span>+</span><kbd class="key-p">P</kbd></span></td>
+<td>Copy a visible file path, including its line number when one is present</td>
+</tr>
+<tr>
+<td><span class="keys"><kbd class="key-shift">Shift</kbd><span>+</span><kbd class="key-enter">Enter</kbd></span></td>
+<td>Send a Shift-modified Enter that a TUI can tell apart from plain Enter</td>
+</tr>
+</tbody>
+</table>
 </section>
 <section class="shortcut-reference shortcut-filter-section" data-shortcut-section="fish">
 <h2 id="fish-shell">fish shell<a class="headerlink" href="#fish-shell" title="Permanent link">&para;</a></h2>
@@ -939,14 +984,25 @@ does not conflict with the configured next-source binding.</p>
 <td><span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-g">G</kbd></span></td>
 <td>Open the project chooser powered by fzf</td>
 </tr>
+<tr>
+<td><span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-t">T</kbd></span></td>
+<td>Open the fzf directory picker</td>
+</tr>
+<tr>
+<td><span class="keys"><kbd class="key-alt">Alt</kbd><span>+</span><kbd class="key-arrow-left">Left</kbd></span> / <span class="keys"><kbd class="key-alt">Alt</kbd><span>+</span><kbd class="key-arrow-right">Right</kbd></span></td>
+<td>Move the cursor one word backward or forward</td>
+</tr>
 </tbody>
 </table>
-<p>Some additional character bindings are keyboard-layout dependent. See the
-source file for the exact mappings used by this configuration.</p>
+<p>Alacritty sets <code>option_as_alt = "OnlyLeft"</code>, so the <span class="keys"><kbd class="key-alt">Alt</kbd></span> bindings above use
+the left Option key. fzf runs with <code>--tmux</code>, so its pickers open in a tmux popup
+whenever one is available. The fzf.fish plugin installs further pickers on its
+own default keys.</p>
 </section>
 <section class="shortcut-reference shortcut-filter-section" data-shortcut-section="tmux">
 <h2 id="tmux-prefix-commands">tmux prefix commands<a class="headerlink" href="#tmux-prefix-commands" title="Permanent link">&para;</a></h2>
-<p>Press <span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-a">A</kbd></span>, release it, and then press the command key.</p>
+<p>Press <span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-a">A</kbd></span>, release it, and then press the command key. Press <span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-a">A</kbd></span>
+twice to send a literal <span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-a">A</kbd></span> through to the program in the pane.</p>
 <div aria-label="Prefix: Control plus A, then release" class="shortcut-prefix-summary" data-search-exclude="data-search-exclude">
   <span class="shortcut-prefix-summary__label">Prefix</span>
   <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span>
@@ -985,6 +1041,14 @@ source file for the exact mappings used by this configuration.</p>
 <td><span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-a">A</kbd></span> <span class="shortcut-then">then</span> <code>+</code></td>
 <td>Toggle pane zoom</td>
 </tr>
+<tr>
+<td><span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-a">A</kbd></span> <span class="shortcut-then">then</span> <code>m</code></td>
+<td>Move the current window to a prompted index</td>
+</tr>
+<tr>
+<td><span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-a">A</kbd></span> <span class="shortcut-then">then</span> <code>L</code></td>
+<td>Link a window from another session</td>
+</tr>
 </tbody>
 </table>
 <h3 id="move-around">Move around<a class="headerlink" href="#move-around" title="Permanent link">&para;</a></h3>
@@ -1011,6 +1075,14 @@ source file for the exact mappings used by this configuration.</p>
 <tr>
 <td><span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-a">A</kbd></span> <span class="shortcut-then">then</span> <span class="keys"><kbd class="key-tab">Tab</kbd></span></td>
 <td>Return to the most recently used window</td>
+</tr>
+<tr>
+<td><span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-a">A</kbd></span> <span class="shortcut-then">then</span> <code>&#92;</code></td>
+<td>Swap the current pane with pane 1, or select pane 1</td>
+</tr>
+<tr>
+<td><span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-a">A</kbd></span> <span class="shortcut-then">then</span> <span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-o">O</kbd></span></td>
+<td>Rotate the panes downward</td>
 </tr>
 </tbody>
 </table>
@@ -1108,7 +1180,8 @@ Option-based scrolling by line or half page.</p>
 </section>
 <section class="shortcut-reference shortcut-filter-section" data-shortcut-section="neovim">
 <h2 id="neovim-additions">Neovim additions<a class="headerlink" href="#neovim-additions" title="Permanent link">&para;</a></h2>
-<p>LazyVim provides most editor mappings. This repository adds only a small set:</p>
+<p>LazyVim provides most editor mappings. This repository overrides or adds the
+following:</p>
 <table>
 <thead>
 <tr>
@@ -1134,12 +1207,50 @@ Option-based scrolling by line or half page.</p>
 <td>Clear search highlights</td>
 </tr>
 <tr>
+<td><span class="shortcut-mode">Normal</span></td>
+<td><code>ys</code> / <code>ds</code> / <code>cs</code></td>
+<td>Add, delete, or replace a surrounding pair</td>
+</tr>
+<tr>
+<td><span class="shortcut-mode shortcut-mode--start">Normal and Visual</span></td>
+<td><code>&lt;leader&gt;/</code></td>
+<td>Comment the current line or the selection</td>
+</tr>
+<tr>
+<td><span class="shortcut-mode">Normal and Visual</span></td>
+<td><code>&lt;S-h&gt;</code> / <code>&lt;S-l&gt;</code></td>
+<td>Move the line or selection left or right</td>
+</tr>
+<tr>
+<td><span class="shortcut-mode">Normal and Visual</span></td>
+<td><code>&lt;S-j&gt;</code> / <code>&lt;S-k&gt;</code></td>
+<td>Move the line or selection down or up</td>
+</tr>
+<tr>
+<td><span class="shortcut-mode">Normal and Visual</span></td>
+<td><code>gz</code></td>
+<td>Title-case the line or the selection</td>
+</tr>
+<tr>
+<td><span class="shortcut-mode shortcut-mode--start">Normal, Operator, and Visual</span></td>
+<td><code>w</code> / <code>b</code></td>
+<td>Step by subword, so <code>camelCase</code> and <code>snake_case</code> split into parts</td>
+</tr>
+<tr>
 <td><span class="shortcut-mode shortcut-mode--start">Visual</span></td>
 <td><code>&gt;</code> / <code>&lt;</code></td>
-<td>Indent while keeping the selection active</td>
+<td>Indent or outdent while keeping the selection active</td>
+</tr>
+<tr>
+<td><span class="shortcut-mode shortcut-mode--start">Insert</span></td>
+<td><code>&lt;C-j&gt;</code> / <code>&lt;C-k&gt;</code></td>
+<td>Select the next or previous completion item</td>
 </tr>
 </tbody>
 </table>
+<p>Three LazyVim defaults are removed rather than remapped: <code>&lt;C-s&gt;</code> for save in
+every mode, and the fzf-lua pickers on <code>&lt;leader&gt;&lt;space&gt;</code> and <code>&lt;leader&gt;/</code>. The
+second of those keys is reused for commenting above.</p>
 </section>
 <section class="shortcut-reference shortcut-filter-section" data-shortcut-section="opencode">
 <h2 id="opencode">OpenCode<a class="headerlink" href="#opencode" title="Permanent link">&para;</a></h2>
@@ -1173,7 +1284,9 @@ session with the <code>/rename</code> command instead.</p>
 <li>tmux shortcuts:
     <a href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf"><code>tmux.conf</code></a></li>
 <li>Neovim additions:
-    <a href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/nvim/lua/config/keymaps.lua"><code>keymaps.lua</code></a></li>
+    <a href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/nvim/lua/config/keymaps.lua"><code>keymaps.lua</code></a>
+    and
+    <a href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/nvim/lua/plugins/custom.lua"><code>custom.lua</code></a></li>
 <li>OpenCode keybinds and voice plugin:
     <a href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_opencode/tui.json"><code>tui.json</code></a></li>
 </ul>
@@ -1311,7 +1424,7 @@ session with the <code>/rename</code> command instead.</p>
       
         <script src="../assets/javascripts/syntax-highlight.js?v=ad3a4f135b38"></script>
       
-        <script src="../assets/javascripts/site-shell.js?v=704c7655ce92"></script>
+        <script src="../assets/javascripts/site-shell.js?v=e21d5e4d96a3"></script>
       
     
   </body>

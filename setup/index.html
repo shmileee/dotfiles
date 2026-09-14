@@ -896,22 +896,23 @@ and the files under
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">macOS</label><label for="__tabbed_1_2">Ubuntu</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<p>Install available system updates and the Xcode Command Line Tools on a
-fresh machine:</p>
+<p>Setup requires the Xcode Command Line Tools and stops if they are missing.
+Install available system updates and the tools before the first run:</p>
 <div class="language-bash highlight"><pre><span></span><code>sudo<span class="w"> </span>softwareupdate<span class="w"> </span>-i<span class="w"> </span>-a
 xcode-select<span class="w"> </span>--install
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<p>Use Ubuntu with a non-root account authorized to use the installed <code>sudo</code>
-command. The base installation must provide a POSIX shell, <code>curl</code>, <code>tar</code>,
-and standard shell utilities. Ansible installs Git, native apt
+<p>Use Ubuntu on ARM64 with a non-root account authorized to use the installed
+<code>sudo</code> command. The base installation must provide a POSIX shell, <code>curl</code>,
+<code>tar</code>, <code>sed</code>, and standard shell utilities. Ansible installs Git, native apt
 prerequisites, and Homebrew.</p>
 </div>
 </div>
 </div>
-<p>Apple Silicon macOS and Ubuntu are the supported targets. Setup validates the
-operating system before downloading sources or requesting elevated privileges.</p>
+<p>Apple Silicon macOS and Ubuntu ARM64 are the supported targets; setup rejects
+Intel macOS and x86-64 Ubuntu. It validates the operating system and
+architecture before downloading sources or requesting elevated privileges.</p>
 <h2 id="recommended-review-then-run">Recommended: review, then run<a class="headerlink" href="#recommended-review-then-run" title="Permanent link">&para;</a></h2>
 <p>Clone the repository so you can inspect exactly what the setup will run. Pay
 particular attention to
@@ -1288,6 +1289,8 @@ and verifies that setup completes on Ubuntu.</p>
 mise<span class="w"> </span>run<span class="w"> </span>ansible:validate-runtime
 mise<span class="w"> </span>run<span class="w"> </span>test:docker
 mise<span class="w"> </span>run<span class="w"> </span>test:bats
+mise<span class="w"> </span>run<span class="w"> </span>test:fish
+mise<span class="w"> </span>run<span class="w"> </span>test:unit
 mise<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--<span class="w"> </span>prek<span class="w"> </span>install<span class="w"> </span>--force
 mise<span class="w"> </span>run<span class="w"> </span>lint
 mise<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--<span class="w"> </span>env<span class="w"> </span><span class="se">\</span>
@@ -1436,7 +1439,7 @@ machine or to the user's configuration.</p>
       
         <script src="../assets/javascripts/syntax-highlight.js?v=ad3a4f135b38"></script>
       
-        <script src="../assets/javascripts/site-shell.js?v=704c7655ce92"></script>
+        <script src="../assets/javascripts/site-shell.js?v=e21d5e4d96a3"></script>
       
     
   </body>

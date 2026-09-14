@@ -854,7 +854,12 @@
   <article>
     <span>OpenCode TUI</span>
     <a class="repo-path" href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_opencode/tui.json" aria-label="Open the managed OpenCode TUI configuration on GitHub"><code class="path-token">~/.config/<wbr>opencode/<wbr>tui.json</code></a>
-    <p>Theme, keybinds, and the client-side plugins including voice dictation.</p>
+    <p>Keybinds, the managed <code>tokyonight-transparent</code> theme, and the client-side plugins including voice dictation.</p>
+  </article>
+  <article>
+    <span>Agent rules</span>
+    <a class="repo-path" href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_opencode/AGENTS.md" aria-label="Open the managed OpenCode agent instructions on GitHub"><code class="path-token">~/.config/<wbr>opencode/<wbr>AGENTS.md</code></a>
+    <p>Instructions applied to every session, including the mise and <code>gh</code> rules.</p>
   </article>
 </div>
 
@@ -886,6 +891,9 @@ install<span class="w"> </span>-m<span class="w"> </span><span class="m">600</sp
 <p>Edit each file and store only its value. OpenCode resolves the <code>{file:...}</code>
 references when it loads the configuration; chezmoi never reads or copies the
 secret contents.</p>
+<p>The <code>home-assistant</code> server ships with <code>"enabled": false</code>, so populating the
+files does not switch it on by itself. Enable it in the managed configuration or
+in a corporate overlay once the values are in place.</p>
 <div class="admonition warning">
 <p class="admonition-title">The files start empty</p>
 <p>The <code>install</code> commands create secure placeholders. Populate them before
@@ -1205,7 +1213,7 @@ one, and stopping it is a one-time fix:</p>
       
         <script src="../assets/javascripts/syntax-highlight.js?v=ad3a4f135b38"></script>
       
-        <script src="../assets/javascripts/site-shell.js?v=704c7655ce92"></script>
+        <script src="../assets/javascripts/site-shell.js?v=e21d5e4d96a3"></script>
       
     
   </body>
