@@ -119,11 +119,11 @@ from this checkout and preserves all durable Ansible changes if a task fails.
 ## Fast path: bootstrap a new machine
 
 ```bash
-curl -fsSL https://oponomarov.com/d | sh
+curl -fsSL https://dotfiles.oponomarov.com/d | sh
 ```
 
-`https://oponomarov.com/d` is the author's convenience redirect for installing
-this repository on a fresh, trusted workstation. It redirects to
+`https://dotfiles.oponomarov.com/d` is the author's convenience redirect for
+installing this repository on a fresh, trusted workstation. It redirects to
 [`bootstrap/setup.sh`](https://github.com/shmileee/dotfiles/blob/master/bootstrap/setup.sh)
 on the configured mutable branch. The POSIX loader stages that branch in a
 private temporary workspace, downloads the pinned uv controller, and hands all
@@ -132,7 +132,8 @@ ordinary exit; uv's normal download cache is retained.
 
 The command above keeps certificate verification enabled. A minimal Ubuntu
 base without a CA bundle cannot validate even this first HTTPS request; only on
-that base, fetch the loader with `curl -kfsSL https://oponomarov.com/d | sh`.
+that base, fetch the loader with
+`curl -kfsSL https://dotfiles.oponomarov.com/d | sh`.
 The loader detects the missing bundle and limits disabled verification to its
 remaining pre-controller curl downloads and the pre-Ansible Galaxy collection
 install. uv verifies the locked Python environment with its own trusted roots.

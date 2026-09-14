@@ -6,7 +6,7 @@ set -eu
 # checkout path and repository URL used by bootstrap is derived from them.
 repository_slug=shmileee/dotfiles
 repository_ref=master
-bootstrap_url=https://oponomarov.com/d
+bootstrap_url=https://dotfiles.oponomarov.com/d
 repository_url=https://github.com/$repository_slug.git
 repository_archive_url=https://github.com/$repository_slug/archive/refs/heads/$repository_ref.tar.gz
 # renovate: datasource=github-releases depName=astral-sh/uv
