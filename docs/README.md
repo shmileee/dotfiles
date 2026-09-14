@@ -3,7 +3,7 @@
 Fully automated development environment. Read the full documentation
 [here](https://dotfiles.oponomarov.com).
 
-Supported targets are Apple Silicon macOS and Ubuntu workstations.
+Supported targets are Apple Silicon macOS and Ubuntu ARM64 workstations.
 Setup reconciles declared state; upgrades are allowed to occur through Homebrew
 and each tool's native update workflow.
 

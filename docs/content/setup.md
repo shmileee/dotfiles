@@ -70,8 +70,8 @@ and the files under
 
 === "macOS"
 
-    Install available system updates and the Xcode Command Line Tools on a
-    fresh machine:
+    Setup requires the Xcode Command Line Tools and stops if they are missing.
+    Install available system updates and the tools before the first run:
 
     ```bash
     sudo softwareupdate -i -a
@@ -80,13 +80,14 @@ and the files under
 
 === "Ubuntu"
 
-    Use Ubuntu with a non-root account authorized to use the installed `sudo`
-    command. The base installation must provide a POSIX shell, `curl`, `tar`,
-    and standard shell utilities. Ansible installs Git, native apt
+    Use Ubuntu on ARM64 with a non-root account authorized to use the installed
+    `sudo` command. The base installation must provide a POSIX shell, `curl`,
+    `tar`, `sed`, and standard shell utilities. Ansible installs Git, native apt
     prerequisites, and Homebrew.
 
-Apple Silicon macOS and Ubuntu are the supported targets. Setup validates the
-operating system before downloading sources or requesting elevated privileges.
+Apple Silicon macOS and Ubuntu ARM64 are the supported targets; setup rejects
+Intel macOS and x86-64 Ubuntu. It validates the operating system and
+architecture before downloading sources or requesting elevated privileges.
 
 ## Recommended: review, then run
 

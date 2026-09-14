@@ -15,13 +15,13 @@ hide:
 <section class="docs-hero docs-hero--home" markdown>
   <p class="section-eyebrow">Personal workstation · documented publicly</p>
   <h1>A workstation I can rebuild.<span class="hero-cursor" aria-hidden="true"></span></h1>
-  <p class="hero-copy">This repository rebuilds my workstation on Apple Silicon macOS and Ubuntu. Ansible, the automation engine, configures the system; chezmoi, the dotfile manager, puts the files in place.</p>
+  <p class="hero-copy">This repository rebuilds my workstation on Apple Silicon macOS and Ubuntu ARM64. Ansible, the automation engine, configures the system; chezmoi, the dotfile manager, puts the files in place.</p>
   <div class="hero-actions">
     <a class="primary-link" href="/setup/">Read the setup guide →</a>
     <a class="secondary-link" href="https://github.com/shmileee/dotfiles">Browse the repository ↗</a>
   </div>
   <dl class="hero-signals">
-    <div><dt>Targets</dt><dd>macOS + Ubuntu</dd></div>
+    <div><dt>Targets</dt><dd>macOS + Ubuntu (ARM64)</dd></div>
     <div><dt>Automation</dt><dd>Ansible</dd></div>
     <div><dt>Dotfiles</dt><dd>chezmoi</dd></div>
   </dl>
@@ -101,7 +101,7 @@ applies dotfiles with `--force`, and modifies macOS preferences.
 
 <aside class="home-validation">
   <strong>Supported platforms</strong>
-  <p>Apple Silicon macOS and Ubuntu.</p>
+  <p>Apple Silicon macOS and Ubuntu ARM64.</p>
 </aside>
 
 ## Choose what you need
