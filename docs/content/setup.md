@@ -4,9 +4,9 @@ description: Review, install, customize, and reapply the workstation configurati
 editUrl: https://github.com/shmileee/dotfiles/edit/master/docs/content/setup.md
 ---
 
-<p class="page-lead">Use the review-first path for an existing machine. The one-line installer is intended for a new machine or for a configuration you already trust.</p>
+<p>Use the review-first path for an existing machine. The one-line installer is intended for a new machine or for a configuration you already trust.</p>
 
-<nav class="setup-paths" aria-label="Choose an installation path" data-mobile-toc-anchor>
+<nav class="surface-grid" aria-label="Choose an installation path">
   <a href="#recommended-review-then-run">
     <span>Existing or customized machine</span>
     <strong>Review first</strong>
@@ -58,8 +58,8 @@ and the files under
 
 ### Platform requirements
 
-<div class="docs-tabs">
-<section class="docs-tab" data-tab-label="macOS">
+<div class="tabs">
+<section class="tab" data-tab-label="macOS">
 <h3>macOS</h3>
 
 Setup requires the Xcode Command Line Tools and stops if they are missing.
@@ -71,7 +71,7 @@ xcode-select --install
 ```
 
 </section>
-<section class="docs-tab" data-tab-label="Ubuntu">
+<section class="tab" data-tab-label="Ubuntu">
 <h3>Ubuntu</h3>
 
 Use Ubuntu on ARM64 with a non-root account authorized to use the installed
@@ -142,7 +142,7 @@ and every later download use normal certificate verification. macOS and Ubuntu
 systems with an existing CA bundle never disable verification. No persistent
 insecure setting is written.
 
-<details class="download-disclosure">
+<details class="disclosure">
 <summary>Review the installer first</summary>
 
 If you want the convenience of the bootstrap without piping directly into
@@ -159,7 +159,7 @@ chmod +x setup.sh
 
 ## What setup does
 
-<ol class="install-flow">
+<ol class="steps">
   <li>
     <span>01</span>
     <div>
@@ -219,7 +219,7 @@ the installed mise environment needs to be recovered.
 
 Make changes in four places:
 
-<div class="setup-reference setup-reference--three">
+<div class="setup-reference">
 
 | Area | Source of truth | Typical changes |
 | --- | --- | --- |

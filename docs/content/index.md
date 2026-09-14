@@ -5,7 +5,7 @@ template: splash
 editUrl: https://github.com/shmileee/dotfiles/edit/master/docs/content/index.md
 ---
 
-<section class="docs-hero docs-hero--home experience-hero">
+<section class="hero">
   <h1>A workstation I can rebuild.<span class="hero-cursor" aria-hidden="true"></span></h1>
   <p class="hero-copy">This repository rebuilds my workstation on Apple Silicon macOS and Ubuntu ARM64. Ansible, the automation engine, configures the system; chezmoi, the dotfile manager, puts the files in place.</p>
   <div class="hero-actions">
@@ -38,26 +38,37 @@ editUrl: https://github.com/shmileee/dotfiles/edit/master/docs/content/index.md
 </dialog>
 </section>
 
-<section class="home-overview">
-<div class="home-overview__summary">
-<h2 id="what-it-builds">What it builds<a class="headerlink" href="#what-it-builds" aria-label="Permanent link" data-pagefind-ignore>¶</a></h2>
-<p>The result is an opinionated terminal-first environment built around fish, tmux, Alacritty, Neovim, mise, Git tools, and a curated set of command-line utilities. On macOS, it also installs desktop applications and applies personal system defaults.</p>
+<section class="surface-grid">
+<div>
+
+## What it builds
+
+The result is an opinionated terminal-first environment built around fish,
+tmux, Alacritty, Neovim, mise, Git tools, and a curated set of command-line
+utilities. On macOS, it also installs desktop applications and applies personal
+system defaults.
+
 </div>
-<aside class="home-caution">
-<h3 id="before-you-run-it">Before you run it<a class="headerlink" href="#before-you-run-it" aria-label="Permanent link" data-pagefind-ignore>¶</a></h3>
-<p>This is a personal configuration. The playbook changes the login shell, applies dotfiles with <code>--force</code>, and modifies macOS preferences.</p>
-<p><a href="/dotfiles/setup/">Review the setup guide first →</a></p>
+<aside>
+
+### Before you run it
+
+This is a personal configuration. The playbook changes the login shell, applies
+dotfiles with `--force`, and modifies macOS preferences.
+
+[Review the setup guide first →](/dotfiles/setup/)
+
 </aside>
 </section>
 
 ## How the pieces fit together
 
-<ol class="install-flow">
+<ol class="steps">
   <li>
     <span>01</span>
     <div>
       <strong>Bootstrap</strong>
-      <p>The POSIX <a class="repo-path" href="https://github.com/shmileee/dotfiles/blob/master/bootstrap/setup.sh"><code>bootstrap/setup.sh</code></a> validates the platform and starts a disposable, repository-locked Ansible controller.</p>
+      <p>The POSIX <a class="path-token" href="https://github.com/shmileee/dotfiles/blob/master/bootstrap/setup.sh"><code>bootstrap/setup.sh</code></a> validates the platform and starts a disposable, repository-locked Ansible controller.</p>
     </div>
   </li>
   <li>
@@ -83,14 +94,14 @@ editUrl: https://github.com/shmileee/dotfiles/edit/master/docs/content/index.md
   </li>
 </ol>
 
-<aside class="home-validation">
+<aside>
   <strong>Supported platforms</strong>
   <p>Apple Silicon macOS and Ubuntu ARM64.</p>
 </aside>
 
 ## Choose what you need
 
-<div class="doc-card-grid">
+<div class="surface-grid">
   <a href="/dotfiles/setup/">
     <span>01 · Start here</span>
     <strong>Set up or customize a machine</strong>
@@ -110,7 +121,7 @@ editUrl: https://github.com/shmileee/dotfiles/edit/master/docs/content/index.md
 
 ## Design principles
 
-<dl class="principle-grid">
+<dl class="surface-grid">
   <div><dt>Repeatable over clever</dt><dd>Repeated runs should converge on the same state.</dd></div>
   <div><dt>Visible over magical</dt><dd>Package lists, roles, and managed files stay in the repository.</dd></div>
   <div><dt>Portable where practical</dt><dd>Shared behavior works on macOS and Ubuntu; platform-specific changes stay explicit.</dd></div>

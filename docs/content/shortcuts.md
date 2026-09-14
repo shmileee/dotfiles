@@ -4,9 +4,9 @@ description: Keyboard shortcuts configured for macOS, Alacritty, fish, tmux, Neo
 editUrl: https://github.com/shmileee/dotfiles/edit/master/docs/content/shortcuts.md
 ---
 
-<p class="page-lead">Choose the layer where the shortcut runs. Alacritty, the terminal application, sends many macOS-style shortcuts directly to tmux; fish adds command-line bindings; tmux commands use <kbd>Ctrl</kbd> + <kbd>A</kbd> as their prefix.</p>
+<p>Choose the layer where the shortcut runs. Alacritty, the terminal application, sends many macOS-style shortcuts directly to tmux; fish adds command-line bindings; tmux commands use <kbd>Ctrl</kbd> + <kbd>A</kbd> as their prefix.</p>
 
-<div class="shortcut-filter" role="search" data-shortcut-filter data-mobile-toc-anchor>
+<div class="shortcut-filter" role="search" data-shortcut-filter>
   <label for="shortcut-query">Find a shortcut</label>
   <div class="shortcut-filter__search">
     <input id="shortcut-query" type="search" inputmode="search" autocomplete="off" placeholder="Search keys or actions" data-shortcut-query>

@@ -4,7 +4,7 @@ description: Local secrets, model routing, corporate overlays, contextual notifi
 editUrl: https://github.com/shmileee/dotfiles/edit/master/docs/content/opencode.md
 ---
 
-<p class="page-lead" data-mobile-toc-anchor>chezmoi, the dotfile manager, manages the shared OpenCode configuration, Oh My OpenAgent routing, fish integration, and tmux notification plumbing. Secrets and company-specific endpoints stay local.</p>
+<p>chezmoi, the dotfile manager, manages the shared OpenCode configuration, Oh My OpenAgent routing, fish integration, and tmux notification plumbing. Secrets and company-specific endpoints stay local.</p>
 
 <section class="context-help-source" hidden data-search-exclude data-pagefind-ignore>
 <button class="context-help-trigger" type="button" aria-label="Open quick context" aria-controls="context-help" aria-haspopup="dialog" title="Quick context" data-context-open data-context-ui><span aria-hidden="true">?</span></button>
@@ -32,32 +32,32 @@ editUrl: https://github.com/shmileee/dotfiles/edit/master/docs/content/opencode.
 <div class="surface-grid">
   <article>
     <span>OpenCode</span>
-    <a class="repo-path" href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_opencode/opencode.json" aria-label="Open the managed OpenCode configuration on GitHub"><code class="path-token">~/.config/<wbr>opencode/<wbr>opencode.json</code></a>
+    <a class="path-token" href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_opencode/opencode.json" aria-label="Open the managed OpenCode configuration on GitHub"><code class="path-token">~/.config/<wbr>opencode/<wbr>opencode.json</code></a>
     <p>Plugins, formatters, language servers, and personal MCP configuration.</p>
   </article>
   <article>
     <span>OmO</span>
-    <a class="repo-path" href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_omo/omo.jsonc" aria-label="Open the managed OmO configuration on GitHub"><code class="path-token">~/.omo/<wbr>omo.jsonc</code></a>
+    <a class="path-token" href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_omo/omo.jsonc" aria-label="Open the managed OmO configuration on GitHub"><code class="path-token">~/.omo/<wbr>omo.jsonc</code></a>
     <p>Agent categories, model choices, fallbacks, and disabled hooks.</p>
   </article>
   <article>
     <span>fish</span>
-    <a class="repo-path" href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_fish/conf.d/opencode.fish" aria-label="Open the managed fish configuration on GitHub"><code class="path-token">~/.config/<wbr>fish/<wbr>conf.d/<wbr>opencode.fish</code></a>
+    <a class="path-token" href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_fish/conf.d/opencode.fish" aria-label="Open the managed fish configuration on GitHub"><code class="path-token">~/.config/<wbr>fish/<wbr>conf.d/<wbr>opencode.fish</code></a>
     <p>Activates the optional corporate configuration.</p>
   </article>
   <article>
     <span>tmux</span>
-    <a class="repo-path" href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf" aria-label="Open the managed tmux configuration on GitHub"><code class="path-token">~/.config/<wbr>tmux/<wbr>tmux.conf</code></a>
+    <a class="path-token" href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_tmux/tmux.conf" aria-label="Open the managed tmux configuration on GitHub"><code class="path-token">~/.config/<wbr>tmux/<wbr>tmux.conf</code></a>
     <p>Installs the contextual-notifier companion plugin.</p>
   </article>
   <article>
     <span>OpenCode TUI</span>
-    <a class="repo-path" href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_opencode/tui.json" aria-label="Open the managed OpenCode TUI configuration on GitHub"><code class="path-token">~/.config/<wbr>opencode/<wbr>tui.json</code></a>
+    <a class="path-token" href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_opencode/tui.json" aria-label="Open the managed OpenCode TUI configuration on GitHub"><code class="path-token">~/.config/<wbr>opencode/<wbr>tui.json</code></a>
     <p>Keybinds, the managed <code>tokyonight-transparent</code> theme, and the client-side plugins including voice dictation.</p>
   </article>
   <article>
     <span>Agent rules</span>
-    <a class="repo-path" href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_opencode/AGENTS.md" aria-label="Open the managed OpenCode agent instructions on GitHub"><code class="path-token">~/.config/<wbr>opencode/<wbr>AGENTS.md</code></a>
+    <a class="path-token" href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_opencode/AGENTS.md" aria-label="Open the managed OpenCode agent instructions on GitHub"><code class="path-token">~/.config/<wbr>opencode/<wbr>AGENTS.md</code></a>
     <p>Instructions applied to every session, including the mise and <code>gh</code> rules.</p>
   </article>
 </div>
@@ -219,12 +219,12 @@ reviewable here instead of being whatever the Homebrew formula ships. Nothing
 in this repository starts `brew services`, so a machine that had the Homebrew
 `ollama` service running needs it stopped once by hand—it binds the same port.
 
-<div class="setup-reference setup-reference--wrap">
+<div class="setup-reference">
 
 | Managed service | Role |
 | --- | --- |
-| `Library/LaunchAgents/com.shmileee.whisper-voice-server.plist` | Keeps whisper.cpp running and owns `~/Library/Logs/whisper-voice-server.log`. |
-| `Library/LaunchAgents/com.shmileee.ollama.plist` | Keeps `ollama serve` bound to loopback and owns `~/Library/Logs/ollama.log`. |
+| `com.shmileee.whisper-voice-server.plist` | Keeps whisper.cpp running and owns `~/Library/Logs/whisper-voice-server.log`. |
+| `com.shmileee.ollama.plist` | Keeps `ollama serve` bound to loopback and owns `~/Library/Logs/ollama.log`. |
 
 </div>
 
@@ -250,12 +250,11 @@ The two text files reload differently:
 
 ## Deliberately unmanaged
 
-<div class="boundary-list">
-  <div><code>opencode.corp.json</code><span>Company-specific configuration</span></div>
-  <div><code>opencode/secrets/</code><span>Credentials and private endpoints</span></div>
-  <div><strong>Runtime files</strong><span>Caches, backups, lockfiles, and dependency directories</span></div>
-  <div><strong>Voice models</strong><span>The whisper weights and ollama blobs installed by <code>voice:setup</code></span></div>
-</div>
+*   `opencode.corp.json` — company-specific configuration.
+*   `opencode/secrets/` — credentials and private endpoints.
+*   **Runtime files** — caches, backups, lockfiles, and dependency directories.
+*   **Voice models** — the whisper weights and ollama blobs installed by
+    `voice:setup`.
 
 ## Troubleshooting
 
@@ -293,7 +292,8 @@ and reload tmux configuration with
 Check that the transcription service is loaded, running, and answering:
 
 ```bash
-launchctl print "gui/$(id -u)/com.shmileee.whisper-voice-server" | grep 'state ='
+launchctl print "gui/$(id -u)/com.shmileee.whisper-voice-server" \
+  | grep 'state ='
 curl -s http://127.0.0.1:8081/health
 ```
 
@@ -322,7 +322,11 @@ launchctl print "gui/$(id -u)/com.shmileee.ollama" | grep 'state ='
 ollama list | grep voice-normalize
 curl -s http://127.0.0.1:11434/v1/chat/completions \
   -H 'Content-Type: application/json' \
-  -d '{"model":"voice-normalize","max_tokens":16,"messages":[{"role":"user","content":"ping"}]}'
+  -d '{
+        "model": "voice-normalize",
+        "max_tokens": 16,
+        "messages": [{"role": "user", "content": "ping"}]
+      }'
 ```
 
 `mise run voice:setup` runs the same probe and rebuilds the model from its
