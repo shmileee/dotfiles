@@ -62,7 +62,12 @@ hide:
   <article>
     <span>OpenCode TUI</span>
     <a class="repo-path" href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_opencode/tui.json" aria-label="Open the managed OpenCode TUI configuration on GitHub"><code class="path-token">~/.config/<wbr>opencode/<wbr>tui.json</code></a>
-    <p>Theme, keybinds, and the client-side plugins including voice dictation.</p>
+    <p>Keybinds, the managed <code>tokyonight-transparent</code> theme, and the client-side plugins including voice dictation.</p>
+  </article>
+  <article>
+    <span>Agent rules</span>
+    <a class="repo-path" href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_opencode/AGENTS.md" aria-label="Open the managed OpenCode agent instructions on GitHub"><code class="path-token">~/.config/<wbr>opencode/<wbr>AGENTS.md</code></a>
+    <p>Instructions applied to every session, including the mise and <code>gh</code> rules.</p>
   </article>
 </div>
 
@@ -99,6 +104,10 @@ install -m 600 /dev/null "$HOME/.config/opencode/secrets/home-assistant-access-t
 Edit each file and store only its value. OpenCode resolves the `{file:...}`
 references when it loads the configuration; chezmoi never reads or copies the
 secret contents.
+
+The `home-assistant` server ships with `"enabled": false`, so populating the
+files does not switch it on by itself. Enable it in the managed configuration or
+in a corporate overlay once the values are in place.
 
 !!! warning "The files start empty"
 
