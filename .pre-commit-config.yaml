@@ -42,7 +42,7 @@ repos:
         name: lint and format web files with biome
         entry: biome check --write --no-errors-on-unmatched
         language: system
-        files: \.(css|js|json|jsonc)$
+        files: \.(css|jsonc?|m?[jt]sx?|c[jt]s)$
       - id: ruff-check
         name: lint python with ruff
         entry: ruff check --config .github/ruff.toml

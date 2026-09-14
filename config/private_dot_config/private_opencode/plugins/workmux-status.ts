@@ -21,7 +21,10 @@ export const WorkmuxStatusPlugin: Plugin = async ({ $ }) => {
   let statusQueue = Promise.resolve();
 
   function writeStatus(status: string) {
-    return $`workmux set-window-status ${status}`.quiet().then(() => {}, () => {});
+    return $`workmux set-window-status ${status}`.quiet().then(
+      () => {},
+      () => {},
+    );
   }
 
   function queueStatus(status: string) {
@@ -50,10 +53,7 @@ export const WorkmuxStatusPlugin: Plugin = async ({ $ }) => {
     await queueStatus(status);
   }
 
-  async function setStatus(
-    sessionID: string | undefined,
-    status: string,
-  ) {
+  async function setStatus(sessionID: string | undefined, status: string) {
     if (!sessionID || deletedSessions.has(sessionID)) {
       return;
     }
@@ -83,7 +83,10 @@ export const WorkmuxStatusPlugin: Plugin = async ({ $ }) => {
 
   return {
     event: async ({ event }) => {
-      if (event.type === 'message.updated' && event.properties.info.role === 'user') {
+      if (
+        event.type === 'message.updated' &&
+        event.properties.info.role === 'user'
+      ) {
         acceptBusyBySession.set(event.properties.sessionID, true);
       }
 
