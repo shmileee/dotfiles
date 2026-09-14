@@ -1,4 +1,4 @@
-name: Notify engine
+name: notify engine
 
 on:
   push:
