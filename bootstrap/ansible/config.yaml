@@ -55,7 +55,6 @@ brew:
       - ghq
       - git
       - git-delta
-      - git-lfs
       - jaq
       - lazygit
       - mise

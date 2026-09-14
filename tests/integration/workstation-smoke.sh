@@ -23,7 +23,7 @@ docker run --rm --entrypoint /bin/bash "$image" -lc '
   test -z "$(git config --local --get remote.origin.promisor || true)"
 
   printf "%s\n" "SMOKE phase=executables"
-  for executable in bash brew chezmoi fish git-lfs mise tmux xclip; do
+  for executable in bash brew chezmoi fish mise tmux xclip; do
     command -v "$executable" >/dev/null
   done
   bash -c "(( BASH_VERSINFO[0] >= 4 ))"
