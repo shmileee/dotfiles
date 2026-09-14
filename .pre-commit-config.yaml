@@ -40,8 +40,7 @@ repos:
         pass_filenames: false
       - id: biome
         name: lint and format web files with biome
-        entry: biome check --config-path .github/biome.json --vcs-root .
-          --write --no-errors-on-unmatched
+        entry: biome check --write --no-errors-on-unmatched
         language: system
         files: \.(css|js|json|jsonc)$
       - id: ruff-check
