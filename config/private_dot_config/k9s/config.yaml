@@ -10,6 +10,3 @@ k9s:
     reactive: true
     # TokyoNight (moon), see skins/tokyonight_moon.yaml
     skin: tokyonight_moon
-  logger:
-    # fetch last 5m of logs instead of full history (press 0 in log view for all)
-    sinceSeconds: 300
