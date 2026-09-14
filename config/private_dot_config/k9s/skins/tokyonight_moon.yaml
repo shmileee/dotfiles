@@ -7,7 +7,6 @@ background: &background default
 current_line: &current_line "#2d3f76"
 comment: &comment "#636da6"
 fg_dark: &fg_dark "#828bb8"
-border: &border "#3b4261"
 border_focus: &border_focus "#589ed7"
 blue: &blue "#82aaff"
 cyan: &cyan "#86e1fc"
@@ -27,9 +26,15 @@ k9s:
     fgColor: *foreground
     bgColor: *background
     suggestColor: *orange
+    border:
+      command: *cyan
+      default: *comment
   info:
     fgColor: *magenta
     sectionColor: *foreground
+    cpuColor: *green
+    memColor: *cyan
+    k9sRevColor: *blue
   help:
     fgColor: *foreground
     bgColor: *background
@@ -47,20 +52,26 @@ k9s:
     fieldFgColor: *foreground
   frame:
     border:
-      fgColor: *border
+      # box outlines are non-text UI, so they only need WCAG's 3:1; the
+      # tokyonight gutter (#3b4261) manages 1.56:1 here and vanishes.
+      fgColor: *comment
       focusColor: *border_focus
     menu:
       fgColor: *foreground
       keyColor: *magenta
       numKeyColor: *magenta
     crumbs:
-      fgColor: *foreground
-      bgColor: *current_line
+      # k9s shares one fgColor across every crumb and only swaps the last
+      # one's background to activeColor (internal/ui/crumbs.go, refresh), so
+      # both backgrounds have to stay light enough for *black text.
+      fgColor: *black
+      bgColor: *fg_dark
       activeColor: *orange
     status:
       newColor: *cyan
       modifyColor: *blue
       addColor: *green
+      pendingColor: *yellow
       errorColor: *red
       highlightColor: *orange
       # these two double as the selected-row background (see table below), so
@@ -91,6 +102,9 @@ k9s:
       # move, so cursorFgColor must be dark or the selection is unreadable.
       cursorFgColor: *black
       cursorBgColor: *current_line
+      # marked rows override the status colour entirely (internal/ui/table.go,
+      # buildRow), so this must differ from every status colour above.
+      markColor: *magenta
       header:
         fgColor: *blue
         bgColor: *background
@@ -98,18 +112,33 @@ k9s:
     xray:
       fgColor: *foreground
       bgColor: *background
+      # tview swaps fg/bg on the current tree node -- cursorColor becomes its
+      # BACKGROUND (derailed/tview treeview.go, Draw). Node text is hardcoded
+      # [gray]prefix/[white]name (internal/xray/tree_node.go, titleFmt) and is
+      # not skinnable, so this has to stay dark enough for white to read on.
       cursorColor: *current_line
       graphicColor: *blue
       showIcons: false
     yaml:
       keyColor: *blue
-      colonColor: *comment
+      colonColor: *fg_dark
       valueColor: *foreground
+    picker:
+      # mainColor is drawn both on the body background and on focusColor when a
+      # row is selected (internal/view/picker.go), so it must clear both.
+      mainColor: *foreground
+      focusColor: *current_line
+      shortcutColor: *magenta
     logs:
       fgColor: *foreground
       bgColor: *background
       indicator:
-        fgColor: *black
-        bgColor: *blue
+        # the whole bar is painted bgColor and only the labels use fgColor;
+        # On/Off are recoloured inline (internal/view/log_indicator.go,
+        # Refresh), so a light bar leaves the toggle values unreadable. Keep
+        # the bar on the terminal background instead. Off additionally gets a
+        # `::d` dim attribute, hence toggleOffColor must not be pre-muted.
+        fgColor: *blue
+        bgColor: *background
         toggleOnColor: *green
-        toggleOffColor: *comment
+        toggleOffColor: *foreground
