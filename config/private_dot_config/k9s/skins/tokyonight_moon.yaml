@@ -6,6 +6,7 @@ foreground: &foreground "#c8d3f5"
 background: &background default
 current_line: &current_line "#2d3f76"
 comment: &comment "#636da6"
+fg_dark: &fg_dark "#828bb8"
 border: &border "#3b4261"
 border_focus: &border_focus "#589ed7"
 blue: &blue "#82aaff"
@@ -62,8 +63,10 @@ k9s:
       addColor: *green
       errorColor: *red
       highlightColor: *orange
-      killColor: *comment
-      completedColor: *comment
+      # these two double as the selected-row background (see table below), so
+      # they stay lighter than *comment to keep *black text legible on them
+      killColor: *fg_dark
+      completedColor: *fg_dark
     title:
       fgColor: *foreground
       bgColor: *background
@@ -82,7 +85,11 @@ k9s:
     table:
       fgColor: *foreground
       bgColor: *background
-      cursorFgColor: *foreground
+      # k9s paints the selected row as cursorFgColor over the row's OWN text
+      # color, not over cursorBgColor (internal/ui/select_table.go,
+      # selectionChanged). cursorBgColor only survives until the first cursor
+      # move, so cursorFgColor must be dark or the selection is unreadable.
+      cursorFgColor: *black
       cursorBgColor: *current_line
       header:
         fgColor: *blue
