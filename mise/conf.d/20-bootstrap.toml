@@ -42,3 +42,12 @@ run = "env ANSIBLE_CONFIG=bootstrap/ansible/ansible.cfg ANSIBLE_COLLECTIONS_PATH
 [tasks."test:docker"]
 description = "Run the Ubuntu bootstrap and Ansible integration tests in Docker"
 run = "docker build --file tests/integration/Dockerfile --tag dotfiles-bootstrap-tests ."
+
+# Kept out of test:bats and every other default test task on purpose: these
+# assertions read the real $HOME, so they only hold on a machine this
+# repository has just provisioned. Both provisioning jobs — the macOS workflow
+# and the container smoke test — run this task right after their own
+# provisioning run, so the suite is defined in exactly one place.
+[tasks."test:provisioned"]
+description = "Assert the state of a machine this repository has just provisioned"
+run = "bats tests/provisioned"
