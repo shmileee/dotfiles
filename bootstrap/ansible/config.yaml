@@ -23,6 +23,8 @@ brew:
   taps:
     - anomalyco/tap
     - carlocab/personal
+    - controlplaneio-fluxcd/tap
+    - fluxcd/tap
     - raine/workmux
     - shmileee/tap
   casks:
@@ -45,11 +47,18 @@ brew:
     common:
       - bat
       - coreutils
+      # k9s crossplane.yaml plugin
+      - crossplane
       - direnv
       - duf
       - dust
       - eza
       - fd
+      # k9s flux.yaml plugin. Fully qualified: homebrew/core/flux is
+      # InfluxData's query language, an unrelated project of the same name.
+      - fluxcd/tap/flux
+      # k9s flux.yaml plugin, for its FluxInstance and ResourceSet entries
+      - controlplaneio-fluxcd/tap/flux-operator
       - fzf
       - gh
       - ghq
