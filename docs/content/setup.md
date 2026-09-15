@@ -307,7 +307,14 @@ mise tasks
 | `mise run ansible:validate-runtime` | Report and validate the checkout, uv, Python, Ansible, locked dependencies, and collections. |
 | `mise run ansible:syntax-check` | Check that the provisioning playbook parses against the locked runtime. |
 | `mise run lint` | Run all prek hooks against the repository. |
+| `mise run lint:commit` | Run the hooks against files changed by the last commit. |
+| `mise run lint:dir bootstrap` | Run the hooks against a single directory. |
 | `mise run test` | Run every test suite that needs no container or provisioned machine. |
+| `mise run prek:install` | Install or refresh the prek Git shims for this checkout. |
+| `mise run prek:hooks` | List the configured hooks and their ids. |
+| `mise run prek:why <file>` | Show the type tags prek infers for a file, to debug a filter. |
+| `mise run prek:update` | Update pinned revisions of remote hook repositories. |
+| `mise run prek:gc` | Report the prek cache size and drop unused entries. |
 | `mise run status` | Show differences between the chezmoi source and files in the home directory. |
 | `mise run import` | Import all modified, non-template managed files into `config/`. |
 | `mise run import ~/.config/nvim` | Import one managed file or directory. |
@@ -400,7 +407,7 @@ mise run ansible:validate-runtime
 mise run ansible:syntax-check
 mise run test
 mise run test:docker
-mise exec -- prek install --force
+mise run prek:install
 mise run lint
 ```
 
