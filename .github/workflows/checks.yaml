@@ -71,13 +71,7 @@ jobs:
           mise run lint
 
       - name: check ansible syntax
-        run: |
-          mise exec -- env \
-            ANSIBLE_CONFIG=bootstrap/ansible/ansible.cfg \
-            ANSIBLE_COLLECTIONS_PATH=bootstrap/.ansible/collections \
-            uv run --project bootstrap --locked --managed-python ansible-playbook \
-            --inventory "127.0.0.1," \
-            --syntax-check bootstrap/ansible/main.yaml
+        run: mise run ansible:syntax-check
 
       - name: test python units
         run: mise run test:unit
