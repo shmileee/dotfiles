@@ -28,6 +28,35 @@
 priorities:
   readonly: 100
 
+# Shim lifecycle.
+#
+# `prek install` bakes the absolute path of the prek binary that generated it
+# into .git/hooks/*. mise keeps old installs on disk, so that path stays
+# executable and the shim's own PATH fallback never triggers: once the pinned
+# version moves, every commit keeps running the previous prek indefinitely.
+#
+# The prek-shim-refresh hook below closes that by regenerating the shims
+# through mise after the operations that can change the pin: `git pull` lands
+# a Renovate bump via post-merge, and a rebase lands it via post-rewrite.
+# Nothing here names a version, so the bump takes effect on its own.
+#
+# post-checkout is deliberately NOT installed. Git makes that hook's exit
+# status the exit status of `git checkout`/`git switch`, and prek refuses to
+# run a ref-diff stage while .pre-commit-config.yaml itself has uncommitted
+# changes -- so editing this file would make every branch switch fail. Neither
+# post-merge nor post-rewrite can affect its command's outcome.
+#
+# For a fresh clone, or after editing the pin by hand, run `mise run
+# prek:install`.
+#
+# default_stages keeps every other hook on pre-commit only, so installing the
+# post-* shims does not drag the whole suite into a merge.
+default_stages: [pre-commit]
+default_install_hook_types:
+  - pre-commit
+  - post-merge
+  - post-rewrite
+
 repos:
   - repo: builtin
     hooks:
@@ -67,6 +96,16 @@ repos:
 
   - repo: local
     hooks:
+      - id: prek-shim-refresh
+        name: refresh prek git shims
+        # Regenerates .git/hooks/* with whatever prek mise currently resolves,
+        # so a version bump needs no manual `prek install`. Runs only on the
+        # post-* stages, so it costs a commit nothing. See the note above.
+        entry: mise exec -- prek install --force
+        language: system
+        stages: [post-merge, post-rewrite]
+        always_run: true
+        pass_filenames: false
       - id: gitleaks
         name: scan secrets with gitleaks
         entry: gitleaks dir --config .github/.gitleaks.toml --redact
