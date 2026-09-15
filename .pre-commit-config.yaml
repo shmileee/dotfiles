@@ -62,7 +62,10 @@ repos:
     hooks:
       - id: check-added-large-files
         name: check added large files
-        args: ["--maxkb=1024"]
+        # 3 MiB, to allow demo/dotfiles.gif (~2.3 MiB). Text in a terminal
+        # recording only compresses so far before the glyphs go soft, and the
+        # GIF is a deliberate, regenerable asset rather than a stray binary.
+        args: ["--maxkb=3072"]
         priority: readonly
       - id: check-case-conflict
         name: check case conflicts
