@@ -1,0 +1,4 @@
+# Per-scene renders (./render.sh --scene <name>) and the tape render.sh builds
+# for them. Iteration artifacts; only dotfiles.gif is committed.
+scene-*.gif
+.render.tape
