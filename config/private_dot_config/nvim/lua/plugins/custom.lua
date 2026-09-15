@@ -120,18 +120,48 @@ local plugins = {
   },
   { "terramate-io/vim-terramate", ft = "terramate" },
   {
-    "ntpeters/vim-better-whitespace",
+    -- replaces ntpeters/vim-better-whitespace. neovim's builtin editorconfig
+    -- support already strips trailing whitespace on write wherever a
+    -- .editorconfig sets trim_trailing_whitespace, so only the highlight and
+    -- the strip-everywhere-else behaviour of strip_whitespace_on_save = 1
+    -- still need a plugin.
+    "nvim-mini/mini.trailspace",
     event = { "BufReadPost", "BufNewFile" },
-    init = function()
-      vim.g.strip_whitespace_on_save = 1
-      vim.g.better_whitespace_filetypes_blacklist = {
-        "lazy",
-        "diff",
-        "git",
-        "gitcommit",
-        "help",
-        "snacks_dashboard",
+    opts = {},
+    config = function(_, opts)
+      local trailspace = require("mini.trailspace")
+      trailspace.setup(opts)
+
+      -- the old better_whitespace_filetypes_blacklist. most of these already
+      -- fall out of only_in_normal_buffers, but naming them keeps the set
+      -- explicit and covers diff/git/gitcommit, which are real buffers.
+      local skip = {
+        diff = true,
+        git = true,
+        gitcommit = true,
+        help = true,
+        lazy = true,
+        snacks_dashboard = true,
       }
+
+      local group =
+        vim.api.nvim_create_augroup("trailspace_custom", { clear = true })
+      vim.api.nvim_create_autocmd("FileType", {
+        group = group,
+        callback = function(ev)
+          if skip[vim.bo[ev.buf].filetype] then
+            vim.b[ev.buf].minitrailspace_disable = true
+          end
+        end,
+      })
+      vim.api.nvim_create_autocmd("BufWritePre", {
+        group = group,
+        callback = function(ev)
+          if not skip[vim.bo[ev.buf].filetype] then
+            trailspace.trim()
+          end
+        end,
+      })
     end,
   },
   {
