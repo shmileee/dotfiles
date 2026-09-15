@@ -63,6 +63,15 @@ local plugins = {
           filetypes = { "terramate" },
           root_markers = { "terramate.tm.hcl", ".git" },
         },
+        -- LazyVim's terraform extra only installs the tflint binary; it is
+        -- mason-lspconfig's automatic_enable that turns it into a second
+        -- language server on every .tf buffer. That server spawns
+        -- `tflint --act-as-bundled-plugin`, which it never reaps: each nvim
+        -- session that opened a terraform file left one behind for good
+        -- (PPID 1, 30-65MB). Nothing else here runs tflint -- no .tflint.hcl,
+        -- no pre-commit hook, no CI job -- so it was linting with the default
+        -- ruleset only. terraform-ls keeps reporting real errors.
+        tflint = { enabled = false },
       },
     },
   },
@@ -79,12 +88,22 @@ local plugins = {
     "stevearc/conform.nvim",
     opts = {
       formatters_by_ft = {
+        -- replaces the formatting.black extra: mason's black is a python venv
+        -- wrapper whose interpreter mise has since removed, so it fails with
+        -- ENOENT on every save while conform still reports it as available --
+        -- silently leaving the buffer unformatted. ruff is already installed
+        -- for the lang.python extra's language server, formats in ~15ms
+        -- instead of black's ~200ms, and is what pre-commit runs here.
+        python = { "ruff_format" },
         terramate = { "terramate" },
       },
       formatters = {
         shfmt = {
           prepend_args = { "-i", "2", "-bn", "-ci", "-sr" },
         },
+        -- no ruff_format entry: the config it needs has to be discoverable
+        -- anyway, because the editor, the ruff language server and a bare
+        -- `ruff check` cannot be handed a --config flag.
         terramate = {
           command = "terramate",
           args = { "fmt", "$FILENAME" },
@@ -93,6 +112,24 @@ local plugins = {
         },
       },
     },
+  },
+  {
+    -- .j2 gets no filetype from nvim (it only knows *.jinja), so ansible
+    -- templates open as plain text. these are the parsers for the filetype
+    -- mapping added in options.lua; jinja_inline covers the {{ ... }}
+    -- expressions injected inside jinja blocks.
+    "nvim-treesitter/nvim-treesitter",
+    opts = { ensure_installed = { "jinja", "jinja_inline" } },
+  },
+  {
+    -- with the tflint language server off (see nvim-lspconfig above), the
+    -- binary LazyVim's terraform extra installs has no consumer left.
+    "mason-org/mason.nvim",
+    opts = function(_, opts)
+      opts.ensure_installed = vim.tbl_filter(function(tool)
+        return tool ~= "tflint"
+      end, opts.ensure_installed or {})
+    end,
   },
 
   -- custom plugins:
@@ -104,9 +141,22 @@ local plugins = {
     init = function()
       -- required with lazy.nvim: avoids plugin load-order constraints
       vim.g["chezmoi#use_tmp_buffer"] = 1
-      -- source dir is non-default (ghq repo + .chezmoiroot), so resolve it
-      -- via `chezmoi source-path` instead of hardcoding
-      vim.g["chezmoi#use_external"] = 1
+      -- the source dir is non-default (ghq repo + .chezmoiroot), and letting
+      -- the plugin discover it with `chezmoi source-path` cost 58ms of every
+      -- single nvim start, in every repo (measured 193ms -> 136ms with the
+      -- plugin disabled entirely). The path only moves if this repo does, so
+      -- name it: sourceDir from ~/.config/chezmoi/chezmoi.toml plus the
+      -- .chezmoiroot below it. Setting this also skips the plugin's own
+      -- .chezmoiroot handling, hence the full path. If it ever stops
+      -- existing, fall back to asking chezmoi rather than silently losing
+      -- filetype detection for every dotfile.
+      local source_dir =
+        vim.fn.expand("~/ghq/personalgit/shmileee/dotfiles/config")
+      if vim.uv.fs_stat(source_dir) then
+        vim.g["chezmoi#source_dir_path"] = source_dir
+      else
+        vim.g["chezmoi#use_external"] = 1
+      end
       -- treesitter can't parse compound "<ft>.chezmoitmpl" filetypes and
       -- suppresses regex syntax when attached (plugin FAQ #3): stop it and
       -- force regex syntax so the go-template overlay actually renders

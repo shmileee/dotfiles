@@ -147,13 +147,13 @@ repos:
         files: \.(css|jsonc?|m?[jt]sx?|c[jt]s)$
       - id: ruff-check
         name: lint python with ruff
-        entry: ruff check --config .github/ruff.toml
+        entry: ruff check
         language: system
         types: [python]
         priority: readonly
       - id: ruff-format
         name: format python with ruff
-        entry: ruff format --config .github/ruff.toml
+        entry: ruff format
         language: system
         types: [python]
       - id: stylua

@@ -15,6 +15,10 @@ vim.filetype.add({
     tm = "terramate",
     tfbackend = "hcl",
     tfstate = "json",
+    -- nvim's builtin detection only knows *.jinja, so every ansible template
+    -- opened as plain text: no highlighting, no comments, no formatter. the
+    -- jinja parsers come from plugins/custom.lua.
+    j2 = "jinja",
   },
   pattern = {
     -- ~/.config/git/personal is a gitconfig include; no builtin pattern
