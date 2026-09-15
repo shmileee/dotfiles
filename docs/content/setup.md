@@ -1,6 +1,7 @@
 ---
 title: "Set up a workstation"
 description: Review, install, customize, and reapply the workstation configuration.
+order: 1
 editUrl: https://github.com/shmileee/dotfiles/edit/master/docs/content/setup.md
 ---
 
@@ -60,7 +61,7 @@ and the files under
 
 <div class="tabs">
 <section class="tab" data-tab-label="macOS">
-<h3>macOS</h3>
+<span>macOS</span>
 
 Setup requires the Xcode Command Line Tools and stops if they are missing.
 Install available system updates and the tools before the first run:
@@ -72,7 +73,7 @@ xcode-select --install
 
 </section>
 <section class="tab" data-tab-label="Ubuntu">
-<h3>Ubuntu</h3>
+<span>Ubuntu</span>
 
 Use Ubuntu on ARM64 with a non-root account authorized to use the installed
 `sudo` command. The base installation must provide a POSIX shell, `curl`,
@@ -219,15 +220,27 @@ the installed mise environment needs to be recovered.
 
 Make changes in four places:
 
-<div class="setup-reference">
-
-| Area | Source of truth | Typical changes |
-| --- | --- | --- |
-| Packages and applications | [`bootstrap/ansible/config.yaml`](https://github.com/shmileee/dotfiles/blob/master/bootstrap/ansible/config.yaml) | Homebrew packages, casks, Dock items, keyboard shortcuts |
-| System behavior | [`bootstrap/ansible/roles/`](https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles) | Installation logic and macOS defaults |
-| Home-directory files | [`config/`](https://github.com/shmileee/dotfiles/tree/master/config) | fish, Git, tmux, Neovim, Alacritty, OpenCode |
-| Tool versions | [`config/private_dot_config/mise/config.toml`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/mise/config.toml) | Language runtimes and developer tools |
-
+<div class="surface-grid">
+  <article>
+    <span>Packages and applications</span>
+    <a class="path-token" href="https://github.com/shmileee/dotfiles/blob/master/bootstrap/ansible/config.yaml" aria-label="Open the Ansible configuration on GitHub"><code class="path-token">bootstrap/<wbr>ansible/<wbr>config.yaml</code></a>
+    <p>Homebrew packages, casks, Dock items, and keyboard shortcuts.</p>
+  </article>
+  <article>
+    <span>System behavior</span>
+    <a class="path-token" href="https://github.com/shmileee/dotfiles/tree/master/bootstrap/ansible/roles" aria-label="Open the Ansible roles on GitHub"><code class="path-token">bootstrap/<wbr>ansible/<wbr>roles/</code></a>
+    <p>Installation logic and macOS defaults.</p>
+  </article>
+  <article>
+    <span>Home-directory files</span>
+    <a class="path-token" href="https://github.com/shmileee/dotfiles/tree/master/config" aria-label="Open the chezmoi source directory on GitHub"><code class="path-token">config/</code></a>
+    <p>fish, Git, tmux, Neovim, Alacritty, and OpenCode.</p>
+  </article>
+  <article>
+    <span>Tool versions</span>
+    <a class="path-token" href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/mise/config.toml" aria-label="Open the mise configuration on GitHub"><code class="path-token">config/<wbr>private_dot_config/<wbr>mise/<wbr>config.toml</code></a>
+    <p>Language runtimes and developer tools.</p>
+  </article>
 </div>
 
 The `dotfiles.checkout` value in

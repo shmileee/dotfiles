@@ -1,5 +1,5 @@
 ---
-title: "Home"
+title: "Overview"
 description: A reproducible Apple Silicon macOS workstation and Ubuntu integration environment built with Ansible and chezmoi.
 template: splash
 editUrl: https://github.com/shmileee/dotfiles/edit/master/docs/content/index.md

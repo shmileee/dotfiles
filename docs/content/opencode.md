@@ -1,6 +1,7 @@
 ---
 title: "OpenCode + OmO"
 description: Local secrets, model routing, corporate overlays, contextual notifications, and local voice dictation.
+order: 3
 editUrl: https://github.com/shmileee/dotfiles/edit/master/docs/content/opencode.md
 ---
 
@@ -223,8 +224,8 @@ in this repository starts `brew services`, so a machine that had the Homebrew
 
 | Managed service | Role |
 | --- | --- |
-| `com.shmileee.whisper-voice-server.plist` | Keeps whisper.cpp running and owns `~/Library/Logs/whisper-voice-server.log`. |
-| `com.shmileee.ollama.plist` | Keeps `ollama serve` bound to loopback and owns `~/Library/Logs/ollama.log`. |
+| `com.shmileee.whisper-voice-server.plist` | Keeps whisper.cpp running and writes the `whisper-voice-server` log under `~/Library/Logs/`. |
+| `com.shmileee.ollama.plist` | Keeps `ollama serve` bound to loopback and writes the `ollama` log under `~/Library/Logs/`. |
 
 </div>
 

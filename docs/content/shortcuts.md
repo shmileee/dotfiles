@@ -1,6 +1,7 @@
 ---
 title: "Keyboard shortcuts"
 description: Keyboard shortcuts configured for macOS, Alacritty, fish, tmux, Neovim, and OpenCode.
+order: 2
 editUrl: https://github.com/shmileee/dotfiles/edit/master/docs/content/shortcuts.md
 ---
 
