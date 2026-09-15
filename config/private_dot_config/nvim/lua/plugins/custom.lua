@@ -120,10 +120,6 @@ local plugins = {
   },
   { "terramate-io/vim-terramate", ft = "terramate" },
   {
-    "christoomey/vim-titlecase",
-    keys = { { "gz", mode = { "n", "x" } } },
-  },
-  {
     "ntpeters/vim-better-whitespace",
     event = { "BufReadPost", "BufNewFile" },
     init = function()

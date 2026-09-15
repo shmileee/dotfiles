@@ -44,6 +44,5 @@
   "vim-better-whitespace": { "branch": "master", "commit": "de99b55a6fe8c96a69f9376f16b1d5d627a56e81" },
   "vim-dirdiff": { "branch": "master", "commit": "84bc8999fde4b3c2d8b228b560278ab30c7ea4c9" },
   "vim-terramate": { "branch": "main", "commit": "072a376f02fd60e5e542fadd83259e9c17c400b0" },
-  "vim-titlecase": { "branch": "master", "commit": "69a697c54a08ca5603cb757b4d4f78cd4b567549" },
   "which-key.nvim": { "branch": "main", "commit": "3aab2147e74890957785941f0c1ad87d0a44c15a" }
 }
