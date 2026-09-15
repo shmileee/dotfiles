@@ -20,6 +20,8 @@ jobs:
     timeout-minutes: 15
     env:
       GITHUB_TOKEN: ${{ github.token }}
+      # prek detects no TTY here and would drop colour from hook output.
+      PREK_COLOR: always
 
     steps:
       - name: checkout
@@ -30,31 +32,12 @@ jobs:
       - name: set up mise
         uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
 
+      # Needed by the fish-indent, fish-syntax and fish-syntax-templates
+      # hooks. Fish syntax and template rendering used to be checked by an
+      # inline loop in this workflow; they are prek hooks now, so they also
+      # run locally on every commit instead of only in CI.
       - name: install fish
         run: sudo apt-get update && sudo apt-get install --yes --no-install-recommends fish
-
-      - name: check fish syntax and templates
-        run: |
-          failed=0
-          while IFS= read -r -d '' file; do
-            if ! fish --no-execute "$file"; then
-              printf 'Fish syntax check failed: %s\n' "$file" >&2
-              failed=1
-            fi
-          done < <(find config -type f -name '*.fish' -print0)
-
-          while IFS= read -r -d '' template; do
-            if ! rendered="$(mise exec -- chezmoi execute-template < "$template")"; then
-              printf 'Template render failed: %s\n' "$template" >&2
-              failed=1
-              continue
-            fi
-            if ! printf '%s\n' "$rendered" | fish --no-execute; then
-              printf 'Fish template syntax check failed: %s\n' "$template" >&2
-              failed=1
-            fi
-          done < <(find config -type f -name '*.fish.tmpl' -print0)
-          exit "$failed"
 
       - name: test fish functions
         run: mise run test:fish
@@ -64,6 +47,18 @@ jobs:
         with:
           path: bootstrap/.ansible/collections
           key: ${{ runner.os }}-ansible-${{ hashFiles('bootstrap/uv.lock', 'bootstrap/ansible/requirements.yml') }}
+
+      # prek builds a hook environment for the one remote hook repository,
+      # which pulls in a Node toolchain: measured at 21.6s cold against 0.4s
+      # warm. The key covers the pinned prek version (10-validation.toml) and
+      # the hook revisions and config (.pre-commit-config.yaml); restore-keys
+      # lets a config edit still reuse the toolchain.
+      - name: restore prek cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        with:
+          path: ~/.cache/prek
+          key: ${{ runner.os }}-prek-${{ hashFiles('mise/conf.d/10-validation.toml', '.pre-commit-config.yaml') }}
+          restore-keys: ${{ runner.os }}-prek-
 
       - name: validate runtime and run lint
         run: |
