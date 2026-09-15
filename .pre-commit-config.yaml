@@ -22,7 +22,6 @@ repos:
         name: fix mixed line endings
       - id: detect-private-key
         name: detect private keys
-
   - repo: https://github.com/renovatebot/pre-commit-hooks
     rev: 44.61.6
     hooks:
@@ -94,24 +93,21 @@ repos:
         name: lint shell templates with shellcheck
         # Go template syntax is not valid shell, so the raw .tmpl cannot be
         # linted directly; render it first and lint the generated script.
+        # `shell` runs the body directly, and one file per invocation keeps
+        # the body free of a loop.
+        shell: sh
         entry: |-
-          sh -c '
-            status=0
-            for file in "$@"; do
-              if ! rendered=$(chezmoi execute-template --source . --file "$file"); then
-                printf "cannot render %s\n" "$file" >&2
-                status=1
-                continue
-              fi
-              if ! printf "%s\n" "$rendered" | shellcheck --shell=sh -; then
-                printf "^ in %s\n" "$file" >&2
-                status=1
-              fi
-            done
-            exit "$status"
-          ' sh
+          if ! rendered=$(chezmoi execute-template --source . --file "$1"); then
+            printf 'cannot render %s\n' "$1" >&2
+            exit 1
+          fi
+          if ! printf '%s\n' "$rendered" | shellcheck --shell=sh -; then
+            printf '^ in %s\n' "$1" >&2
+            exit 1
+          fi
         language: system
         files: ^config/bin/.*\.tmpl$
+        pass_filenames: 1
       - id: yamllint
         name: lint yaml with yamllint
         entry: yamllint --config-file .github/.yamllint.yaml
@@ -131,10 +127,12 @@ repos:
         types: [yaml]
       - id: ansible-lint
         name: lint ansible with ansible-lint
-        entry: env ANSIBLE_CONFIG=bootstrap/ansible/ansible.cfg
-          ANSIBLE_COLLECTIONS_PATH=bootstrap/.ansible/collections ansible-lint
-          --config-file .github/.ansible-lint --project-dir .
-          --yamllint-file .github/.yamllint.yaml bootstrap/ansible
+        entry: ansible-lint --config-file .github/.ansible-lint
+          --project-dir . --yamllint-file .github/.yamllint.yaml
+          bootstrap/ansible
         language: system
+        env:
+          ANSIBLE_CONFIG: bootstrap/ansible/ansible.cfg
+          ANSIBLE_COLLECTIONS_PATH: bootstrap/.ansible/collections
         pass_filenames: false
         files: ^bootstrap/ansible/
