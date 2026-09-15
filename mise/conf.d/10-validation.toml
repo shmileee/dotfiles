@@ -14,6 +14,56 @@ shfmt = "3.14.0"
 stylua = "2.5.2"
 taplo = "0.10.0"
 
+# `lint` is the single entry point for the hook suite, so CI runs this exact
+# task rather than its own prek invocation. Keeping the flags here is what
+# makes a local run and a CI run behave identically.
 [tasks.lint]
 description = "Run all prek hooks against the repository"
-run = "prek run --all-files"
+run = "prek run --all-files --show-diff-on-failure"
+
+# Checks only what the last commit touched. Useful after committing to see
+# what a pushed CI run would say, without waiting for the full sweep.
+[tasks."lint:commit"]
+description = "Run prek hooks against files changed by the last commit"
+run = "prek run --last-commit --show-diff-on-failure"
+
+# Narrows a run to one subtree, e.g. `mise run lint:dir bootstrap`. Handy when
+# iterating on a single area and the full sweep is more noise than signal.
+[tasks."lint:dir"]
+description = "Run prek hooks against one directory"
+usage = 'arg "<dir>" help="Directory to check"'
+run = 'prek run --show-diff-on-failure --directory "$usage_dir"'
+
+# Installs the Git shims, and re-points them at the prek that mise currently
+# resolves. Run after a fresh clone; the prek-shim-refresh hook handles it
+# automatically on pull, switch and rebase thereafter.
+[tasks."prek:install"]
+description = "Install or refresh the prek Git shims for this checkout"
+run = "prek install --force"
+
+# Lists hook ids, which are also the selectors accepted by `prek run <id>`
+# and by PREK_SKIP.
+[tasks."prek:hooks"]
+description = "List the configured prek hooks"
+run = "prek list"
+
+# Answers "why did no hook pick up this file?". prek matches on type tags
+# derived from the name, shebang and contents, not just the extension, so this
+# is the fastest way to debug a `files:` or `types:` filter.
+[tasks."prek:why"]
+description = "Show the type tags prek infers for a file"
+usage = 'arg "<file>" help="File to identify"'
+run = 'prek util identify "$usage_file"'
+
+# Bumps the `rev` of remote hook repositories. Renovate normally does this, so
+# reach for it only when checking a bump by hand.
+[tasks."prek:update"]
+description = "Update pinned revisions of remote hook repositories"
+run = "prek update"
+
+# prek caches every hook environment and downloaded toolchain under
+# PREK_HOME, which grows without bound. `gc` drops what no current config
+# references.
+[tasks."prek:gc"]
+description = "Report the prek cache size and drop unused entries"
+run = ["prek cache size", "prek cache gc"]
