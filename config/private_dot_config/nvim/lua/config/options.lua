@@ -8,11 +8,21 @@ vim.g.snacks_animate = false
 -- docs/overrides, which nothing else would catch.
 vim.g.lazyvim_prettier_needs_config = true
 
--- ~/.config/git/personal is a gitconfig include; no builtin pattern matches
--- an extensionless name other than "config"
 vim.filetype.add({
+  extension = {
+    -- terramate-io/vim-terramate used to own these. without it nvim resolves
+    -- .tm to tcl, and .tfbackend/.tfstate to nothing at all.
+    tm = "terramate",
+    tfbackend = "hcl",
+    tfstate = "json",
+  },
   pattern = {
+    -- ~/.config/git/personal is a gitconfig include; no builtin pattern
+    -- matches an extensionless name other than "config"
     [".*/git/personal"] = "gitconfig",
+    -- builtin detection lands this one on hcl, which would silently drop the
+    -- terramate formatter and language server
+    [".*%.tm%.hcl"] = "terramate",
   },
 })
 
@@ -22,6 +32,11 @@ vim.filetype.add({
 -- the command plus a VimEnter hook for `nvim -d dir1 dir2`, so the cost of
 -- doing it eagerly is nil.
 vim.cmd.packadd("nvim.difftool")
+
+-- there is no terramate treesitter parser: terramate is hcl with extra block
+-- types, so point the filetype at the hcl parser that lang.terraform already
+-- installs. this is what keeps highlighting after dropping vim-terramate.
+vim.treesitter.language.register("hcl", "terramate")
 
 -- Neovim probes python3, python3.14 ... python3.9, python in order, spawning
 -- each to look for the "neovim" module. pynvim is installed nowhere, so the

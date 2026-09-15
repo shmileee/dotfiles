@@ -54,6 +54,15 @@ local plugins = {
         terraformls = {
           cmd = { "terraform-ls", "serve", "-log-file", "/dev/null" },
         },
+        -- replaces terramate-io/vim-terramate, unmaintained since 2023. the
+        -- language server ships inside the mise-managed terramate cli and is
+        -- absent from mason's registry, so LazyVim wires it up natively with
+        -- vim.lsp.config + vim.lsp.enable instead of trying to install it.
+        terramate_ls = {
+          cmd = { "terramate-ls" },
+          filetypes = { "terramate" },
+          root_markers = { "terramate.tm.hcl", ".git" },
+        },
       },
     },
   },
@@ -118,7 +127,6 @@ local plugins = {
       })
     end,
   },
-  { "terramate-io/vim-terramate", ft = "terramate" },
   {
     -- replaces ntpeters/vim-better-whitespace. neovim's builtin editorconfig
     -- support already strips trailing whitespace on write wherever a
