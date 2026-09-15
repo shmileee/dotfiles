@@ -75,8 +75,9 @@ brew:
       - sponge
       - tmux
       # nvim-treesitter's main branch shells out to `tree-sitter generate`
-      # and `tree-sitter build`; without the CLI every parser install fails
-      - tree-sitter
+      # and `tree-sitter build`; without the CLI every parser install fails.
+      # not `tree-sitter`, which is the parsing library and ships no binary.
+      - tree-sitter-cli
       - zoxide
     darwin:
       - bash
