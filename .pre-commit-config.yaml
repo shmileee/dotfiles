@@ -86,6 +86,30 @@ repos:
       - id: detect-private-key
         name: detect private keys
         priority: readonly
+      - id: destroyed-symlinks
+        name: detect destroyed symlinks
+        priority: readonly
+      - id: check-vcs-permalinks
+        name: check vcs permalinks
+        priority: readonly
+      - id: check-shebang-scripts-are-executable
+        name: check shebang scripts are executable
+        # Only outside the chezmoi source root. Inside config/ the deployed
+        # mode comes from the `executable_` filename prefix, so the source
+        # file's own bit carries no meaning and every script would be
+        # reported.
+        files: \.sh$
+        exclude: ^config/
+        priority: readonly
+      - id: deny-pattern
+        name: deny absolute home paths in managed config
+        # A managed file must derive the home directory from a template
+        # variable; a literal /Users/<name>/ path only works on one machine.
+        args: ["/Users/[a-z][a-z0-9._-]*/"]
+        files: ^config/
+        types: [text]
+        priority: readonly
+
   - repo: https://github.com/renovatebot/pre-commit-hooks
     rev: 44.61.6
     hooks:
@@ -161,6 +185,34 @@ repos:
         entry: fish_indent --write
         language: system
         files: \.fish$
+      - id: fish-syntax
+        name: check fish syntax
+        # fish --no-execute only parses its FIRST argument and passes the
+        # rest through as $argv, so a batched invocation would silently skip
+        # every file after the first. One file per invocation is required.
+        entry: fish --no-execute
+        language: system
+        files: \.fish$
+        pass_filenames: 1
+        priority: readonly
+      - id: fish-syntax-templates
+        name: check fish template syntax
+        # Same reasoning as shellcheck-templates: render the Go template
+        # first, then parse the generated script.
+        shell: sh
+        entry: |-
+          if ! rendered=$(chezmoi execute-template --source . --file "$1"); then
+            printf 'cannot render %s\n' "$1" >&2
+            exit 1
+          fi
+          if ! printf '%s\n' "$rendered" | fish --no-execute; then
+            printf '^ in %s\n' "$1" >&2
+            exit 1
+          fi
+        language: system
+        files: \.fish\.tmpl$
+        pass_filenames: 1
+        priority: readonly
       - id: shellcheck
         name: lint shell with shellcheck
         entry: shellcheck
@@ -187,6 +239,14 @@ repos:
         language: system
         files: ^config/bin/.*\.tmpl$
         pass_filenames: 1
+        priority: readonly
+      - id: shellcheck-bats
+        name: lint bats tests with shellcheck
+        # bats assigns its helper variables inside setup(), which shellcheck
+        # analyses separately, so SC2154 fires on every one of them.
+        entry: shellcheck --exclude=SC2154
+        language: system
+        files: \.bats$
         priority: readonly
       - id: yamllint
         name: lint yaml with yamllint
