@@ -1,16 +1,49 @@
 ---
+# Hook scheduling.
+#
+# prek runs hooks sequentially unless they share an explicit `priority`; hooks
+# with equal priority run concurrently. Three properties of that model matter
+# here, all verified against prek 0.5.2 on this repository:
+#
+#   1. Hooks with the same explicit priority run at the same time.
+#   2. Hooks that omit `priority` stay strictly sequential.
+#   3. A priority group never overlaps hooks outside it, and the unprioritised
+#      hooks run first.
+#
+# So the split below is by write behaviour, not by speed:
+#
+#   no priority         Hooks that rewrite files. They stay sequential because
+#                       end-of-file-fixer, trailing-whitespace and
+#                       mixed-line-ending rewrite *every* file, so overlapping
+#                       them with a language formatter would drop edits.
+#   priority: readonly  Hooks that only read. Concurrency is safe, and by (3)
+#                       they still observe the formatters' output.
+#
+# `prek run --all-files` went from 7.8s to 3.0s; ansible-lint and zizmor alone
+# were 5.1s of serial wall time.
+#
+# Adding a hook: leave `priority` unset unless you are sure the hook never
+# writes to the working tree. Omitting it is always safe, only slower. Use
+# `PREK_NO_CONCURRENCY=1` to force everything sequential when debugging.
+priorities:
+  readonly: 100
+
 repos:
   - repo: builtin
     hooks:
       - id: check-added-large-files
         name: check added large files
         args: ["--maxkb=1024"]
+        priority: readonly
       - id: check-case-conflict
         name: check case conflicts
+        priority: readonly
       - id: check-merge-conflict
         name: check merge conflicts
+        priority: readonly
       - id: check-symlinks
         name: check symlinks
+        priority: readonly
       - id: end-of-file-fixer
         name: fix end of files
       - id: trailing-whitespace
@@ -18,16 +51,19 @@ repos:
         args: [--markdown-linebreak-ext=md]
       - id: check-executables-have-shebangs
         name: check executable shebangs
+        priority: readonly
       - id: mixed-line-ending
         name: fix mixed line endings
       - id: detect-private-key
         name: detect private keys
+        priority: readonly
   - repo: https://github.com/renovatebot/pre-commit-hooks
     rev: 44.61.6
     hooks:
       - id: renovate-config-validator
         name: validate renovate configuration
         args: [--strict]
+        priority: readonly
 
   - repo: local
     hooks:
@@ -37,6 +73,7 @@ repos:
           --no-banner .
         language: system
         pass_filenames: false
+        priority: readonly
       - id: biome
         name: lint and format web files with biome
         entry: biome check --write --no-errors-on-unmatched
@@ -47,6 +84,7 @@ repos:
         entry: ruff check --config .github/ruff.toml
         language: system
         types: [python]
+        priority: readonly
       - id: ruff-format
         name: format python with ruff
         entry: ruff format --config .github/ruff.toml
@@ -72,6 +110,7 @@ repos:
         entry: chezmoi execute-template --source . --file
         language: system
         files: \.tmpl$
+        priority: readonly
       - id: shfmt
         name: format shell with shfmt
         entry: shfmt --write
@@ -89,6 +128,7 @@ repos:
         language: system
         files: (\.(sh|bash)$|^config/bin/executable_[a-z0-9-]+$)
         exclude: ^config/bin/executable_rg-sed$
+        priority: readonly
       - id: shellcheck-templates
         name: lint shell templates with shellcheck
         # Go template syntax is not valid shell, so the raw .tmpl cannot be
@@ -108,23 +148,27 @@ repos:
         language: system
         files: ^config/bin/.*\.tmpl$
         pass_filenames: 1
+        priority: readonly
       - id: yamllint
         name: lint yaml with yamllint
         entry: yamllint --config-file .github/.yamllint.yaml
         language: system
         types: [yaml]
+        priority: readonly
       - id: actionlint
         name: lint github actions with actionlint
         entry: actionlint
         language: system
         files: ^\.github/workflows/.*\.ya?ml$
         types: [yaml]
+        priority: readonly
       - id: zizmor
         name: audit github actions with zizmor
         entry: zizmor --min-severity medium --min-confidence medium
         language: system
         files: ^\.github/(actions|workflows)/.*\.ya?ml$
         types: [yaml]
+        priority: readonly
       - id: ansible-lint
         name: lint ansible with ansible-lint
         entry: ansible-lint --config-file .github/.ansible-lint
@@ -136,3 +180,4 @@ repos:
           ANSIBLE_COLLECTIONS_PATH: bootstrap/.ansible/collections
         pass_filenames: false
         files: ^bootstrap/ansible/
+        priority: readonly
