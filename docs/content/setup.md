@@ -305,7 +305,9 @@ mise tasks
 | `mise run reconcile` | Install the required Ansible collections and reconcile the machine. |
 | `mise run reconcile:check` | Preview the reconciliation using Ansible check mode. |
 | `mise run ansible:validate-runtime` | Report and validate the checkout, uv, Python, Ansible, locked dependencies, and collections. |
+| `mise run ansible:syntax-check` | Check that the provisioning playbook parses against the locked runtime. |
 | `mise run lint` | Run all prek hooks against the repository. |
+| `mise run test` | Run every test suite that needs no container or provisioned machine. |
 | `mise run status` | Show differences between the chezmoi source and files in the home directory. |
 | `mise run import` | Import all modified, non-template managed files into `config/`. |
 | `mise run import ~/.config/nvim` | Import one managed file or directory. |
@@ -395,18 +397,11 @@ Run the repository's static checks and Ansible syntax validation:
 ```bash
 mise install
 mise run ansible:validate-runtime
+mise run ansible:syntax-check
+mise run test
 mise run test:docker
-mise run test:bats
-mise run test:fish
-mise run test:unit
 mise exec -- prek install --force
 mise run lint
-mise exec -- env \
-  ANSIBLE_CONFIG=bootstrap/ansible/ansible.cfg \
-  ANSIBLE_COLLECTIONS_PATH=bootstrap/.ansible/collections \
-  uv run --project bootstrap --locked --managed-python \
-  ansible-playbook --inventory '127.0.0.1,' \
-  --syntax-check bootstrap/ansible/main.yaml
 ```
 
 If the prerequisites are installed, preview the playbook too:
