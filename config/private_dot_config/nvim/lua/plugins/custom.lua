@@ -118,7 +118,6 @@ local plugins = {
       })
     end,
   },
-  { "tpope/vim-repeat" },
   { "terramate-io/vim-terramate", ft = "terramate" },
   {
     "christoomey/vim-titlecase",
