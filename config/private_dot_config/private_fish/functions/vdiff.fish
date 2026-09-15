@@ -10,7 +10,7 @@ function vdiff --description="Compare two files or dirs with vim"
     set --local right "$argv[2]"
 
     if test -d "$left"; and test -d "$right"
-        nvim +"DirDiff $left $right"
+        nvim +"DiffTool $left $right"
     else
         nvim -d "$left" "$right"
     end

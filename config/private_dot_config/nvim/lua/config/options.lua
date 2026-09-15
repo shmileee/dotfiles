@@ -16,6 +16,13 @@ vim.filetype.add({
   },
 })
 
+-- replaces will133/vim-dirdiff, unmaintained since 2021. nvim ships a
+-- recursive directory diff with rename detection, but as an opt package, so
+-- :DiffTool {left} {right} only exists once it is added. it just registers
+-- the command plus a VimEnter hook for `nvim -d dir1 dir2`, so the cost of
+-- doing it eagerly is nil.
+vim.cmd.packadd("nvim.difftool")
+
 -- Neovim probes python3, python3.14 ... python3.9, python in order, spawning
 -- each to look for the "neovim" module. pynvim is installed nowhere, so the
 -- walk never short-circuits and re-runs on every has("python3"). Two

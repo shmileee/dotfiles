@@ -165,18 +165,6 @@ local plugins = {
     end,
   },
   {
-    "will133/vim-dirdiff",
-    cmd = "DirDiff",
-    init = function()
-      vim.api.nvim_create_autocmd("FileType", {
-        pattern = "dirdiff",
-        callback = function()
-          vim.bo.filetype = "diff"
-        end,
-      })
-    end,
-  },
-  {
     "chrisgrieser/nvim-spider",
     keys = {
       {
