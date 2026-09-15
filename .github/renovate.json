@@ -120,6 +120,21 @@
       "semanticCommitScope": "workstation"
     },
     {
+      "description": "Keep tools shared by this repository and the workstation synchronized",
+      "matchManagers": ["mise"],
+      "matchFileNames": [
+        "mise/conf.d/10-validation.toml",
+        "config/private_dot_config/mise/config.toml"
+      ],
+      "matchDepNames": ["prek", "shellcheck", "shfmt", "yamllint"],
+      "matchUpdateTypes": ["major", "minor", "patch"],
+      "groupName": "shared tooling",
+      "groupSlug": "shared-tooling",
+      "minimumGroupSize": 2,
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "tooling"
+    },
+    {
       "description": "Use build commit semantics for Docker dependencies",
       "matchManagers": ["dockerfile"],
       "semanticCommitType": "build",
@@ -147,17 +162,18 @@
       "semanticCommitScope": "bootstrap"
     },
     {
-      "description": "Keep bootstrap uv declarations synchronized",
+      "description": "Keep every uv declaration synchronized",
       "matchDepNames": ["uv", "astral-sh/uv", "ghcr.io/astral-sh/uv"],
       "matchFileNames": [
         "mise.toml",
         "bootstrap/setup.sh",
-        "tests/integration/Dockerfile"
+        "tests/integration/Dockerfile",
+        "config/private_dot_config/mise/config.toml"
       ],
       "matchUpdateTypes": ["major", "minor", "patch"],
       "groupName": "bootstrap uv",
       "groupSlug": "bootstrap-uv",
-      "minimumGroupSize": 3,
+      "minimumGroupSize": 4,
       "semanticCommitType": "chore",
       "semanticCommitScope": "bootstrap"
     },
