@@ -12,7 +12,12 @@ setup_bootstrap_test() {
   setup_copy=$test_root/setup.sh
   os_release=$test_root/os-release
   ca_bundle=$test_root/ca-certificates.crt
-  dash_path=$(command -v dash)
+  # Real dash, never the platform /bin/sh: macOS ships bash in POSIX mode,
+  # which accepts the bashisms these scripts are checked against.
+  if ! dash_path=$(command -v dash); then
+    printf 'dash is required by this suite; install it (macOS: brew install dash)\n' >&2
+    return 1
+  fi
   expected_uv_version=$(sed -n 's/^uv_version=//p' "$project_root/bootstrap/setup.sh")
 
   mkdir -p "$test_home" "$test_tmp" "$fake_bin" "$base_bin"
