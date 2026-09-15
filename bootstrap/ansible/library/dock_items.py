@@ -8,8 +8,9 @@ module: dock_items
 short_description: Reconcile the current user's macOS Dock
 description:
   - Reconciles the exact ordered set of persistent Dock items.
-  - Parses dockutil's tab-delimited output and reads native plist fields for folder presentation.
-  - Validates every requested item before changing the Dock and attempts rollback after a failed rebuild.
+  - Parses dockutil's tab-delimited output and reads folder presentation from the Dock preference domain.
+  - Reads presentation with defaults export because dockutil writes through cfprefsd, which leaves the plist file on disk stale.
+  - Validates every requested item before changing the Dock, waits for the restarted Dock to settle, and verifies any rollback.
 requirements:
   - dockutil
 options:
@@ -80,12 +81,23 @@ paths:
   type: list
   elements: str
 rollback:
-  description: Whether restoration of the previous Dock succeeded after a mutation failure.
+  description: Whether the previous Dock was restored and observed again after a mutation failure.
   returned: on failure after mutation
   type: bool
+observed:
+  description: Dock items last observed while waiting for the requested state.
+  returned: on verification failure
+  type: list
+  elements: dict
+expected:
+  description: Dock items the module required the Dock to report.
+  returned: on verification failure
+  type: list
+  elements: dict
 """
 
 import plistlib
+import time
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Tuple
 from urllib.parse import urlsplit
@@ -109,6 +121,14 @@ SORT_VALUES = {
     5: "kind",
 }
 
+DOCK_DOMAIN = "com.apple.dock"
+# dockutil returns as soon as it has asked the Dock to terminate, so the
+# relaunched Dock can still be rewriting preferences. Wait for the requested
+# state to appear twice in a row instead of trusting one immediate read.
+VERIFY_TIMEOUT = 10.0
+VERIFY_INTERVAL = 0.5
+VERIFY_MATCHES = 2
+
 
 class DockError(Exception):
     pass
@@ -126,7 +146,11 @@ class DockCommandError(DockError):
 
 
 class DockStateError(DockError):
-    pass
+    def __init__(
+        self, message: str, observed: Optional[List[Dict[str, Any]]] = None
+    ) -> None:
+        super().__init__(message)
+        self.observed = observed
 
 
 def run_dockutil(module: AnsibleModule, argv: List[str]) -> str:
@@ -136,56 +160,74 @@ def run_dockutil(module: AnsibleModule, argv: List[str]) -> str:
     return stdout
 
 
-def folder_options(plist_paths: List[str]) -> Dict[str, Dict[str, str]]:
-    options = {}
-    for plist_path in sorted(set(plist_paths)):
-        try:
-            with Path(plist_path).open("rb") as plist_file:
-                plist = plistlib.load(plist_file)
-        except (
-            OSError,
-            plistlib.InvalidFileException,
-            TypeError,
-            ValueError,
-        ) as error:
-            raise DockStateError(
-                "could not read Dock plist {0!r}: {1}".format(plist_path, error)
-            ) from error
-        if not isinstance(plist, dict):
-            raise DockStateError(
-                "Dock plist {0!r} is not a dictionary".format(plist_path)
-            )
+def export_dock_domain(module: AnsibleModule, defaults: str) -> Dict[str, Any]:
+    """Read the Dock domain through the layer dockutil writes through.
 
-        for tile in plist.get("persistent-others", []):
-            tile_data = tile.get("tile-data", {})
-            url = tile_data.get("file-data", {}).get("_CFURLString")
-            if not url:
-                continue
-            options[normalize_location(url)] = {
-                "display": DISPLAY_VALUES.get(
-                    tile_data.get("displayas", 0), "unknown"
-                ),
-                # Intentionally reads the non-native "viewas" key. The real key
-                # is "showas", but dockutil cannot make a fresh Dock persist
-                # "view: auto" as showas=0, so comparing the native key makes
-                # reconciliation fail after rebuilding on a clean machine.
-                "view": VIEW_VALUES.get(tile_data.get("viewas", 0), "unknown"),
-                "sort": SORT_VALUES.get(
-                    tile_data.get("arrangement", 1), "unknown"
-                ),
-            }
+    dockutil persists with CFPreferences, so cfprefsd holds the authoritative
+    state and the plist file on disk lags behind it. Exporting the domain
+    keeps reads coherent with those writes.
+    """
+    argv = [defaults, "export", DOCK_DOMAIN, "-"]
+    rc, stdout, stderr = module.run_command(argv, encoding=None)
+    if rc != 0:
+        raise DockCommandError(
+            argv,
+            rc,
+            stdout.decode("utf-8", "replace"),
+            stderr.decode("utf-8", "replace"),
+        )
+    try:
+        domain = plistlib.loads(stdout)
+    except (plistlib.InvalidFileException, TypeError, ValueError) as error:
+        raise DockStateError(
+            "could not parse the exported Dock domain: {0}".format(error)
+        ) from error
+    if not isinstance(domain, dict):
+        raise DockStateError("the exported Dock domain is not a dictionary")
+    return domain
+
+
+def folder_options(domain: Mapping[str, Any]) -> Dict[str, Dict[str, str]]:
+    """Decode folder presentation for filesystem tiles in the others section."""
+    tiles = domain.get("persistent-others", [])
+    if not isinstance(tiles, list):
+        raise DockStateError("Dock persistent-others is not an array")
+
+    options = {}
+    for tile in tiles:
+        tile_data = tile.get("tile-data") if isinstance(tile, dict) else None
+        if not isinstance(tile_data, dict):
+            continue
+        file_data = tile_data.get("file-data")
+        url = (
+            file_data.get("_CFURLString")
+            if isinstance(file_data, dict)
+            else None
+        )
+        if not isinstance(url, str) or not url:
+            continue
+        options[normalize_location(url)] = {
+            "display": DISPLAY_VALUES.get(
+                tile_data.get("displayas", 0), "unknown"
+            ),
+            # dockutil writes the native "showas" key and never writes
+            # "viewas", so reading any other key cannot verify a requested
+            # view.
+            "view": VIEW_VALUES.get(tile_data.get("showas", 0), "unknown"),
+            "sort": SORT_VALUES.get(tile_data.get("arrangement", 1), "unknown"),
+        }
     return options
 
 
-def current_items(module: AnsibleModule, dockutil: str) -> List[Dict[str, Any]]:
+def current_items(
+    module: AnsibleModule, dockutil: str, defaults: str
+) -> List[Dict[str, Any]]:
     try:
         rows = parse_dockutil_output(run_dockutil(module, [dockutil, "--list"]))
     except ValueError as error:
         raise DockStateError(str(error)) from error
 
-    presentation = folder_options(
-        [row["plist"] for row in rows if row["plist"]]
-    )
+    presentation = folder_options(export_dock_domain(module, defaults))
     return [
         {
             "name": row["name"],
@@ -242,12 +284,38 @@ def rebuild(
         run_dockutil(module, arguments)
 
 
+def verify_dock_state(
+    module: AnsibleModule,
+    dockutil: str,
+    defaults: str,
+    desired: List[Mapping[str, Any]],
+) -> None:
+    """Wait until the Dock reports the requested state twice in a row."""
+    deadline = time.monotonic() + VERIFY_TIMEOUT
+    matches = 0
+    while True:
+        observed = current_items(module, dockutil, defaults)
+        matches = matches + 1 if dock_states_match(observed, desired) else 0
+        if matches >= VERIFY_MATCHES:
+            return
+        if time.monotonic() >= deadline:
+            raise DockStateError(
+                "Dock state did not match the requested state after rebuilding",
+                observed=observed,
+            )
+        time.sleep(VERIFY_INTERVAL)
+
+
 def restore(
-    module: AnsibleModule, dockutil: str, previous: List[Mapping[str, Any]]
-) -> Tuple[bool, Optional[DockCommandError]]:
+    module: AnsibleModule,
+    dockutil: str,
+    defaults: str,
+    previous: List[Mapping[str, Any]],
+) -> Tuple[bool, Optional[DockError]]:
     try:
         rebuild(module, dockutil, previous)
-    except DockCommandError as error:
+        verify_dock_state(module, dockutil, defaults, previous)
+    except DockError as error:
         return False, error
     return True, None
 
@@ -326,19 +394,27 @@ def main() -> None:
     )
 
     desired = desired_items(module)
-    dockutil = module.get_bin_path("dockutil", required=not module.check_mode)
-    if dockutil is None:
-        after = public_items(desired)
+    required = not module.check_mode
+    dockutil = module.get_bin_path("dockutil", required=required)
+    defaults = module.get_bin_path("defaults", required=required)
+    unavailable = [
+        name
+        for name, path in (("dockutil", dockutil), ("defaults", defaults))
+        if path is None
+    ]
+    if unavailable:
         module.exit_json(
             changed=True,
             items=[],
             paths=[],
-            msg="dockutil is not installed; the Dock cannot be inspected in check mode",
-            diff={"before": None, "after": after},
+            msg="{0} is not installed; the Dock cannot be inspected in check mode".format(
+                " and ".join(unavailable)
+            ),
+            diff={"before": None, "after": public_items(desired)},
         )
 
     try:
-        current = current_items(module, dockutil)
+        current = current_items(module, dockutil, defaults)
     except DockError as error:
         fail_for_dock_error(module, error, changed=False)
     before = public_items(current)
@@ -365,24 +441,29 @@ def main() -> None:
 
     try:
         rebuild(module, dockutil, desired)
-        persisted = current_items(module, dockutil)
-        if not dock_states_match(persisted, desired):
-            raise DockStateError(
-                "Dock state did not match the requested state after rebuilding"
-            )
+        verify_dock_state(module, dockutil, defaults, desired)
     except DockError as error:
-        rollback, rollback_error = restore(module, dockutil, current)
-        failure = {
+        rollback, rollback_error = restore(module, dockutil, defaults, current)
+        failure: Dict[str, Any] = {
             "changed": True,
             "rollback": rollback,
         }
+        observed = getattr(error, "observed", None)
+        if observed is not None:
+            failure["observed"] = public_items(observed)
+            failure["expected"] = after
         if rollback_error is not None:
-            failure["rollback_error"] = {
-                "command": rollback_error.argv,
-                "rc": rollback_error.rc,
-                "stdout": rollback_error.stdout,
-                "stderr": rollback_error.stderr,
-            }
+            details: Dict[str, Any] = {"msg": str(rollback_error)}
+            if isinstance(rollback_error, DockCommandError):
+                details.update(
+                    {
+                        "command": rollback_error.argv,
+                        "rc": rollback_error.rc,
+                        "stdout": rollback_error.stdout,
+                        "stderr": rollback_error.stderr,
+                    }
+                )
+            failure["rollback_error"] = details
         fail_for_dock_error(module, error, **failure)
 
     module.exit_json(**result)
