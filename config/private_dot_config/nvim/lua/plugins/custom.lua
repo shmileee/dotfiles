@@ -4,6 +4,10 @@ local plugins = {
   { "zbirenbaum/copilot.lua", enabled = false },
   { "CopilotC-Nvim/CopilotChat.nvim", enabled = false },
   { "mfussenegger/nvim-lint", enabled = false },
+  -- superseded by wallpants/github-preview.nvim below: upstream master has
+  -- not moved since 2023-10 and its single-buffer server cannot resolve
+  -- relative links to other local markdown files
+  { "iamcco/markdown-preview.nvim", enabled = false },
   {
     "ibhagwan/fzf-lua",
     keys = {
@@ -167,6 +171,42 @@ local plugins = {
     opts = {
       auto_cmd = true,
     },
+  },
+  {
+    -- browser preview replacing LazyVim's markdown-preview.nvim. repository
+    -- mode (entered whenever a .git dir is found) serves the whole repo, so
+    -- relative links to other markdown files are clickable and browsable the
+    -- way they are on github.com. needs bun, pinned in mise/config.toml
+    "wallpants/github-preview.nvim",
+    cmd = {
+      "GithubPreviewToggle",
+      "GithubPreviewStart",
+      "GithubPreviewStop",
+    },
+    keys = {
+      -- the key LazyVim's markdown extra bound to MarkdownPreviewToggle
+      {
+        "<leader>cp",
+        "<cmd>GithubPreviewToggle<cr>",
+        ft = "markdown",
+        desc = "Markdown Preview",
+      },
+    },
+    opts = {
+      -- default false lets a preview started in one nvim kill the preview of
+      -- every other; parallel nvim instances across tmux windows are the norm
+      -- here, so let each one claim its own port instead
+      allow_multiple_instances = true,
+    },
+  },
+  {
+    -- <cr> on a markdown link opens the target in nvim: relative, absolute
+    -- and ~ paths, #headings, file.md:42, reference links; urls still go to
+    -- the browser. the counterpart to the preview above -- a linked file
+    -- lands in an editable buffer rather than a browser tab. the mapping
+    -- ships in the plugin's own ftplugin/markdown.lua; there is no setup()
+    "jghauser/follow-md-links.nvim",
+    ft = "markdown",
   },
 }
 
