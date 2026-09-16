@@ -242,7 +242,7 @@ Make changes in four places:
   </article>
   <article>
     <span>Tool versions</span>
-    <a class="path-token" href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/mise/config.toml" aria-label="Open the mise configuration on GitHub"><code class="path-token">config/<wbr>private_dot_config/<wbr>mise/<wbr>config.toml</code></a>
+    <a class="path-token" href="https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/mise/config.toml" aria-label="Open the mise configuration on GitHub" title="config/private_dot_config/mise/config.toml"><code class="path-token">mise/<wbr>config.toml</code></a>
     <p>Language runtimes and developer tools.</p>
   </article>
 </div>
