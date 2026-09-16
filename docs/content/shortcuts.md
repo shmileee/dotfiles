@@ -201,21 +201,24 @@ Option-based scrolling by line or half page.
 ## Neovim additions
 
 LazyVim provides most editor mappings. This repository overrides or adds the
-following:
+following. The tag after a key is the mode it works in:
+<span class="shortcut-mode">n</span> normal, <span class="shortcut-mode">v</span> visual,
+<span class="shortcut-mode">o</span> operator-pending (after `d`, `c` or `y`) and
+<span class="shortcut-mode">i</span> insert.
 
-| Mode | Shortcut | Action |
-| --- | --- | --- |
-| <span class="shortcut-mode shortcut-mode--start">Normal</span> | `o` | Create a blank line below without staying in Insert mode |
-| <span class="shortcut-mode">Normal</span> | `O` | Create a blank line above without staying in Insert mode |
-| <span class="shortcut-mode">Normal</span> | `<leader><leader>` | Clear search highlights |
-| <span class="shortcut-mode">Normal</span> | `ys` / `ds` / `cs` | Add, delete, or replace a surrounding pair |
-| <span class="shortcut-mode shortcut-mode--start">Normal and Visual</span> | `<leader>/` | Comment the current line or the selection |
-| <span class="shortcut-mode">Normal and Visual</span> | `<S-h>` / `<S-l>` | Move the line or selection left or right |
-| <span class="shortcut-mode">Normal and Visual</span> | `<S-j>` / `<S-k>` | Move the line or selection down or up |
-| <span class="shortcut-mode">Normal and Visual</span> | `gz` | Title-case the line or the selection |
-| <span class="shortcut-mode shortcut-mode--start">Normal, Operator, and Visual</span> | `w` / `b` | Step by subword, so `camelCase` and `snake_case` split into parts |
-| <span class="shortcut-mode shortcut-mode--start">Visual</span> | `>` / `<` | Indent or outdent while keeping the selection active |
-| <span class="shortcut-mode shortcut-mode--start">Insert</span> | `<C-j>` / `<C-k>` | Select the next or previous completion item |
+| Shortcut | Action |
+| --- | --- |
+| `o` <span class="shortcut-mode">n</span> | Create a blank line below without staying in Insert mode |
+| `O` <span class="shortcut-mode">n</span> | Create a blank line above without staying in Insert mode |
+| `<leader><leader>` <span class="shortcut-mode">n</span> | Clear search highlights |
+| `ys` / `ds` / `cs` <span class="shortcut-mode">n</span> | Add, delete, or replace a surrounding pair |
+| `<leader>/` <span class="shortcut-mode">n v</span> | Comment the current line or the selection |
+| `<S-h>` / `<S-l>` <span class="shortcut-mode">n v</span> | Move the line or selection left or right |
+| `<S-j>` / `<S-k>` <span class="shortcut-mode">n v</span> | Move the line or selection down or up |
+| `gz` <span class="shortcut-mode">n v</span> | Title-case the line or the selection |
+| `w` / `b` <span class="shortcut-mode">n o v</span> | Step by subword, so `camelCase` and `snake_case` split into parts |
+| `>` / `<` <span class="shortcut-mode">v</span> | Indent or outdent while keeping the selection active |
+| `<C-j>` / `<C-k>` <span class="shortcut-mode">i</span> | Select the next or previous completion item |
 
 Three LazyVim defaults are removed rather than remapped: `<C-s>` for save in
 every mode, and the fzf-lua pickers on `<leader><space>` and `<leader>/`. The
