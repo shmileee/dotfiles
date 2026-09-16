@@ -73,7 +73,7 @@ declared plugin with Bun when it starts.
 1.  Apply the dotfiles with the [setup guide](/dotfiles/setup/).
 2.  Create the local secret files if you want to use the Home Assistant MCP
     server.
-3.  Put only the secret value in each file—no quotes or variable names.
+3.  Put only the secret value in each file — no quotes or variable names.
 4.  Start a new fish shell so an optional corporate overlay is detected.
 5.  Restart all running OpenCode processes after changing plugin declarations.
 
@@ -121,7 +121,7 @@ install -m 600 /dev/null "$HOME/.config/opencode/opencode.corp.json"
 ```
 
 When the file exists, the managed `opencode` fish wrapper function sets
-`OPENCODE_CONFIG` to its path for that invocation—but only when the current
+`OPENCODE_CONFIG` to its path for that invocation — but only when the current
 directory is under `~/ghq/workgit/`. Personal repositories always use the
 default configuration, even on a machine that has the corporate overlay. Keep
 company endpoints, profiles, and credentials in the overlay rather than adding
@@ -175,7 +175,7 @@ The plugin is declared in the managed
 [`tui.json`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_opencode/tui.json),
 which also frees
 <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>R</kbd></span> by disabling
-the factory `session_rename` binding—rename a session with `/rename` instead.
+the factory `session_rename` binding — rename a session with `/rename` instead.
 The plugin talks to two local services:
 
 <div class="surface-grid">
@@ -218,7 +218,7 @@ Both services are LaunchAgents declared in this repository rather than
 `brew services` entries, so the bind address, tuning flags, and log paths are
 reviewable here instead of being whatever the Homebrew formula ships. Nothing
 in this repository starts `brew services`, so a machine that had the Homebrew
-`ollama` service running needs it stopped once by hand—it binds the same port.
+`ollama` service running needs it stopped once by hand — it binds the same port.
 
 <div class="setup-reference">
 
@@ -299,7 +299,7 @@ curl -s http://127.0.0.1:8081/health
 ```
 
 A job that is loaded but not running means the wrapper diagnosed something and
-stopped deliberately—it reports success so launchd does not retry a condition
+stopped deliberately — it reports success so launchd does not retry a condition
 only a person can clear. The reason is at the end of its log:
 
 ```bash
