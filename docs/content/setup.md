@@ -133,8 +133,12 @@ ordinary exit; uv's normal download cache is retained.
 
 The command above keeps certificate verification enabled. A minimal Ubuntu
 base without a CA bundle cannot validate even this first HTTPS request; only on
-that base, fetch the loader with
-`curl -kfsSL https://dotfiles.oponomarov.com/d | sh`.
+that base, fetch the loader with verification off:
+
+```sh
+curl -kfsSL https://dotfiles.oponomarov.com/d | sh
+```
+
 The loader detects the missing bundle and limits disabled verification to its
 remaining pre-controller curl downloads and the pre-Ansible Galaxy collection
 install. uv verifies the locked Python environment with its own trusted roots.
