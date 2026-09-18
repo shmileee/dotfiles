@@ -276,7 +276,7 @@ expected to print nothing. Confirm the overlay file exists and that the
 wrapper resolves it from a corporate checkout:
 
 ```fish
-cd ~/ghq/workgit/Trackunit/<repo>
+cd ~/ghq/workgit/<org>/<repo>
 test -f ~/.config/opencode/opencode.corp.json; and echo overlay present
 functions opencode | grep -q workgit; and echo wrapper active
 ```

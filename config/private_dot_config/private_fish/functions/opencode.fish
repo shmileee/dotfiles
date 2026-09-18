@@ -1,5 +1,5 @@
 function opencode --wraps opencode --description "opencode with path-scoped config"
-    # Corp config applies only under ~/ghq/workgit (Trackunit); everything
+    # Corp config applies only under ~/ghq/workgit (work checkouts); everything
     # else uses the default personal config. Erase any inherited value first
     # (stale tmux global environment, old shells) so routing is deterministic.
     set -e OPENCODE_CONFIG
