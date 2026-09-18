@@ -202,9 +202,10 @@ Option-based scrolling by line or half page.
 
 LazyVim provides most editor mappings. This repository overrides or adds the
 following. The tag after a key is the mode it works in:
-<span class="shortcut-mode">n</span> normal, <span class="shortcut-mode">v</span> visual,
-<span class="shortcut-mode">o</span> operator-pending (after `d`, `c` or `y`) and
-<span class="shortcut-mode">i</span> insert.
+<span class="shortcut-mode">n</span> normal,
+<span class="shortcut-mode">v</span> visual,
+<span class="shortcut-mode">o</span> operator-pending (after `d`, `c` or `y`)
+and <span class="shortcut-mode">i</span> insert.
 
 | Shortcut | Action |
 | --- | --- |
