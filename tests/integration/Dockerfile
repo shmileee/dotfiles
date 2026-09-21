@@ -2,7 +2,7 @@
 
 FROM ghcr.io/astral-sh/uv:0.12.9@sha256:8b940d3a9d65bed080436972241af2e21c84b5e8c9193f7014ed71479ee795ff AS uv
 
-FROM ubuntu:latest@sha256:2260313b31c8c011cd2eebe728008efac1b3982be73eb71348ea2648d2c0e09b AS ubuntu-bootstrap-integration
+FROM ubuntu:latest@sha256:da6fc2be547864451aa253836dd926da33623312df4a9a243e35dc877c378a78 AS ubuntu-bootstrap-integration
 
 ENV HOME=/home/linuxbrew
 ENV DEBIAN_FRONTEND=noninteractive
