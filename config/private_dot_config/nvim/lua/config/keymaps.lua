@@ -11,6 +11,27 @@ map({ "n" }, "O", "O<Esc>")
 
 map({ "n" }, "<leader><leader>", "<cmd>nohlsearch<cr>")
 
+-- Move by screen line inside a wrapped paragraph, where a single logical
+-- line can be five rows tall and plain j jumps over all of them.
+--
+-- Guarded on v:count rather than mapped outright: with relativenumber on,
+-- the whole point of 8j is to land on the line the gutter says is 8 away,
+-- and a bare gj mapping would count screen rows and miss it. No count means
+-- the cursor is being nudged, which is when gj is wanted; any count means a
+-- jump was aimed at a numbered line, which is when it is not.
+map(
+  { "n", "x" },
+  "j",
+  "v:count == 0 ? 'gj' : 'j'",
+  { expr = true, silent = true }
+)
+map(
+  { "n", "x" },
+  "k",
+  "v:count == 0 ? 'gk' : 'k'",
+  { expr = true, silent = true }
+)
+
 -- comment via native gc (0.10+) + ts-comments.nvim; replaces mini.comment
 map("n", "<leader>/", "gcc", { remap = true, desc = "Comment line" })
 map("x", "<leader>/", "gc", { remap = true, desc = "Comment selection" })

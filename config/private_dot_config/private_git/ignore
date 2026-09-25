@@ -14,3 +14,5 @@ temp_files
 .decrypted~*
 
 .tool-versions
+
+**/.claude/settings.local.json
