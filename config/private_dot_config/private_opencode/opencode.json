@@ -28,7 +28,7 @@
     }
   },
   "plugin": [
-    "opencode-claude-auth@2.2.0",
+    "opencode-claude-auth@2.2.1",
     "oh-my-openagent@5.0.0-beta.46",
     "agent-contextual-notifier@0.2.0"
   ]
