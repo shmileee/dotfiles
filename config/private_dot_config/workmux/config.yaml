@@ -2,7 +2,7 @@
 # agent-workdone (~/bin) and the tmux prefix+C-g binding.
 # status_format false keeps status icons out of tmux window names - the
 # dashboard reads workmux state, not the format, and tmux.conf's
-# @opencode_waiting segment stays the only window-name indicator.
+# @agent_waiting segment stays the only window-name indicator.
 status_format: false
 
 # Sibling of the repo: <repo>-worktrees/<slug>. Relative paths resolve against

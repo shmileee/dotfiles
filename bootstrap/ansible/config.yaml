@@ -152,7 +152,7 @@ tmux_plugins:
     name: tpm
     version: 7bdb7ca33c9cc6440a600202b50142f401b6fe21
     update: true
-  - repo: https://github.com/shmileee/opencode-contextual-notifier
-    name: opencode-contextual-notifier
-    version: eebf6c146a14d860ece6242564ba8cddb4819a10
+  - repo: https://github.com/shmileee/agent-contextual-notifier
+    name: agent-contextual-notifier
+    version: 3367da3d1857d25f6cf6d2f501d1000e81b000a2
     update: true

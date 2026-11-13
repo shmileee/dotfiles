@@ -146,7 +146,7 @@ are handled by the dedicated contextual-notifier plugin.
 ## Contextual notifications
 
 OpenCode declares the
-[`opencode-contextual-notifier`](https://github.com/shmileee/opencode-contextual-notifier)
+[`agent-contextual-notifier`](https://github.com/shmileee/agent-contextual-notifier)
 package in the managed
 [`opencode.json`](https://github.com/shmileee/dotfiles/blob/master/config/private_dot_config/private_opencode/opencode.json).
 Its tmux companion is declared through TPM in the managed
