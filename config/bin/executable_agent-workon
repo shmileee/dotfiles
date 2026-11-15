@@ -4,7 +4,7 @@ set -eu
 
 # Start an agentic task from a tmux popup: pick a ghq repo, name the task, get
 # a worktree on a branch off the local origin mainline plus a tmux window
-# running opencode. Never fetches - staleness reconciles at PR rebase.
+# running Claude Code. Never fetches - staleness reconciles at PR rebase.
 # Designed for `tmux display-popup -E`. The target session comes from
 # WM_PARENT_SESSION when a caller provides it, otherwise from the popup's own
 # pane context (display-popup does not format-expand -e values).

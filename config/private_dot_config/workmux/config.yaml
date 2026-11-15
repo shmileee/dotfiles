@@ -16,10 +16,19 @@ window_prefix: ''
 # first-run wizard from hijacking the agent-workon popup on fresh machines.
 nerdfont: true
 
+# Claude Code. Its status tracking (sidebar/dashboard) comes from the
+# workmux-status Claude Code plugin, which lives in the unmanaged ~/.claude:
+#   claude plugin marketplace add raine/workmux
+#   claude plugin install workmux-status
+# Not `workmux setup --hooks`: it writes hooks for every agent CLI it detects,
+# not just Claude.
+agent: claude
+
 panes:
-  # opencode is a fish wrapper function (path-scoped OPENCODE_CONFIG routing);
-  # workmux runs pane commands through the default shell, so it applies here.
-  - command: opencode
+  # Keep the placeholder. A literal `claude` is recognized as an agent pane but
+  # launched verbatim, so the `--continue` that agent-workon passes on reopen
+  # is silently dropped (verified at v0.1.276).
+  - command: <agent>
 
 # Autostarted from tmux.conf (run-shell "workmux sidebar on").
 sidebar:

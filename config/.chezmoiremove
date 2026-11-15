@@ -2,6 +2,7 @@
 .config/opencode/lib/contextual-notifier.ts
 .config/opencode/package.json
 .config/opencode/plugin/contextual-notifier.ts
+.config/opencode/plugins/workmux-status.ts
 .config/opencode/test/contextual-notifier-adapter.test.ts
 .config/opencode/test/contextual-notifier-plugin.test.ts
 .config/opencode/test/contextual-notifier-race.test.ts

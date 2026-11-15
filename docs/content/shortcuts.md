@@ -166,7 +166,7 @@ the program in the pane.
 
 | Command | Action |
 | --- | --- |
-| <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> <span class="shortcut-then">then</span> <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>G</kbd></span> | Start or reopen an agent task: pick a repository, name the task, get a git worktree with an OpenCode window |
+| <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> <span class="shortcut-then">then</span> <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>G</kbd></span> | Start or reopen an agent task: pick a repository, name the task, get a git worktree with a Claude Code window |
 | <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> <span class="shortcut-then">then</span> `S` | Create or attach a context session by name, then open the task launcher |
 | <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>A</kbd></span> <span class="shortcut-then">then</span> <span class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>D</kbd></span> | Open the workmux agent dashboard |
 
